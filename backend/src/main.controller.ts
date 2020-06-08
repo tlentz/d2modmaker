@@ -15,5 +15,11 @@ export class Controller {
     this.app.route("/api/items/setitems").get(this.itemsService.getSetItems);
     this.app.route("/api/items/sets").get(this.itemsService.getSets);
     this.app.route("/api/items/uniqueitems").get(this.itemsService.getUniques);
+    this.app
+      .route("/api/items/uniqueitems/randomprop")
+      .get(this.itemsService.getRandomUniqueProperty);
+    this.app
+      .route("/api/items/uniqueitems/random")
+      .get(this.itemsService.randomizeUniques);
   }
 }
