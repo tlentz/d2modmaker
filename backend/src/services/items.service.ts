@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { resolve } from "dns";
-import { rejects } from "assert";
 const csv = require("csv-parser");
 const fs = require("fs");
 const path = require("path");
+const jsonexport = require("jsonexport");
 
 export class ItemsService {
   constructor() {}
@@ -45,8 +44,24 @@ export class ItemsService {
     let items = await getItems("UniqueItems");
     let stuff = getStuff(items);
     let randomized = randomizeItems(stuff);
-    res.json(randomized.items);
+    let csv = await buildCsv(randomized.items.map(x => x.item))
+
+    res.setHeader("Content-Disposition", "attachment; filename=UniqueItems.txt");
+    res.send(csv);
   }
+}
+
+const buildCsv = async (items : any[]) => {
+  let options = {
+    rowDelimiter: '\t'
+  }
+  return new Promise(async (resolve, reject) => {
+    await jsonexport(items, options, function(err : any, csv : any){
+      if (err) reject(err);
+      resolve(csv);
+    });
+  });
+
 }
 
 const randomizeItems = (stuff: Stuff) => {
