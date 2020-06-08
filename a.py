@@ -20,7 +20,9 @@ def read_src_file(fname):
 def main():
     for f in src_files:
         read_src_file(f)
-    print(src_data)
+    for key in src_data:
+        print(key)
+        print(src_data[key].columns)
 
 
 if __name__ == "__main__":
