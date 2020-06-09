@@ -43,8 +43,8 @@ export class ItemsService {
   public async randomizeUniques(req: Request, res: Response) {
     let items = await getItems("UniqueItems");
     let stuff = getStuff(items);
-    let randomized = randomizeItems(stuff);
-    let csv = await buildCsv(randomized.items.map(x => x.item))
+    // let randomized = randomizeItems(stuff);
+    let csv = await buildCsv(stuff.items.map(x => x.item))
 
     res.setHeader("Content-Disposition", "attachment; filename=UniqueItems.txt");
     res.send(csv);
@@ -104,7 +104,7 @@ const getStuff = (data: any) => {
     let propCount = 0;
     let name = item["index"];
     let enabled = item["enabled"];
-    if (name !== "" && enabled === "1") {
+    if (name !== "") {
       for (var i = 1; i <= 12; i++) {
         let propI = item[`prop${i}`];
         if (propI !== "") {
