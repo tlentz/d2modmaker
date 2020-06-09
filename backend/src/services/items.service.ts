@@ -43,8 +43,8 @@ export class ItemsService {
   public async randomizeUniques(req: Request, res: Response) {
     let items = await getItems("UniqueItems");
     let stuff = getStuff(items);
-    // let randomized = randomizeItems(stuff);
-    let csv = await buildCsv(stuff.items.map(x => x.item))
+    let randomized = randomizeItems(stuff);
+    let csv = await buildCsv(randomized.items.map(x => x.item))
 
     res.setHeader("Content-Disposition", "attachment; filename=UniqueItems.txt");
     res.send(csv);
@@ -53,7 +53,8 @@ export class ItemsService {
 
 const buildCsv = async (items : any[]) => {
   let options = {
-    rowDelimiter: '\t'
+    rowDelimiter: '\t',
+    endOfLine: '\r\n'
   }
   return new Promise(async (resolve, reject) => {
     await jsonexport(items, options, function(err : any, csv : any){
