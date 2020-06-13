@@ -9,6 +9,6 @@ data = D2Data()
 
 @app.route('/', methods=['GET'])
 def home():
-    return jsonify(data.variable)
+    return str(data.fileData)
 
 app.run()
