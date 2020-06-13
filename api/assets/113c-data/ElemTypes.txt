@@ -1,0 +1,14 @@
+Elemental Type	Code	*EOL
+None		0
+Fire	fire	0
+Lightning	ltng	0
+Magic	mag	0
+Cold	cold	0
+Poison	pois	0
+Life Drain	life	0
+Mana Drain	mana	0
+Stamina Drain	stam	0
+Stun	stun	0
+Random	rand	0
+Burning	burn	0
+Freeze	frze	0

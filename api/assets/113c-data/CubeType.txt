@@ -1,0 +1,16 @@
+cube item class	Code	*EOL
+None		0
+Health Potion	hpt	0
+Mana Potion	mpt	0
+Item	itm	0
+Axe	axe	0
+Sword	swr	0
+Spear	spr	0
+Gem	gem	0
+Staff	stf	0
+Belt	blt	0
+Dagger	dag	0
+Weapon	wep	0
+Armor	arm	0
+Ring	rin	0
+Amulet	amu	0
