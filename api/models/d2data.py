@@ -1,23 +1,47 @@
 import csv
 import os
+import json
+
+def get_data_dir():
+    this_dir = os.path.dirname(os.path.realpath('__file__'))
+    return os.path.join(this_dir, "../api/assets/113c-data/")
 
 class D2Data:
-    fileData = []
-
     def __init__(self):
-        self.fileData = []
-        uniques = D2File("UniqueItems.txt")
-        self.fileData.append(uniques)
+        self.files = self.read_files()
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
+
+    def read_files(self):
+        files = {}
+        for f in os.listdir(get_data_dir()):
+            files[f] = D2File(f)
+        return files
+
 
 class D2File:
-    name = "sdfasdfsf"
-    headers = {}
-    rows = []
-
     def __init__(self, name):
         self.name = name
+        self.file_name = f"{get_data_dir()}{self.name}"
+
+        self.fieldnames = []
+        self.data = []
+
+        self.read()
+#         self.write()
 
     def read(self):
-        thisDir = os.path.dirname(os.path.realpath('__file__'))
-        fileDir = os.path.join(thisDir, f"../assets/113c-data/{self.name}")
-        print(fileDir)
+        self.data = []
+        print (self.name)
+        with open(self.file_name, newline='\r\n', encoding="latin-1") as csvfile:
+            reader = csv.DictReader(f=csvfile, delimiter='\t')
+            self.fieldnames = reader.fieldnames
+            for row in reader:
+                self.data.append(row)
+
+    def write(self):
+        with open(self.file_name, 'w', newline='\r\n', encoding="latin-1") as csvfile:
+           writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames, delimiter='\t')
+           writer.writeheader()
+           writer.writerows(self.data)
