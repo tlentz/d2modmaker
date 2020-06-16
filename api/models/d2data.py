@@ -34,14 +34,14 @@ class D2File:
     def read(self):
         self.data = []
         print (self.name)
-        with open(self.file_name, newline='\r\n', encoding="latin-1") as csvfile:
+        with open(self.file_name, newline='\r\n', encoding="cp1252") as csvfile:
             reader = csv.DictReader(f=csvfile, delimiter='\t')
             self.fieldnames = reader.fieldnames
             for row in reader:
                 self.data.append(row)
 
     def write(self):
-        with open(self.file_name, 'w', newline='\r\n', encoding="latin-1") as csvfile:
+        with open(self.file_name, 'w', newline='\r\n', encoding="cp1252") as csvfile:
            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames, delimiter='\t')
            writer.writeheader()
            writer.writerows(self.data)
