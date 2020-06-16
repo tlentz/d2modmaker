@@ -5,7 +5,7 @@ import pandas
 
 def get_data_dir():
     this_dir = os.path.dirname(os.path.realpath('__file__'))
-    return os.path.join(this_dir, "../api/assets/113c-data/")
+    return os.path.join(this_dir, "../api/assets/d2-src/")
 
 class D2Data:
     def __init__(self):
@@ -30,7 +30,7 @@ class D2File:
         self.data = []
 
         self.read()
-        self.write()
+#         self.write()
 
     def read(self):
         self.data = []

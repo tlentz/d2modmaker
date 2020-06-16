@@ -10,7 +10,6 @@ data = D2Data()
 
 @app.route('/', methods=['GET'])
 def home():
-    return "hi"
-#     return f"<pre>{data.toJSON()}</pre>"
+    return f"<pre>{data.toJSON()}</pre>"
 
 app.run()
