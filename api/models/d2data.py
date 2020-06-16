@@ -30,7 +30,6 @@ class D2File:
         self.data = []
 
         self.read()
-        self.write()
 
     def read(self):
         self.data = []
