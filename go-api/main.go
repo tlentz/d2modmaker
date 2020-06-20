@@ -85,7 +85,7 @@ func writeD2File(d2file *D2File) {
 	// create writer
 	writer := csv.NewWriter(file)
 	writer.Comma = '\t'
-	writer.UseCRLF = false
+	writer.UseCRLF = true
 
 	// write all records (including headers)
 	writer.WriteAll(records)
