@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -14,11 +15,13 @@ type D2File struct {
 	Records  []map[string]string `json:"records,omitempty"`
 }
 
+const dataDir = "../assets/113c-data/"
+
 func readD2File(fname string) (*D2File, error) {
 	// create new D2File pointer with fname
 	d2file := &D2File{FileName: fname}
 
-	var filePath = "../assets/test/" + d2file.FileName
+	var filePath = dataDir + d2file.FileName
 
 	// open csvfile
 	csvfile, err := os.Open(filePath)
@@ -64,7 +67,7 @@ func readD2File(fname string) (*D2File, error) {
 
 func writeD2File(d2file *D2File) {
 	// create file at filePath
-	var filePath = "../assets/test/" + d2file.FileName
+	var filePath = dataDir + d2file.FileName
 	file, err := os.Create(filePath)
 	checkError("Cannot create file", err)
 	defer file.Close()
@@ -105,11 +108,97 @@ func checkError(message string, err error) {
 	}
 }
 
-func main() {
-	var fileName = "UniqueItems.txt"
-	d2file, err := readD2File(fileName)
-	if err != nil {
-		fmt.Println("An error encountered ::", err)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func getItemFromRecords(d2file *D2File, key string, name string) (*int, error) {
+	for i, record := range d2file.Records {
+		itm, ok := record[key]
+		if ok && itm == name {
+			return &i, nil
+		}
 	}
-	writeD2File(d2file)
+	return nil, fmt.Errorf("Cannot find %s : %s", key, name)
+}
+
+func pp(v interface{}) (err error) {
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err == nil {
+		fmt.Println(string(b))
+	}
+	return
+}
+
+func increaseStackSizes(d2file *D2File) (*D2File, error) {
+
+	// Sets TP Book size to 100
+	tpBookIdx, err := getItemFromRecords(d2file, "name", "Town Portal Book")
+	if err != nil {
+		encodeError(d2file, err.Error())
+	}
+	d2file.Records[*tpBookIdx]["maxstack"] = "100"
+
+	// Sets Id Book size to 100
+	idBookIdx, err := getItemFromRecords(d2file, "name", "Identify Book")
+	if err != nil {
+		encodeError(d2file, err.Error())
+	}
+	d2file.Records[*idBookIdx]["maxstack"] = "100"
+
+	return d2file, nil
+}
+
+func addFileIfNotExists(d2files map[string]D2File, filename string) map[string]D2File {
+	if _, ok := d2files[filename]; ok {
+		return d2files
+	}
+
+	pp("hi2")
+	d2file, err := readD2File(filename)
+	if err != nil {
+		pe(err)
+	}
+
+	d2files[filename] = *d2file
+	return d2files
+}
+
+func getOrCreateFile(d2files *map[string]D2File, filename string) *D2File {
+	if val, ok := (*d2files)[filename]; ok {
+		return &val
+	}
+
+	d2file, err := readD2File(filename)
+	if err != nil {
+		pe(err)
+	}
+
+	(*d2files)[filename] = *d2file
+
+	return d2file
+}
+
+type ModConfig struct {
+	IncreaseStackSizes bool `json:"increaseStackSizes,omitempty"`
+}
+
+var cfg = ModConfig{
+	IncreaseStackSizes: true,
+}
+
+func pe(e error) {
+	panic(fmt.Sprintf("An error encountered :: ", e))
+}
+
+func main() {
+	var d2files = map[string]D2File{}
+
+	if cfg.IncreaseStackSizes {
+		d2file := getOrCreateFile(&d2files, "Misc.txt")
+		increaseStackSizes(d2file)
+	}
+
+	pp(d2files["Misc.txt"].Records[10]["maxstack"])
 }
