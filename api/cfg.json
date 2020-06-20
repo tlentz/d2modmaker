@@ -1,3 +1,4 @@
 {
-    "IncreaseStackSizes": true
+    "IncreaseStackSizes": true,
+    "IncreaseMonsterDensity": 5
 }

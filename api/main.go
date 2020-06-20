@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -152,6 +153,30 @@ func increaseStackSizes(d2file *D2File) (*D2File, error) {
 	return d2file, nil
 }
 
+func increaseMonsterDensity(d2file *D2File, m int) {
+	var normal = "MonDen"
+	var nm = "MonDen(N)"
+	var hell = "MonDen(H)"
+
+	for idx, _ := range d2file.Records {
+
+		oldNorm, err := strconv.Atoi(d2file.Records[idx][normal])
+		if err == nil {
+			d2file.Records[idx][normal] = strconv.Itoa(oldNorm * m)
+		}
+
+		oldNm, err := strconv.Atoi(d2file.Records[idx][nm])
+		if err == nil {
+			d2file.Records[idx][nm] = strconv.Itoa(oldNm * m)
+		}
+
+		oldHell, err := strconv.Atoi(d2file.Records[idx][hell])
+		if err != nil {
+			d2file.Records[idx][hell] = strconv.Itoa(oldHell * m)
+		}
+	}
+}
+
 func addFileIfNotExists(d2files map[string]D2File, filename string) map[string]D2File {
 	if _, ok := d2files[filename]; ok {
 		return d2files
@@ -182,10 +207,6 @@ func getOrCreateFile(d2files *map[string]D2File, filename string) *D2File {
 	return d2file
 }
 
-type ModConfig struct {
-	IncreaseStackSizes bool `json:"IncreaseStackSizes"`
-}
-
 func pe(e error) {
 	panic(fmt.Sprintf("An error encountered :: ", e))
 }
@@ -194,6 +215,11 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+type ModConfig struct {
+	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
+	IncreaseMonsterDensity int  `json:"IncreaseMonsterDensity"`
 }
 
 func readCfg() ModConfig {
@@ -224,9 +250,14 @@ func main() {
 	var cfg = readCfg()
 	var d2files = map[string]D2File{}
 
-	d2file := getOrCreateFile(&d2files, "Misc.txt")
 	if cfg.IncreaseStackSizes {
+		d2file := getOrCreateFile(&d2files, "Misc.txt")
 		increaseStackSizes(d2file)
+	}
+
+	if cfg.IncreaseMonsterDensity > 1 {
+		d2file := getOrCreateFile(&d2files, "Levels.txt")
+		increaseMonsterDensity(d2file, cfg.IncreaseMonsterDensity)
 	}
 
 	writeFiles(&d2files)

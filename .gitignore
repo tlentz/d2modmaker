@@ -8,3 +8,5 @@ node_modules
 .idea
 .stack-work
 dist
+data
+data.zip
