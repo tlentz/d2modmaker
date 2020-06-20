@@ -1,0 +1,15 @@
+Hit Class	Code	*EOL
+None		0
+Hand To Hand	hth	0
+One Hand Swing vs. Small	1hss	0
+One Hand Swing vs. Large	1hsl	0
+Two Hand Swing vs. Small	2hss	0
+Two Hand Swing vs. Large	2hsl	0
+One Hand Thrust	1ht	0
+Two Hand Thrust	2ht	0
+Club	club	0
+Staff	staf	0
+Bow	bow	0
+Crossbow	xbow	0
+Claw	claw	0
+Overlay	over	0

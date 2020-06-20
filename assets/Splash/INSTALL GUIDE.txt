@@ -1,0 +1,23 @@
+SPLASH DAMAGE (For melee weapons)
+
+There are two folders, and they need to go in two different places
+First we will add the files to randomizer source files, these are:
+
+SetItems.txt
+Sets.txt
+Uniqueitems.txt
+(Found in "Put this in randomizer source folder")
+Place these files and overwrite them inside "source" folder in Randomizer
+
+Next we will add the required files to the diablo 2 folder
+I have already made the structure, so open "Put this in d2 folder"
+and copy the whole "data" folder.
+Now locate your Diablo 2 folder and place it there
+If you have an existing data folder from randomizer only, you can merge it still (Not compatible with other mods)
+
+Thats it!
+
+
+
+NOTE:
+Unique and set items that have splash will also be randomized.
