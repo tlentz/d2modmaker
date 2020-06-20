@@ -16,6 +16,7 @@ type D2File struct {
 }
 
 const dataDir = "../assets/113c-data/"
+const outDir = "./dist/"
 
 func readD2File(fname string) (*D2File, error) {
 	// create new D2File pointer with fname
@@ -67,7 +68,7 @@ func readD2File(fname string) (*D2File, error) {
 
 func writeD2File(d2file *D2File) {
 	// create file at filePath
-	var filePath = dataDir + d2file.FileName
+	var filePath = outDir + d2file.FileName
 	file, err := os.Create(filePath)
 	checkError("Cannot create file", err)
 	defer file.Close()
@@ -192,6 +193,12 @@ func pe(e error) {
 	panic(fmt.Sprintf("An error encountered :: ", e))
 }
 
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
 func main() {
 	var d2files = map[string]D2File{}
 
@@ -200,5 +207,15 @@ func main() {
 		increaseStackSizes(d2file)
 	}
 
-	pp(d2files["Misc.txt"].Records[10]["maxstack"])
+	os.RemoveAll("dist")
+	err := os.Mkdir("dist", 0755)
+	check(err)
+
+	for _, file := range d2files {
+		writeD2File(&file)
+	}
+
+	pp("Done")
+
+	// pp(d2files["Misc.txt"].Records[10]["maxstack"])
 }
