@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -182,11 +183,7 @@ func getOrCreateFile(d2files *map[string]D2File, filename string) *D2File {
 }
 
 type ModConfig struct {
-	IncreaseStackSizes bool `json:"increaseStackSizes,omitempty"`
-}
-
-var cfg = ModConfig{
-	IncreaseStackSizes: true,
+	IncreaseStackSizes bool `json:"IncreaseStackSizes"`
 }
 
 func pe(e error) {
@@ -199,23 +196,40 @@ func check(e error) {
 	}
 }
 
-func main() {
-	var d2files = map[string]D2File{}
+func readCfg() ModConfig {
+	file, _ := ioutil.ReadFile("cfg.json")
+	data := ModConfig{}
+	_ = json.Unmarshal([]byte(file), &data)
+	return data
+}
 
-	if cfg.IncreaseStackSizes {
-		d2file := getOrCreateFile(&d2files, "Misc.txt")
-		increaseStackSizes(d2file)
-	}
+func writeFiles(d2files *map[string]D2File) {
 
-	os.RemoveAll("dist")
-	err := os.Mkdir("dist", 0755)
+	fmt.Println("removing " + outDir)
+	os.RemoveAll(outDir)
+
+	fmt.Println("creating " + outDir)
+	err := os.Mkdir(outDir, 0755)
 	check(err)
 
-	for _, file := range d2files {
+	for _, file := range *d2files {
+		fmt.Println("writing " + outDir + file.FileName)
 		writeD2File(&file)
 	}
 
-	pp("Done")
+	fmt.Println("Done")
+}
+
+func main() {
+	var cfg = readCfg()
+	var d2files = map[string]D2File{}
+
+	d2file := getOrCreateFile(&d2files, "Misc.txt")
+	if cfg.IncreaseStackSizes {
+		increaseStackSizes(d2file)
+	}
+
+	writeFiles(&d2files)
 
 	// pp(d2files["Misc.txt"].Records[10]["maxstack"])
 }
