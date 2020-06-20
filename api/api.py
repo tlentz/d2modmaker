@@ -9,7 +9,10 @@ app.config["DEBUG"] = True
 
 # data = D2Data()
 cfg_dict = {
-    'INCREASED_STACK_SIZES': True
+    'INCREASED_STACK_SIZES': True,
+    'MELEE_SPLASH': {
+        'ON_JEWELS': True
+    }
 }
 cfg = ModConfig(cfg_dict)
 

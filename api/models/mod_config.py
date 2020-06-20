@@ -7,7 +7,7 @@ def set_with_default_and_type(obj, key, t, default):
             return default
 
 class MELEE_SPLASH_CFG:
-    def __init__(self, obj = {})
+    def __init__(self, obj = {}):
         self.ON_JEWELS = set_with_default_and_type(obj, "ON_JEWELS", bool, False)
         self.RANDOMIZED_PROP = set_with_default_and_type(obj, "RANDOMIZED_PROP", bool, False)
         self.ON_ALL_WEAPONS = set_with_default_and_type(obj, "ON_ALL_WEAPONS", bool, False)
@@ -17,7 +17,18 @@ class ModConfig:
     def __init__(self, obj = {}):
         self.INCREASED_STACK_SIZES = set_with_default_and_type(obj, "INCREASED_STACK_SIZES", bool, False)
         self.RANDOMIZE = set_with_default_and_type(obj, "RANDOMIZE", bool, False)
-        self.MELEE_SPLASH = set_with_default_and_type(obj, "MELEE_SPLASH", bool, False)
+        self.MELEE_SPLASH = self.set_melee_splash_cfg(obj)
+
+    def set_melee_splash_cfg(self, obj):
+        key = "MELEE_SPLASH"
+        if key in obj:
+            print(obj[key])
+            if isinstance(obj[key], MELEE_SPLASH_CFG):
+                return obj[key]
+            elif isinstance(obj[key], dict):
+                return MELEE_SPLASH_CFG(obj)
+            else:
+                return MELEE_SPLASH_CFG()
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
