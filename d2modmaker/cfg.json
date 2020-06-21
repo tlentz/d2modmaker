@@ -1,6 +1,5 @@
 {
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 30,
-    "LinearRuneDrops": true,
     "EnableTownSkills": true
 }

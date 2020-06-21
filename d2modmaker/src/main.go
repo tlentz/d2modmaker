@@ -1,10 +1,23 @@
 package main
 
+import (
+	"strconv"
+
+	"fyne.io/fyne"
+	"fyne.io/fyne/app"
+	"fyne.io/fyne/widget"
+)
+
 const dataDir = "../assets/113c-data/"
 const outDir = "../dist/"
 
 func main() {
+	// runGUI()
 	var cfg = ReadCfg()
+	makeMod(cfg)
+}
+
+func makeMod(cfg ModConfig) {
 	var d2files = map[string]D2File{}
 
 	PP(cfg)
@@ -19,9 +32,9 @@ func main() {
 		IncreaseMonsterDensity(d2file, cfg.IncreaseMonsterDensity)
 	}
 
-	if cfg.LinearRuneDrops {
-		GetOrCreateFile(&d2files, "TreasureClassEx.txt")
-	}
+	// if cfg.LinearRuneDrops {
+	// 	GetOrCreateFile(&d2files, "TreasureClassEx.txt")
+	// }
 
 	if cfg.EnableTownSkills {
 		d2file := GetOrCreateFile(&d2files, "Skills.txt")
@@ -29,4 +42,34 @@ func main() {
 	}
 
 	WriteFiles(&d2files)
+}
+
+func runGUI() {
+	cfg := ModConfig{}
+
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Choice Widgets")
+
+	check1 := widget.NewCheck("Increase Stack Sizes", func(value bool) {
+		cfg.IncreaseStackSizes = value
+	})
+	check2 := widget.NewCheck("Enable Town Skills", func(value bool) {
+		cfg.EnableTownSkills = value
+	})
+
+	slider1 := widget.NewSlider(1, 30)
+	slider1Label := widget.NewLabel("Increase Monster Density by " + strconv.Itoa(int(slider1.Value)) + "x")
+	monsterDensityBox := widget.NewHBox(slider1Label, slider1)
+
+	// radio := widget.NewRadio([]string{"Option 1", "Option 2"}, func(value string) {
+	// 	log.Println("Radio set to", value)
+	// })
+	// combo := widget.NewSelect([]string{"Option 1", "Option 2"}, func(value string) {
+	// 	log.Println("Select set to", value)
+	// })
+
+	myWindow.SetContent(widget.NewVBox(check1, check2, monsterDensityBox))
+	myWindow.Resize(fyne.NewSize(600, 600))
+	myWindow.CenterOnScreen()
+	myWindow.ShowAndRun()
 }
