@@ -24,15 +24,16 @@ func QuestDrops(d2file *D2File) (*D2File, error) {
 	pairs["Baal (H)"] = "Baalq (H)"
 
 	for idx, record := range d2file.Records {
-		val, ok := record["Treasure Class"]
-		if ok && val != "" {
-			qKey, ok2 := pairs[val]
+		tc, ok := record["Treasure Class"]
+		if ok && tc != "" {
+			qKey, ok2 := pairs[tc]
 			if ok2 {
 				qItemIdx, err := GetItemFromRecords(d2file, "Treasure Class", qKey)
 				if err == nil {
-					qVal := d2file.Records[*qItemIdx]
-					d2file.Records[idx] = qVal
-					d2file.Records[idx]["Treasure Class"] = val
+					qRow := d2file.Records[*qItemIdx]
+					newRow := copyMap(qRow)
+					newRow["Treasure Class"] = tc
+					d2file.Records[idx] = newRow
 				}
 			}
 		}

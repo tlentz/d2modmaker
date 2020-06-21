@@ -52,3 +52,11 @@ func ContainsString(s []string, e string) bool {
 	}
 	return false
 }
+
+func copyMap(m map[string]string) map[string]string {
+	newMap := map[string]string{}
+	for k, v := range m {
+		newMap[k] = v
+	}
+	return newMap
+}
