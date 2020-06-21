@@ -45,6 +45,11 @@ func makeMod(cfg ModConfig) {
 		NoDropZero(d2file)
 	}
 
+	if cfg.QuestDrops {
+		d2file := GetOrCreateFile(&d2files, "TreasureClassEx.txt")
+		QuestDrops(d2file)
+	}
+
 	WriteFiles(&d2files)
 }
 

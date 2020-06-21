@@ -39,3 +39,16 @@ func PP(v interface{}) (err error) {
 	}
 	return
 }
+
+type Tuple struct {
+	a, b interface{}
+}
+
+func ContainsString(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
