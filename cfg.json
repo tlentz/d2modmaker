@@ -1,5 +1,6 @@
 {
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 30,
-    "EnableTownSkills": true
+    "EnableTownSkills": true,
+    "NoDropZero": true
 }

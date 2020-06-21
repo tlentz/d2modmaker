@@ -24,3 +24,5 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
     * `MAX: 30`
 * **EnableTownSkills** `bool`
     * Enables teleport in town
+* **NoDropZero** `bool`
+    * Sets "NoDrop" = 0 (Monsters will always drop items)

@@ -12,7 +12,6 @@ const dataDir = "./assets/113c-data/"
 const outDir = "./dist/"
 
 func main() {
-	// runGUI()
 	var cfg = ReadCfg()
 	makeMod(cfg)
 }
@@ -41,6 +40,11 @@ func makeMod(cfg ModConfig) {
 		EnableTownSkills(d2file)
 	}
 
+	if cfg.NoDropZero {
+		d2file := GetOrCreateFile(&d2files, "TreasureClassEx.txt")
+		NoDropZero(d2file)
+	}
+
 	WriteFiles(&d2files)
 }
 
@@ -56,6 +60,9 @@ func runGUI() {
 	check2 := widget.NewCheck("Enable Town Skills", func(value bool) {
 		cfg.EnableTownSkills = value
 	})
+	check3 := widget.NewCheck("No Drop = 0", func(value bool) {
+		cfg.NoDropZero = value
+	})
 
 	slider1 := widget.NewSlider(1, 30)
 	slider1Label := widget.NewLabel("Increase Monster Density by " + strconv.Itoa(int(slider1.Value)) + "x")
@@ -68,7 +75,7 @@ func runGUI() {
 	// 	log.Println("Select set to", value)
 	// })
 
-	myWindow.SetContent(widget.NewVBox(check1, check2, monsterDensityBox))
+	myWindow.SetContent(widget.NewVBox(check1, check2, check3, monsterDensityBox))
 	myWindow.Resize(fyne.NewSize(600, 600))
 	myWindow.CenterOnScreen()
 	myWindow.ShowAndRun()

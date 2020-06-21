@@ -9,6 +9,7 @@ type ModConfig struct {
 	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity int  `json:"IncreaseMonsterDensity"`
 	EnableTownSkills       bool `json:"EnableTownSkills"`
+	NoDropZero             bool `json:"NoDropZero"`
 }
 
 func ReadCfg() ModConfig {
