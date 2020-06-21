@@ -154,25 +154,33 @@ func increaseStackSizes(d2file *D2File) (*D2File, error) {
 }
 
 func increaseMonsterDensity(d2file *D2File, m int) {
-	var normal = "MonDen"
-	var nm = "MonDen(N)"
-	var hell = "MonDen(H)"
+	var monDen = "MonDen"
+	var monUMin = "MonUMin"
+	var monUMax = "MonUMax"
+	var maxDensity = 10000
+	var maxM = 30
+	multiplier := min(maxM, m)
 
+	var difficulties = []string{"", "(N)", "(H)"}
 	for idx, _ := range d2file.Records {
+		for _, diff := range difficulties {
+			oldMonDen, err := strconv.Atoi(d2file.Records[idx][monDen+diff])
+			if err == nil {
+				newMonDen := min(maxDensity, oldMonDen*multiplier)
+				d2file.Records[idx][monDen+diff] = strconv.Itoa(newMonDen)
+			}
 
-		oldNorm, err := strconv.Atoi(d2file.Records[idx][normal])
-		if err == nil {
-			d2file.Records[idx][normal] = strconv.Itoa(oldNorm * m)
-		}
+			oldMonUMin, err := strconv.Atoi(d2file.Records[idx][monUMin+diff])
+			if err == nil {
+				newMonUMin := oldMonUMin * multiplier
+				d2file.Records[idx][monUMin+diff] = strconv.Itoa(newMonUMin)
+			}
 
-		oldNm, err := strconv.Atoi(d2file.Records[idx][nm])
-		if err == nil {
-			d2file.Records[idx][nm] = strconv.Itoa(oldNm * m)
-		}
-
-		oldHell, err := strconv.Atoi(d2file.Records[idx][hell])
-		if err != nil {
-			d2file.Records[idx][hell] = strconv.Itoa(oldHell * m)
+			oldMonUMax, err := strconv.Atoi(d2file.Records[idx][monUMax+diff])
+			if err == nil {
+				newMonUMax := oldMonUMax * multiplier
+				d2file.Records[idx][monUMax+diff] = strconv.Itoa(newMonUMax)
+			}
 		}
 	}
 }
@@ -220,6 +228,7 @@ func check(e error) {
 type ModConfig struct {
 	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity int  `json:"IncreaseMonsterDensity"`
+	LinearRuneDrops        bool `json:"LinearRuneDrops"`
 }
 
 func readCfg() ModConfig {
@@ -246,6 +255,20 @@ func writeFiles(d2files *map[string]D2File) {
 	fmt.Println("Done")
 }
 
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func main() {
 	var cfg = readCfg()
 	var d2files = map[string]D2File{}
@@ -260,7 +283,9 @@ func main() {
 		increaseMonsterDensity(d2file, cfg.IncreaseMonsterDensity)
 	}
 
-	writeFiles(&d2files)
+	if cfg.LinearRuneDrops {
+		getOrCreateFile(&d2files, "TreasureClassEx.txt")
+	}
 
-	// pp(d2files["Misc.txt"].Records[10]["maxstack"])
+	writeFiles(&d2files)
 }

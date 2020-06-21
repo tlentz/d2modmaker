@@ -1,4 +1,5 @@
 {
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 5
+    "IncreaseMonsterDensity": 30,
+    "LinearRuneDrops": true
 }
