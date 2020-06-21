@@ -8,8 +8,8 @@ import (
 	"fyne.io/fyne/widget"
 )
 
-const dataDir = "../assets/113c-data/"
-const outDir = "../dist/"
+const dataDir = "./assets/113c-data/"
+const outDir = "./dist/"
 
 func main() {
 	// runGUI()
