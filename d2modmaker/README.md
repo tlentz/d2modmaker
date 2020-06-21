@@ -22,3 +22,5 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
 * **IncreaseMonsterDensity** `int`
     * Will increase the density of all areas by the given multiplier
     * `MAX: 30`
+* **EnableTownSkills** `bool`
+    * Enables teleport in town
