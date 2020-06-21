@@ -1,0 +1,10 @@
+#!/bin/bash
+go run src/*.go
+
+rm -rf data.zip
+
+mkdir -p data/global/excel
+
+cp dist/* data/global/excel
+
+zip -r data.zip data/*
