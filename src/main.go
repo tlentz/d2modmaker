@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"fyne.io/fyne"
@@ -8,12 +9,20 @@ import (
 	"fyne.io/fyne/widget"
 )
 
-const dataDir = "./assets/113c-data/"
+const dataDir = "../assets/113c-data/"
 const outDir = "./dist/"
 
 func main() {
-	var cfg = ReadCfg()
-	makeMod(cfg)
+	// var cfg = ReadCfg()
+	// makeMod(cfg)
+
+	d2file, err := ReadD2File("TreasureClassEx.txt")
+	Check(err)
+
+	for idx, header := range d2file.Headers {
+		fmt.Println(header, "= ", idx)
+	}
+
 }
 
 func makeMod(cfg ModConfig) {
