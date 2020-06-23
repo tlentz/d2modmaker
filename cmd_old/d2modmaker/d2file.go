@@ -5,14 +5,21 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/tlentz/d2modmaker/internal/d2file"
 )
 
+// D2File is a struct holding all the d2 file data
 type D2File struct {
 	FileName string              `json:"filename,omitempty"`
 	Headers  []string            `json:"headers,omitempty"`
 	Records  []map[string]string `json:"records,omitempty"`
 }
 
+// D2Files is a map[string]D2File
+type D2Files = map[string]d2file.D2File
+
+// ReadD2File reads a given d2 file
 func ReadD2File(fname string) (*D2File, error) {
 	// create new D2File pointer with fname
 	d2file := &D2File{FileName: fname}
@@ -57,6 +64,7 @@ func ReadD2File(fname string) (*D2File, error) {
 	return d2file, nil
 }
 
+// WriteD2File writes the given d2File
 func WriteD2File(d2file *D2File) {
 	// create file at filePath
 	var filePath = outDir + d2file.FileName
@@ -90,33 +98,13 @@ func WriteD2File(d2file *D2File) {
 	}
 }
 
-func GetItemFromRecords(d2file *D2File, key string, name string) (*int, error) {
-	for i, record := range d2file.Records {
-		itm, ok := record[key]
-		if ok && itm == name {
-			return &i, nil
-		}
-	}
-	return nil, fmt.Errorf("Cannot find %s : %s", key, name)
-}
-
+// CheckD2FileErr checks for an error and logs it
 func CheckD2FileErr(d2file *D2File, err error) {
 	CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
 }
 
-func AddFileIfNotExists(d2files map[string]D2File, filename string) map[string]D2File {
-	if _, ok := d2files[filename]; ok {
-		return d2files
-	}
-
-	d2file, err := ReadD2File(filename)
-	Check(err)
-
-	d2files[filename] = *d2file
-	return d2files
-}
-
-func GetOrCreateFile(d2files *map[string]D2File, filename string) *D2File {
+// GetOrCreateFile returns the D2File at the given key otherwise creates it
+func GetOrCreateFile(d2files *D2Files, filename string) *D2File {
 	if val, ok := (*d2files)[filename]; ok {
 		return &val
 	}
@@ -129,7 +117,8 @@ func GetOrCreateFile(d2files *map[string]D2File, filename string) *D2File {
 	return d2file
 }
 
-func WriteFiles(d2files *map[string]D2File) {
+// WriteFiles writes all d2 files
+func WriteFiles(d2files *D2Files) {
 
 	fmt.Println("removing " + outDir)
 	os.RemoveAll(outDir)
