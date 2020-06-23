@@ -1,4 +1,4 @@
-package skillsTXT
+package skillsTxt
 
 // File Constants
 const (

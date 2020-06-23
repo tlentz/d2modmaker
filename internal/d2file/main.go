@@ -4,6 +4,8 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+
+	"github.com/tlentz/d2modmaker/internal/util"
 )
 
 type D2File struct {
@@ -17,7 +19,7 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	d2file := &D2File{FileName: fname}
 
 	// open csvfile
-	csvfile, err := os.Open(filePath)
+	csvfile, err := os.Open(filePath + fname)
 	checkD2FileErr(d2file, err)
 
 	defer csvfile.Close()
@@ -53,5 +55,5 @@ func WriteD2File2(d2file *D2File, filePath string) {
 }
 
 func checkD2FileErr(d2file *D2File, err error) {
-	CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
+	util.CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
 }
