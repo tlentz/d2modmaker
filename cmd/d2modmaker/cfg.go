@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 )
 
+// ModConfig is the config used to build the mod
 type ModConfig struct {
 	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity int  `json:"IncreaseMonsterDensity"`
@@ -13,6 +14,7 @@ type ModConfig struct {
 	QuestDrops             bool `json:"QuestDrops"`
 }
 
+// ReadCfg reads a ModConfig from the given json file
 func ReadCfg(filePath string) ModConfig {
 	file, _ := ioutil.ReadFile(filePath)
 	data := ModConfig{}
