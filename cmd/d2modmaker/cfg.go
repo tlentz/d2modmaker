@@ -7,11 +7,11 @@ import (
 
 // ModConfig is the config used to build the mod
 type ModConfig struct {
-	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
-	IncreaseMonsterDensity int  `json:"IncreaseMonsterDensity"`
-	EnableTownTeleport     bool `json:"EnableTownTeleport"`
-	NoDropZero             bool `json:"NoDropZero"`
-	QuestDrops             bool `json:"QuestDrops"`
+	IncreaseStackSizes     bool    `json:"IncreaseStackSizes"`
+	IncreaseMonsterDensity float64 `json:"IncreaseMonsterDensity"`
+	EnableTownTeleport     bool    `json:"EnableTownTeleport"`
+	NoDropZero             bool    `json:"NoDropZero"`
+	QuestDrops             bool    `json:"QuestDrops"`
 }
 
 // ReadCfg reads a ModConfig from the given json file

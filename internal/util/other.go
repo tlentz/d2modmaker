@@ -1,15 +1,31 @@
 package util
 
-// Max Returns the max between 2 ints
-func Max(a, b int) int {
+// MaxInt Returns the max between 2 ints
+func MaxInt(a, b int) int {
 	if a > b {
 		return a
 	}
 	return b
 }
 
-// Min Returns the min between 2 ints
-func Min(a, b int) int {
+// MaxFloat Returns the max between 2 float64
+func MaxFloat(a, b float64) float64 {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+// MinInt Returns the min between 2 ints
+func MinInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+// MinFloat Returns the min between 2 float64
+func MinFloat(a, b float64) float64 {
 	if a < b {
 		return a
 	}
