@@ -9,7 +9,7 @@ import (
 type ModConfig struct {
 	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity int  `json:"IncreaseMonsterDensity"`
-	EnableTownSkills       bool `json:"EnableTownSkills"`
+	EnableTownTeleport     bool `json:"EnableTownTeleport"`
 	NoDropZero             bool `json:"NoDropZero"`
 	QuestDrops             bool `json:"QuestDrops"`
 }

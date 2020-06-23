@@ -8,12 +8,17 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
+// D2File is a struct holding all the d2 file data
 type D2File struct {
 	FileName string     `json:"filename,omitempty"`
 	Headers  []string   `json:"headers,omitempty"`
 	Rows     [][]string `json:"records,omitempty"`
 }
 
+// D2Files is a map[string]D2File
+type D2Files = map[string]D2File
+
+// ReadD2File reads a given d2 file
 func ReadD2File(fname string, filePath string) (*D2File, error) {
 	// create new D2File pointer with fname
 	d2file := &D2File{FileName: fname}
@@ -41,6 +46,7 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	return d2file, nil
 }
 
+// WriteD2File writes the given d2File
 func WriteD2File(d2file *D2File, filePath string) {
 	file, err := os.Create(filePath + d2file.FileName)
 	CheckD2FileErr(d2file, err)
@@ -54,6 +60,7 @@ func WriteD2File(d2file *D2File, filePath string) {
 	CheckD2FileErr(d2file, e)
 }
 
+// WriteFiles writes all d2 files
 func WriteFiles(d2files *map[string]D2File, outDir string) {
 	fmt.Println("removing " + outDir)
 	os.RemoveAll(outDir)
@@ -68,6 +75,7 @@ func WriteFiles(d2files *map[string]D2File, outDir string) {
 	}
 }
 
+// GetOrCreateFile returns the D2File at the given key otherwise creates it
 func GetOrCreateFile(dataDir string, d2files *map[string]D2File, filename string) *D2File {
 	if val, ok := (*d2files)[filename]; ok {
 		return &val
@@ -81,6 +89,7 @@ func GetOrCreateFile(dataDir string, d2files *map[string]D2File, filename string
 	return d2file
 }
 
+// CheckD2FileErr checks for an error and logs it
 func CheckD2FileErr(d2file *D2File, err error) {
 	util.CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
 }
