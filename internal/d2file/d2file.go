@@ -20,7 +20,7 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 
 	// open csvfile
 	csvfile, err := os.Open(filePath + fname)
-	checkD2FileErr(d2file, err)
+	CheckD2FileErr(d2file, err)
 
 	defer csvfile.Close()
 
@@ -29,10 +29,10 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	reader.Comma = '\t'
 
 	headers, err := reader.Read()
-	checkD2FileErr(d2file, err)
+	CheckD2FileErr(d2file, err)
 
 	rows, err := reader.ReadAll()
-	checkD2FileErr(d2file, err)
+	CheckD2FileErr(d2file, err)
 
 	// set the headers/records on D2File
 	d2file.Headers = headers
@@ -41,9 +41,9 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	return d2file, nil
 }
 
-func WriteD2File2(d2file *D2File, filePath string) {
-	file, err := os.Create(filePath)
-	checkD2FileErr(d2file, err)
+func WriteD2File(d2file *D2File, filePath string) {
+	file, err := os.Create(filePath + d2file.FileName)
+	CheckD2FileErr(d2file, err)
 	defer file.Close()
 
 	w := csv.NewWriter(file)
@@ -51,9 +51,36 @@ func WriteD2File2(d2file *D2File, filePath string) {
 	w.UseCRLF = true
 	w.Write(d2file.Headers)
 	e := w.WriteAll(d2file.Rows)
-	checkD2FileErr(d2file, e)
+	CheckD2FileErr(d2file, e)
 }
 
-func checkD2FileErr(d2file *D2File, err error) {
+func WriteFiles(d2files *map[string]D2File, outDir string) {
+	fmt.Println("removing " + outDir)
+	os.RemoveAll(outDir)
+
+	fmt.Println("creating " + outDir)
+	err := os.MkdirAll(outDir, 0755)
+	util.Check(err)
+
+	for _, file := range *d2files {
+		fmt.Println("writing " + outDir + file.FileName)
+		WriteD2File(&file, outDir)
+	}
+}
+
+func GetOrCreateFile(dataDir string, d2files *map[string]D2File, filename string) *D2File {
+	if val, ok := (*d2files)[filename]; ok {
+		return &val
+	}
+
+	d2file, err := ReadD2File(filename, dataDir)
+	util.Check(err)
+
+	(*d2files)[filename] = *d2file
+
+	return d2file
+}
+
+func CheckD2FileErr(d2file *D2File, err error) {
 	util.CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
 }
