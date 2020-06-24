@@ -45,7 +45,7 @@ func main() {
 
 func questDrops(d2files *d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
-	diffOffsets := []int{0, 1, 2}
+	diffOffsets := []int{0, 1, 2} // norm, nm, hell
 	bossQOffset := 3
 	for idx, row := range f.Rows {
 		switch row[tc.TreasureClass] {
