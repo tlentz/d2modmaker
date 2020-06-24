@@ -1,7 +1,7 @@
 {
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 30,
-    "EnableTownSkills": true,
+    "IncreaseMonsterDensity": 100,
+    "EnableTownTeleport": true,
     "NoDropZero": true,
     "QuestDrops": true
 }
