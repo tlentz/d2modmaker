@@ -2,12 +2,21 @@ package treasureclassextxt
 
 // File Constants
 const (
-	FileName   = "TreasureClass.txt"
+	FileName   = "TreasureClassEx.txt"
 	NumColumns = 33
 )
 
-// Header Indexes
+// Row Constants
+const (
+	Andariel   = "Andariel"
+	Duriel     = "Duriel"
+	DurielBase = "Duriel - Base"
+	Mephisto   = "Mephisto"
+	Diablo     = "Diablo"
+	Baal       = "Baal"
+)
 
+// Header Indexes
 const (
 	TreasureClass = 0
 	Group         = 1

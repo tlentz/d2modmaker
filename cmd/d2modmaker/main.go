@@ -5,7 +5,9 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2file"
 	levels "github.com/tlentz/d2modmaker/internal/levelsTxt"
+	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
 	skills "github.com/tlentz/d2modmaker/internal/skillsTxt"
+	tc "github.com/tlentz/d2modmaker/internal/treasureclassextxt"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
@@ -22,21 +24,67 @@ func main() {
 
 	var d2files = d2file.D2Files{}
 
+	if cfg.IncreaseStackSizes {
+		increaseStackSizes(&d2files)
+	}
+	if cfg.IncreaseMonsterDensity > 1.0 {
+		increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
+	}
 	if cfg.EnableTownTeleport {
 		enableTownTeleport(&d2files)
 	}
-
-	if cfg.IncreaseMonsterDensity > 1.0 {
-		increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
+	if cfg.NoDropZero {
+		noDropZero(&d2files)
+	}
+	if cfg.QuestDrops {
+		questDrops(&d2files)
 	}
 
 	d2file.WriteFiles(&d2files, outDir)
 }
 
+func questDrops(d2files *d2file.D2Files) {
+	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
+	diffOffsets := []int{0, 1, 2}
+	bossQOffset := 3
+	for idx, row := range f.Rows {
+		switch row[tc.TreasureClass] {
+		case tc.Andariel, tc.Duriel, tc.DurielBase, tc.Mephisto, tc.Diablo, tc.Baal:
+			{
+				for _, offset := range diffOffsets {
+					tmp := make([]string, cap(row))
+					// copy quest drop row to tmp
+					copy(tmp, f.Rows[idx+bossQOffset+offset])
+					// copy all tmp values except 1st index to original row
+					copy(f.Rows[idx+offset][tc.TreasureClass+1:], tmp[tc.TreasureClass+1:])
+				}
+			}
+		}
+	}
+}
+
+func noDropZero(d2files *d2file.D2Files) {
+	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
+	for idx, row := range f.Rows {
+		if row[tc.NoDrop] != "" {
+			f.Rows[idx][tc.NoDrop] = "0"
+		}
+	}
+}
+
+func increaseStackSizes(d2files *d2file.D2Files) {
+	f := d2file.GetOrCreateFile(dataDir, d2files, misc.FileName)
+	for idx, row := range f.Rows {
+		if row[misc.Name] == misc.TownPortalBook || row[misc.Name] == misc.IdentifyBook {
+			f.Rows[idx][misc.MaxStack] = "100"
+		}
+	}
+}
+
 func enableTownTeleport(d2files *d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, skills.FileName)
 	for idx, row := range f.Rows {
-		if row[skills.Skill] == "Teleport" {
+		if row[skills.Skill] == skills.Teleport {
 			f.Rows[idx][skills.InTown] = "1"
 		}
 	}

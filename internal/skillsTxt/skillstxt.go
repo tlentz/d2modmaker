@@ -6,6 +6,11 @@ const (
 	NumColumns = 256
 )
 
+// Skill names
+const (
+	Teleport = "Teleport"
+)
+
 // Header Indexes
 const (
 	Skill             = 0

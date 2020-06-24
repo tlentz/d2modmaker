@@ -33,10 +33,19 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	reader := csv.NewReader(csvfile)
 	reader.Comma = '\t'
 
-	headers, err := reader.Read()
+	raw, err := reader.ReadAll()
 	CheckD2FileErr(d2file, err)
 
-	rows, err := reader.ReadAll()
+	rows := make([][]string, 0)
+	headers := make([]string, 0)
+
+	for i, line := range raw {
+		if i == 0 {
+			copy(headers, line)
+		} else {
+			rows = append(rows, line)
+		}
+	}
 	CheckD2FileErr(d2file, err)
 
 	// set the headers/records on D2File

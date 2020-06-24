@@ -6,6 +6,12 @@ const (
 	NumColumns = 169
 )
 
+// Misc Names
+const (
+	IdentifyBook   = "Identify Book"
+	TownPortalBook = "Town Portal Book"
+)
+
 // Header Indexes
 const (
 	Name             = 0
