@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/tlentz/d2modmaker/internal/d2file"
@@ -19,6 +20,14 @@ const (
 )
 
 func main() {
+	d2files := d2file.D2Files{}
+	f := d2file.GetOrCreateFile(dataDir, &d2files, "ItemRatio.txt")
+	for i := range f.Headers {
+		fmt.Println(f.Headers[i], " = ", i)
+	}
+}
+
+func makeMod() {
 	var cfg = ReadCfg(cfgPath)
 	util.PP(cfg)
 
