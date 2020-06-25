@@ -13,6 +13,7 @@ type ModConfig struct {
 	NoDropZero             bool    `json:"NoDropZero"`
 	QuestDrops             bool    `json:"QuestDrops"`
 	UniqueItemDropRate     float64 `json:"UniqueItemDropRate"`
+	StartWithCube          bool    `json:"StartWithCube"`
 }
 
 // ReadCfg reads a ModConfig from the given json file

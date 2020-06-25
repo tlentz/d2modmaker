@@ -4,5 +4,6 @@
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 100
+    "UniqueItemDropRate": 100,
+    "StartWithCube": true
 }
