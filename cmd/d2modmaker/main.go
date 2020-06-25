@@ -8,6 +8,7 @@ import (
 	itmRatio "github.com/tlentz/d2modmaker/internal/itemRatioTxt"
 	levels "github.com/tlentz/d2modmaker/internal/levelsTxt"
 	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
+	missiles "github.com/tlentz/d2modmaker/internal/missilesTxt"
 	skills "github.com/tlentz/d2modmaker/internal/skillsTxt"
 	tc "github.com/tlentz/d2modmaker/internal/treasureclassextxt"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -22,11 +23,12 @@ const (
 
 func main() {
 	makeMod()
+	// printFile()
 }
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, &d2files, "ItemRatio.txt")
+	f := d2file.GetOrCreateFile(dataDir, &d2files, "Missiles.txt")
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}
@@ -44,8 +46,8 @@ func makeMod() {
 	if cfg.IncreaseMonsterDensity > 1.0 {
 		increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
 	}
-	if cfg.EnableTownTeleport {
-		enableTownTeleport(&d2files)
+	if cfg.EnableTownSkills {
+		enableTownSkills(&d2files)
 	}
 	if cfg.NoDropZero {
 		noDropZero(&d2files)
@@ -140,12 +142,14 @@ func increaseStackSizes(d2files *d2file.D2Files) {
 	}
 }
 
-func enableTownTeleport(d2files *d2file.D2Files) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, skills.FileName)
-	for idx, row := range f.Rows {
-		if row[skills.Skill] == skills.Teleport {
-			f.Rows[idx][skills.InTown] = "1"
-		}
+func enableTownSkills(d2files *d2file.D2Files) {
+	sktxt := d2file.GetOrCreateFile(dataDir, d2files, skills.FileName)
+	for i := range sktxt.Rows {
+		sktxt.Rows[i][skills.InTown] = "1"
+	}
+	missilestxt := d2file.GetOrCreateFile(dataDir, d2files, missiles.FileName)
+	for i := range missilestxt.Rows {
+		missilestxt.Rows[i][missiles.Town] = "1"
 	}
 }
 
