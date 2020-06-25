@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/tlentz/d2modmaker/internal/d2file"
+	gemstxt "github.com/tlentz/d2modmaker/internal/gemstxt"
+	itmRatio "github.com/tlentz/d2modmaker/internal/itemRatioTxt"
 	levels "github.com/tlentz/d2modmaker/internal/levelsTxt"
 	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
+	missiles "github.com/tlentz/d2modmaker/internal/missilesTxt"
 	skills "github.com/tlentz/d2modmaker/internal/skillsTxt"
 	tc "github.com/tlentz/d2modmaker/internal/treasureclassextxt"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -19,6 +23,19 @@ const (
 )
 
 func main() {
+	// makeMod()
+	printFile()
+}
+
+func printFile() {
+	d2files := d2file.D2Files{}
+	f := d2file.GetOrCreateFile(dataDir, &d2files, gemstxt.FileName)
+	for i := range f.Headers {
+		fmt.Println(f.Headers[i], " = ", i)
+	}
+}
+
+func makeMod() {
 	var cfg = ReadCfg(cfgPath)
 	util.PP(cfg)
 
@@ -30,8 +47,8 @@ func main() {
 	if cfg.IncreaseMonsterDensity > 1.0 {
 		increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
 	}
-	if cfg.EnableTownTeleport {
-		enableTownTeleport(&d2files)
+	if cfg.EnableTownSkills {
+		enableTownSkills(&d2files)
 	}
 	if cfg.NoDropZero {
 		noDropZero(&d2files)
@@ -39,8 +56,53 @@ func main() {
 	if cfg.QuestDrops {
 		questDrops(&d2files)
 	}
+	if cfg.UniqueItemDropRate > 1.0 {
+		uniqueItemDropRate(&d2files, cfg.UniqueItemDropRate)
+	}
 
 	d2file.WriteFiles(&d2files, outDir)
+}
+
+func uniqueItemDropRate(d2files *d2file.D2Files, d float64) {
+	f := d2file.GetOrCreateFile(dataDir, d2files, itmRatio.FileName)
+
+	one := func(n int) int {
+		if n < 1 {
+			return 1
+		}
+		return n
+	}
+
+	divU := func(n int) int {
+		return one(int(float64(n) / d))
+	}
+
+	divM := func(n int) int {
+		return one(int(float64(n) / d * 10))
+	}
+
+	for i := range f.Rows {
+
+		// Uniques
+		oldUnique, err1 := strconv.Atoi(f.Rows[i][itmRatio.Unique])
+		oldUniqueMin, err2 := strconv.Atoi(f.Rows[i][itmRatio.UniqueMin])
+		if err1 == nil && err2 == nil {
+			newUnique := divU(oldUnique)
+			newUniqueMin := divM(oldUniqueMin)
+			f.Rows[i][itmRatio.Unique] = strconv.Itoa(newUnique)
+			f.Rows[i][itmRatio.UniqueMin] = strconv.Itoa(newUniqueMin)
+		}
+
+		// Sets
+		oldSet, err3 := strconv.Atoi(f.Rows[i][itmRatio.Set])
+		oldSetMin, err4 := strconv.Atoi(f.Rows[i][itmRatio.SetMin])
+		if err3 == nil && err4 == nil {
+			newSet := divU(oldSet)
+			newSetMin := divM(oldSetMin)
+			f.Rows[i][itmRatio.Set] = strconv.Itoa(newSet)
+			f.Rows[i][itmRatio.SetMin] = strconv.Itoa(newSetMin)
+		}
+	}
 }
 
 func questDrops(d2files *d2file.D2Files) {
@@ -81,12 +143,14 @@ func increaseStackSizes(d2files *d2file.D2Files) {
 	}
 }
 
-func enableTownTeleport(d2files *d2file.D2Files) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, skills.FileName)
-	for idx, row := range f.Rows {
-		if row[skills.Skill] == skills.Teleport {
-			f.Rows[idx][skills.InTown] = "1"
-		}
+func enableTownSkills(d2files *d2file.D2Files) {
+	sktxt := d2file.GetOrCreateFile(dataDir, d2files, skills.FileName)
+	for i := range sktxt.Rows {
+		sktxt.Rows[i][skills.InTown] = "1"
+	}
+	missilestxt := d2file.GetOrCreateFile(dataDir, d2files, missiles.FileName)
+	for i := range missilestxt.Rows {
+		missilestxt.Rows[i][missiles.Town] = "1"
 	}
 }
 

@@ -9,9 +9,10 @@ import (
 type ModConfig struct {
 	IncreaseStackSizes     bool    `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity float64 `json:"IncreaseMonsterDensity"`
-	EnableTownTeleport     bool    `json:"EnableTownTeleport"`
+	EnableTownSkills       bool    `json:"EnableTownSkills"`
 	NoDropZero             bool    `json:"NoDropZero"`
 	QuestDrops             bool    `json:"QuestDrops"`
+	UniqueItemDropRate     float64 `json:"UniqueItemDropRate"`
 }
 
 // ReadCfg reads a ModConfig from the given json file

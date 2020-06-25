@@ -41,7 +41,9 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 
 	for i, line := range raw {
 		if i == 0 {
-			copy(headers, line)
+			for j := range line {
+				headers = append(headers, line[j])
+			}
 		} else {
 			rows = append(rows, line)
 		}
