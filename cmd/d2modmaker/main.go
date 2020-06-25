@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
+	charStats "github.com/tlentz/d2modmaker/internal/charStatsTxt"
 	"github.com/tlentz/d2modmaker/internal/d2file"
-	gemstxt "github.com/tlentz/d2modmaker/internal/gemstxt"
 	itmRatio "github.com/tlentz/d2modmaker/internal/itemRatioTxt"
 	levels "github.com/tlentz/d2modmaker/internal/levelsTxt"
 	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
@@ -23,13 +23,13 @@ const (
 )
 
 func main() {
-	// makeMod()
-	printFile()
+	makeMod()
+	// printFile()
 }
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, &d2files, gemstxt.FileName)
+	f := d2file.GetOrCreateFile(dataDir, &d2files, charStats.FileName)
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}
@@ -59,8 +59,26 @@ func makeMod() {
 	if cfg.UniqueItemDropRate > 1.0 {
 		uniqueItemDropRate(&d2files, cfg.UniqueItemDropRate)
 	}
+	if cfg.StartWithCube {
+		startWithCube(&d2files)
+	}
 
 	d2file.WriteFiles(&d2files, outDir)
+}
+
+func startWithCube(d2files *d2file.D2Files) {
+	f := d2file.GetOrCreateFile(dataDir, d2files, charStats.FileName)
+	itemOffset := charStats.Item1
+	countOffset := 2
+	for idx, row := range f.Rows {
+		for i := itemOffset; i < len(row)-countOffset; i += 3 {
+			if (row[i] == "0" || row[i] == "") && (row[i+countOffset] == "0" || row[i+countOffset] == "") {
+				f.Rows[idx][i] = "box"
+				f.Rows[idx][i+countOffset] = "1"
+				break // we added a cube, we are done with this row
+			}
+		}
+	}
 }
 
 func uniqueItemDropRate(d2files *d2file.D2Files, d float64) {
