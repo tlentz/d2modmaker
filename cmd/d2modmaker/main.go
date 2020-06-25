@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/tlentz/d2modmaker/internal/d2file"
+	gemstxt "github.com/tlentz/d2modmaker/internal/gemstxt"
 	itmRatio "github.com/tlentz/d2modmaker/internal/itemRatioTxt"
 	levels "github.com/tlentz/d2modmaker/internal/levelsTxt"
 	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
@@ -22,13 +23,13 @@ const (
 )
 
 func main() {
-	makeMod()
-	// printFile()
+	// makeMod()
+	printFile()
 }
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, &d2files, "Missiles.txt")
+	f := d2file.GetOrCreateFile(dataDir, &d2files, gemstxt.FileName)
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}
