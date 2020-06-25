@@ -3,5 +3,6 @@
     "IncreaseMonsterDensity": 100,
     "EnableTownTeleport": true,
     "NoDropZero": true,
-    "QuestDrops": true
+    "QuestDrops": true,
+    "UniqueItemDropRate": 100
 }
