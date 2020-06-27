@@ -79,10 +79,3 @@ const (
 	Max12        = 68
 	Eol          = 69
 )
-
-type UProp struct {
-	UPropProp string
-	UPropPar  string
-	UPropMin  string
-	UPropMax  string
-}
