@@ -2,7 +2,7 @@ package uniqueItemsTxt
 
 // File Constants
 const (
-	FileName   = "UniqueItemx.txt"
+	FileName   = "UniqueItems.txt"
 	NumColumns = 70
 )
 
@@ -79,3 +79,10 @@ const (
 	Max12        = 68
 	Eol          = 69
 )
+
+type UProp struct {
+	UPropProp string
+	UPropPar  string
+	UPropMin  string
+	UPropMax  string
+}

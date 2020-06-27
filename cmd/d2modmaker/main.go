@@ -63,6 +63,8 @@ func makeMod() {
 		startWithCube(&d2files)
 	}
 
+	Randomize(&d2files)
+
 	d2file.WriteFiles(&d2files, outDir)
 }
 
