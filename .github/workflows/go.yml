@@ -22,7 +22,7 @@ jobs:
       with:
         path: ./src/github.com/${{ github.repository }}
     - name: Build
-      run: ls
+      run: cd ./src/github.com/${{ github.repository }} && ls
   # build:
   #   name: Build
   #   runs-on: ubuntu-latest
