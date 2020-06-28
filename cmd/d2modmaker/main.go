@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	charStats "github.com/tlentz/d2modmaker/internal/charStatsTxt"
@@ -15,16 +16,42 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-// dir constants
-const (
-	dataDir = "../../assets/113c-data/"
-	outDir  = "../../dist/"
-	cfgPath = "../../cfg.json"
+var (
+	dataDir string
+	outDir  string
+	cfgPath string
+	mode    string
 )
 
+func withDefault(a, b string) string {
+	if a == "" {
+		return b
+	}
+	return a
+}
+
 func main() {
+	if mode == "development" {
+		dataDir = "../../assets/113c-data/"
+		outDir = "../../dist/"
+		cfgPath = "../../cfg.json"
+	} else {
+		dataDir = "../113c-data/"
+		outDir = "../data/global/excel/"
+		cfgPath = "../cfg.json"
+	}
+	fmt.Println(dataDir, outDir, cfgPath)
 	makeMod()
 	// printFile()
+}
+
+// Simple helper function to read an environment or return a default value
+func getEnv(key string, defaultVal string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+
+	return defaultVal
 }
 
 func printFile() {
