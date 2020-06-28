@@ -5,5 +5,8 @@
     "NoDropZero": true,
     "QuestDrops": true,
     "UniqueItemDropRate": 100,
-    "StartWithCube": true
+    "StartWithCube": true,
+    "Randomize": true,
+    "RandomSeed": 42,
+    "RandomBalance": true
 }
