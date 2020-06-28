@@ -42,6 +42,8 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
     * **Seed** `int`
         * Will use this seed for randomization
         * Set to `-1` to generate a random seed
+    * **IsBalanced** `bool`
+        * bucketizes props by levels `[0-30] [31-60] [61+]` so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
     * **MinProps** `int`
         * Minimum number of non blank props that spawn on an item
         * Set to `-1` to omit
