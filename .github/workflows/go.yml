@@ -31,7 +31,7 @@ jobs:
         fi
 
     - name: Build
-      run: ls
+      run: bin/build && ls
 
     - name: Test
       run: cd ./dist/d2modmaker && ./d2modmaker-linux
