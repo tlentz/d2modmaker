@@ -2,7 +2,7 @@ package uniqueItemsTxt
 
 // File Constants
 const (
-	FileName   = "UniqueItemx.txt"
+	FileName   = "UniqueItems.txt"
 	NumColumns = 70
 )
 
