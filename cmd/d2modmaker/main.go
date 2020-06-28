@@ -62,7 +62,7 @@ func makeMod() {
 	if cfg.StartWithCube {
 		startWithCube(&d2files)
 	}
-	if cfg.Randomize {
+	if cfg.RandomOptions.Randomize {
 		Randomize(&cfg, &d2files)
 	}
 

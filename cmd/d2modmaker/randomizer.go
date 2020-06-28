@@ -23,10 +23,12 @@ type Prop struct {
 }
 type Props = []Prop
 type BalancedProps = map[int]Props
+type Props2 = map[string]BalancedProps
 
 type RandomOptions struct {
-	Seed       int64
-	IsBalanced bool
+	Randomize  bool  `json:"Randomize"`
+	Seed       int64 `json:"Seed"`
+	IsBalanced bool  `json:"Balance"`
 }
 
 const (
@@ -38,13 +40,12 @@ const (
 
 func getRandomOptions(cfg *ModConfig) RandomOptions {
 	defaultCfg := RandomOptions{
-		Seed:       time.Now().UnixNano(),
-		IsBalanced: false,
+		Seed: time.Now().UnixNano(),
 	}
-	if cfg.RandomSeed > 0 {
-		defaultCfg.Seed = cfg.RandomSeed
+	if cfg.RandomOptions.Seed > 0 {
+		defaultCfg.Seed = cfg.RandomOptions.Seed
 	}
-	defaultCfg.IsBalanced = cfg.RandomBalance
+	defaultCfg.IsBalanced = cfg.RandomOptions.IsBalanced
 	return defaultCfg
 }
 
