@@ -2,8 +2,9 @@ package setItemsTxt
 
 // File Constants
 const (
-	FileName   = "SetItems.txt"
-	NumColumns = 94
+	FileName    = "SetItems.txt"
+	NumColumns  = 94
+	MaxNumProps = 19
 )
 
 // Header Indexes

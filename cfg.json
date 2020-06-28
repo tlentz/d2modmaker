@@ -6,7 +6,13 @@
     "QuestDrops": true,
     "UniqueItemDropRate": 100,
     "StartWithCube": true,
-    "Randomize": true,
-    "RandomSeed": 42,
-    "RandomBalance": true
+    "RandomOptions": {
+        "Randomize": true,
+        "Seed": -1,
+        "IsBalanced": false,
+        "MinProps": 20,
+        "MaxProps": -1,
+        "UseOSkills": true,
+        "PerfectProps": true
+    }
 }

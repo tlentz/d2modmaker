@@ -2,8 +2,9 @@ package uniqueItemsTxt
 
 // File Constants
 const (
-	FileName   = "UniqueItems.txt"
-	NumColumns = 70
+	FileName    = "UniqueItems.txt"
+	NumColumns  = 70
+	MaxNumProps = 12
 )
 
 // Header Indexes

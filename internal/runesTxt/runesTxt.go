@@ -2,8 +2,9 @@ package runesTxt
 
 // File Constants
 const (
-	FileName   = "Runes.txt"
-	NumColumns = 49
+	FileName    = "Runes.txt"
+	NumColumns  = 49
+	MaxNumProps = 7
 )
 
 // Header Indexes

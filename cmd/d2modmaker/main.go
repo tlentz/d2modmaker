@@ -44,9 +44,12 @@ func makeMod() {
 	if cfg.IncreaseStackSizes {
 		increaseStackSizes(&d2files)
 	}
-	if cfg.IncreaseMonsterDensity > 1.0 {
-		increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
+
+	if cfg.IncreaseMonsterDensity < 0 {
+		cfg.IncreaseMonsterDensity = 1.0
 	}
+	increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
+
 	if cfg.EnableTownSkills {
 		enableTownSkills(&d2files)
 	}
@@ -56,13 +59,16 @@ func makeMod() {
 	if cfg.QuestDrops {
 		questDrops(&d2files)
 	}
-	if cfg.UniqueItemDropRate > 1.0 {
-		uniqueItemDropRate(&d2files, cfg.UniqueItemDropRate)
+
+	if cfg.UniqueItemDropRate < 0 {
+		cfg.UniqueItemDropRate = 1.0
 	}
+	uniqueItemDropRate(&d2files, cfg.UniqueItemDropRate)
+
 	if cfg.StartWithCube {
 		startWithCube(&d2files)
 	}
-	if cfg.Randomize {
+	if cfg.RandomOptions.Randomize {
 		Randomize(&cfg, &d2files)
 	}
 
