@@ -9,6 +9,6 @@
     "RandomOptions": {
         "Randomize": true,
         "Seed": 99,
-        "IsBalanced": false
+        "IsBalanced": true
     }
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/uniqueItemsTxt"
 )
 
+// Prop represents an item
 type Prop struct {
 	Name string
 	Par  string
@@ -21,14 +22,21 @@ type Prop struct {
 	Max  string
 	Lvl  int
 }
-type Props = []Prop
-type BalancedProps = map[int]Props
-type Props2 = map[string]BalancedProps
 
+// Props is a slice of Prop
+type Props = []Prop
+
+// BucketedProps is a map holding Props for each bucket
+type BucketedProps = map[int]Props
+
+// BucketedPropsMap is a map with the prop name as the key holding a BucketedProps
+type BucketedPropsMap = map[string]BucketedProps
+
+// RandomOptions are the options for the randomizer
 type RandomOptions struct {
 	Randomize  bool  `json:"Randomize"`
 	Seed       int64 `json:"Seed"`
-	IsBalanced bool  `json:"Balance"`
+	IsBalanced bool  `json:"IsBalanced"`
 }
 
 const (
@@ -49,21 +57,43 @@ func getRandomOptions(cfg *ModConfig) RandomOptions {
 	return defaultCfg
 }
 
+// Randomize randomizes all items based on the RandomOptions
 func Randomize(cfg *ModConfig, d2files *d2file.D2Files) {
 	opts := getRandomOptions(cfg)
 	rand.Seed(opts.Seed)
 
-	props := getAllProps(opts, d2files)
+	props, propKeys := getAllProps(opts, d2files)
 	miscBuckets := getBucketsForMisc(d2files)
 
-	randomizeUniqueProps(opts, d2files, props)
-	randomizeSetProps(opts, d2files, props)
-	randomizeSetItemsProps(opts, d2files, props)
-	randomizeRWProps(opts, miscBuckets, d2files, props)
+	randomizeUniqueProps(opts, d2files, props, propKeys)
+	randomizeSetProps(opts, d2files, props, propKeys)
+	randomizeSetItemsProps(opts, d2files, props, propKeys)
+	randomizeRWProps(opts, miscBuckets, d2files, props, propKeys)
 }
 
-func getAllProps(opts RandomOptions, d2files *d2file.D2Files) BalancedProps {
-	props := BalancedProps{}
+// Adds prop to correct map/bucket
+func addOrCreateProp(props BucketedPropsMap, prop Prop) BucketedPropsMap {
+	buckets := getBalanceBuckets(prop.Lvl)
+	if _, ok := props[prop.Name]; !ok {
+		props[prop.Name] = make(map[int][]Prop)
+		props[prop.Name][bucketAll] = make([]Prop, 0)
+		props[prop.Name][bucket0] = make([]Prop, 0)
+		props[prop.Name][bucket30] = make([]Prop, 0)
+		props[prop.Name][bucket60] = make([]Prop, 0)
+	}
+	for bucket := range buckets {
+		props[prop.Name][bucket] = append(props[prop.Name][bucket], prop)
+	}
+	props[prop.Name][bucketAll] = append(props[prop.Name][bucketAll], prop)
+	return props
+}
+
+// Returns all props bucketized
+func getAllProps(opts RandomOptions, d2files *d2file.D2Files) (BucketedPropsMap, []string) {
+
+	props2 := BucketedPropsMap{}
+
+	props := BucketedProps{}
 	props[bucketAll] = Props{}
 	props[bucket0] = Props{}
 	props[bucket30] = Props{}
@@ -71,55 +101,40 @@ func getAllProps(opts RandomOptions, d2files *d2file.D2Files) BalancedProps {
 
 	// uniques
 	uniqueProps := getAllUniqueProps(d2files, []Prop{})
-	if opts.IsBalanced {
-		for _, prop := range uniqueProps {
-			bucket := getBalancebucket(prop.Lvl)
-			props[bucket] = append(props[bucket], prop)
-		}
+	for _, prop := range uniqueProps {
+		props2 = addOrCreateProp(props2, prop)
 	}
-	props[bucketAll] = append(props[bucketAll], uniqueProps...)
 
 	// sets
 	setProps := getAllSetProps(d2files, []Prop{})
-	if opts.IsBalanced {
-		for _, prop := range setProps {
-			bucket := getBalancebucket(prop.Lvl)
-			props[bucket] = append(props[bucket], prop)
-		}
+	for _, prop := range setProps {
+		props2 = addOrCreateProp(props2, prop)
 	}
-	props[bucketAll] = append(props[bucketAll], setProps...)
 
 	// sets items
 	setItemsProps := getAllSetItemsProps(d2files, []Prop{})
-	if opts.IsBalanced {
-		for _, prop := range setItemsProps {
-			bucket := getBalancebucket(prop.Lvl)
-			props[bucket] = append(props[bucket], prop)
-		}
+	for _, prop := range setItemsProps {
+		props2 = addOrCreateProp(props2, prop)
 	}
-	props[bucketAll] = append(props[bucketAll], setProps...)
 
 	// rw
 	rwProps := getAllRWProps(d2files, []Prop{})
-	if opts.IsBalanced {
-		for _, prop := range rwProps {
-			bucket := getBalancebucket(prop.Lvl)
-			props[bucket] = append(props[bucket], prop)
-		}
+	for _, prop := range rwProps {
+		props2 = addOrCreateProp(props2, prop)
 	}
-	props[bucketAll] = append(props[bucketAll], setProps...)
 
 	// gems
 	gemsProps := getAllGemsProps(d2files, []Prop{})
-	if opts.IsBalanced {
-		for _, prop := range gemsProps {
-			bucket := getBalancebucket(prop.Lvl)
-			props[bucket] = append(props[bucket], prop)
-		}
+	for _, prop := range gemsProps {
+		props2 = addOrCreateProp(props2, prop)
 	}
-	props[bucketAll] = append(props[bucketAll], setProps...)
 
-	return props
+	var keys []string
+	for k := range props2 {
+		keys = append(keys, k)
+	}
+
+	return props2, keys
 }
 
 // Get Unique Props
@@ -133,33 +148,29 @@ func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
 			lvl = mbLvl
 		}
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			if row[i] != "" {
-				props = append(props, Prop{
-					Name: row[i],
-					Par:  row[i+1],
-					Min:  row[i+2],
-					Max:  row[i+3],
-					Lvl:  lvl,
-				})
-			}
+			props = append(props, Prop{
+				Name: row[i],
+				Par:  row[i+1],
+				Min:  row[i+2],
+				Max:  row[i+3],
+				Lvl:  lvl,
+			})
 		}
 	}
 	return props
 }
 
 // Randomize Unique Props
-func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props BalancedProps) {
+func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, uniqueItemsTxt.FileName)
 	propOffset := uniqueItemsTxt.Prop1
 	for idx, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			prop := getBalancedRandomProp(opts, row[uniqueItemsTxt.Lvl], props)
-			if row[i] != "" {
-				f.Rows[idx][i] = prop.Name
-				f.Rows[idx][i+1] = prop.Par
-				f.Rows[idx][i+2] = prop.Min
-				f.Rows[idx][i+3] = prop.Max
-			}
+			prop := getBalancedRandomProp(opts, row[uniqueItemsTxt.Lvl], props, propKeys)
+			f.Rows[idx][i] = prop.Name
+			f.Rows[idx][i+1] = prop.Par
+			f.Rows[idx][i+2] = prop.Min
+			f.Rows[idx][i+3] = prop.Max
 		}
 	}
 }
@@ -175,33 +186,29 @@ func getAllSetProps(d2files *d2file.D2Files, props Props) Props {
 			lvl = mbLvl
 		}
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			if row[i] != "" {
-				props = append(props, Prop{
-					Name: row[i],
-					Par:  row[i+1],
-					Min:  row[i+2],
-					Max:  row[i+3],
-					Lvl:  lvl,
-				})
-			}
+			props = append(props, Prop{
+				Name: row[i],
+				Par:  row[i+1],
+				Min:  row[i+2],
+				Max:  row[i+3],
+				Lvl:  lvl,
+			})
 		}
 	}
 	return props
 }
 
 // Randomize Set Props
-func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props BalancedProps) {
+func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, setsTxt.FileName)
 	propOffset := setsTxt.PCode2a
 	for idx, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			prop := getBalancedRandomProp(opts, row[setsTxt.Level], props)
-			if row[i] != "" {
-				f.Rows[idx][i] = prop.Name
-				f.Rows[idx][i+1] = prop.Par
-				f.Rows[idx][i+2] = prop.Min
-				f.Rows[idx][i+3] = prop.Max
-			}
+			prop := getBalancedRandomProp(opts, row[setsTxt.Level], props, propKeys)
+			f.Rows[idx][i] = prop.Name
+			f.Rows[idx][i+1] = prop.Par
+			f.Rows[idx][i+2] = prop.Min
+			f.Rows[idx][i+3] = prop.Max
 		}
 	}
 }
@@ -232,18 +239,16 @@ func getAllSetItemsProps(d2files *d2file.D2Files, props Props) Props {
 }
 
 // Randomize Set Items Props
-func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props BalancedProps) {
+func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, setItemsTxt.FileName)
 	propOffset := setItemsTxt.Prop1
 	for idx, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			prop := getBalancedRandomProp(opts, row[setItemsTxt.Lvl], props)
-			if row[i] != "" {
-				f.Rows[idx][i] = prop.Name
-				f.Rows[idx][i+1] = prop.Par
-				f.Rows[idx][i+2] = prop.Min
-				f.Rows[idx][i+3] = prop.Max
-			}
+			prop := getBalancedRandomProp(opts, row[setItemsTxt.Lvl], props, propKeys)
+			f.Rows[idx][i] = prop.Name
+			f.Rows[idx][i+1] = prop.Par
+			f.Rows[idx][i+2] = prop.Min
+			f.Rows[idx][i+3] = prop.Max
 		}
 	}
 }
@@ -269,7 +274,7 @@ func getAllRWProps(d2files *d2file.D2Files, props Props) Props {
 }
 
 // Randomize RW Props
-func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d2file.D2Files, props BalancedProps) {
+func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
 	propOffset := runesTxt.T1Code1
 	for idx, row := range f.Rows {
@@ -279,13 +284,11 @@ func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d
 		}
 		bucket := getMaxBucket(runeBuckets)
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			prop := getRandomProp(opts, bucket, props)
-			if row[i] != "" {
-				f.Rows[idx][i] = prop.Name
-				f.Rows[idx][i+1] = prop.Par
-				f.Rows[idx][i+2] = prop.Min
-				f.Rows[idx][i+3] = prop.Max
-			}
+			prop := getBalancedRandomProp(opts, strconv.Itoa(bucket), props, propKeys)
+			f.Rows[idx][i] = prop.Name
+			f.Rows[idx][i+1] = prop.Par
+			f.Rows[idx][i+2] = prop.Min
+			f.Rows[idx][i+3] = prop.Max
 		}
 	}
 }
@@ -296,49 +299,16 @@ func getAllGemsProps(d2files *d2file.D2Files, props Props) Props {
 	propOffset := gemsTxt.WeaponMod1Code
 	for _, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			if row[i] != "" {
-				props = append(props, Prop{
-					Name: row[i],
-					Par:  row[i+1],
-					Min:  row[i+2],
-					Max:  row[i+3],
-					Lvl:  0,
-				})
-			}
+			props = append(props, Prop{
+				Name: row[i],
+				Par:  row[i+1],
+				Min:  row[i+2],
+				Max:  row[i+3],
+				Lvl:  0,
+			})
 		}
 	}
 	return props
-}
-
-// Randomize Gem Props
-func randomizeGemsProps(opts RandomOptions, miscBuckets map[string]int, d2files *d2file.D2Files, props BalancedProps) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, gemsTxt.FileName)
-	propOffset := gemsTxt.WeaponMod1Code
-	for idx, row := range f.Rows {
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
-			prop := getRandomProp(opts, miscBuckets[row[gemsTxt.Name]], props)
-			for ok := false; ok; ok = prop.Par == "" {
-				if prop.Par == "" {
-					break
-				}
-				prop = getRandomProp(opts, miscBuckets[row[gemsTxt.Name]], props)
-			}
-
-			if row[i] != "" {
-				f.Rows[idx][i] = prop.Name
-				f.Rows[idx][i+1] = prop.Par
-				f.Rows[idx][i+2] = prop.Max // min/max need to be the same values
-				f.Rows[idx][i+3] = prop.Max
-			}
-		}
-	}
-}
-
-func getRandomProp(opts RandomOptions, bucket int, props BalancedProps) Prop {
-	if opts.IsBalanced {
-		return props[bucket][rand.Intn(len(props[bucket]))]
-	}
-	return props[bucketAll][rand.Intn(len(props[bucketAll]))]
 }
 
 func getBalancebucket(lvl int) int {
@@ -351,13 +321,26 @@ func getBalancebucket(lvl int) int {
 	return bucket0
 }
 
-func getBalancedRandomProp(opts RandomOptions, lvl string, props BalancedProps) Prop {
-	n, err := strconv.Atoi(lvl)
-	if err == nil {
-		bucket := getBalancebucket(n)
-		return getRandomProp(opts, bucket, props)
+func getBalanceBuckets(lvl int) []int {
+	buckets := []int{}
+	if lvl > 60 {
+		buckets = append(buckets, bucket60)
 	}
-	return getRandomProp(opts, bucketAll, props)
+	if lvl > 30 {
+		buckets = append(buckets, bucket30)
+	}
+	buckets = append(buckets, bucket0)
+	return buckets
+}
+
+func getBalancedRandomProp(opts RandomOptions, lvl string, props BucketedPropsMap, propKeys []string) Prop {
+	bucket := bucketAll
+	n, err := strconv.Atoi(lvl)
+	if err == nil && opts.IsBalanced {
+		bucket = getBalancebucket(n)
+	}
+	propKey := propKeys[rand.Intn(len(propKeys))]
+	return props[propKey][bucket][rand.Intn(len(props[propKey][bucket]))]
 }
 
 func getBucketsForMisc(d2files *d2file.D2Files) map[string]int {
@@ -382,21 +365,4 @@ func getMaxBucket(buckets []int) int {
 		}
 	}
 	return bucket
-}
-
-func maxBucket(a, b string) string {
-	if bucketToInt(a) > bucketToInt(b) {
-		return a
-	}
-	return b
-}
-
-func bucketToInt(x string) int {
-	if x == "0-30" {
-		return 0
-	}
-	if x == "31-60" {
-		return 1
-	}
-	return 2
 }
