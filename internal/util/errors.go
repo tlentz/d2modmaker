@@ -1,11 +1,14 @@
 package util
 
-import "log"
+import (
+	"fmt"
+)
 
 // CheckError checks for err, log message/err
 func CheckError(message string, err error) {
 	if err != nil {
-		log.Fatal(message, err)
+		fmt.Println(message, err)
+		panic(err)
 	}
 }
 

@@ -73,13 +73,6 @@ func WriteD2File(d2file *D2File, filePath string) {
 
 // WriteFiles writes all d2 files
 func WriteFiles(d2files *map[string]D2File, outDir string) {
-	fmt.Println("removing " + outDir)
-	os.RemoveAll(outDir)
-
-	fmt.Println("creating " + outDir)
-	err := os.MkdirAll(outDir, 0755)
-	util.Check(err)
-
 	for _, file := range *d2files {
 		fmt.Println("writing " + outDir + file.FileName)
 		WriteD2File(&file, outDir)

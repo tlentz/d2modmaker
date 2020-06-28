@@ -69,6 +69,8 @@ func getRandomOptions(cfg *ModConfig) RandomOptions {
 	}
 	defaultCfg.PerfectProps = cfg.RandomOptions.PerfectProps
 	defaultCfg.UseOSkills = cfg.RandomOptions.UseOSkills
+
+	cfg.RandomOptions.Seed = defaultCfg.Seed
 	return defaultCfg
 }
 

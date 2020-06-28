@@ -99,7 +99,22 @@ func makeMod() {
 		Randomize(&cfg, &d2files)
 	}
 
+	fmt.Println("removing " + outDir)
+	os.RemoveAll(outDir)
+	fmt.Println("creating " + outDir)
+	err := os.MkdirAll(outDir, 0755)
+	util.Check(err)
 	d2file.WriteFiles(&d2files, outDir)
+	writeSeed(cfg)
+}
+
+func writeSeed(cfg ModConfig) {
+	filePath := outDir + "Seed.txt"
+	fmt.Println("writing " + filePath)
+	f, err := os.Create(filePath)
+	util.Check(err)
+	defer f.Close()
+	f.WriteString(fmt.Sprintf("%d\n", cfg.RandomOptions.Seed))
 }
 
 func startWithCube(d2files *d2file.D2Files) {
