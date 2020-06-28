@@ -9,6 +9,8 @@
     "RandomOptions": {
         "Randomize": true,
         "Seed": 99,
-        "IsBalanced": true
+        "IsBalanced": true,
+        "MinProps": 1,
+        "MaxProps": 1
     }
 }

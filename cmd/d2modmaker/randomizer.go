@@ -12,6 +12,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/setItemsTxt"
 	"github.com/tlentz/d2modmaker/internal/setsTxt"
 	"github.com/tlentz/d2modmaker/internal/uniqueItemsTxt"
+	"github.com/tlentz/d2modmaker/internal/util"
 )
 
 // Prop represents an item
@@ -36,7 +37,9 @@ type BucketedPropsMap = map[string]BucketedProps
 type RandomOptions struct {
 	Randomize  bool  `json:"Randomize"`
 	Seed       int64 `json:"Seed"`
-	IsBalanced bool  `json:"IsBalanced"`
+	IsBalanced bool  `json:"IsBalanced"` // bucketizes props [0-30] [31-60] [61+]
+	MinProps   int   `json:"MinProps"`   // minimum number of non blank props on an item
+	MaxProps   int   `json:"MaxProps"`   // maximum number of non blank props on an item
 }
 
 const (
@@ -164,13 +167,31 @@ func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
 func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, uniqueItemsTxt.FileName)
 	propOffset := uniqueItemsTxt.Prop1
+	adjustNumProps := false
+	if opts.MinProps >= 0 && opts.MaxProps >= 0 && opts.MinProps <= opts.MaxProps {
+		adjustNumProps = true
+	}
+	minNumProps := util.MinInt(util.MaxInt(0, opts.MinProps), uniqueItemsTxt.MaxNumProps)
+	maxNumProps := util.MaxInt(util.MinInt(uniqueItemsTxt.MaxNumProps, opts.MaxProps), 0)
+	numProps := 0
 	for idx, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
 			prop := getBalancedRandomProp(opts, row[uniqueItemsTxt.Lvl], props, propKeys)
-			f.Rows[idx][i] = prop.Name
-			f.Rows[idx][i+1] = prop.Par
-			f.Rows[idx][i+2] = prop.Min
-			f.Rows[idx][i+3] = prop.Max
+			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
+				i -= 4
+			} else if numProps >= minNumProps && numProps >= maxNumProps && adjustNumProps {
+				f.Rows[idx][i] = ""
+				f.Rows[idx][i+1] = ""
+				f.Rows[idx][i+2] = ""
+				f.Rows[idx][i+3] = ""
+				numProps++
+			} else {
+				f.Rows[idx][i] = prop.Name
+				f.Rows[idx][i+1] = prop.Par
+				f.Rows[idx][i+2] = prop.Min
+				f.Rows[idx][i+3] = prop.Max
+				numProps++
+			}
 		}
 	}
 }
@@ -202,13 +223,31 @@ func getAllSetProps(d2files *d2file.D2Files, props Props) Props {
 func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, setsTxt.FileName)
 	propOffset := setsTxt.PCode2a
+	adjustNumProps := false
+	if opts.MinProps >= 0 && opts.MaxProps >= 0 && opts.MinProps <= opts.MaxProps {
+		adjustNumProps = true
+	}
+	minNumProps := util.MinInt(util.MaxInt(0, opts.MinProps), setsTxt.MaxNumProps)
+	maxNumProps := util.MaxInt(util.MinInt(setsTxt.MaxNumProps, opts.MaxProps), 0)
+	numProps := 0
 	for idx, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
 			prop := getBalancedRandomProp(opts, row[setsTxt.Level], props, propKeys)
-			f.Rows[idx][i] = prop.Name
-			f.Rows[idx][i+1] = prop.Par
-			f.Rows[idx][i+2] = prop.Min
-			f.Rows[idx][i+3] = prop.Max
+			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
+				i -= 4
+			} else if numProps >= minNumProps && numProps >= maxNumProps && adjustNumProps {
+				f.Rows[idx][i] = ""
+				f.Rows[idx][i+1] = ""
+				f.Rows[idx][i+2] = ""
+				f.Rows[idx][i+3] = ""
+				numProps++
+			} else {
+				f.Rows[idx][i] = prop.Name
+				f.Rows[idx][i+1] = prop.Par
+				f.Rows[idx][i+2] = prop.Min
+				f.Rows[idx][i+3] = prop.Max
+				numProps++
+			}
 		}
 	}
 }
@@ -242,13 +281,31 @@ func getAllSetItemsProps(d2files *d2file.D2Files, props Props) Props {
 func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, setItemsTxt.FileName)
 	propOffset := setItemsTxt.Prop1
+	adjustNumProps := false
+	if opts.MinProps >= 0 && opts.MaxProps >= 0 && opts.MinProps <= opts.MaxProps {
+		adjustNumProps = true
+	}
+	minNumProps := util.MinInt(util.MaxInt(0, opts.MinProps), setItemsTxt.MaxNumProps)
+	maxNumProps := util.MaxInt(util.MinInt(setItemsTxt.MaxNumProps, opts.MaxProps), 0)
+	numProps := 0
 	for idx, row := range f.Rows {
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
 			prop := getBalancedRandomProp(opts, row[setItemsTxt.Lvl], props, propKeys)
-			f.Rows[idx][i] = prop.Name
-			f.Rows[idx][i+1] = prop.Par
-			f.Rows[idx][i+2] = prop.Min
-			f.Rows[idx][i+3] = prop.Max
+			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
+				i -= 4
+			} else if numProps >= minNumProps && numProps >= maxNumProps && adjustNumProps {
+				f.Rows[idx][i] = ""
+				f.Rows[idx][i+1] = ""
+				f.Rows[idx][i+2] = ""
+				f.Rows[idx][i+3] = ""
+				numProps++
+			} else {
+				f.Rows[idx][i] = prop.Name
+				f.Rows[idx][i+1] = prop.Par
+				f.Rows[idx][i+2] = prop.Min
+				f.Rows[idx][i+3] = prop.Max
+				numProps++
+			}
 		}
 	}
 }
@@ -283,12 +340,30 @@ func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d
 			runeBuckets = append(runeBuckets, miscBuckets[row[runesTxt.Rune1+j]])
 		}
 		bucket := getMaxBucket(runeBuckets)
+		adjustNumProps := false
+		if opts.MinProps >= 0 && opts.MaxProps >= 0 && opts.MinProps <= opts.MaxProps {
+			adjustNumProps = true
+		}
+		minNumProps := util.MinInt(util.MaxInt(0, opts.MinProps), runesTxt.MaxNumProps)
+		maxNumProps := util.MaxInt(util.MinInt(runesTxt.MaxNumProps, opts.MaxProps), 0)
+		numProps := 0
 		for i := propOffset; i < len(row)-propOffset; i += 4 {
 			prop := getBalancedRandomProp(opts, strconv.Itoa(bucket), props, propKeys)
-			f.Rows[idx][i] = prop.Name
-			f.Rows[idx][i+1] = prop.Par
-			f.Rows[idx][i+2] = prop.Min
-			f.Rows[idx][i+3] = prop.Max
+			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
+				i -= 4
+			} else if numProps >= minNumProps && numProps >= maxNumProps && adjustNumProps {
+				f.Rows[idx][i] = ""
+				f.Rows[idx][i+1] = ""
+				f.Rows[idx][i+2] = ""
+				f.Rows[idx][i+3] = ""
+				numProps++
+			} else {
+				f.Rows[idx][i] = prop.Name
+				f.Rows[idx][i+1] = prop.Par
+				f.Rows[idx][i+2] = prop.Min
+				f.Rows[idx][i+3] = prop.Max
+				numProps++
+			}
 		}
 	}
 }
@@ -334,13 +409,22 @@ func getBalanceBuckets(lvl int) []int {
 }
 
 func getBalancedRandomProp(opts RandomOptions, lvl string, props BucketedPropsMap, propKeys []string) Prop {
+
+	// get our bucket
 	bucket := bucketAll
 	n, err := strconv.Atoi(lvl)
 	if err == nil && opts.IsBalanced {
 		bucket = getBalancebucket(n)
 	}
-	propKey := propKeys[rand.Intn(len(propKeys))]
-	return props[propKey][bucket][rand.Intn(len(props[propKey][bucket]))]
+
+	// get prop
+	numPropKeys := len(propKeys)
+	k := propKeys[rand.Intn(numPropKeys)]
+	if len(props[k][bucket]) > 0 {
+		return props[k][bucket][rand.Intn(len(props[k][bucket]))]
+	}
+	return props[k][bucketAll][rand.Intn(len(props[k][bucketAll]))]
+
 }
 
 func getBucketsForMisc(d2files *d2file.D2Files) map[string]int {
