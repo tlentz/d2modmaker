@@ -22,7 +22,12 @@ jobs:
       with:
         path: ./src/github.com/${{ github.repository }}
     - name: Build
-      run: cd ./src/github.com/${{ github.repository }} && ls
+      run: cd ./src/github.com/${{ github.repository }} && bin/build
+    - name: Archive Release
+      uses: thedoctor0/zip-release@master
+      with:
+        filename: 'd2modmaker.zip'
+        directory: ./src/github.com/${{ github.repository }}/dist
   # build:
   #   name: Build
   #   runs-on: ubuntu-latest
