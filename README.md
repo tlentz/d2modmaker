@@ -1,15 +1,18 @@
-# D2 Mod Maker
+# D2 ModMaker
 
 This is a program is used to create your own Diablo II mod, the way you want it to be given a simple config.
 
 # How It Works
-1. Clone the repository
-2. `cd d2modmaker && ./bin/d2modmaker`
-
-* This will generate a `data.zip` which will hold the `data` folder that you can put into your Diablo II folder.
-* The generated files are based on the original 1.13c files
-* Add `-direct -txt` to your Diablo II shortcut
-* If using Plugy add `-direct -txt` to your plugy shortcut
+1. Download the latest release zip folder from here: https://github.com/tlentz/d2modmaker/releases
+2. Unzip the folder
+3. Edit `cfg.json` with the settings th you like.  `ModConfig` details are below.
+4. Go into the d2modmaker folder
+5a. If on windows, execute d2modmaker-windows.exe
+5b. If on mac, execute d2modmaker-mac (you may need to `chmod +x d2modmaker-mac`)
+5c. If on linux, execute d2modmaker-linux (you may need to `chmod +x d2modmaker-linux`)
+6. Put the `data` folder into your diablo 2 folder
+7. Launch your shortcut with `-direct -txt`
+8. If using Plugy add `-direct -txt` to your plugy shortcut
 
 # ModConfig
 
