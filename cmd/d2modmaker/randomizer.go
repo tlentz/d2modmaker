@@ -51,12 +51,20 @@ const (
 
 func getRandomOptions(cfg *ModConfig) RandomOptions {
 	defaultCfg := RandomOptions{
-		Seed: time.Now().UnixNano(),
+		Seed:     time.Now().UnixNano(),
+		MinProps: -1,
+		MaxProps: -1,
 	}
-	if cfg.RandomOptions.Seed > 0 {
+	if cfg.RandomOptions.Seed >= 0 {
 		defaultCfg.Seed = cfg.RandomOptions.Seed
 	}
 	defaultCfg.IsBalanced = cfg.RandomOptions.IsBalanced
+	if cfg.RandomOptions.MaxProps >= 0 {
+		defaultCfg.MaxProps = cfg.RandomOptions.MaxProps
+	}
+	if cfg.RandomOptions.MinProps >= 0 {
+		defaultCfg.MinProps = cfg.RandomOptions.MinProps
+	}
 	return defaultCfg
 }
 

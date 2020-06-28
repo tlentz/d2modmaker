@@ -10,7 +10,7 @@
         "Randomize": true,
         "Seed": 99,
         "IsBalanced": true,
-        "MinProps": 1,
-        "MaxProps": 1
+        "MinProps": -1,
+        "MaxProps": -1
     }
 }
