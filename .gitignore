@@ -10,3 +10,4 @@ node_modules
 dist
 data
 data.zip
+*.exe
