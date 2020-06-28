@@ -35,11 +35,13 @@ type BucketedPropsMap = map[string]BucketedProps
 
 // RandomOptions are the options for the randomizer
 type RandomOptions struct {
-	Randomize  bool  `json:"Randomize"`
-	Seed       int64 `json:"Seed"`
-	IsBalanced bool  `json:"IsBalanced"` // bucketizes props [0-30] [31-60] [61+]
-	MinProps   int   `json:"MinProps"`   // minimum number of non blank props on an item
-	MaxProps   int   `json:"MaxProps"`   // maximum number of non blank props on an item
+	Randomize    bool  `json:"Randomize"`
+	Seed         int64 `json:"Seed"`
+	IsBalanced   bool  `json:"IsBalanced"`   // bucketizes props [0-30] [31-60] [61+]
+	MinProps     int   `json:"MinProps"`     // minimum number of non blank props on an item
+	MaxProps     int   `json:"MaxProps"`     // maximum number of non blank props on an item
+	PerfectProps bool  `json:"PerfectProps"` // sets min/max to max
+	UseOSkills   bool  `json:"UseOSkills"`   // +3 Fireball (Sorceress Only) -> +3 Fireball
 }
 
 const (
@@ -65,6 +67,8 @@ func getRandomOptions(cfg *ModConfig) RandomOptions {
 	if cfg.RandomOptions.MinProps >= 0 {
 		defaultCfg.MinProps = cfg.RandomOptions.MinProps
 	}
+	defaultCfg.PerfectProps = cfg.RandomOptions.PerfectProps
+	defaultCfg.UseOSkills = cfg.RandomOptions.UseOSkills
 	return defaultCfg
 }
 
@@ -102,50 +106,61 @@ func addOrCreateProp(props BucketedPropsMap, prop Prop) BucketedPropsMap {
 // Returns all props bucketized
 func getAllProps(opts RandomOptions, d2files *d2file.D2Files) (BucketedPropsMap, []string) {
 
-	props2 := BucketedPropsMap{}
-
-	props := BucketedProps{}
-	props[bucketAll] = Props{}
-	props[bucket0] = Props{}
-	props[bucket30] = Props{}
-	props[bucket60] = Props{}
+	props := BucketedPropsMap{}
 
 	// uniques
 	uniqueProps := getAllUniqueProps(d2files, []Prop{})
 	for _, prop := range uniqueProps {
-		props2 = addOrCreateProp(props2, prop)
+		props = addOrCreateProp(props, prop)
 	}
 
 	// sets
 	setProps := getAllSetProps(d2files, []Prop{})
 	for _, prop := range setProps {
-		props2 = addOrCreateProp(props2, prop)
+		props = addOrCreateProp(props, prop)
 	}
 
 	// sets items
 	setItemsProps := getAllSetItemsProps(d2files, []Prop{})
 	for _, prop := range setItemsProps {
-		props2 = addOrCreateProp(props2, prop)
+		props = addOrCreateProp(props, prop)
 	}
 
 	// rw
 	rwProps := getAllRWProps(d2files, []Prop{})
 	for _, prop := range rwProps {
-		props2 = addOrCreateProp(props2, prop)
+		props = addOrCreateProp(props, prop)
 	}
 
 	// gems
 	gemsProps := getAllGemsProps(d2files, []Prop{})
 	for _, prop := range gemsProps {
-		props2 = addOrCreateProp(props2, prop)
+		props = addOrCreateProp(props, prop)
+	}
+
+	for k := range props {
+		for b := range props[k] {
+			for i, p := range props[k][b] {
+				// Set all props Min to the Max value
+				if opts.PerfectProps {
+					props[k][b][i].Min = p.Max
+				}
+				// sets skill = oskill
+				if opts.UseOSkills {
+					if p.Name == "skill" {
+						props[k][b][i].Name = "oskill"
+					}
+				}
+			}
+		}
 	}
 
 	var keys []string
-	for k := range props2 {
+	for k := range props {
 		keys = append(keys, k)
 	}
 
-	return props2, keys
+	return props, keys
 }
 
 // Get Unique Props

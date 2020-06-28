@@ -8,9 +8,11 @@
     "StartWithCube": true,
     "RandomOptions": {
         "Randomize": true,
-        "Seed": 99,
-        "IsBalanced": true,
-        "MinProps": -1,
-        "MaxProps": -1
+        "Seed": -1,
+        "IsBalanced": false,
+        "MinProps": 20,
+        "MaxProps": -1,
+        "UseOSkills": true,
+        "PerfectProps": true
     }
 }
