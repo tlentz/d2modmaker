@@ -194,6 +194,9 @@ func increaseStackSizes(d2files *d2file.D2Files) {
 		if row[misc.Name] == misc.TownPortalBook || row[misc.Name] == misc.IdentifyBook {
 			f.Rows[idx][misc.MaxStack] = "100"
 		}
+		if row[misc.Name] == misc.Arrows || row[misc.Name] == misc.Bolts {
+			f.Rows[idx][misc.MaxStack] = "511"
+		}
 	}
 }
 
