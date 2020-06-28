@@ -23,35 +23,28 @@ jobs:
         path: ./src/github.com/${{ github.repository }}
     - name: Build
       run: cd ./src/github.com/${{ github.repository }} && bin/build
-    - name: Archive Release
+    - name: Archive
       uses: papeloto/action-zip@v1
       with:
         files: ./src/github.com/${{ github.repository }}/dist/
         dest: d2modmaker.zip
-  # build:
-  #   name: Build
-  #   runs-on: ubuntu-latest
-  #   steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Pre Release ${{ github.ref }}
+        draft: false
+        prerelease: true
+    - name: Uploade Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./d2modmaker.zip
+        asset_name: d2modmaker.zip
+        asset_content_type: application/zip
 
-  #   - name: Set up Go 1.x
-  #     uses: actions/setup-go@v2
-  #     with:
-  #       go-version: ^1.13
-  #     id: go
-
-  #   - name: Check out code into the Go module directory
-  #     uses: actions/checkout@v2
-
-  #   - name: Get dependencies
-  #     run: |
-  #       go get -v -t -d ./...
-  #       if [ -f Gopkg.toml ]; then
-  #           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-  #           dep ensure
-  #       fi
-
-  #   - name: Build
-  #     run: bin/build && ls
-
-  #   - name: Test
-  #     run: cd ./dist/d2modmaker && ./d2modmaker-linux
