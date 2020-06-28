@@ -2,7 +2,7 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, tlentz/actions-test ]
   pull_request:
     branches: [ master ]
 
@@ -32,7 +32,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Pre Release ${{ github.ref }}
@@ -41,7 +41,7 @@ jobs:
     - name: Uploade Release Asset
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./d2modmaker.zip
