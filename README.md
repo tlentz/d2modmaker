@@ -29,7 +29,7 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
     * `MIN 0.0`
     * Set to `-1` to omit
 * **EnableTownSkills** `bool`
-    * Enables teleport in town
+    * Enables all skills in town
 * **NoDropZero** `bool`
     * Sets "NoDrop" = 0 (Monsters will always drop items)
 * **QuestDrops** `bool`

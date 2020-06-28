@@ -12,7 +12,7 @@ import (
 	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
 	missiles "github.com/tlentz/d2modmaker/internal/missilesTxt"
 	skills "github.com/tlentz/d2modmaker/internal/skillsTxt"
-	tc "github.com/tlentz/d2modmaker/internal/treasureclassextxt"
+	tc "github.com/tlentz/d2modmaker/internal/treasureClassExTxt"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
