@@ -7,31 +7,46 @@ on:
     branches: [ master ]
 
 jobs:
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  test-gopath:
+    env:
+      GOPATH: ${{ github.workspace }}
+      GO111MODULE: off
+    runs-on: macos-latest
     steps:
-
-    - name: Set up Go 1.x
+    - name: Install Go
       uses: actions/setup-go@v2
       with:
-        go-version: ^1.13
-      id: go
-
-    - name: Check out code into the Go module directory
+        go-version: 1.14.x
+    - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
-
+      with:
+        path: ./src/github.com/${{ github.repository }}
     - name: Build
-      run: bin/build && ls
+      run: bin/build && ls && ls dist
+  # build:
+  #   name: Build
+  #   runs-on: ubuntu-latest
+  #   steps:
 
-    - name: Test
-      run: cd ./dist/d2modmaker && ./d2modmaker-linux
+  #   - name: Set up Go 1.x
+  #     uses: actions/setup-go@v2
+  #     with:
+  #       go-version: ^1.13
+  #     id: go
+
+  #   - name: Check out code into the Go module directory
+  #     uses: actions/checkout@v2
+
+  #   - name: Get dependencies
+  #     run: |
+  #       go get -v -t -d ./...
+  #       if [ -f Gopkg.toml ]; then
+  #           curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+  #           dep ensure
+  #       fi
+
+  #   - name: Build
+  #     run: bin/build && ls
+
+  #   - name: Test
+  #     run: cd ./dist/d2modmaker && ./d2modmaker-linux
