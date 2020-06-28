@@ -15,11 +15,11 @@ GOOS=windows GOARCH=amd64 go build -ldflags "-X main.mode=%D2ModMakerMode%" -o d
 cd ../..
 
 rm -rf ./dist/
-mkdir -p ./dist/d2modmaker/
+mkdir -p ./dist/
 
-mv cmd/d2modmaker/d2modmaker-mac ./dist/d2modmaker/d2modmaker-mac
-mv cmd/d2modmaker/d2modmaker-linux ./dist/d2modmaker/d2modmaker-linux
-mv cmd/d2modmaker/d2modmaker-windows.exe ./dist/d2modmaker/d2modmaker-windows.exe
+mv cmd/d2modmaker/d2modmaker-mac ./dist/d2modmaker-mac
+mv cmd/d2modmaker/d2modmaker-linux ./dist/d2modmaker-linux
+mv cmd/d2modmaker/d2modmaker-windows.exe ./dist/d2modmaker-windows.exe
 
 cp cfg.json ./dist/cfg.json
 cp -r assets/113c-data/ ./dist/113c-data/

@@ -31,18 +31,17 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	if mode == "production" {
-		dataDir = "../113c-data/"
-		outDir = "../data/global/excel/"
-		cfgPath = "../cfg.json"
-	} else {
-		dataDir = "../../assets/113c-data/"
-		outDir = "../../dist/"
-		cfgPath = "../../cfg.json"
-	}
+	// if mode == "production" {
+	dataDir = "./113c-data/"
+	outDir = "./data/global/excel/"
+	cfgPath = "./cfg.json"
+	// } else {
+	// 	dataDir = "../../assets/113c-data/"
+	// 	outDir = "../../dist/"
+	// 	cfgPath = "../../cfg.json"
+	// }
 	fmt.Println(dataDir, outDir, cfgPath)
 	makeMod()
-	// printFile()
 }
 
 // Simple helper function to read an environment or return a default value
@@ -106,6 +105,7 @@ func makeMod() {
 	util.Check(err)
 	d2file.WriteFiles(&d2files, outDir)
 	writeSeed(cfg)
+	fmt.Scanln() // wait for Enter Key
 }
 
 func writeSeed(cfg ModConfig) {
