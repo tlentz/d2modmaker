@@ -1,4 +1,4 @@
-package treasureclassextxt
+package treasureClassExTxt
 
 // File Constants
 const (

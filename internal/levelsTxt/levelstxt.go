@@ -1,4 +1,4 @@
-package levelstxt
+package levelsTxt
 
 // File Constants
 const (

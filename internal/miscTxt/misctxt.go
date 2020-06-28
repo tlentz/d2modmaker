@@ -1,4 +1,4 @@
-package misctxt
+package miscTxt
 
 // File Constants
 const (
