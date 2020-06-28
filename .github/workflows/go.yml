@@ -2,7 +2,7 @@ name: Go
 
 on:
   push:
-    branches: [ master, tlentz/actions-test ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -14,11 +14,14 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: Generate build number
+      id: buildnumber
       uses: einaregilsson/build-number@v2 
       with:
-        token: ${{secrets.MY_SECRET}}  
-    - name: Print new build number
-      run: echo "Build number is $BUILD_NUMBER"
+        token: ${{secrets.MY_SECRET}}
+    - name: Set version_number
+      id: version_number
+      outputs:
+        version_number: v0.0.$${{ steps.buildnumber.outputs.build_number }}
     - name: Install Go
       uses: actions/setup-go@v2
       with:
@@ -34,23 +37,23 @@ jobs:
       with:
         files: ./src/github.com/${{ github.repository }}/dist/
         dest: d2modmaker.zip
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
-    #   with:
-    #     tag_name: ${{ github.ref }}
-    #     release_name: Pre Release ${{ github.ref }}
-    #     draft: false
-    #     prerelease: true
-    # - name: Uploade Release Asset
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: ./d2modmaker.zip
-    #     asset_name: d2modmaker.zip
-    #     asset_content_type: application/zip
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
+      with:
+        tag_name: ${{ steps.version_number.outputs.version_number }}
+        release_name: Pre Release ${{ steps.version_number.outputs.version_number }}
+        draft: false
+        prerelease: true
+    - name: Uploade Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./d2modmaker.zip
+        asset_name: d2modmaker.zip
+        asset_content_type: application/zip
 
