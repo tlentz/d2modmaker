@@ -53,6 +53,6 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./d2modmaker.zip
-        asset_name: d2modmaker.zip
+        asset_name: "d2modmaker ${{ steps.version_number.outputs.version_number }}.zip"
         asset_content_type: application/zip
 
