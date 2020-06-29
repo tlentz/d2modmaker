@@ -31,15 +31,17 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	// if mode == "production" {
-	dataDir = "./113c-data/"
-	outDir = "./data/global/excel/"
-	cfgPath = "./cfg.json"
-	// } else {
-	// 	dataDir = "../../assets/113c-data/"
-	// 	outDir = "../../dist/"
-	// 	cfgPath = "../../cfg.json"
-	// }
+	// mode = "dev"
+	mode = "production"
+	if mode == "production" {
+		dataDir = "./113c-data/"
+		outDir = "./data/global/excel/"
+		cfgPath = "./cfg.json"
+	} else {
+		dataDir = "../../assets/113c-data/"
+		outDir = "../../dist/"
+		cfgPath = "../../cfg.json"
+	}
 	fmt.Println(dataDir, outDir, cfgPath)
 	makeMod()
 }

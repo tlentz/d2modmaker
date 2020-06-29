@@ -200,7 +200,7 @@ func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props Buc
 	maxNumProps := util.MaxInt(util.MinInt(uniqueItemsTxt.MaxNumProps, opts.MaxProps), 0)
 	numProps := 0
 	for idx, row := range f.Rows {
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			prop := getBalancedRandomProp(opts, row[uniqueItemsTxt.Lvl], props, propKeys)
 			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
 				i -= 4
@@ -256,7 +256,7 @@ func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props Bucket
 	maxNumProps := util.MaxInt(util.MinInt(setsTxt.MaxNumProps, opts.MaxProps), 0)
 	numProps := 0
 	for idx, row := range f.Rows {
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			prop := getBalancedRandomProp(opts, row[setsTxt.Level], props, propKeys)
 			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
 				i -= 4
@@ -314,7 +314,7 @@ func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props B
 	maxNumProps := util.MaxInt(util.MinInt(setItemsTxt.MaxNumProps, opts.MaxProps), 0)
 	numProps := 0
 	for idx, row := range f.Rows {
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			prop := getBalancedRandomProp(opts, row[setItemsTxt.Lvl], props, propKeys)
 			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
 				i -= 4
@@ -372,7 +372,8 @@ func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d
 		minNumProps := util.MinInt(util.MaxInt(0, opts.MinProps), runesTxt.MaxNumProps)
 		maxNumProps := util.MaxInt(util.MinInt(runesTxt.MaxNumProps, opts.MaxProps), 0)
 		numProps := 0
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
+
 			prop := getBalancedRandomProp(opts, strconv.Itoa(bucket), props, propKeys)
 			if prop.Name == "" && numProps < minNumProps && numProps < maxNumProps && adjustNumProps {
 				i -= 4
