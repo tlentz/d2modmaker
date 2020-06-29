@@ -175,7 +175,7 @@ func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
 		if err == nil {
 			lvl = mbLvl
 		}
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			props = append(props, Prop{
 				Name: row[i],
 				Par:  row[i+1],
@@ -231,7 +231,7 @@ func getAllSetProps(d2files *d2file.D2Files, props Props) Props {
 		if err == nil {
 			lvl = mbLvl
 		}
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			props = append(props, Prop{
 				Name: row[i],
 				Par:  row[i+1],
@@ -287,7 +287,7 @@ func getAllSetItemsProps(d2files *d2file.D2Files, props Props) Props {
 		if err == nil {
 			lvl = mbLvl
 		}
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			if row[i] != "" {
 				props = append(props, Prop{
 					Name: row[i],
@@ -340,7 +340,7 @@ func getAllRWProps(d2files *d2file.D2Files, props Props) Props {
 	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
 	propOffset := runesTxt.T1Code1
 	for _, row := range f.Rows {
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			if row[i] != "" {
 				props = append(props, Prop{
 					Name: row[i],
@@ -399,7 +399,7 @@ func getAllGemsProps(d2files *d2file.D2Files, props Props) Props {
 	f := d2file.GetOrCreateFile(dataDir, d2files, gemsTxt.FileName)
 	propOffset := gemsTxt.WeaponMod1Code
 	for _, row := range f.Rows {
-		for i := propOffset; i < len(row)-propOffset; i += 4 {
+		for i := propOffset; i < len(row)-3; i += 4 {
 			props = append(props, Prop{
 				Name: row[i],
 				Par:  row[i+1],
