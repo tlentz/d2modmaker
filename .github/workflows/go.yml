@@ -20,7 +20,7 @@ jobs:
         token: ${{secrets.MY_SECRET}}
     - name: Set version_number
       id: version_number
-      run: echo "::set-output name=version_number::v0.0.${{ steps.buildnumber.outputs.build_number }}"
+      run: echo "::set-output name=version_number::v1.0.${{ steps.buildnumber.outputs.build_number }}"
     - name: Install Go
       uses: actions/setup-go@v2
       with:
