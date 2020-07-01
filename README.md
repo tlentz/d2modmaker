@@ -2,6 +2,10 @@
 
 This is a program is used to create your own Diablo II mod, the way you want it to be given a simple config.
 
+# Discord
+* I created this discord channel to get better open source communication and for a place for people to post screenshots / ask questions and what not.
+* https://discord.gg/eQt2Z9b
+
 # How It Works
 1. Download the latest release zip folder from here: https://github.com/tlentz/d2modmaker/releases
 2. Unzip the folder
@@ -28,7 +32,7 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
 * **IncreaseMonsterDensity** `float`
     * Will increase the density of all areas by the given multiplier
     * `MAX: 30.0`
-    * `MIN 0.0`
+    * `MIN: 0.0`
     * Set to `-1` to omit
 * **EnableTownSkills** `bool`
     * Enables all skills in town
