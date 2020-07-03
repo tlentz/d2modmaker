@@ -31,8 +31,8 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	// mode = "dev"
-	mode = "production"
+	mode = "dev"
+	// mode = "production"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
