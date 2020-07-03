@@ -2,9 +2,8 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - releases/**
 
 jobs:
   build:
