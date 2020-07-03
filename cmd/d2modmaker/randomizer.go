@@ -108,49 +108,31 @@ func addOrCreateProp(props BucketedPropsMap, prop Prop) BucketedPropsMap {
 // Returns all props bucketized
 func getAllProps(opts RandomOptions, d2files *d2file.D2Files) (BucketedPropsMap, []string) {
 
-	props := BucketedPropsMap{}
+	propMap := BucketedPropsMap{}
+	props := [][]Prop{}
+	props = append(props, getAllUniqueProps(d2files, []Prop{}))
+	props = append(props, getAllSetProps(d2files, []Prop{}))
+	props = append(props, getAllSetItemsProps(d2files, []Prop{}))
+	props = append(props, getAllRWProps(d2files, []Prop{}))
+	props = append(props, getAllGemsProps(d2files, []Prop{}))
 
-	// uniques
-	uniqueProps := getAllUniqueProps(d2files, []Prop{})
-	for _, prop := range uniqueProps {
-		props = addOrCreateProp(props, prop)
+	for i := range props {
+		for j := range props[i] {
+			propMap = addOrCreateProp(propMap, props[i][j])
+		}
 	}
 
-	// sets
-	setProps := getAllSetProps(d2files, []Prop{})
-	for _, prop := range setProps {
-		props = addOrCreateProp(props, prop)
-	}
-
-	// sets items
-	setItemsProps := getAllSetItemsProps(d2files, []Prop{})
-	for _, prop := range setItemsProps {
-		props = addOrCreateProp(props, prop)
-	}
-
-	// rw
-	rwProps := getAllRWProps(d2files, []Prop{})
-	for _, prop := range rwProps {
-		props = addOrCreateProp(props, prop)
-	}
-
-	// gems
-	gemsProps := getAllGemsProps(d2files, []Prop{})
-	for _, prop := range gemsProps {
-		props = addOrCreateProp(props, prop)
-	}
-
-	for k := range props {
-		for b := range props[k] {
-			for i, p := range props[k][b] {
+	for k := range propMap {
+		for b := range propMap[k] {
+			for i, p := range propMap[k][b] {
 				// Set all props Min to the Max value
 				if opts.PerfectProps {
-					props[k][b][i].Min = p.Max
+					propMap[k][b][i].Min = p.Max
 				}
 				// sets skill = oskill
 				if opts.UseOSkills {
 					if p.Name == "skill" {
-						props[k][b][i].Name = "oskill"
+						propMap[k][b][i].Name = "oskill"
 					}
 				}
 			}
@@ -158,30 +140,36 @@ func getAllProps(opts RandomOptions, d2files *d2file.D2Files) (BucketedPropsMap,
 	}
 
 	var keys []string
-	for k := range props {
+	for k := range propMap {
 		totalProps := 0
-		for b := range props[k] {
-			totalProps += len(props[k][b])
+		for b := range propMap[k] {
+			totalProps += len(propMap[k][b])
 		}
 		for i := 0; i < totalProps; i++ {
 			keys = append(keys, k)
 		}
 	}
-	return props, keys
+	return propMap, keys
 }
 
-// Get Unique Props
-func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
-	f := d2file.GetOrCreateFile(dataDir, d2files, uniqueItemsTxt.FileName)
-	propOffset := uniqueItemsTxt.Prop1
+type PropGetter struct {
+	d2files    *d2file.D2Files
+	props      Props
+	fileName   string
+	propOffset int
+	lvl        int
+}
+
+func getProps(p PropGetter) Props {
+	f := d2file.GetOrCreateFile(dataDir, p.d2files, p.fileName)
 	for _, row := range f.Rows {
-		mbLvl, err := strconv.Atoi(row[uniqueItemsTxt.Lvl])
+		mbLvl, err := strconv.Atoi(row[p.lvl])
 		lvl := 0
 		if err == nil {
 			lvl = mbLvl
 		}
-		for i := propOffset; i < len(row)-3; i += 4 {
-			props = append(props, Prop{
+		for i := p.propOffset; i < len(row)-3; i += 4 {
+			p.props = append(p.props, Prop{
 				Name: row[i],
 				Par:  row[i+1],
 				Min:  row[i+2],
@@ -190,7 +178,19 @@ func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
 			})
 		}
 	}
-	return props
+	return p.props
+}
+
+// Get Unique Props
+func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
+	p := PropGetter{
+		d2files:    d2files,
+		props:      props,
+		fileName:   uniqueItemsTxt.FileName,
+		propOffset: uniqueItemsTxt.Prop1,
+		lvl:        uniqueItemsTxt.Lvl,
+	}
+	return getProps(p)
 }
 
 // Randomize Unique Props
@@ -211,25 +211,14 @@ func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props Buc
 
 // Get Set Props
 func getAllSetProps(d2files *d2file.D2Files, props Props) Props {
-	f := d2file.GetOrCreateFile(dataDir, d2files, setsTxt.FileName)
-	propOffset := setsTxt.PCode2a
-	for _, row := range f.Rows {
-		mbLvl, err := strconv.Atoi(row[setsTxt.Level])
-		lvl := 0
-		if err == nil {
-			lvl = mbLvl
-		}
-		for i := propOffset; i < len(row)-3; i += 4 {
-			props = append(props, Prop{
-				Name: row[i],
-				Par:  row[i+1],
-				Min:  row[i+2],
-				Max:  row[i+3],
-				Lvl:  lvl,
-			})
-		}
+	p := PropGetter{
+		d2files:    d2files,
+		props:      props,
+		fileName:   setsTxt.FileName,
+		propOffset: setsTxt.PCode2a,
+		lvl:        setsTxt.Level,
 	}
-	return props
+	return getProps(p)
 }
 
 // Randomize Set Props
@@ -250,27 +239,14 @@ func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props Bucket
 
 // Get Set Items Props
 func getAllSetItemsProps(d2files *d2file.D2Files, props Props) Props {
-	f := d2file.GetOrCreateFile(dataDir, d2files, setItemsTxt.FileName)
-	propOffset := setItemsTxt.Prop1
-	for _, row := range f.Rows {
-		mbLvl, err := strconv.Atoi(row[setItemsTxt.Lvl])
-		lvl := 0
-		if err == nil {
-			lvl = mbLvl
-		}
-		for i := propOffset; i < len(row)-3; i += 4 {
-			if row[i] != "" {
-				props = append(props, Prop{
-					Name: row[i],
-					Par:  row[i+1],
-					Min:  row[i+2],
-					Max:  row[i+3],
-					Lvl:  lvl,
-				})
-			}
-		}
+	p := PropGetter{
+		d2files:    d2files,
+		props:      props,
+		fileName:   setItemsTxt.FileName,
+		propOffset: setItemsTxt.Prop1,
+		lvl:        setItemsTxt.Lvl,
 	}
-	return props
+	return getProps(p)
 }
 
 // Randomize Set Items Props
@@ -291,22 +267,14 @@ func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props B
 
 // Get RW Props
 func getAllRWProps(d2files *d2file.D2Files, props Props) Props {
-	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
-	propOffset := runesTxt.T1Code1
-	for _, row := range f.Rows {
-		for i := propOffset; i < len(row)-3; i += 4 {
-			if row[i] != "" {
-				props = append(props, Prop{
-					Name: row[i],
-					Par:  row[i+1],
-					Min:  row[i+2],
-					Max:  row[i+3],
-					Lvl:  0,
-				})
-			}
-		}
+	p := PropGetter{
+		d2files:    d2files,
+		props:      props,
+		fileName:   runesTxt.FileName,
+		propOffset: runesTxt.T1Code1,
+		lvl:        0,
 	}
-	return props
+	return getProps(p)
 }
 
 // Randomize RW Props
