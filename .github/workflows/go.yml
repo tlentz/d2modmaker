@@ -3,7 +3,7 @@ name: Go
 on:
   push:
     branches:
-      - releases/**
+      - ok/**
 
 jobs:
   build:
