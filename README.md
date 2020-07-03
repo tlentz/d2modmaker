@@ -11,12 +11,12 @@ This is a program is used to create your own Diablo II mod, the way you want it 
 2. Unzip the folder
 3. Edit `cfg.json` with the settings th you like.  `ModConfig` details are below.
 4. Go into the d2modmaker folder
-5a. If on windows, execute d2modmaker-windows.exe
-5b. If on mac, execute d2modmaker-mac (you may need to `chmod +x d2modmaker-mac`)
-5c. If on linux, execute d2modmaker-linux (you may need to `chmod +x d2modmaker-linux`)
-6. Put the `data` folder into your diablo 2 folder
-7. Launch your shortcut with `-direct -txt`
-8. If using Plugy add `-direct -txt` to your plugy shortcut
+5. Execute the program for your platform `windows` `mac` `linux`
+6. Put the `data` folder that it produces into your Diablo II folder
+7. Add `-direct -txt` to your Diablo II shortcut (or your PlugY shortcut)
+
+**NOTE**
+* If on mac/linux, you may need to `chmod +x d2modmaker-mac`
 
 # ModConfig
 
@@ -67,20 +67,22 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
 
 ## Example ModConfig
 ```json
+    {
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 3.5,
+    "IncreaseMonsterDensity": 100,
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 100,
+    "UniqueItemDropRate": 1000,
     "StartWithCube": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
         "IsBalanced": false,
-        "MinProps": 20,
-        "MaxProps": -1,
+        "MinProps": 3,
+        "MaxProps": 12,
         "UseOSkills": true,
         "PerfectProps": true
     }
+}
 ```
