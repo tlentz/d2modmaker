@@ -12,14 +12,6 @@ jobs:
       GO111MODULE: off
     runs-on: macos-latest
     steps:
-    - name: Generate build number
-      id: buildnumber
-      uses: einaregilsson/build-number@v2 
-      with:
-        token: ${{secrets.MY_SECRET}}
-    - name: Set version_number
-      id: version_number
-      run: echo "::set-output name=version_number::v0.1.${{ steps.buildnumber.outputs.build_number }}"
     - name: Install Go
       uses: actions/setup-go@v2
       with:
@@ -28,6 +20,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         path: ./src/github.com/${{ github.repository }}
+  - name: "Version Number"
+    uses: pCYSl5EDgo/cat@master
+    id: version_number
+      with:
+        path: VERSION.txt
     - name: Build
       run: cd ./src/github.com/${{ github.repository }} && bin/build
     - name: Archive
