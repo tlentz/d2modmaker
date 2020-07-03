@@ -25,6 +25,9 @@ jobs:
         id: version_number
         with:
           path: ./src/github.com/${{ github.repository }}/VERSION.txt
+        run: echo $TEXT
+        env:
+          TEXT: ${{ steps.hello.outputs.text }}
       - name: Build
         run: cd ./src/github.com/${{ github.repository }} && bin/build
       - name: Archive
