@@ -20,7 +20,7 @@ This is a program is used to create your own Diablo II mod, the way you want it 
 
 # ModConfig
 
-The mod conifg is located in `cfg.json`.  You can change this config to your liking to produce a new `data.zip` folder.
+The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data.zip` folder.
 
 
 ## ModConfig Options
