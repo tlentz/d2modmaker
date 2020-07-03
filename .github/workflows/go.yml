@@ -24,7 +24,7 @@ jobs:
         uses: pCYSl5EDgo/cat@master
         id: version_number
         with:
-          path: VERSION.txt
+          path: ./src/github.com/${{ github.repository }}/VERSION.txt
       - name: Build
         run: cd ./src/github.com/${{ github.repository }} && bin/build
       - name: Archive
