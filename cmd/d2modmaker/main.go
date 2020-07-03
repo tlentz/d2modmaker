@@ -31,8 +31,8 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	mode = "dev"
-	// mode = "production"
+	// mode = "dev"
+	mode = "production"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
@@ -208,13 +208,14 @@ func noDropZero(d2files *d2file.D2Files) {
 func increaseStackSizes(d2files *d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, misc.FileName)
 	for idx, row := range f.Rows {
-		if row[misc.Name] == misc.TownPortalBook || row[misc.Name] == misc.IdentifyBook {
+		if row[misc.Name] == misc.TownPortalBook || row[misc.Name] == misc.IdentifyBook || row[misc.Name] == misc.SkeletonKey {
 			f.Rows[idx][misc.MaxStack] = "100"
 		}
 		if row[misc.Name] == misc.Arrows || row[misc.Name] == misc.Bolts {
 			f.Rows[idx][misc.MaxStack] = "511"
 		}
 	}
+
 }
 
 func enableTownSkills(d2files *d2file.D2Files) {

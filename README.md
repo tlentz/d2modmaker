@@ -29,6 +29,7 @@ The mod conifg is located in `cfg.json`.  You can change this config to your lik
     * Increases book of id to 100
     * Increases arrows maxstack to 511
     * Increases bolts maxstack to 511
+    * Increases key stack sizes to 100
 * **IncreaseMonsterDensity** `float`
     * Will increase the density of all areas by the given multiplier
     * `MAX: 30.0`

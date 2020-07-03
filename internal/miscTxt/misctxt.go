@@ -10,8 +10,9 @@ const (
 const (
 	IdentifyBook   = "Identify Book"
 	TownPortalBook = "Town Portal Book"
-	Arrows = "Arrows"
-	Bolts = "Bolts"
+	Arrows         = "Arrows"
+	Bolts          = "Bolts"
+	SkeletonKey = "Skeleton Key"
 )
 
 // Header Indexes

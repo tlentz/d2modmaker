@@ -4,14 +4,14 @@
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 100,
+    "UniqueItemDropRate": 1000,
     "StartWithCube": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
         "IsBalanced": false,
-        "MinProps": 1,
-        "MaxProps": 1,
+        "MinProps": 3,
+        "MaxProps": 12,
         "UseOSkills": true,
         "PerfectProps": true
     }
