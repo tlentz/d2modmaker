@@ -31,7 +31,7 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	mode = "dev"
+	mode = "production"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
@@ -64,7 +64,6 @@ func printFile() {
 
 func makeMod() {
 	var cfg = ReadCfg(cfgPath)
-	util.PP(cfg)
 
 	var d2files = d2file.D2Files{}
 
@@ -106,6 +105,11 @@ func makeMod() {
 	util.Check(err)
 	d2file.WriteFiles(&d2files, outDir)
 	writeSeed(cfg)
+	fmt.Println("\n\n===========================")
+	fmt.Println("Config used:\n\n")
+	util.PP(cfg)
+	fmt.Println("\n\n===========================")
+	fmt.Println("Done!\n\nPress enter to exit.")
 	fmt.Scanln() // wait for Enter Key
 }
 
