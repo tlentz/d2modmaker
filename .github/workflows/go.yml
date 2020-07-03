@@ -25,30 +25,30 @@ jobs:
     id: version_number
       with:
         path: VERSION.txt
-    - name: Build
-      run: cd ./src/github.com/${{ github.repository }} && bin/build
-    - name: Archive
-      uses: papeloto/action-zip@v1
-      with:
-        files: ./src/github.com/${{ github.repository }}/dist/
-        dest: d2modmaker.zip
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
-      with:
-        tag_name: ${{ steps.version_number.outputs.version_number }}
-        release_name: Pre Release ${{ steps.version_number.outputs.version_number }}
-        draft: false
-        prerelease: true
-    - name: Uploade Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./d2modmaker.zip
-        asset_name: "d2modmaker ${{ steps.version_number.outputs.version_number }}.zip"
-        asset_content_type: application/zip
+  - name: Build
+    run: cd ./src/github.com/${{ github.repository }} && bin/build
+  - name: Archive
+    uses: papeloto/action-zip@v1
+    with:
+      files: ./src/github.com/${{ github.repository }}/dist/
+      dest: d2modmaker.zip
+  - name: Create Release
+    id: create_release
+    uses: actions/create-release@v1
+    env:
+      GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
+    with:
+      tag_name: ${{ steps.version_number.outputs.version_number }}
+      release_name: Pre Release ${{ steps.version_number.outputs.version_number }}
+      draft: false
+      prerelease: true
+  - name: Uploade Release Asset
+    uses: actions/upload-release-asset@v1
+    env:
+      GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
+    with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ./d2modmaker.zip
+      asset_name: "d2modmaker ${{ steps.version_number.outputs.version_number }}.zip"
+      asset_content_type: application/zip
 
