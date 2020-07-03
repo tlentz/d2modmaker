@@ -23,8 +23,8 @@ jobs:
       - name: "Version Number"
         uses: pCYSl5EDgo/cat@master
         id: version_number
-          with:
-            path: VERSION.txt
+        with:
+          path: VERSION.txt
       - name: Build
         run: cd ./src/github.com/${{ github.repository }} && bin/build
       - name: Archive
