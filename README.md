@@ -6,6 +6,9 @@ This is a program is used to create your own Diablo II mod, the way you want it 
 * I created this discord channel to get better open source communication and for a place for people to post screenshots / ask questions and what not.
 * https://discord.gg/eQt2Z9b
 
+# Installation Guide
+* https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing
+
 # How It Works
 1. Download the latest release zip folder from here: https://github.com/tlentz/d2modmaker/releases
 2. Unzip the folder
