@@ -1,30 +1,20 @@
 # D2 ModMaker
 
-This is a program is used to create your own Diablo II mod, the way you want it to be given a simple config.
+The idea behind this project is to play Diablo II the way that you want to play.  Every option in the `ModConfig` is optional.
 
-# Discord
+# Links
 * I created this discord channel to get better open source communication and for a place for people to post screenshots / ask questions and what not.
-* https://discord.gg/eQt2Z9b
-
-# Installation Guide
-* https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing
-
-# How It Works
-1. Download the latest release zip folder from here: https://github.com/tlentz/d2modmaker/releases
-2. Unzip the folder
-3. Edit `cfg.json` with the settings th you like.  `ModConfig` details are below.
-4. Go into the d2modmaker folder
-5. Execute the program for your platform `windows` `mac` `linux`
-6. Put the `data` folder that it produces into your Diablo II folder
-7. Add `-direct -txt` to your Diablo II shortcut (or your PlugY shortcut)
+* [Repository](https://github.com/tlentz/d2modmaker)
+* [Releases](https://github.com/tlentz/d2modmaker/releases)
+* [Installation Guide](https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing)
+* [Discord Community](https://discord.gg/fePUH3)
 
 **NOTE**
 * If on mac/linux, you may need to `chmod +x d2modmaker-mac`
 
 # ModConfig
 
-The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data.zip` folder.
-
+The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
 
 ## ModConfig Options
 * **IncreaseStackSizes** `bool`
@@ -72,20 +62,34 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ```json
  {
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 100,
+    "IncreaseMonsterDensity": 1,
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 1000,
+    "UniqueItemDropRate": 100,
     "StartWithCube": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
         "IsBalanced": false,
-        "MinProps": 3,
-        "MaxProps": 12,
+        "MinProps": -1,
+        "MaxProps": -1,
         "UseOSkills": true,
-        "PerfectProps": true
+        "PerfectProps": false
     }
 }
 ```
+
+# Screenshots
+### Nagel
+![Nagel](https://i.imgur.com/1zOKK3q.png)
+### Raven Claw
+![Raven Claw](https://i.imgur.com/tmxZpjc.png)
+### Venom Ward
+![Venom Ward](https://i.imgur.com/7cLQDBN.png)
+### Angelic Halo
+![Angelic Halo](https://i.imgur.com/N3Om8II.png)
+### Wall of Eyeless
+![Wall of Eyeless](https://i.imgur.com/QL07TKL.png)
+### MonsterDensity: 30
+![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
