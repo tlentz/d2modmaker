@@ -70,7 +70,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 
 ## Example ModConfig
 ```json
-    {
+ {
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 100,
     "EnableTownSkills": true,
