@@ -3,14 +3,10 @@
 The idea behind this project is to play Diablo II the way that you want to play.  Every option in the `ModConfig` is optional.
 
 # Links
-* I created this discord channel to get better open source communication and for a place for people to post screenshots / ask questions and what not.
 * [Repository](https://github.com/tlentz/d2modmaker)
 * [Releases](https://github.com/tlentz/d2modmaker/releases)
 * [Installation Guide](https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing)
 * [Discord Community](https://discord.gg/fePUH3)
-
-**NOTE**
-* If on mac/linux, you may need to `chmod +x d2modmaker-mac`
 
 # ModConfig
 
