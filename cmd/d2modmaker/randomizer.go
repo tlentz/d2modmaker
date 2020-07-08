@@ -75,7 +75,7 @@ func getRandomOptions(cfg *ModConfig) RandomOptions {
 }
 
 // Randomize randomizes all items based on the RandomOptions
-func Randomize(cfg *ModConfig, d2files *d2file.D2Files) {
+func Randomize(cfg *ModConfig, d2files d2file.D2Files) {
 	opts := getRandomOptions(cfg)
 	rand.Seed(opts.Seed)
 
@@ -106,7 +106,7 @@ func addOrCreateProp(props BucketedPropsMap, prop Prop) BucketedPropsMap {
 }
 
 // Returns all props bucketized
-func getAllProps(opts RandomOptions, d2files *d2file.D2Files) (BucketedPropsMap, []string) {
+func getAllProps(opts RandomOptions, d2files d2file.D2Files) (BucketedPropsMap, []string) {
 
 	propMap := BucketedPropsMap{}
 	props := [][]Prop{}
@@ -153,7 +153,7 @@ func getAllProps(opts RandomOptions, d2files *d2file.D2Files) (BucketedPropsMap,
 }
 
 type PropGetter struct {
-	d2files    *d2file.D2Files
+	d2files    d2file.D2Files
 	props      Props
 	fileName   string
 	propOffset int
@@ -182,7 +182,7 @@ func getProps(p PropGetter) Props {
 }
 
 // Get Unique Props
-func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
+func getAllUniqueProps(d2files d2file.D2Files, props Props) Props {
 	p := PropGetter{
 		d2files:    d2files,
 		props:      props,
@@ -194,7 +194,7 @@ func getAllUniqueProps(d2files *d2file.D2Files, props Props) Props {
 }
 
 // Randomize Unique Props
-func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := Scrambler{
 		opts:           opts,
 		d2files:        d2files,
@@ -210,7 +210,7 @@ func randomizeUniqueProps(opts RandomOptions, d2files *d2file.D2Files, props Buc
 }
 
 // Get Set Props
-func getAllSetProps(d2files *d2file.D2Files, props Props) Props {
+func getAllSetProps(d2files d2file.D2Files, props Props) Props {
 	p := PropGetter{
 		d2files:    d2files,
 		props:      props,
@@ -222,7 +222,7 @@ func getAllSetProps(d2files *d2file.D2Files, props Props) Props {
 }
 
 // Randomize Set Props
-func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := Scrambler{
 		opts:           opts,
 		d2files:        d2files,
@@ -238,7 +238,7 @@ func randomizeSetProps(opts RandomOptions, d2files *d2file.D2Files, props Bucket
 }
 
 // Get Set Items Props
-func getAllSetItemsProps(d2files *d2file.D2Files, props Props) Props {
+func getAllSetItemsProps(d2files d2file.D2Files, props Props) Props {
 	p := PropGetter{
 		d2files:    d2files,
 		props:      props,
@@ -250,7 +250,7 @@ func getAllSetItemsProps(d2files *d2file.D2Files, props Props) Props {
 }
 
 // Randomize Set Items Props
-func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeSetItemsProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := Scrambler{
 		opts:           opts,
 		d2files:        d2files,
@@ -266,7 +266,7 @@ func randomizeSetItemsProps(opts RandomOptions, d2files *d2file.D2Files, props B
 }
 
 // Get RW Props
-func getAllRWProps(d2files *d2file.D2Files, props Props) Props {
+func getAllRWProps(d2files d2file.D2Files, props Props) Props {
 	p := PropGetter{
 		d2files:    d2files,
 		props:      props,
@@ -278,7 +278,7 @@ func getAllRWProps(d2files *d2file.D2Files, props Props) Props {
 }
 
 // Randomize RW Props
-func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
 	s := Scrambler{
 		opts:           opts,
@@ -304,7 +304,7 @@ func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files *d
 }
 
 // Get Gem Props
-func getAllGemsProps(d2files *d2file.D2Files, props Props) Props {
+func getAllGemsProps(d2files d2file.D2Files, props Props) Props {
 	f := d2file.GetOrCreateFile(dataDir, d2files, gemsTxt.FileName)
 	propOffset := gemsTxt.WeaponMod1Code
 	for _, row := range f.Rows {
@@ -361,7 +361,7 @@ func getBalancedRandomProp(opts RandomOptions, lvl string, props BucketedPropsMa
 
 }
 
-func getBucketsForMisc(d2files *d2file.D2Files) map[string]int {
+func getBucketsForMisc(d2files d2file.D2Files) map[string]int {
 	f := d2file.GetOrCreateFile(dataDir, d2files, misctxt.FileName)
 	buckets := make(map[string]int)
 	for _, row := range f.Rows {
@@ -401,7 +401,7 @@ func getMinMaxProps(opts RandomOptions, maxItemProps int) MinMaxProps {
 
 type Scrambler struct {
 	opts           RandomOptions
-	d2files        *d2file.D2Files
+	d2files        d2file.D2Files
 	props          BucketedPropsMap
 	propKeys       []string
 	fileName       string

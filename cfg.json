@@ -4,8 +4,9 @@
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 1000,
+    "UniqueItemDropRate": 100,
     "StartWithCube": true,
+    "Cowzzz": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
