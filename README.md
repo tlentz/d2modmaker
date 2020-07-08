@@ -40,6 +40,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     * Set to `-1` to omit
 * **StartWithCube** `bool`
     * Characters will start with cube when created
+* **Cowzzz** `bool`
+    * Enables ability to kill cow king and still make cow portal
+    * Adds ability to cube 1 town portal scroll to make the cow portal
 * **RandomOptions** `RandomOptions`
     * **Randomize** `bool`
         * Will randomize if set to true
