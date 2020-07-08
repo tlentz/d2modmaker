@@ -14,6 +14,7 @@ type ModConfig struct {
 	QuestDrops             bool          `json:"QuestDrops"`
 	UniqueItemDropRate     float64       `json:"UniqueItemDropRate"`
 	StartWithCube          bool          `json:"StartWithCube"`
+	Cowzzz                 bool          `json:"Cowzzz"`
 	RandomOptions          RandomOptions `json:"RandomOptions"`
 }
 

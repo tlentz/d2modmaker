@@ -6,12 +6,14 @@ import (
 	"strconv"
 
 	charStats "github.com/tlentz/d2modmaker/internal/charStatsTxt"
+	"github.com/tlentz/d2modmaker/internal/cubeMainTxt"
 	"github.com/tlentz/d2modmaker/internal/d2file"
 	itmRatio "github.com/tlentz/d2modmaker/internal/itemRatioTxt"
 	levels "github.com/tlentz/d2modmaker/internal/levelsTxt"
 	misc "github.com/tlentz/d2modmaker/internal/miscTxt"
 	missiles "github.com/tlentz/d2modmaker/internal/missilesTxt"
 	skills "github.com/tlentz/d2modmaker/internal/skillsTxt"
+	"github.com/tlentz/d2modmaker/internal/superUniquesTxt"
 	tc "github.com/tlentz/d2modmaker/internal/treasureClassExTxt"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -31,7 +33,7 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	mode = "production"
+	mode = "dev"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
@@ -43,6 +45,7 @@ func main() {
 	}
 	fmt.Println(dataDir, outDir, cfgPath)
 	makeMod()
+	// printFile()
 }
 
 // Simple helper function to read an environment or return a default value
@@ -56,7 +59,7 @@ func getEnv(key string, defaultVal string) string {
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, &d2files, charStats.FileName)
+	f := d2file.GetOrCreateFile(dataDir, &d2files, superUniquesTxt.FileName)
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}
@@ -84,6 +87,9 @@ func makeMod() {
 	}
 	if cfg.QuestDrops {
 		questDrops(&d2files)
+	}
+	if cfg.Cowzzz {
+		cowzzz(&d2files)
 	}
 
 	if cfg.UniqueItemDropRate < 0 {
@@ -120,6 +126,41 @@ func writeSeed(cfg ModConfig) {
 	util.Check(err)
 	defer f.Close()
 	f.WriteString(fmt.Sprintf("%d\n", cfg.RandomOptions.Seed))
+}
+
+func cowzzz(d2files *d2file.D2Files) {
+	// Add New Recipe for Cow Poral (tp scroll -> cow portal)
+	var cubeF *d2file.D2File = d2file.GetOrCreateFile(dataDir, d2files, cubeMainTxt.FileName)
+	// newCubeRows := make([][]string, 0)
+	for _, row := range cubeF.Rows {
+		description := row[cubeMainTxt.Description]
+
+		if description == cubeMainTxt.CowPortalWirt {
+			fmt.Println(description)
+			tmp := make([]string, cap(row))
+			// // copy cow row to tmp
+			copy(tmp, row)
+
+			// change tmp to remove wirts leg
+			tmp[cubeMainTxt.Description] = cubeMainTxt.CowPortalNoWirt
+			tmp[cubeMainTxt.NumInputs] = "1"
+			tmp[cubeMainTxt.Input1] = "tsc"
+			tmp[cubeMainTxt.Input2] = ""
+
+			*&cubeF.Rows = append(*&cubeF.Rows, tmp)
+
+		}
+	}
+
+	// Enable ability to kill cow king and still create portal
+	suF := d2file.GetOrCreateFile(dataDir, d2files, superUniquesTxt.FileName)
+	for idx, row := range suF.Rows {
+		name := row[superUniquesTxt.Name]
+
+		if name == superUniquesTxt.CowKing {
+			suF.Rows[idx][superUniquesTxt.HcIdx] = "1"
+		}
+	}
 }
 
 func startWithCube(d2files *d2file.D2Files) {

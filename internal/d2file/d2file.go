@@ -67,6 +67,9 @@ func WriteD2File(d2file *D2File, filePath string) {
 	w.Comma = '\t'
 	w.UseCRLF = true
 	w.Write(d2file.Headers)
+	if d2file.FileName == "CubeMain.txt" {
+		util.PP((d2file.Rows)[len(d2file.Rows)-1])
+	}
 	e := w.WriteAll(d2file.Rows)
 	CheckD2FileErr(d2file, e)
 }
