@@ -1,6 +1,6 @@
 {
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 100,
+    "IncreaseMonsterDensity": 1,
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
@@ -11,9 +11,9 @@
         "Randomize": true,
         "Seed": -1,
         "IsBalanced": false,
-        "MinProps": 3,
-        "MaxProps": 12,
+        "MinProps": -1,
+        "MaxProps": -1,
         "UseOSkills": true,
-        "PerfectProps": true
+        "PerfectProps": false
     }
 }
