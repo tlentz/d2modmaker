@@ -8,6 +8,11 @@ The idea behind this project is to play Diablo II the way that you want to play.
 * [Installation Guide](https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing)
 * [Discord Community](https://discord.gg/fePUH3)
 
+# PlugY and Things
+This should be compatible with PlugY and other things such as:
+* [PlugY](http://plugy.free.fr/en/index.html) by Yohann Nicolas.
+* [MultiRes / BH](https://www.reddit.com/r/slashdiablo/comments/7z5uy1/hd_mod_and_maphack_new_release/) by SlashDiablo.
+
 # ModConfig
 
 The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
