@@ -16,7 +16,7 @@ type D2File struct {
 }
 
 // D2Files is a map[string]D2File
-type D2Files = map[string]D2File
+type D2Files = map[string]*D2File
 
 // ReadD2File reads a given d2 file
 func ReadD2File(fname string, filePath string) (*D2File, error) {
@@ -67,31 +67,28 @@ func WriteD2File(d2file *D2File, filePath string) {
 	w.Comma = '\t'
 	w.UseCRLF = true
 	w.Write(d2file.Headers)
-	if d2file.FileName == "CubeMain.txt" {
-		util.PP((d2file.Rows)[len(d2file.Rows)-1])
-	}
 	e := w.WriteAll(d2file.Rows)
 	CheckD2FileErr(d2file, e)
 }
 
 // WriteFiles writes all d2 files
-func WriteFiles(d2files map[string]D2File, outDir string) {
+func WriteFiles(d2files D2Files, outDir string) {
 	for _, file := range d2files {
 		fmt.Println("writing " + outDir + file.FileName)
-		WriteD2File(&file, outDir)
+		WriteD2File(file, outDir)
 	}
 }
 
 // GetOrCreateFile returns the D2File at the given key otherwise creates it
-func GetOrCreateFile(dataDir string, d2files map[string]D2File, filename string) *D2File {
+func GetOrCreateFile(dataDir string, d2files D2Files, filename string) *D2File {
 	if val, ok := d2files[filename]; ok {
-		return &val
+		return val
 	}
 
 	d2file, err := ReadD2File(filename, dataDir)
 	util.Check(err)
 
-	d2files[filename] = *d2file
+	d2files[filename] = d2file
 
 	return d2file
 }

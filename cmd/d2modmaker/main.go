@@ -68,7 +68,7 @@ func printFile() {
 func makeMod() {
 	var cfg = ReadCfg(cfgPath)
 
-	var d2files = d2file.D2Files{}
+	d2files := d2file.D2Files{}
 
 	if cfg.IncreaseStackSizes {
 		increaseStackSizes(d2files)
