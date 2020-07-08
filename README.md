@@ -72,6 +72,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "QuestDrops": true,
     "UniqueItemDropRate": 100,
     "StartWithCube": true,
+    "Cowzzz": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
@@ -97,3 +98,10 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![Wall of Eyeless](https://i.imgur.com/QL07TKL.png)
 ### MonsterDensity: 30
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
+
+# Change Log
+
+## v0.1.6
+* **Cowzzz** `bool`
+    * Enables ability to kill cow king and still make cow portal
+    * Adds ability to cube 1 town portal scroll to make the cow portal
