@@ -59,7 +59,7 @@ func getEnv(key string, defaultVal string) string {
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, &d2files, superUniquesTxt.FileName)
+	f := d2file.GetOrCreateFile(dataDir, d2files, superUniquesTxt.FileName)
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}
@@ -71,37 +71,37 @@ func makeMod() {
 	var d2files = d2file.D2Files{}
 
 	if cfg.IncreaseStackSizes {
-		increaseStackSizes(&d2files)
+		increaseStackSizes(d2files)
 	}
 
 	if cfg.IncreaseMonsterDensity < 0 {
 		cfg.IncreaseMonsterDensity = 1.0
 	}
-	increaseMonsterDensity(&d2files, cfg.IncreaseMonsterDensity)
+	increaseMonsterDensity(d2files, cfg.IncreaseMonsterDensity)
 
 	if cfg.EnableTownSkills {
-		enableTownSkills(&d2files)
+		enableTownSkills(d2files)
 	}
 	if cfg.NoDropZero {
-		noDropZero(&d2files)
+		noDropZero(d2files)
 	}
 	if cfg.QuestDrops {
-		questDrops(&d2files)
+		questDrops(d2files)
 	}
 	if cfg.Cowzzz {
-		cowzzz(&d2files)
+		cowzzz(d2files)
 	}
 
 	if cfg.UniqueItemDropRate < 0 {
 		cfg.UniqueItemDropRate = 1.0
 	}
-	uniqueItemDropRate(&d2files, cfg.UniqueItemDropRate)
+	uniqueItemDropRate(d2files, cfg.UniqueItemDropRate)
 
 	if cfg.StartWithCube {
-		startWithCube(&d2files)
+		startWithCube(d2files)
 	}
 	if cfg.RandomOptions.Randomize {
-		Randomize(&cfg, &d2files)
+		Randomize(&cfg, d2files)
 	}
 
 	fmt.Println("removing " + outDir)
@@ -109,7 +109,7 @@ func makeMod() {
 	fmt.Println("creating " + outDir)
 	err := os.MkdirAll(outDir, 0755)
 	util.Check(err)
-	d2file.WriteFiles(&d2files, outDir)
+	d2file.WriteFiles(d2files, outDir)
 	writeSeed(cfg)
 	fmt.Println("\n\n===========================")
 	fmt.Println("Config used:\n\n")
@@ -128,16 +128,16 @@ func writeSeed(cfg ModConfig) {
 	f.WriteString(fmt.Sprintf("%d\n", cfg.RandomOptions.Seed))
 }
 
-func cowzzz(d2files *d2file.D2Files) {
+func cowzzz(d2files d2file.D2Files) {
 	// Add New Recipe for Cow Poral (tp scroll -> cow portal)
-	var cubeF *d2file.D2File = d2file.GetOrCreateFile(dataDir, d2files, cubeMainTxt.FileName)
+	cubeF := d2file.GetOrCreateFile(dataDir, d2files, cubeMainTxt.FileName)
 	// newCubeRows := make([][]string, 0)
 	for _, row := range cubeF.Rows {
 		description := row[cubeMainTxt.Description]
 
 		if description == cubeMainTxt.CowPortalWirt {
 			fmt.Println(description)
-			tmp := make([]string, cap(row))
+			tmp := make([]string, len(row))
 			// // copy cow row to tmp
 			copy(tmp, row)
 
@@ -147,7 +147,7 @@ func cowzzz(d2files *d2file.D2Files) {
 			tmp[cubeMainTxt.Input1] = "tsc"
 			tmp[cubeMainTxt.Input2] = ""
 
-			*&cubeF.Rows = append(*&cubeF.Rows, tmp)
+			cubeF.Rows = append(cubeF.Rows, tmp)
 
 		}
 	}
@@ -163,7 +163,7 @@ func cowzzz(d2files *d2file.D2Files) {
 	}
 }
 
-func startWithCube(d2files *d2file.D2Files) {
+func startWithCube(d2files d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, charStats.FileName)
 	itemOffset := charStats.Item1
 	countOffset := 2
@@ -178,7 +178,7 @@ func startWithCube(d2files *d2file.D2Files) {
 	}
 }
 
-func uniqueItemDropRate(d2files *d2file.D2Files, d float64) {
+func uniqueItemDropRate(d2files d2file.D2Files, d float64) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, itmRatio.FileName)
 
 	one := func(n int) int {
@@ -220,7 +220,7 @@ func uniqueItemDropRate(d2files *d2file.D2Files, d float64) {
 	}
 }
 
-func questDrops(d2files *d2file.D2Files) {
+func questDrops(d2files d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
 	diffOffsets := []int{0, 1, 2} // norm, nm, hell
 	bossQOffset := 3
@@ -229,7 +229,7 @@ func questDrops(d2files *d2file.D2Files) {
 		case tc.Andariel, tc.Duriel, tc.DurielBase, tc.Mephisto, tc.Diablo, tc.Baal:
 			{
 				for _, offset := range diffOffsets {
-					tmp := make([]string, cap(row))
+					tmp := make([]string, len(row))
 					// copy quest drop row to tmp
 					copy(tmp, f.Rows[idx+bossQOffset+offset])
 					// copy all tmp values except 1st index to original row
@@ -240,7 +240,7 @@ func questDrops(d2files *d2file.D2Files) {
 	}
 }
 
-func noDropZero(d2files *d2file.D2Files) {
+func noDropZero(d2files d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
 	for idx, row := range f.Rows {
 		if row[tc.NoDrop] != "" {
@@ -249,7 +249,7 @@ func noDropZero(d2files *d2file.D2Files) {
 	}
 }
 
-func increaseStackSizes(d2files *d2file.D2Files) {
+func increaseStackSizes(d2files d2file.D2Files) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, misc.FileName)
 	for idx, row := range f.Rows {
 		if row[misc.Name] == misc.TownPortalBook || row[misc.Name] == misc.IdentifyBook || row[misc.Name] == misc.SkeletonKey {
@@ -262,7 +262,7 @@ func increaseStackSizes(d2files *d2file.D2Files) {
 
 }
 
-func enableTownSkills(d2files *d2file.D2Files) {
+func enableTownSkills(d2files d2file.D2Files) {
 	sktxt := d2file.GetOrCreateFile(dataDir, d2files, skills.FileName)
 	for i := range sktxt.Rows {
 		sktxt.Rows[i][skills.InTown] = "1"
@@ -273,7 +273,7 @@ func enableTownSkills(d2files *d2file.D2Files) {
 	}
 }
 
-func increaseMonsterDensity(d2files *d2file.D2Files, m float64) {
+func increaseMonsterDensity(d2files d2file.D2Files, m float64) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, levels.FileName)
 	maxM := 30.0
 	mult := util.MinFloat(m, maxM)
