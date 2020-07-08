@@ -6,7 +6,7 @@ The idea behind this project is to play Diablo II the way that you want to play.
 * [Repository](https://github.com/tlentz/d2modmaker)
 * [Releases](https://github.com/tlentz/d2modmaker/releases)
 * [Installation Guide](https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing)
-* [Discord Community](https://discord.gg/fePUH3)
+* [Discord Community](https://discord.gg/eQt2Z9b)
 
 # PlugY and Things
 This should be compatible with PlugY and other things such as:
