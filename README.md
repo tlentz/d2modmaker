@@ -43,6 +43,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * **Cowzzz** `bool`
     * Enables ability to kill cow king and still make cow portal
     * Adds ability to cube 1 town portal scroll to make the cow portal
+* **EnterToExit** `bool`
+    * If this is true, this will require the user to press enter to close the program
+    * If false, it will not prompt user input
 * **RandomOptions** `RandomOptions`
     * **Randomize** `bool`
         * Will randomize if set to true
