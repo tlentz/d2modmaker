@@ -136,7 +136,6 @@ func cowzzz(d2files d2file.D2Files) {
 		description := row[cubeMainTxt.Description]
 
 		if description == cubeMainTxt.CowPortalWirt {
-			fmt.Println(description)
 			tmp := make([]string, len(row))
 			// // copy cow row to tmp
 			copy(tmp, row)
