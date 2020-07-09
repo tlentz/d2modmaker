@@ -64,7 +64,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 
 ## Example ModConfig
 ```json
- {
+{
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 1,
     "EnableTownSkills": true,
@@ -73,6 +73,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "UniqueItemDropRate": 100,
     "StartWithCube": true,
     "Cowzzz": true,
+    "EnterToExit": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
@@ -100,6 +101,13 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 
 # Change Log
+
+## v0.2.0
+* Fixed issue where buckets were incorrect for the `IsBalanced` option.
+* Added new option to cfg
+    * **EnterToExit** `bool`
+        * If this is true, this will require the user to press enter to close the program
+        * If false, it will not prompt user input
 
 ## v0.1.6
 * **Cowzzz** `bool`

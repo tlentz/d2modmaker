@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"strconv"
 	"time"
@@ -86,6 +89,14 @@ func Randomize(cfg *ModConfig, d2files d2file.D2Files) {
 	randomizeSetProps(opts, d2files, props, propKeys)
 	randomizeSetItemsProps(opts, d2files, props, propKeys)
 	randomizeRWProps(opts, miscBuckets, d2files, props, propKeys)
+	writePropBuckets(props)
+}
+
+func writePropBuckets(props BucketedPropsMap) {
+	filePath := outDir + "buckets.json"
+	fmt.Println("Writing " + filePath)
+	file, _ := json.MarshalIndent(props, "", " ")
+	_ = ioutil.WriteFile(filePath, file, 0644)
 }
 
 // Adds prop to correct map/bucket
@@ -163,19 +174,23 @@ type PropGetter struct {
 func getProps(p PropGetter) Props {
 	f := d2file.GetOrCreateFile(dataDir, p.d2files, p.fileName)
 	for _, row := range f.Rows {
-		mbLvl, err := strconv.Atoi(row[p.lvl])
 		lvl := 0
-		if err == nil {
-			lvl = mbLvl
+		if p.lvl >= 0 {
+			mbLvl, err := strconv.Atoi(row[p.lvl])
+			if err == nil {
+				lvl = mbLvl
+			}
 		}
+
 		for i := p.propOffset; i < len(row)-3; i += 4 {
-			p.props = append(p.props, Prop{
+			prop := Prop{
 				Name: row[i],
 				Par:  row[i+1],
 				Min:  row[i+2],
 				Max:  row[i+3],
 				Lvl:  lvl,
-			})
+			}
+			p.props = append(p.props, prop)
 		}
 	}
 	return p.props
@@ -272,7 +287,7 @@ func getAllRWProps(d2files d2file.D2Files, props Props) Props {
 		props:      props,
 		fileName:   runesTxt.FileName,
 		propOffset: runesTxt.T1Code1,
-		lvl:        0,
+		lvl:        -1,
 	}
 	return getProps(p)
 }
@@ -335,11 +350,14 @@ func getBalanceBuckets(lvl int) []int {
 	buckets := []int{}
 	if lvl > 60 {
 		buckets = append(buckets, bucket60)
-	}
-	if lvl > 30 {
+	} else if lvl > 30 {
+		buckets = append(buckets, bucket60)
 		buckets = append(buckets, bucket30)
+	} else {
+		buckets = append(buckets, bucket60)
+		buckets = append(buckets, bucket30)
+		buckets = append(buckets, bucket0)
 	}
-	buckets = append(buckets, bucket0)
 	return buckets
 }
 

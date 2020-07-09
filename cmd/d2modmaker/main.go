@@ -33,7 +33,7 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	mode = "production"
+	mode = "dev"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
@@ -66,9 +66,14 @@ func printFile() {
 }
 
 func makeMod() {
-	var cfg = ReadCfg(cfgPath)
-
+	cfg := ReadCfg(cfgPath)
 	d2files := d2file.D2Files{}
+
+	fmt.Println("removing " + outDir)
+	os.RemoveAll(outDir)
+	fmt.Println("creating " + outDir)
+	err := os.MkdirAll(outDir, 0755)
+	util.Check(err)
 
 	if cfg.IncreaseStackSizes {
 		increaseStackSizes(d2files)
@@ -104,19 +109,17 @@ func makeMod() {
 		Randomize(&cfg, d2files)
 	}
 
-	fmt.Println("removing " + outDir)
-	os.RemoveAll(outDir)
-	fmt.Println("creating " + outDir)
-	err := os.MkdirAll(outDir, 0755)
-	util.Check(err)
 	d2file.WriteFiles(d2files, outDir)
 	writeSeed(cfg)
 	fmt.Println("\n\n===========================")
 	fmt.Println("Config used:\n\n")
 	util.PP(cfg)
 	fmt.Println("\n\n===========================")
-	fmt.Println("Done!\n\nPress enter to exit.")
-	fmt.Scanln() // wait for Enter Key
+	fmt.Println("Done!")
+	if cfg.EnterToExit {
+		fmt.Println("\n\nPress enter to exit.")
+		fmt.Scanln() // wait for Enter Key
+	}
 }
 
 func writeSeed(cfg ModConfig) {
@@ -136,7 +139,6 @@ func cowzzz(d2files d2file.D2Files) {
 		description := row[cubeMainTxt.Description]
 
 		if description == cubeMainTxt.CowPortalWirt {
-			fmt.Println(description)
 			tmp := make([]string, len(row))
 			// // copy cow row to tmp
 			copy(tmp, row)
