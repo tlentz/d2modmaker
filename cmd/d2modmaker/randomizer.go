@@ -1,6 +1,9 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"strconv"
 	"time"
@@ -86,6 +89,14 @@ func Randomize(cfg *ModConfig, d2files d2file.D2Files) {
 	randomizeSetProps(opts, d2files, props, propKeys)
 	randomizeSetItemsProps(opts, d2files, props, propKeys)
 	randomizeRWProps(opts, miscBuckets, d2files, props, propKeys)
+	writePropBuckets(props)
+}
+
+func writePropBuckets(props BucketedPropsMap) {
+	filePath := outDir + "buckets.json"
+	fmt.Println("Writing " + filePath)
+	file, _ := json.MarshalIndent(props, "", " ")
+	_ = ioutil.WriteFile(filePath, file, 0644)
 }
 
 // Adds prop to correct map/bucket

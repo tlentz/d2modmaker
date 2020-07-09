@@ -33,7 +33,7 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	mode = "production"
+	mode = "dev"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
@@ -66,9 +66,14 @@ func printFile() {
 }
 
 func makeMod() {
-	var cfg = ReadCfg(cfgPath)
-
+	cfg := ReadCfg(cfgPath)
 	d2files := d2file.D2Files{}
+
+	fmt.Println("removing " + outDir)
+	os.RemoveAll(outDir)
+	fmt.Println("creating " + outDir)
+	err := os.MkdirAll(outDir, 0755)
+	util.Check(err)
 
 	if cfg.IncreaseStackSizes {
 		increaseStackSizes(d2files)
@@ -104,11 +109,6 @@ func makeMod() {
 		Randomize(&cfg, d2files)
 	}
 
-	fmt.Println("removing " + outDir)
-	os.RemoveAll(outDir)
-	fmt.Println("creating " + outDir)
-	err := os.MkdirAll(outDir, 0755)
-	util.Check(err)
 	d2file.WriteFiles(d2files, outDir)
 	writeSeed(cfg)
 	fmt.Println("\n\n===========================")
