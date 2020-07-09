@@ -115,8 +115,11 @@ func makeMod() {
 	fmt.Println("Config used:\n\n")
 	util.PP(cfg)
 	fmt.Println("\n\n===========================")
-	fmt.Println("Done!\n\nPress enter to exit.")
-	fmt.Scanln() // wait for Enter Key
+	fmt.Println("Done!")
+	if cfg.EnterToExit {
+		fmt.Println("\n\nPress enter to exit.")
+		fmt.Scanln() // wait for Enter Key
+	}
 }
 
 func writeSeed(cfg ModConfig) {

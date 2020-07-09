@@ -15,6 +15,7 @@ type ModConfig struct {
 	UniqueItemDropRate     float64       `json:"UniqueItemDropRate"`
 	StartWithCube          bool          `json:"StartWithCube"`
 	Cowzzz                 bool          `json:"Cowzzz"`
+	EnterToExit            bool          `json:"EnterToExit"`
 	RandomOptions          RandomOptions `json:"RandomOptions"`
 }
 

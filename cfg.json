@@ -7,6 +7,7 @@
     "UniqueItemDropRate": 100,
     "StartWithCube": true,
     "Cowzzz": true,
+    "EnterToExit": true,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
