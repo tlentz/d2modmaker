@@ -219,6 +219,7 @@ func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props Buck
 		propOffset:     uniqueItemsTxt.Prop1,
 		adjustNumProps: getAdjustNumProps(opts),
 		minMaxProps:    getMinMaxProps(opts, uniqueItemsTxt.MaxNumProps),
+		itemMaxProps:   uniqueItemsTxt.MaxNumProps,
 		lvl:            uniqueItemsTxt.Lvl,
 	}
 	scramble(s)
@@ -247,6 +248,7 @@ func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props Buckete
 		propOffset:     setsTxt.PCode2a,
 		adjustNumProps: getAdjustNumProps(opts),
 		minMaxProps:    getMinMaxProps(opts, setsTxt.MaxNumProps),
+		itemMaxProps:   setsTxt.MaxNumProps,
 		lvl:            setsTxt.Level,
 	}
 	scramble(s)
@@ -275,6 +277,7 @@ func randomizeSetItemsProps(opts RandomOptions, d2files d2file.D2Files, props Bu
 		propOffset:     setItemsTxt.Prop1,
 		adjustNumProps: getAdjustNumProps(opts),
 		minMaxProps:    getMinMaxProps(opts, setItemsTxt.MaxNumProps),
+		itemMaxProps:   setItemsTxt.MaxNumProps,
 		lvl:            setItemsTxt.Lvl,
 	}
 	scramble(s)
@@ -304,6 +307,7 @@ func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2
 		propOffset:     runesTxt.T1Code1,
 		adjustNumProps: getAdjustNumProps(opts),
 		minMaxProps:    getMinMaxProps(opts, runesTxt.MaxNumProps),
+		itemMaxProps:   runesTxt.MaxNumProps,
 		lvl:            0,
 	}
 	for idx, row := range f.Rows {
@@ -371,11 +375,11 @@ func getBalancedRandomProp(opts RandomOptions, lvl string, props BucketedPropsMa
 
 	// get prop
 	numPropKeys := len(propKeys)
-	k := propKeys[rand.Intn(numPropKeys)]
+	k := propKeys[randInt(0, numPropKeys)]
 	if len(props[k][bucket]) > 0 {
-		return props[k][bucket][rand.Intn(len(props[k][bucket]))]
+		return props[k][bucket][randInt(0, len(props[k][bucket]))]
 	}
-	return props[k][bucketAll][rand.Intn(len(props[k][bucketAll]))]
+	return props[k][bucketAll][randInt(0, len(props[k][bucketAll]))]
 
 }
 
@@ -426,6 +430,7 @@ type Scrambler struct {
 	propOffset     int
 	adjustNumProps bool
 	minMaxProps    MinMaxProps
+	itemMaxProps   int
 	lvl            int
 }
 
@@ -442,23 +447,26 @@ func scramble(s Scrambler) {
 }
 
 func scrambleRow(s Scrambler, f *d2file.D2File, idx int, row []string) {
-	numProps := 0
-	for i := s.propOffset; i < len(row)-3; i += 4 {
-		prop := getBalancedRandomProp(s.opts, row[s.lvl], s.props, s.propKeys)
-		if prop.Name == "" && numProps < s.minMaxProps.minNumProps && numProps < s.minMaxProps.maxNumProps && s.adjustNumProps {
-			i -= 4
-		} else if numProps >= s.minMaxProps.minNumProps && numProps >= s.minMaxProps.maxNumProps && s.adjustNumProps {
-			f.Rows[idx][i] = ""
-			f.Rows[idx][i+1] = ""
-			f.Rows[idx][i+2] = ""
-			f.Rows[idx][i+3] = ""
-			numProps++
-		} else {
-			f.Rows[idx][i] = prop.Name
-			f.Rows[idx][i+1] = prop.Par
-			f.Rows[idx][i+2] = prop.Min
-			f.Rows[idx][i+3] = prop.Max
-			numProps++
+	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps)
+	currentNumProps := 0
+	// fill in the rest of the props with blanks
+	for currentNumProps < s.itemMaxProps {
+		prop := Prop{Name: "", Par: "", Min: "", Max: ""}
+		for prop.Name == "" && currentNumProps < numProps {
+			prop = getBalancedRandomProp(s.opts, row[s.lvl], s.props, s.propKeys)
 		}
+		i := s.propOffset + currentNumProps*4
+		f.Rows[idx][i] = prop.Name
+		f.Rows[idx][i+1] = prop.Par
+		f.Rows[idx][i+2] = prop.Min
+		f.Rows[idx][i+3] = prop.Max
+		currentNumProps++
 	}
+}
+
+func randInt(min int, max int) int {
+	if min == max {
+		return min
+	}
+	return min + rand.Intn(max-min)
 }
