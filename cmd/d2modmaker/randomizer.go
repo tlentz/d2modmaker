@@ -222,8 +222,7 @@ func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props Buck
 		itemMaxProps: uniqueItemsTxt.MaxNumProps,
 		lvl:          uniqueItemsTxt.Lvl,
 	}
-	s.minMaxProps = getMinMaxProps(opts, runesTxt.MaxNumProps)
-	util.PP(s.minMaxProps)
+	s.minMaxProps = getMinMaxProps(opts, uniqueItemsTxt.MaxNumProps)
 	scramble(s)
 }
 
@@ -251,7 +250,7 @@ func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props Buckete
 		itemMaxProps: setsTxt.MaxNumProps,
 		lvl:          setsTxt.Level,
 	}
-	s.minMaxProps = getMinMaxProps(opts, runesTxt.MaxNumProps)
+	s.minMaxProps = getMinMaxProps(opts, setsTxt.MaxNumProps)
 	scramble(s)
 }
 
