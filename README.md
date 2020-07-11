@@ -1,4 +1,6 @@
-# D2 ModMaker
+![release](https://img.shields.io/github/v/release/tlentz/d2modmaker?include_prereleases&sort=semver)
+
+# D2 Mod Maker
 
 The idea behind this project is to play Diablo II the way that you want to play.  Every option in the `ModConfig` is optional.
 
