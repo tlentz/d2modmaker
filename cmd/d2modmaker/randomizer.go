@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/rand"
+	"sort"
 	"strconv"
 	"time"
 
@@ -160,6 +161,7 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (BucketedPropsMap, 
 			keys = append(keys, k)
 		}
 	}
+	sort.Strings(keys)
 	return propMap, keys
 }
 
