@@ -39,6 +39,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     * Enables quest drops for boss kills always
 * **UniqueItemDropRate** `float`
     * Will increase the rate in which uniques/sets drop
+	* When using this setting, high values will prevent some monsters from dropping set items.
+		* Act bosses at approximately 10
+		* Mini bosses at approximately 85
+		* Other special monsters at approximately 200
+		* All other monsters at approximately 450
     * Set to `-1` to omit
 * **StartWithCube** `bool`
     * Characters will start with cube when created
@@ -106,6 +111,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 
 # Change Log
+## v0.3.1
+* Fixed an issue where unique drop rate multipliers less than 10 would actually reduce drop rates
 
 ## v0.3.0
 * Fixed an issue where seeding wasn't working correctly
