@@ -23,6 +23,7 @@ var (
 	outDir  string
 	cfgPath string
 	mode    string
+	version string
 )
 
 func withDefault(a, b string) string {
@@ -33,7 +34,7 @@ func withDefault(a, b string) string {
 }
 
 func main() {
-	mode = "production"
+	mode = "dev"
 	if mode == "production" {
 		dataDir = "./113c-data/"
 		outDir = "./data/global/excel/"
@@ -43,7 +44,14 @@ func main() {
 		outDir = "../../dist/"
 		cfgPath = "../../cfg.json"
 	}
-	fmt.Println(dataDir, outDir, cfgPath)
+
+	if version == "" {
+		version = "[Dev Build]"
+	}
+	line := "==============================="
+	fmt.Println(line)
+	fmt.Println("", "D2 Mod Maker", version)
+	fmt.Println(line)
 	makeMod()
 	// printFile()
 }
@@ -69,9 +77,9 @@ func makeMod() {
 	cfg := ReadCfg(cfgPath)
 	d2files := d2file.D2Files{}
 
-	fmt.Println("removing " + outDir)
+	// fmt.Println("removing " + outDir)
 	os.RemoveAll(outDir)
-	fmt.Println("creating " + outDir)
+	// fmt.Println("creating " + outDir)
 	err := os.MkdirAll(outDir, 0755)
 	util.Check(err)
 
@@ -110,20 +118,18 @@ func makeMod() {
 
 	d2file.WriteFiles(d2files, outDir)
 	writeSeed(cfg)
-	fmt.Println("\n\n===========================")
-	fmt.Println("Config used:\n\n")
 	util.PP(cfg)
-	fmt.Println("\n\n===========================")
+	fmt.Println("===========================")
 	fmt.Println("Done!")
 	if cfg.EnterToExit {
-		fmt.Println("\n\nPress enter to exit.")
+		fmt.Println("\n[Press enter to exit]")
 		fmt.Scanln() // wait for Enter Key
 	}
 }
 
 func writeSeed(cfg ModConfig) {
 	filePath := outDir + "Seed.txt"
-	fmt.Println("writing " + filePath)
+	// fmt.Println("writing " + filePath)
 	f, err := os.Create(filePath)
 	util.Check(err)
 	defer f.Close()
