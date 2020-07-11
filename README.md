@@ -1,4 +1,5 @@
 ![release](https://img.shields.io/github/v/release/tlentz/d2modmaker?include_prereleases&sort=semver)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
 
 # D2 Mod Maker
 
@@ -14,6 +15,19 @@ The idea behind this project is to play Diablo II the way that you want to play.
 This should be compatible with PlugY and other things such as:
 * [PlugY](http://plugy.free.fr/en/index.html) by Yohann Nicolas.
 * [MultiRes / BH](https://www.reddit.com/r/slashdiablo/comments/7z5uy1/hd_mod_and_maphack_new_release/) by SlashDiablo.
+
+# Support
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
+
+If you'd like to support the project, you can do so by joining our discord and/or choosing to donate through paypal.
+
+Donations will help support development in the project whether that is new features or bug fixes.  
+
+Both one time donations and recurring monthly donations are welcome.
+
+Anyone who donates, will get recognition in the form of a role in the Discord.
+
+Thanks!
 
 # ModConfig
 
