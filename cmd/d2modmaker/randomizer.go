@@ -213,17 +213,16 @@ func getAllUniqueProps(d2files d2file.D2Files, props Props) Props {
 // Randomize Unique Props
 func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := Scrambler{
-		opts:           opts,
-		d2files:        d2files,
-		props:          props,
-		propKeys:       propKeys,
-		fileName:       uniqueItemsTxt.FileName,
-		propOffset:     uniqueItemsTxt.Prop1,
-		adjustNumProps: getAdjustNumProps(opts),
-		minMaxProps:    getMinMaxProps(opts, uniqueItemsTxt.MaxNumProps),
-		itemMaxProps:   uniqueItemsTxt.MaxNumProps,
-		lvl:            uniqueItemsTxt.Lvl,
+		opts:         opts,
+		d2files:      d2files,
+		props:        props,
+		propKeys:     propKeys,
+		fileName:     uniqueItemsTxt.FileName,
+		propOffset:   uniqueItemsTxt.Prop1,
+		itemMaxProps: uniqueItemsTxt.MaxNumProps,
+		lvl:          uniqueItemsTxt.Lvl,
 	}
+	s.minMaxProps = getMinMaxProps(opts, uniqueItemsTxt.MaxNumProps)
 	scramble(s)
 }
 
@@ -242,17 +241,16 @@ func getAllSetProps(d2files d2file.D2Files, props Props) Props {
 // Randomize Set Props
 func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := Scrambler{
-		opts:           opts,
-		d2files:        d2files,
-		props:          props,
-		propKeys:       propKeys,
-		fileName:       setsTxt.FileName,
-		propOffset:     setsTxt.PCode2a,
-		adjustNumProps: getAdjustNumProps(opts),
-		minMaxProps:    getMinMaxProps(opts, setsTxt.MaxNumProps),
-		itemMaxProps:   setsTxt.MaxNumProps,
-		lvl:            setsTxt.Level,
+		opts:         opts,
+		d2files:      d2files,
+		props:        props,
+		propKeys:     propKeys,
+		fileName:     setsTxt.FileName,
+		propOffset:   setsTxt.PCode2a,
+		itemMaxProps: setsTxt.MaxNumProps,
+		lvl:          setsTxt.Level,
 	}
+	s.minMaxProps = getMinMaxProps(opts, setsTxt.MaxNumProps)
 	scramble(s)
 }
 
@@ -271,17 +269,16 @@ func getAllSetItemsProps(d2files d2file.D2Files, props Props) Props {
 // Randomize Set Items Props
 func randomizeSetItemsProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := Scrambler{
-		opts:           opts,
-		d2files:        d2files,
-		props:          props,
-		propKeys:       propKeys,
-		fileName:       setItemsTxt.FileName,
-		propOffset:     setItemsTxt.Prop1,
-		adjustNumProps: getAdjustNumProps(opts),
-		minMaxProps:    getMinMaxProps(opts, setItemsTxt.MaxNumProps),
-		itemMaxProps:   setItemsTxt.MaxNumProps,
-		lvl:            setItemsTxt.Lvl,
+		opts:         opts,
+		d2files:      d2files,
+		props:        props,
+		propKeys:     propKeys,
+		fileName:     setItemsTxt.FileName,
+		propOffset:   setItemsTxt.Prop1,
+		itemMaxProps: setItemsTxt.MaxNumProps,
+		lvl:          setItemsTxt.Lvl,
 	}
+	s.minMaxProps = getMinMaxProps(opts, setItemsTxt.MaxNumProps)
 	scramble(s)
 }
 
@@ -301,17 +298,15 @@ func getAllRWProps(d2files d2file.D2Files, props Props) Props {
 func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
 	s := Scrambler{
-		opts:           opts,
-		d2files:        d2files,
-		props:          props,
-		propKeys:       propKeys,
-		fileName:       runesTxt.FileName,
-		propOffset:     runesTxt.T1Code1,
-		adjustNumProps: getAdjustNumProps(opts),
-		minMaxProps:    getMinMaxProps(opts, runesTxt.MaxNumProps),
-		itemMaxProps:   runesTxt.MaxNumProps,
-		lvl:            0,
+		opts:         opts,
+		d2files:      d2files,
+		props:        props,
+		propKeys:     propKeys,
+		fileName:     runesTxt.FileName,
+		propOffset:   runesTxt.T1Code1,
+		itemMaxProps: runesTxt.MaxNumProps,
 	}
+	s.minMaxProps = getMinMaxProps(opts, runesTxt.MaxNumProps)
 	for idx, row := range f.Rows {
 		runeBuckets := []int{}
 		for j := 0; j < 5; j++ {
@@ -414,26 +409,24 @@ func getAdjustNumProps(opts RandomOptions) bool {
 }
 
 func getMinMaxProps(opts RandomOptions, maxItemProps int) MinMaxProps {
-	min := util.MinInt(util.MaxInt(0, opts.MinProps), maxItemProps)
-	max := util.MaxInt(util.MinInt(maxItemProps, opts.MaxProps), 0)
-	a := MinMaxProps{
+	min := util.MaxInt(0, opts.MinProps)
+	max := util.MaxInt(maxItemProps, util.MinInt(0, opts.MaxProps))
+	return MinMaxProps{
 		minNumProps: min,
 		maxNumProps: util.MaxInt(min, max),
 	}
-	return a
 }
 
 type Scrambler struct {
-	opts           RandomOptions
-	d2files        d2file.D2Files
-	props          BucketedPropsMap
-	propKeys       []string
-	fileName       string
-	propOffset     int
-	adjustNumProps bool
-	minMaxProps    MinMaxProps
-	itemMaxProps   int
-	lvl            int
+	opts         RandomOptions
+	d2files      d2file.D2Files
+	props        BucketedPropsMap
+	propKeys     []string
+	fileName     string
+	propOffset   int
+	minMaxProps  MinMaxProps
+	itemMaxProps int
+	lvl          int
 }
 
 type MinMaxProps struct {
