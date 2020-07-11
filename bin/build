@@ -1,16 +1,17 @@
 #!/bin/bash
 D2ModMakerMode="production"
+VERSION=`cat VERSION.txt`
 
 cd cmd/d2modmaker
 
 # macOS
-GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.mode=$D2ModMakerMode" -o d2modmaker-mac *.go
+GOOS=darwin GOARCH=amd64 go build -ldflags "-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'" -o d2modmaker-mac *.go
 
 # linux
-GOOS=linux GOARCH=amd64 go build -ldflags "-X main.mode=$D2ModMakerMode" -o d2modmaker-linux *.go
+GOOS=linux GOARCH=amd64 go build -ldflags "-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'" -o d2modmaker-linux *.go
 
 # windows
-GOOS=windows GOARCH=amd64 go build -ldflags "-X main.mode=%D2ModMakerMode%" -o d2modmaker-windows.exe *.go
+GOOS=windows GOARCH=amd64 go build -ldflags "-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'" -o d2modmaker-windows.exe *.go
 
 cd ../..
 
