@@ -106,7 +106,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 # Change Log
 
 ## v0.3.0
-* Fixes an issue where seeding wasn't working correctly
+* Fixed an issue where seeding wasn't working correctly
+* Fixed an issue where `IncreaseMonsterDensity` couldn't be a value between 0 and 1
 
 ## v0.2.0
 * Fixed issue where buckets were incorrect for the `IsBalanced` option.

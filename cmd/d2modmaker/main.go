@@ -79,10 +79,9 @@ func makeMod() {
 		increaseStackSizes(d2files)
 	}
 
-	if cfg.IncreaseMonsterDensity < 0 {
-		cfg.IncreaseMonsterDensity = 1.0
+	if cfg.IncreaseMonsterDensity > 0 {
+		increaseMonsterDensity(d2files, cfg.IncreaseMonsterDensity)
 	}
-	increaseMonsterDensity(d2files, cfg.IncreaseMonsterDensity)
 
 	if cfg.EnableTownSkills {
 		enableTownSkills(d2files)
