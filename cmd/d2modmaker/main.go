@@ -103,10 +103,10 @@ func makeMod() {
 		cowzzz(d2files)
 	}
 
-	if cfg.UniqueItemDropRate < 0 {
-		cfg.UniqueItemDropRate = 1.0
+	if cfg.UniqueItemDropRate > 0 {
+		uniqueItemDropRate(d2files, cfg.UniqueItemDropRate)
 	}
-	uniqueItemDropRate(d2files, cfg.UniqueItemDropRate)
+	
 
 	if cfg.StartWithCube {
 		startWithCube(d2files)
@@ -199,7 +199,8 @@ func uniqueItemDropRate(d2files d2file.D2Files, d float64) {
 	}
 
 	divM := func(n int) int {
-		return one(int(float64(n) / d * 10))
+		dM := 1 + (d - 1) / 10
+		return one(int(float64(n) / dM))
 	}
 
 	for i := range f.Rows {
