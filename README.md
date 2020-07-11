@@ -1,4 +1,7 @@
 ![release](https://img.shields.io/github/v/release/tlentz/d2modmaker?include_prereleases&sort=semver)
+
+
+<a href="https://www.buymeacoffee.com/tlentz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
 
 # D2 Mod Maker
@@ -18,13 +21,14 @@ This should be compatible with PlugY and other things such as:
 * [MultiRes / BH](https://www.reddit.com/r/slashdiablo/comments/7z5uy1/hd_mod_and_maphack_new_release/) by SlashDiablo.
 
 # Support
+<a href="https://www.buymeacoffee.com/tlentz" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
 
-If you'd like to support the project, you can do so by joining our discord and/or choosing to donate through paypal.
+If you'd like to support the project, you can do so by:
+* Buying me a coffee
+* Donating via paypal (monthly recurring and/or one time)
 
 Donations will help support development in the project whether that is new features or bug fixes.  
-
-Both one time donations and recurring monthly donations are welcome.
 
 Anyone who donates, will get recognition in the form of a role in the Discord.
 
