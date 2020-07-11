@@ -74,7 +74,7 @@ func WriteD2File(d2file *D2File, filePath string) {
 // WriteFiles writes all d2 files
 func WriteFiles(d2files D2Files, outDir string) {
 	for _, file := range d2files {
-		fmt.Println("writing " + outDir + file.FileName)
+		// fmt.Println("writing " + outDir + file.FileName)
 		WriteD2File(file, outDir)
 	}
 }

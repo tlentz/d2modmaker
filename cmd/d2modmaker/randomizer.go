@@ -90,7 +90,7 @@ func Randomize(cfg *ModConfig, d2files d2file.D2Files) {
 	randomizeSetProps(opts, d2files, props, propKeys)
 	randomizeSetItemsProps(opts, d2files, props, propKeys)
 	randomizeRWProps(opts, miscBuckets, d2files, props, propKeys)
-	writePropBuckets(props)
+	// writePropBuckets(props)
 }
 
 func writePropBuckets(props BucketedPropsMap) {
