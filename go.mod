@@ -1,4 +1,3 @@
-module github.com/tlentz/d2modmaker
+module diablomod
 
 go 1.14
-
