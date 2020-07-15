@@ -409,7 +409,7 @@ func getAdjustNumProps(opts RandomOptions) bool {
 }
 
 func getMinMaxProps(opts RandomOptions, maxItemProps int) MinMaxProps {
-	min := util.MaxInt(0, opts.MinProps)
+	min := util.MinInt(maxItemProps, util.MaxInt(0, opts.MinProps))
 	max := maxItemProps
 	if opts.MaxProps > 0 {
 		max = util.MinInt(opts.MaxProps, maxItemProps)

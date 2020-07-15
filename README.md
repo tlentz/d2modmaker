@@ -129,8 +129,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 # Change Log
 
 ## v0.3.2
-* Fixed an issue where `MaxProps` wasn't working correctly
-   * This will invalidate any seeds that had `MaxProps` enabled previously, the seed can be maintained by just setting `MaxProps` to `-1` for any cfg using v0.3.0 or later
+* Fixed an issue where `MinProps` and `MaxProps` weren't working correctly
+   * This may invalidate seeds that were using these options
 
 ## v0.3.1
 * Fixed an issue where unique drop rate multipliers less than 10 would actually reduce drop rates
