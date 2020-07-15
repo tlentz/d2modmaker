@@ -127,6 +127,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 
 # Change Log
+
+## v0.3.2
+* Fixed an issue where `MinProps` and `MaxProps` weren't working correctly
+   * This may invalidate seeds that were using these options
+
 ## v0.3.1
 * Fixed an issue where unique drop rate multipliers less than 10 would actually reduce drop rates
 
