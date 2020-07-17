@@ -234,9 +234,17 @@ func uniqueItemDropRate(d2files d2file.D2Files, d float64) {
 func runeDropRate(d2files d2file.D2Files, rateScale float64) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
 
-	if rateScale > 1.0 {
+	// Clip rateScale to valid 1-100 range
+	if rateScale > 100.0 {
+		rateScale = 100.0
+	}
+	if rateScale < 1.0 {
 		rateScale = 1.0
 	}
+	// Convert rateScale to 0.0-1.0 range
+	rateScale = ( rateScale - 1.0 ) / 99.0
+	
+	// Invert rate scale to get the drop rate multiplier
 	rateMult := 1.0 - rateScale 
 	
 	targetProb12 := 1.0
