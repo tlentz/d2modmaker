@@ -61,6 +61,12 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 		* Other special monsters at approximately 200
 		* All other monsters at approximately 450
     * Set to `-1` to omit
+* **RuneDropRate** `float`
+	* Valid values are from 1 (vanilla drop rate) - 100 (even chance for all runes)
+	* Does not change the maximum rune any enemy can drop.
+	* Scales exponetially:
+		* Each increase of 1 raises the drop rate of the highest runes by ~5% cumulatively
+		* E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
 * **StartWithCube** `bool`
     * Characters will start with cube when created
 * **Cowzzz** `bool`
@@ -97,6 +103,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "NoDropZero": true,
     "QuestDrops": true,
     "UniqueItemDropRate": 100,
+    "RuneDropRate": -1,
     "StartWithCube": true,
     "Cowzzz": true,
     "EnterToExit": true,
@@ -127,6 +134,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 
 # Change Log
+
+## v0.3.3
+* Added new option to cfg
+	* **RuneDropRate** 'float'
+		* Scales Rune drop rates from vanilla to even chance per rune.
 
 ## v0.3.2
 * Fixed an issue where `MinProps` and `MaxProps` weren't working correctly

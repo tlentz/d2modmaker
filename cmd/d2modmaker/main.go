@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"math"
 
 	charStats "github.com/tlentz/d2modmaker/internal/charStatsTxt"
 	"github.com/tlentz/d2modmaker/internal/cubeMainTxt"
@@ -107,6 +108,9 @@ func makeMod() {
 		uniqueItemDropRate(d2files, cfg.UniqueItemDropRate)
 	}
 	
+	if cfg.RuneDropRate > 0 {
+		runeDropRate(d2files, cfg.RuneDropRate);
+	}
 
 	if cfg.StartWithCube {
 		startWithCube(d2files)
@@ -223,6 +227,71 @@ func uniqueItemDropRate(d2files d2file.D2Files, d float64) {
 			newSetMin := divM(oldSetMin)
 			f.Rows[i][itmRatio.Set] = strconv.Itoa(newSet)
 			f.Rows[i][itmRatio.SetMin] = strconv.Itoa(newSetMin)
+		}
+	}
+}
+
+func runeDropRate(d2files d2file.D2Files, rateScale float64) {
+	f := d2file.GetOrCreateFile(dataDir, d2files, tc.FileName)
+
+	// Clip rateScale to valid 1-100 range
+	if rateScale > 100.0 {
+		rateScale = 100.0
+	}
+	if rateScale < 1.0 {
+		rateScale = 1.0
+	}
+	// Convert rateScale to 0.0-1.0 range
+	rateScale = ( rateScale - 1.0 ) / 99.0
+	
+	// Invert rate scale to get the drop rate multiplier
+	rateMult := 1.0 - rateScale 
+	
+	targetProb12 := 1.0
+	
+	origProb1 := 3.0
+	baseProb1 := math.Log2(targetProb12)
+	rangeProb1 := math.Log2(origProb1) - math.Log2(targetProb12)
+	newProb1 := math.Pow( 2, baseProb1 + rangeProb1 * rateMult )
+	
+	origProb2 := 2.0
+	baseProb2 := math.Log2(targetProb12)
+	rangeProb2 := math.Log2(origProb2) - math.Log2(targetProb12)
+	newProb2 := math.Pow( 2, baseProb2 + rangeProb2 * rateMult )
+	
+	for idx, row := range f.Rows {
+		treasureClass := row[tc.TreasureClass]
+		if len(treasureClass) >= 5 && treasureClass[:5] == "Runes" {
+			runeTc, err := strconv.Atoi(row[tc.TreasureClass][6:])
+			
+			if err == nil {			
+				targetProb3	:= float64((runeTc - 1) * 2)
+				var newProb3 float64 = 0
+				if targetProb3 != 0 {	
+					var origProb3 int
+					if runeTc != 17 {
+						origProb3, _ = strconv.Atoi(row[tc.Prob3])	
+					} else {
+						// Runes 17 doesn't have a second rune chance, and the next rune TC slot is in Prob2
+						origProb3, _ = strconv.Atoi(row[tc.Prob2])	
+					}
+					baseProb3 := math.Log2(targetProb3)
+					rangeProb3 := math.Log2(float64(origProb3)) - math.Log2(targetProb3)
+					newProb3 = math.Pow( 2, baseProb3 + rangeProb3 * rateMult )
+				}
+				
+				if runeTc != 17 {
+					f.Rows[idx][tc.Prob1] = strconv.Itoa(int(newProb1+0.5))
+					f.Rows[idx][tc.Prob2] = strconv.Itoa(int(newProb2+0.5))
+					if runeTc != 1 {
+						// Runes 1 does not have a next rune TC
+						f.Rows[idx][tc.Prob3] = strconv.Itoa(int(newProb3+0.5))
+					}
+				} else {
+					// Runes 17 doesn't have a second rune chance, and the next rune TC slot is in Prob2
+					f.Rows[idx][tc.Prob2] = strconv.Itoa(int(newProb3+0.5))
+				}
+			}
 		}
 	}
 }

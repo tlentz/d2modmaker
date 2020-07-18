@@ -13,6 +13,7 @@ type ModConfig struct {
 	NoDropZero             bool          `json:"NoDropZero"`
 	QuestDrops             bool          `json:"QuestDrops"`
 	UniqueItemDropRate     float64       `json:"UniqueItemDropRate"`
+	RuneDropRate     	   float64       `json:"RuneDropRate"`
 	StartWithCube          bool          `json:"StartWithCube"`
 	Cowzzz                 bool          `json:"Cowzzz"`
 	EnterToExit            bool          `json:"EnterToExit"`

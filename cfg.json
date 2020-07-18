@@ -5,6 +5,7 @@
     "NoDropZero": true,
     "QuestDrops": true,
     "UniqueItemDropRate": 100,
+    "RuneDropRate": -1,
     "StartWithCube": true,
     "Cowzzz": true,
     "EnterToExit": true,
