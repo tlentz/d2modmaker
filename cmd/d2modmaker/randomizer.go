@@ -445,7 +445,7 @@ func scramble(s Scrambler) {
 }
 
 func scrambleRow(s Scrambler, f *d2file.D2File, idx int, row []string) {
-	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps)
+	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 	currentNumProps := 0
 	// fill in the rest of the props with blanks
 	for currentNumProps < s.itemMaxProps {

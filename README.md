@@ -135,6 +135,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 
 # Change Log
 
+## v0.3.4
+* Fixed an issue where `MaxProps` was effectively one less than the configured value
+   * This will invalidate most seeds
+   * If MaxProps was 7 or less, the seed can be preserved by setting it to one less than the previous value
+
 ## v0.3.3
 * Added new option to cfg
 	* **RuneDropRate** 'float'
