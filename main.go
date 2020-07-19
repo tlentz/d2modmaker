@@ -11,6 +11,7 @@ import (
 	"text/template"
 )
 
+//Added additional fields to help with check/uncheck boxes. Shouldn't affect mods in any way. Once this GUI is prod, people won't be editing the cfg.json anymore anyway.
 type Settings struct {
 	IncreaseStackSizes     bool `json:"IncreaseStackSizes"`
 	IncreaseStackSizess    string
