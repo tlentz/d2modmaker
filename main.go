@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"text/template"
 )
 
@@ -33,12 +34,13 @@ type RandomOptions struct {
 }
 
 //PageVariables - GUI variables that change on webpages.
-type PageVariables struct {
-	Output string
+type Checkboxes struct {
+	IncreaseStackSizesBOX string
 }
 
 //Global struct to save the settings.
 var N = Settings{}
+var P = Checkboxes{}
 
 //Main page for the front end.
 var mapage = `<title>d2modmaker config editor</title>
@@ -59,20 +61,21 @@ var mapage = `<title>d2modmaker config editor</title>
   
 </body>
 <form action="/process" method="POST">
-	IncreaseStackSizes         <input name="IncreaseStackSizes" type="text" value="{{.IncreaseStackSizes}}" /> <br> </br>
-	IncreaseMonsterDensity     <input name="IncreaseMonsterDensity" type="text" value="{{.IncreaseMonsterDensity}}" /> <br> </br>
-	EnableTownSkills           <input name="EnableTownSkills" type="text" value="{{.EnableTownSkills}}" /> <br> </br>
-	NoDropZero                 <input name="NoDropZero" type="text" value="{{.NoDropZero}}" /> <br> </br>
-	QuestDrops                 <input name="QuestDrops" type="text" value="{{.QuestDrops}}" /> <br> </br>
-	UniqueItemDropRate         <input name="UniqueItemDropRate" type="text" value="{{.UniqueItemDropRate}}" /> <br> </br>
-	StartWithCube              <input name="StartWithCube" type="text" value="{{.StartWithCube}}" /> <br> </br>
-	RandomOptions.Randomize    <input name="Randomize" type="text" value="{{.RandomOptions.Randomize}}" /> <br> </br>
-	RandomOptions.Seed         <input name="Seed" type="text" value="{{.RandomOptions.Seed}}" /> <br> </br>
-	RandomOptions.IsBalanced   <input name="IsBalanced" type="text" value="{{.RandomOptions.IsBalanced}}" /> <br> </br>
-	RandomOptions.MinProps     <input name="MinProps" type="text" value="{{.RandomOptions.MinProps}}" /> <br> </br>
-	RandomOptions.MaxProps     <input name="MaxProps" type="text" value="{{.RandomOptions.MaxProps}}" /> <br> </br>
-	RandomOptions.UseOSkills   <input name="UseOSkills" type="text" value="{{.RandomOptions.UseOSkills}}" /> <br> </br>
-	RandomOptions.PerfectProps <input name="PerfectProps" type="text" value="{{.RandomOptions.PerfectProps}}" /> <br> </br>
+	IncreaseStackSizesBOX (true/false)         <input name="IncreaseStackSizesBOX" type="checkbox" value="{{.IncreaseStackSizes}}"> <br> </br>
+	IncreaseStackSizes (true/false)         <input name="IncreaseStackSizes" type="text" value="{{.IncreaseStackSizes}}" /> <br> </br>
+	IncreaseMonsterDensity (min:0 max:30 or -1 to omit)     <input name="IncreaseMonsterDensity" type="text" value="{{.IncreaseMonsterDensity}}" /> <br> </br>
+	EnableTownSkills (true/false)            <input name="EnableTownSkills" type="text" value="{{.EnableTownSkills}}" /> <br> </br>
+	NoDropZero (true/false)                 <input name="NoDropZero" type="text" value="{{.NoDropZero}}" /> <br> </br>
+	QuestDrops (true/false)                  <input name="QuestDrops" type="text" value="{{.QuestDrops}}" /> <br> </br>
+	UniqueItemDropRate (min:0 max: 450 or -1 to omit)        <input name="UniqueItemDropRate" type="text" value="{{.UniqueItemDropRate}}" /> <br> </br>
+	StartWithCube (true/false)               <input name="StartWithCube" type="text" value="{{.StartWithCube}}" /> <br> </br>
+	RandomOptions.Randomize (true/false)     <input name="Randomize" type="text" value="{{.RandomOptions.Randomize}}" /> <br> </br>
+	RandomOptions.Seed (set to -1 to generate random seed)        <input name="Seed" type="text" value="{{.RandomOptions.Seed}}" /> <br> </br>
+	RandomOptions.IsBalanced (true/false)    <input name="IsBalanced" type="text" value="{{.RandomOptions.IsBalanced}}" /> <br> </br>
+	RandomOptions.MinProps (set to -1 to omit)    <input name="MinProps" type="text" value="{{.RandomOptions.MinProps}}" /> <br> </br>
+	RandomOptions.MaxProps (set to -1 to omit)    <input name="MaxProps" type="text" value="{{.RandomOptions.MaxProps}}" /> <br> </br>
+	RandomOptions.UseOSkills (true/false)    <input name="UseOSkills" type="text" value="{{.RandomOptions.UseOSkills}}" /> <br> </br>
+	RandomOptions.PerfectProps (true/false)  <input name="PerfectProps" type="text" value="{{.RandomOptions.PerfectProps}}" /> <br> </br>
 	<button type="submit" style="background-color: #ffc2c2;" value="save">Save</button> Save the CFG file.
 </form>
 <form action="/run" method="POST">
@@ -109,14 +112,31 @@ func run(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func adjustbool(input string) bool {
-	switch input {
-	case "true":
-		return true
-	case "True":
-		return true
+func adjustboolx(input []string) bool {
+	if len(input) != 0 && input[0] != "" {
+		switch strings.ToLower(input[0]) {
+		case "true":
+			return true
+		}
 	}
 	return false
+}
+
+func adjustinput(change *int, input []string) {
+	ch := *change
+	if len(input) != 0 && input[0] != "" {
+		converted, _ := strconv.Atoi(input[0])
+		ch = converted
+	}
+	*change = ch
+}
+
+func checkboxGrabinput(input []string) {
+	if len(input) != 0 && input[0] != "" {
+		fmt.Println("checkbox is set to true")
+		return
+	}
+	fmt.Println("checkbox is set to false")
 }
 
 func process(w http.ResponseWriter, r *http.Request) {
@@ -125,48 +145,24 @@ func process(w http.ResponseWriter, r *http.Request) {
 		log.Print("template executing error: ", err) //log it
 	}
 	r.ParseForm()
-	if len(r.Form["IncreaseStackSizes"]) != 0 && r.Form["IncreaseStackSizes"][0] != "" {
-		N.IncreaseStackSizes = adjustbool(r.Form["IncreaseStackSizes"][0])
-	}
-	if len(r.Form["IncreaseMonsterDensity"]) != 0 && r.Form["IncreaseMonsterDensity"][0] != "" {
-		N.IncreaseMonsterDensity, _ = strconv.Atoi(r.Form["IncreaseMonsterDensity"][0])
-	}
-	if len(r.Form["EnableTownSkills"]) != 0 && r.Form["EnableTownSkills"][0] != "" {
-		N.EnableTownSkills = adjustbool(r.Form["EnableTownSkills"][0])
-	}
-	if len(r.Form["NoDropZero"]) != 0 && r.Form["NoDropZero"][0] != "" {
-		N.NoDropZero = adjustbool(r.Form["NoDropZero"][0])
-	}
-	if len(r.Form["QuestDrops"]) != 0 && r.Form["QuestDrops"][0] != "" {
-		N.QuestDrops = adjustbool(r.Form["QuestDrops"][0])
-	}
-	if len(r.Form["UniqueItemDropRate"]) != 0 && r.Form["UniqueItemDropRate"][0] != "" {
-		N.UniqueItemDropRate, _ = strconv.Atoi(r.Form["UniqueItemDropRate"][0])
-	}
-	if len(r.Form["StartWithCube"]) != 0 && r.Form["StartWithCube"][0] != "" {
-		N.StartWithCube = adjustbool(r.Form["StartWithCube"][0])
-	}
-	if len(r.Form["Randomize"]) != 0 && r.Form["Randomize"][0] != "" {
-		N.RandomOptions.Randomize = adjustbool(r.Form["Randomize"][0])
-	}
-	if len(r.Form["Seed"]) != 0 && r.Form["Seed"][0] != "" {
-		N.RandomOptions.Seed, _ = strconv.Atoi(r.Form["Seed"][0])
-	}
-	if len(r.Form["IsBalanced"]) != 0 && r.Form["IsBalanced"][0] != "" {
-		N.RandomOptions.IsBalanced = adjustbool(r.Form["IsBalanced"][0])
-	}
-	if len(r.Form["MinProps"]) != 0 && r.Form["MinProps"][0] != "" {
-		N.RandomOptions.MinProps, _ = strconv.Atoi(r.Form["MinProps"][0])
-	}
-	if len(r.Form["MaxProps"]) != 0 && r.Form["MaxProps"][0] != "" {
-		N.RandomOptions.MaxProps, _ = strconv.Atoi(r.Form["MaxProps"][0])
-	}
-	if len(r.Form["UseOSkills"]) != 0 && r.Form["UseOSkills"][0] != "" {
-		N.RandomOptions.UseOSkills = adjustbool(r.Form["UseOSkills"][0])
-	}
-	if len(r.Form["PerfectProps"]) != 0 && r.Form["PerfectProps"][0] != "" {
-		N.RandomOptions.PerfectProps = adjustbool(r.Form["PerfectProps"][0])
-	}
+	//Test demonstrating grabbing of input from 'IncreaseStackSizesBOX' checkbox
+	checkboxGrabinput(r.Form["IncreaseStackSizesBOX"])
+	//endtest
+	//refactored below into two functions
+	adjustinput(&N.IncreaseMonsterDensity, r.Form["IncreaseMonsterDensity"])
+	adjustinput(&N.UniqueItemDropRate, r.Form["UniqueItemDropRate"])
+	adjustinput(&N.RandomOptions.Seed, r.Form["Seed"])
+	adjustinput(&N.RandomOptions.MinProps, r.Form["MinProps"])
+	adjustinput(&N.RandomOptions.MaxProps, r.Form["MaxProps"])
+	N.EnableTownSkills = adjustboolx(r.Form["EnableTownSkills"])
+	N.NoDropZero = adjustboolx(r.Form["NoDropZero"])
+	N.QuestDrops = adjustboolx(r.Form["QuestDrops"])
+	N.StartWithCube = adjustboolx(r.Form["StartWithCube"])
+	N.RandomOptions.Randomize = adjustboolx(r.Form["Randomize"])
+	N.RandomOptions.IsBalanced = adjustboolx(r.Form["IsBalanced"])
+	N.RandomOptions.UseOSkills = adjustboolx(r.Form["UseOSkills"])
+	N.RandomOptions.PerfectProps = adjustboolx(r.Form["PerfectProps"])
+	N.IncreaseStackSizes = adjustboolx(r.Form["IncreaseStackSizes"])
 	fmt.Println(N)
 	output, err := json.MarshalIndent(N, "", "\t")
 	if err != nil {
@@ -174,6 +170,7 @@ func process(w http.ResponseWriter, r *http.Request) {
 	}
 	ioutil.WriteFile("cfg.json", output, 0755)
 	fmt.Println("Saved!!")
+	fmt.Println("---")
 	err2 := t.Execute(w, N)
 	if err2 != nil { // if there is an error
 		log.Print("template executing error: ", err) //log it
