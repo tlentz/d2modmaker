@@ -165,7 +165,7 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (BucketedPropsMap, 
 	return propMap, keys
 }
 
-type PropGetter struct {
+type propGetter struct {
 	d2files    d2file.D2Files
 	props      Props
 	fileName   string
@@ -173,7 +173,7 @@ type PropGetter struct {
 	lvl        int
 }
 
-func getProps(p PropGetter) Props {
+func getProps(p propGetter) Props {
 	f := d2file.GetOrCreateFile(dataDir, p.d2files, p.fileName)
 	for _, row := range f.Rows {
 		lvl := 0
@@ -200,7 +200,7 @@ func getProps(p PropGetter) Props {
 
 // Get Unique Props
 func getAllUniqueProps(d2files d2file.D2Files, props Props) Props {
-	p := PropGetter{
+	p := propGetter{
 		d2files:    d2files,
 		props:      props,
 		fileName:   uniqueItemsTxt.FileName,
@@ -212,7 +212,7 @@ func getAllUniqueProps(d2files d2file.D2Files, props Props) Props {
 
 // Randomize Unique Props
 func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
-	s := Scrambler{
+	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
 		props:        props,
@@ -228,7 +228,7 @@ func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props Buck
 
 // Get Set Props
 func getAllSetProps(d2files d2file.D2Files, props Props) Props {
-	p := PropGetter{
+	p := propGetter{
 		d2files:    d2files,
 		props:      props,
 		fileName:   setsTxt.FileName,
@@ -240,7 +240,7 @@ func getAllSetProps(d2files d2file.D2Files, props Props) Props {
 
 // Randomize Set Props
 func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
-	s := Scrambler{
+	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
 		props:        props,
@@ -256,7 +256,7 @@ func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props Buckete
 
 // Get Set Items Props
 func getAllSetItemsProps(d2files d2file.D2Files, props Props) Props {
-	p := PropGetter{
+	p := propGetter{
 		d2files:    d2files,
 		props:      props,
 		fileName:   setItemsTxt.FileName,
@@ -268,7 +268,7 @@ func getAllSetItemsProps(d2files d2file.D2Files, props Props) Props {
 
 // Randomize Set Items Props
 func randomizeSetItemsProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
-	s := Scrambler{
+	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
 		props:        props,
@@ -284,7 +284,7 @@ func randomizeSetItemsProps(opts RandomOptions, d2files d2file.D2Files, props Bu
 
 // Get RW Props
 func getAllRWProps(d2files d2file.D2Files, props Props) Props {
-	p := PropGetter{
+	p := propGetter{
 		d2files:    d2files,
 		props:      props,
 		fileName:   runesTxt.FileName,
@@ -297,7 +297,7 @@ func getAllRWProps(d2files d2file.D2Files, props Props) Props {
 // Randomize RW Props
 func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
-	s := Scrambler{
+	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
 		props:        props,
@@ -408,43 +408,43 @@ func getAdjustNumProps(opts RandomOptions) bool {
 	return opts.MinProps >= 0 || opts.MaxProps >= 0
 }
 
-func getMinMaxProps(opts RandomOptions, maxItemProps int) MinMaxProps {
+func getMinMaxProps(opts RandomOptions, maxItemProps int) minMaxProps {
 	min := util.MinInt(maxItemProps, util.MaxInt(0, opts.MinProps))
 	max := maxItemProps
 	if opts.MaxProps > 0 {
 		max = util.MinInt(opts.MaxProps, maxItemProps)
 	}
-	return MinMaxProps{
+	return minMaxProps{
 		minNumProps: min,
 		maxNumProps: util.MaxInt(min, max),
 	}
 }
 
-type Scrambler struct {
+type scrambler struct {
 	opts         RandomOptions
 	d2files      d2file.D2Files
 	props        BucketedPropsMap
 	propKeys     []string
 	fileName     string
 	propOffset   int
-	minMaxProps  MinMaxProps
+	minMaxProps  minMaxProps
 	itemMaxProps int
 	lvl          int
 }
 
-type MinMaxProps struct {
+type minMaxProps struct {
 	minNumProps int
 	maxNumProps int
 }
 
-func scramble(s Scrambler) {
+func scramble(s scrambler) {
 	f := d2file.GetOrCreateFile(dataDir, s.d2files, s.fileName)
 	for idx, row := range f.Rows {
 		scrambleRow(s, f, idx, row)
 	}
 }
 
-func scrambleRow(s Scrambler, f *d2file.D2File, idx int, row []string) {
+func scrambleRow(s scrambler, f *d2file.D2File, idx int, row []string) {
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 	currentNumProps := 0
 	// fill in the rest of the props with blanks
