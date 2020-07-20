@@ -24,7 +24,7 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	d2file := &D2File{FileName: fname}
 
 	// open csvfile
-	csvfile, err := os.Open(filePath + fname)
+	csvfile, err := assets.Open(filePath + fname)
 	CheckD2FileErr(d2file, err)
 
 	defer csvfile.Close()
