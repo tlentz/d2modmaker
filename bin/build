@@ -5,14 +5,27 @@ VERSION=`cat VERSION.txt`
 rm -rf ./dist/
 mkdir -p ./dist/
 
-# macOS
-GOOS=darwin GOARCH=amd64 go build -ldflags "-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'" -o ./dist/d2modmaker-mac ./cmd/d2modmaker
+PLATFORMS="darwin/amd64"
+PLATFORMS="$PLATFORMS windows/amd64 windows/386"
+PLATFORMS="$PLATFORMS linux/amd64 linux/386"
 
-# linux
-GOOS=linux GOARCH=amd64 go build -ldflags "-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'" -o ./dist/d2modmaker-linux ./cmd/d2modmaker
+for PLATFORM in $PLATFORMS; do
+  GOOS=${PLATFORM%/*}
+  GOARCH=${PLATFORM#*/}
+  BIN_FILENAME="./dist/d2modmaker-${GOOS}-${GOARCH}"
+  WITHFLAGS="-ldflags \"-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'\""
+  if [[ "${GOOS}" == "windows" ]]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
+  CMD="GOOS=${GOOS} GOARCH=${GOARCH} go build ${WITHFLAGS} -o ${BIN_FILENAME} ./cmd/d2modmaker"
+  echo "${CMD}"
+  eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
+done
 
-# windows
-GOOS=windows GOARCH=amd64 go build -ldflags "-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'" -o ./dist/d2modmaker-windows.exe ./cmd/d2modmaker
+# eval errors
+if [[ "${FAILURES}" != "" ]]; then
+  echo ""
+  echo "${SCRIPT_NAME} failed on: ${FAILURES}"
+  exit 1
+fi
 
 cp cfg.json ./dist/cfg.json
 cp -r assets/113c-data/ ./dist/113c-data/
