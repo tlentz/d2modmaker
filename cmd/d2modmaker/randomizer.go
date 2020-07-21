@@ -12,6 +12,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2file"
 	"github.com/tlentz/d2modmaker/internal/gemsTxt"
 	misctxt "github.com/tlentz/d2modmaker/internal/miscTxt"
+	"github.com/tlentz/d2modmaker/internal/modcfg"
 	"github.com/tlentz/d2modmaker/internal/runesTxt"
 	"github.com/tlentz/d2modmaker/internal/setItemsTxt"
 	"github.com/tlentz/d2modmaker/internal/setsTxt"
@@ -37,17 +38,6 @@ type BucketedProps = map[int]Props
 // BucketedPropsMap is a map with the prop name as the key holding a BucketedProps
 type BucketedPropsMap = map[string]BucketedProps
 
-// RandomOptions are the options for the randomizer
-type RandomOptions struct {
-	Randomize    bool  `json:"Randomize"`
-	Seed         int64 `json:"Seed"`
-	IsBalanced   bool  `json:"IsBalanced"`   // bucketizes props [0-30] [31-60] [61+]
-	MinProps     int   `json:"MinProps"`     // minimum number of non blank props on an item
-	MaxProps     int   `json:"MaxProps"`     // maximum number of non blank props on an item
-	PerfectProps bool  `json:"PerfectProps"` // sets min/max to max
-	UseOSkills   bool  `json:"UseOSkills"`   // +3 Fireball (Sorceress Only) -> +3 Fireball
-}
-
 const (
 	bucketAll = 0
 	bucket0   = 1
@@ -55,8 +45,8 @@ const (
 	bucket60  = 3
 )
 
-func getRandomOptions(cfg *ModConfig) RandomOptions {
-	defaultCfg := RandomOptions{
+func getRandomOptions(cfg *modcfg.ModConfig) modcfg.RandomOptions {
+	defaultCfg := modcfg.RandomOptions{
 		Seed:     time.Now().UnixNano(),
 		MinProps: -1,
 		MaxProps: -1,
@@ -79,7 +69,7 @@ func getRandomOptions(cfg *ModConfig) RandomOptions {
 }
 
 // Randomize randomizes all items based on the RandomOptions
-func Randomize(cfg *ModConfig, d2files d2file.D2Files) {
+func Randomize(cfg *modcfg.ModConfig, d2files d2file.D2Files) {
 	opts := getRandomOptions(cfg)
 	rand.Seed(opts.Seed)
 
@@ -118,7 +108,7 @@ func addOrCreateProp(props BucketedPropsMap, prop Prop) BucketedPropsMap {
 }
 
 // Returns all props bucketized
-func getAllProps(opts RandomOptions, d2files d2file.D2Files) (BucketedPropsMap, []string) {
+func getAllProps(opts modcfg.RandomOptions, d2files d2file.D2Files) (BucketedPropsMap, []string) {
 
 	propMap := BucketedPropsMap{}
 	props := [][]Prop{}
@@ -211,7 +201,7 @@ func getAllUniqueProps(d2files d2file.D2Files, props Props) Props {
 }
 
 // Randomize Unique Props
-func randomizeUniqueProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeUniqueProps(opts modcfg.RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
@@ -239,7 +229,7 @@ func getAllSetProps(d2files d2file.D2Files, props Props) Props {
 }
 
 // Randomize Set Props
-func randomizeSetProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeSetProps(opts modcfg.RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
@@ -267,7 +257,7 @@ func getAllSetItemsProps(d2files d2file.D2Files, props Props) Props {
 }
 
 // Randomize Set Items Props
-func randomizeSetItemsProps(opts RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeSetItemsProps(opts modcfg.RandomOptions, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
@@ -295,7 +285,7 @@ func getAllRWProps(d2files d2file.D2Files, props Props) Props {
 }
 
 // Randomize RW Props
-func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
+func randomizeRWProps(opts modcfg.RandomOptions, miscBuckets map[string]int, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
 	f := d2file.GetOrCreateFile(d2files, runesTxt.FileName)
 	s := scrambler{
 		opts:         opts,
@@ -362,7 +352,7 @@ func getBalanceBuckets(lvl int) []int {
 	return buckets
 }
 
-func getBalancedRandomProp(opts RandomOptions, lvl string, props BucketedPropsMap, propKeys []string) Prop {
+func getBalancedRandomProp(opts modcfg.RandomOptions, lvl string, props BucketedPropsMap, propKeys []string) Prop {
 	// get our bucket
 	bucket := bucketAll
 	n, err := strconv.Atoi(lvl)
@@ -404,11 +394,11 @@ func getMaxBucket(buckets []int) int {
 	return bucket
 }
 
-func getAdjustNumProps(opts RandomOptions) bool {
+func getAdjustNumProps(opts modcfg.RandomOptions) bool {
 	return opts.MinProps >= 0 || opts.MaxProps >= 0
 }
 
-func getMinMaxProps(opts RandomOptions, maxItemProps int) minMaxProps {
+func getMinMaxProps(opts modcfg.RandomOptions, maxItemProps int) minMaxProps {
 	min := util.MinInt(maxItemProps, util.MaxInt(0, opts.MinProps))
 	max := maxItemProps
 	if opts.MaxProps > 0 {
@@ -421,7 +411,7 @@ func getMinMaxProps(opts RandomOptions, maxItemProps int) minMaxProps {
 }
 
 type scrambler struct {
-	opts         RandomOptions
+	opts         modcfg.RandomOptions
 	d2files      d2file.D2Files
 	props        BucketedPropsMap
 	propKeys     []string

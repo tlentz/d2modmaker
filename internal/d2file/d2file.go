@@ -3,6 +3,7 @@ package d2file
 import (
 	"encoding/csv"
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/tlentz/d2modmaker/internal/assets"
@@ -20,12 +21,12 @@ type D2File struct {
 type D2Files = map[string]*D2File
 
 // ReadD2File reads a given d2 file
-func ReadD2File(fname string, filePath string) (*D2File, error) {
+func ReadD2File(fs http.FileSystem, fname string, filePath string) (*D2File, error) {
 	// create new D2File pointer with fname
 	d2file := &D2File{FileName: fname}
 
 	// open csvfile
-	csvfile, err := assets.Assets.Open(filePath + fname)
+	csvfile, err := fs.Open(filePath + fname)
 	CheckD2FileErr(d2file, err)
 
 	defer csvfile.Close()
@@ -86,7 +87,7 @@ func GetOrCreateFile(d2files D2Files, filename string) *D2File {
 		return val
 	}
 
-	d2file, err := ReadD2File(filename, assets.DataDir)
+	d2file, err := ReadD2File(assets.DataDirFS, filename, assets.DataDir)
 	util.Check(err)
 
 	d2files[filename] = d2file
@@ -99,6 +100,7 @@ func CheckD2FileErr(d2file *D2File, err error) {
 	util.CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
 }
 
+// MergeRows merges f2 rows into f1
 func MergeRows(f1 *D2File, f2 D2File) {
 	f1.Rows = append(f1.Rows, f2.Rows...)
 }

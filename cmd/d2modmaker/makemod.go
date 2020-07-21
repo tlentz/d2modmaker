@@ -14,6 +14,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/levelsTxt"
 	"github.com/tlentz/d2modmaker/internal/miscTxt"
 	"github.com/tlentz/d2modmaker/internal/missilesTxt"
+	"github.com/tlentz/d2modmaker/internal/modcfg"
 	"github.com/tlentz/d2modmaker/internal/skillsTxt"
 	"github.com/tlentz/d2modmaker/internal/splash"
 	"github.com/tlentz/d2modmaker/internal/superUniquesTxt"
@@ -22,7 +23,9 @@ import (
 )
 
 func makeMod() {
-	cfg := ReadCfg(cfgPath)
+	cfg := modcfg.ReadCfg(cfgPath)
+	assets.SetDataDirFS(cfg) // Set the DataDirFS
+
 	d2files := d2file.D2Files{}
 
 	os.RemoveAll(outDir + "/data/")
@@ -81,7 +84,7 @@ func makeMod() {
 	}
 }
 
-func writeSeed(cfg ModConfig) {
+func writeSeed(cfg modcfg.ModConfig) {
 	filePath := outDir + "Seed.txt"
 	// fmt.Println("writing " + filePath)
 	f, err := os.Create(filePath)

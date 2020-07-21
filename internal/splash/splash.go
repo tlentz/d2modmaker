@@ -46,7 +46,7 @@ func copyPatchString(outDir string) {
 }
 
 func mergeSplashFile(fileName string, d2files d2file.D2Files) {
-	splashFile, err := d2file.ReadD2File(fileName, splashDir)
+	splashFile, err := d2file.ReadD2File(assets.AssetFS, fileName, splashDir)
 	util.Check(err)
 
 	modFile := d2file.GetOrCreateFile(d2files, fileName)

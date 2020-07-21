@@ -10,7 +10,7 @@ import (
 var fs http.FileSystem = http.Dir("../../assets")
 
 func main() {
-	err := vfsgen.Generate(fs, vfsgen.Options{})
+	err := vfsgen.Generate(fs, vfsgen.Options{BuildTags: "!dev"})
 	if err != nil {
 		log.Fatalln(err)
 	}

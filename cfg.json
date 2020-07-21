@@ -10,6 +10,7 @@
     "StartWithCube": true,
     "Cowzzz": true,
     "EnterToExit": true,
+    "PathToDataDir": "~/some-data",
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
