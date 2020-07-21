@@ -97,6 +97,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ## Example ModConfig
 ```json
 {
+    "MeleeSplash": true,
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 1,
     "EnableTownSkills": true,
@@ -134,6 +135,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 
 # Change Log
+
+## v0.4.0
+* Adds new feature `MeleeSplash`
+   * This enables `Splash Damage` as an affix on jewels.
+   * Can spawn on any magic or rare jewel.
 
 ## v0.3.4
 * Fixed an issue where `MaxProps` was effectively one less than the configured value

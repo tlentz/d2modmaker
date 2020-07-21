@@ -7,7 +7,7 @@ import (
 
 // ModConfig is the config used to build the mod
 type ModConfig struct {
-	SplashJewels           bool          `json:"SplashJewels"`
+	MeleeSplash            bool          `json:"MeleeSplash"`
 	IncreaseStackSizes     bool          `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity float64       `json:"IncreaseMonsterDensity"`
 	EnableTownSkills       bool          `json:"EnableTownSkills"`

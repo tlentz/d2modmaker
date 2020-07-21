@@ -29,7 +29,7 @@ func makeMod() {
 	err := os.MkdirAll(outDir+assets.DataGlobalExcel, 0755)
 	util.Check(err)
 
-	if cfg.SplashJewels {
+	if cfg.MeleeSplash {
 		splash.SplashJewels(outDir, d2files)
 	}
 
