@@ -1,6 +1,7 @@
 package assets
 
 const (
-	DataDir          = "/113c-data/"
-	PatchStringsDest = "/local/LNG/ENG/"
+	DataDir         = "/113c-data/"
+	PatchStringDest = "data/local/LNG/ENG/"
+	DataGlobalExcel = "data/global/excel/"
 )

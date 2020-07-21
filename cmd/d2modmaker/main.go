@@ -18,7 +18,7 @@ var (
 func main() {
 
 	if mode == "production" {
-		outDir = "./data/global/excel/"
+		outDir = "./"
 		cfgPath = "./cfg.json"
 	} else {
 		outDir = "../../dist/"

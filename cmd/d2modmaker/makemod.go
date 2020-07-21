@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/tlentz/d2modmaker/internal/assets"
 	"github.com/tlentz/d2modmaker/internal/charStatsTxt"
 	"github.com/tlentz/d2modmaker/internal/cubeMainTxt"
 	"github.com/tlentz/d2modmaker/internal/d2file"
@@ -24,14 +25,12 @@ func makeMod() {
 	cfg := ReadCfg(cfgPath)
 	d2files := d2file.D2Files{}
 
-	// fmt.Println("removing " + outDir)
 	os.RemoveAll(outDir)
-	// fmt.Println("creating " + outDir)
-	err := os.MkdirAll(outDir, 0755)
+	err := os.MkdirAll(outDir+assets.DataGlobalExcel, 0755)
 	util.Check(err)
 
 	if cfg.SplashJewels {
-		splash.SplashJewels(d2files)
+		splash.SplashJewels(outDir, d2files)
 	}
 
 	if cfg.IncreaseStackSizes {

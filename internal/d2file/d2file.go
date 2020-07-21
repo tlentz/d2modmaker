@@ -59,8 +59,8 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 }
 
 // WriteD2File writes the given d2File
-func WriteD2File(d2file *D2File, filePath string) {
-	file, err := os.Create(filePath + d2file.FileName)
+func WriteD2File(d2file *D2File, outDir string) {
+	file, err := os.Create(outDir + assets.DataGlobalExcel + d2file.FileName)
 	CheckD2FileErr(d2file, err)
 	defer file.Close()
 
