@@ -1,0 +1,2 @@
+Name	*comment	version	spawnable	rare	level	maxlevel	levelreq	class	classlevelreq	classspecific	frequency	group	mod1code	mod1param	mod1min	mod1max	mod2code	mod2param	mod2min	mod2max	mod3code	mod3param	mod3min	mod3max	transform	transformcolor	itype1	itype2	itype3	itype4	itype5	itype6	itype7	etype1	etype2	etype3	etype4	etype5	divide	multiply	add
+Melee Splash		100	1	1	1		1				1	665	meleesplash	358	100	1																									0

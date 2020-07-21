@@ -174,7 +174,7 @@ type propGetter struct {
 }
 
 func getProps(p propGetter) Props {
-	f := d2file.GetOrCreateFile(dataDir, p.d2files, p.fileName)
+	f := d2file.GetOrCreateFile(p.d2files, p.fileName)
 	for _, row := range f.Rows {
 		lvl := 0
 		if p.lvl >= 0 {
@@ -296,7 +296,7 @@ func getAllRWProps(d2files d2file.D2Files, props Props) Props {
 
 // Randomize RW Props
 func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2file.D2Files, props BucketedPropsMap, propKeys []string) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, runesTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, runesTxt.FileName)
 	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
@@ -321,7 +321,7 @@ func randomizeRWProps(opts RandomOptions, miscBuckets map[string]int, d2files d2
 
 // Get Gem Props
 func getAllGemsProps(d2files d2file.D2Files, props Props) Props {
-	f := d2file.GetOrCreateFile(dataDir, d2files, gemsTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, gemsTxt.FileName)
 	propOffset := gemsTxt.WeaponMod1Code
 	for _, row := range f.Rows {
 		for i := propOffset; i < len(row)-3; i += 4 {
@@ -381,7 +381,7 @@ func getBalancedRandomProp(opts RandomOptions, lvl string, props BucketedPropsMa
 }
 
 func getBucketsForMisc(d2files d2file.D2Files) map[string]int {
-	f := d2file.GetOrCreateFile(dataDir, d2files, misctxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, misctxt.FileName)
 	buckets := make(map[string]int)
 	for _, row := range f.Rows {
 		n, err := strconv.Atoi(row[misctxt.Level])
@@ -438,7 +438,7 @@ type minMaxProps struct {
 }
 
 func scramble(s scrambler) {
-	f := d2file.GetOrCreateFile(dataDir, s.d2files, s.fileName)
+	f := d2file.GetOrCreateFile(s.d2files, s.fileName)
 	for idx, row := range f.Rows {
 		scrambleRow(s, f, idx, row)
 	}

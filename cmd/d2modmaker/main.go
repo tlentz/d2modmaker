@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/superUniquesTxt"
+	"github.com/tlentz/d2modmaker/internal/magicSuffixTxt"
 )
 
 var (
@@ -17,9 +17,8 @@ var (
 
 func main() {
 
-	dataDir = "/113c-data/"
 	if mode == "production" {
-		outDir = "./data/global/excel/"
+		outDir = "./"
 		cfgPath = "./cfg.json"
 	} else {
 		outDir = "../../dist/"
@@ -34,13 +33,15 @@ func main() {
 	fmt.Println("", "D2 Mod Maker", version)
 	fmt.Println(line)
 
+	// printFile()
 	makeMod()
 }
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, d2files, superUniquesTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, magicSuffixTxt.FileName)
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}
+	panic("")
 }

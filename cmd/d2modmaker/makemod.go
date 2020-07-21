@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/tlentz/d2modmaker/internal/assets"
 	"github.com/tlentz/d2modmaker/internal/charStatsTxt"
 	"github.com/tlentz/d2modmaker/internal/cubeMainTxt"
 	"github.com/tlentz/d2modmaker/internal/d2file"
@@ -14,6 +15,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/miscTxt"
 	"github.com/tlentz/d2modmaker/internal/missilesTxt"
 	"github.com/tlentz/d2modmaker/internal/skillsTxt"
+	"github.com/tlentz/d2modmaker/internal/splash"
 	"github.com/tlentz/d2modmaker/internal/superUniquesTxt"
 	"github.com/tlentz/d2modmaker/internal/treasureClassExTxt"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -23,11 +25,13 @@ func makeMod() {
 	cfg := ReadCfg(cfgPath)
 	d2files := d2file.D2Files{}
 
-	// fmt.Println("removing " + outDir)
 	os.RemoveAll(outDir)
-	// fmt.Println("creating " + outDir)
-	err := os.MkdirAll(outDir, 0755)
+	err := os.MkdirAll(outDir+assets.DataGlobalExcel, 0755)
 	util.Check(err)
+
+	if cfg.MeleeSplash {
+		splash.SplashJewels(outDir, d2files)
+	}
 
 	if cfg.IncreaseStackSizes {
 		increaseStackSizes(d2files)
@@ -61,6 +65,7 @@ func makeMod() {
 	if cfg.StartWithCube {
 		startWithCube(d2files)
 	}
+
 	if cfg.RandomOptions.Randomize {
 		Randomize(&cfg, d2files)
 	}
@@ -87,7 +92,7 @@ func writeSeed(cfg ModConfig) {
 
 func cowzzz(d2files d2file.D2Files) {
 	// Add New Recipe for Cow Poral (tp scroll -> cow portal)
-	cubeF := d2file.GetOrCreateFile(dataDir, d2files, cubeMainTxt.FileName)
+	cubeF := d2file.GetOrCreateFile(d2files, cubeMainTxt.FileName)
 	// newCubeRows := make([][]string, 0)
 	for _, row := range cubeF.Rows {
 		description := row[cubeMainTxt.Description]
@@ -109,7 +114,7 @@ func cowzzz(d2files d2file.D2Files) {
 	}
 
 	// Enable ability to kill cow king and still create portal
-	suF := d2file.GetOrCreateFile(dataDir, d2files, superUniquesTxt.FileName)
+	suF := d2file.GetOrCreateFile(d2files, superUniquesTxt.FileName)
 	for idx, row := range suF.Rows {
 		name := row[superUniquesTxt.Name]
 
@@ -120,7 +125,7 @@ func cowzzz(d2files d2file.D2Files) {
 }
 
 func startWithCube(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, charStatsTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, charStatsTxt.FileName)
 	itemOffset := charStatsTxt.Item1
 	countOffset := 2
 	for idx, row := range f.Rows {
@@ -135,7 +140,7 @@ func startWithCube(d2files d2file.D2Files) {
 }
 
 func uniqueItemDropRate(d2files d2file.D2Files, d float64) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, itemRatioTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, itemRatioTxt.FileName)
 
 	one := func(n int) int {
 		if n < 1 {
@@ -178,7 +183,7 @@ func uniqueItemDropRate(d2files d2file.D2Files, d float64) {
 }
 
 func runeDropRate(d2files d2file.D2Files, rateScale float64) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, treasureClassExTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, treasureClassExTxt.FileName)
 
 	// Clip rateScale to valid 1-100 range
 	if rateScale > 100.0 {
@@ -243,7 +248,7 @@ func runeDropRate(d2files d2file.D2Files, rateScale float64) {
 }
 
 func questDrops(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, treasureClassExTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, treasureClassExTxt.FileName)
 	diffOffsets := []int{0, 1, 2} // norm, nm, hell
 	bossQOffset := 3
 	for idx, row := range f.Rows {
@@ -263,7 +268,7 @@ func questDrops(d2files d2file.D2Files) {
 }
 
 func noDropZero(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, treasureClassExTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, treasureClassExTxt.FileName)
 	for idx, row := range f.Rows {
 		if row[treasureClassExTxt.NoDrop] != "" {
 			f.Rows[idx][treasureClassExTxt.NoDrop] = "0"
@@ -272,7 +277,7 @@ func noDropZero(d2files d2file.D2Files) {
 }
 
 func increaseStackSizes(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, miscTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, miscTxt.FileName)
 	for idx, row := range f.Rows {
 		if row[miscTxt.Name] == miscTxt.TownPortalBook || row[miscTxt.Name] == miscTxt.IdentifyBook || row[miscTxt.Name] == miscTxt.SkeletonKey {
 			f.Rows[idx][miscTxt.MaxStack] = "100"
@@ -285,18 +290,18 @@ func increaseStackSizes(d2files d2file.D2Files) {
 }
 
 func enableTownSkills(d2files d2file.D2Files) {
-	sktxt := d2file.GetOrCreateFile(dataDir, d2files, skillsTxt.FileName)
+	sktxt := d2file.GetOrCreateFile(d2files, skillsTxt.FileName)
 	for i := range sktxt.Rows {
 		sktxt.Rows[i][skillsTxt.InTown] = "1"
 	}
-	missilestxt := d2file.GetOrCreateFile(dataDir, d2files, missilesTxt.FileName)
+	missilestxt := d2file.GetOrCreateFile(d2files, missilesTxt.FileName)
 	for i := range missilestxt.Rows {
 		missilestxt.Rows[i][missilesTxt.Town] = "1"
 	}
 }
 
 func increaseMonsterDensity(d2files d2file.D2Files, m float64) {
-	f := d2file.GetOrCreateFile(dataDir, d2files, levelsTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, levelsTxt.FileName)
 	maxM := 30.0
 	mult := util.MinFloat(m, maxM)
 	maxDensity := 10000
