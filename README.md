@@ -134,7 +134,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ### MonsterDensity: 30
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 ### Melee Splash
-![Melee Splash](https://i.imgur.com/7qqDycZ)
+![Melee Splash](https://i.imgur.com/7qqDycZ.png)
 
 # Change Log
 
