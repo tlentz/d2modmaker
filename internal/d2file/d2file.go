@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tlentz/d2modmaker/internal/assets"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
@@ -24,7 +25,7 @@ func ReadD2File(fname string, filePath string) (*D2File, error) {
 	d2file := &D2File{FileName: fname}
 
 	// open csvfile
-	csvfile, err := assets.Open(filePath + fname)
+	csvfile, err := assets.Assets.Open(filePath + fname)
 	CheckD2FileErr(d2file, err)
 
 	defer csvfile.Close()
@@ -80,12 +81,12 @@ func WriteFiles(d2files D2Files, outDir string) {
 }
 
 // GetOrCreateFile returns the D2File at the given key otherwise creates it
-func GetOrCreateFile(dataDir string, d2files D2Files, filename string) *D2File {
+func GetOrCreateFile(d2files D2Files, filename string) *D2File {
 	if val, ok := d2files[filename]; ok {
 		return val
 	}
 
-	d2file, err := ReadD2File(filename, dataDir)
+	d2file, err := ReadD2File(filename, assets.DataDir)
 	util.Check(err)
 
 	d2files[filename] = d2file

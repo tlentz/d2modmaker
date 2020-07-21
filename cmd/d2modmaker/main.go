@@ -17,7 +17,6 @@ var (
 
 func main() {
 
-	dataDir = "/113c-data/"
 	if mode == "production" {
 		outDir = "./data/global/excel/"
 		cfgPath = "./cfg.json"
@@ -39,7 +38,7 @@ func main() {
 
 func printFile() {
 	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(dataDir, d2files, superUniquesTxt.FileName)
+	f := d2file.GetOrCreateFile(d2files, superUniquesTxt.FileName)
 	for i := range f.Headers {
 		fmt.Println(f.Headers[i], " = ", i)
 	}

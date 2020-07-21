@@ -7,13 +7,14 @@ import (
 
 // ModConfig is the config used to build the mod
 type ModConfig struct {
+	SplashJewels           bool          `json:"SplashJewels"`
 	IncreaseStackSizes     bool          `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity float64       `json:"IncreaseMonsterDensity"`
 	EnableTownSkills       bool          `json:"EnableTownSkills"`
 	NoDropZero             bool          `json:"NoDropZero"`
 	QuestDrops             bool          `json:"QuestDrops"`
 	UniqueItemDropRate     float64       `json:"UniqueItemDropRate"`
-	RuneDropRate     	   float64       `json:"RuneDropRate"`
+	RuneDropRate           float64       `json:"RuneDropRate"`
 	StartWithCube          bool          `json:"StartWithCube"`
 	Cowzzz                 bool          `json:"Cowzzz"`
 	EnterToExit            bool          `json:"EnterToExit"`
