@@ -98,3 +98,7 @@ func GetOrCreateFile(d2files D2Files, filename string) *D2File {
 func CheckD2FileErr(d2file *D2File, err error) {
 	util.CheckError(fmt.Sprintf("Filename: %s", d2file.FileName), err)
 }
+
+func MergeRows(f1 *D2File, f2 D2File) {
+	f1.Rows = append(f1.Rows, f2.Rows...)
+}

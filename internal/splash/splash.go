@@ -2,25 +2,31 @@ package splash
 
 import (
 	"github.com/tlentz/d2modmaker/internal/d2file"
+	"github.com/tlentz/d2modmaker/internal/itemStatCostTxt"
+	"github.com/tlentz/d2modmaker/internal/magicSuffixTxt"
+	"github.com/tlentz/d2modmaker/internal/missilesTxt"
+	"github.com/tlentz/d2modmaker/internal/propertiesTxt"
+	"github.com/tlentz/d2modmaker/internal/skillsTxt"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
 func SplashJewels(d2files d2file.D2Files) {
-	panic("")
+	mergeSplashFile(missilesTxt.FileName, d2files)
+	mergeSplashFile(skillsTxt.FileName, d2files)
+	mergeSplashFile(itemStatCostTxt.FileName, d2files)
+	mergeSplashFile(propertiesTxt.FileName, d2files)
+	mergeSplashFile(magicSuffixTxt.FileName, d2files)
+}
+
+func writePatchStrings() {
+
 }
 
 func mergeSplashFile(fileName string, d2files d2file.D2Files) {
 	splashDir := "/splash/"
-	_, err := d2file.ReadD2File(fileName, splashDir)
+	splashFile, err := d2file.ReadD2File(fileName, splashDir)
 	util.Check(err)
 
-	// modFile, err := d2file.GetOrCreateFile()
-}
-
-func mergeRows(f1 d2file.D2File, f2 d2file.D2File) d2file.D2File {
-	return d2file.D2File{
-		FileName: f1.FileName,
-		Headers:  f1.Headers,
-		Rows:     append(f1.Rows, f2.Rows...),
-	}
+	modFile := d2file.GetOrCreateFile(d2files, fileName)
+	d2file.MergeRows(modFile, *splashFile)
 }
