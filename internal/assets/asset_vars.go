@@ -20,6 +20,6 @@ var (
 func SetDataDirFS(cfg modcfg.ModConfig) {
 	if cfg.PathToDataDir != "" {
 		DataDirFS = http.Dir(cfg.PathToDataDir)
-		DataDir = ""
+		DataDir = "/data/"
 	}
 }
