@@ -25,7 +25,7 @@ func makeMod() {
 	cfg := ReadCfg(cfgPath)
 	d2files := d2file.D2Files{}
 
-	os.RemoveAll(outDir)
+	os.RemoveAll(outDir + "/data/")
 	err := os.MkdirAll(outDir+assets.DataGlobalExcel, 0755)
 	util.Check(err)
 
