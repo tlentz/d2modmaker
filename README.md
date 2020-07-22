@@ -12,7 +12,7 @@ The idea behind this project is to play Diablo II the way that you want to play.
 * [Releases](https://github.com/tlentz/d2modmaker/releases)
 * [Installation Guide](https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing)
 * [Discord Community](https://discord.gg/eQt2Z9b)
-* [Support this Project](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
+* [Support this Project](https://www.buymeacoffee.com/tlentz)
 
 # PlugY and Things
 This should be compatible with PlugY and other things such as:
