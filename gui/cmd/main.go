@@ -21,7 +21,7 @@ import (
 )
 
 var version = "1.0.0"
-var uiURL = "http://localhost:9999/"
+var uiURL = "http://localhost:3000/"
 
 func main() {
 	cfg := struct {
