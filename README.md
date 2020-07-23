@@ -71,6 +71,10 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
         * Set to `-1` to generate a random seed
     * **IsBalanced** `bool`
         * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
+    * **BalancedPropCount** `bool`
+        * Pick prop count on items based on counts from vanilla items.
+        * Picks from items up to 10 levels higher when randomizing
+        * Enabling this setting will make MinProps and MaxProps unused.
     * **MinProps** `int`
         * Minimum number of non blank props that spawn on an item
         * Set to `-1` to omit
@@ -91,7 +95,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 100,
+    "UniqueItemDropRate": -1,
     "RuneDropRate": -1,
     "StartWithCube": true,
     "Cowzzz": true,
@@ -99,7 +103,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
-        "IsBalanced": false,
+        "IsBalanced": true,
+        "BalancedPropCount":true,
         "MinProps": -1,
         "MaxProps": -1,
         "UseOSkills": true,
@@ -137,6 +142,12 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+
+## v0.4.2
+* Adds a new randomization option: BalancedPropCount
+   * This option enables picking the prop count for items from the counts on vanilla items
+   * The count is pulled from items up to 10 levels above the item being randomized
+   * The MinProps and MaxProps settings will be ignored if this is enabled
 
 ## v0.4.1
 * Refactors IsBalanced mode
