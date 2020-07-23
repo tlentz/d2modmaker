@@ -108,19 +108,24 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (Props, Items) {
 	props := Props{}
 	items := Items{}
 
-	uniqueItemProps, uniqueItems  := getAllUniqueProps(d2files)
+	p := propGetter{
+		d2files:	d2files,
+		opts:		opts,
+	}
+	
+	uniqueItemProps, uniqueItems  := getAllUniqueProps(p)
 	props = append(props, uniqueItemProps...)
 	items = append(items, uniqueItems...)
 
-	setProps, setBonuses = getAllSetProps(d2files)
+	setProps, _ := getAllSetProps(p)
 	props = append(props, setProps...)
 	//items = append(items, setBonuses...) //These aren't really items
 
-	setItemProps, setItems = getAllSetItemsProps(d2files)
+	setItemProps, setItems := getAllSetItemsProps(p)
 	props = append(props, setItemProps...)
 	items = append(items, setItems...)
 
-	runeWordProps, runewords = getAllRWProps(d2files)
+	runeWordProps, runewords := getAllRWProps(p)
 	props = append(props, runeWordProps...)
 	items = append(items, runewords...)
 
@@ -133,6 +138,7 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (Props, Items) {
 
 type propGetter struct {
 	d2files     d2file.D2Files
+	opts		RandomOptions
 	props       Props
 	fileName    string
 	propOffset  int
@@ -169,10 +175,10 @@ func getProps(p propGetter) (Props, Items) {
 				Lvl:  lvl,
 			}
 			if prop.Name != "" {
-				if opts.PerfectProps {
+				if p.opts.PerfectProps {
 					prop.Min = prop.Max
 				}
-				if opts.UseOSkills {
+				if p.opts.UseOSkills {
 					if prop.Name == "skill" {
 						prop.Name = "oskill"
 					}
@@ -191,14 +197,11 @@ func getProps(p propGetter) (Props, Items) {
 }
 
 // Get Unique Props
-func getAllUniqueProps(d2files d2file.D2Files) (Props, Items) {
-	p := propGetter{
-		d2files:     d2files,
-		fileName:    uniqueItemsTxt.FileName,
-		propOffset:  uniqueItemsTxt.Prop1,
-		levelOffset: uniqueItemsTxt.Lvl,
-		nameOffset:  uniqueItemsTxt.Index,
-	}
+func getAllUniqueProps(p propGetter) (Props, Items) {
+	p.fileName    = uniqueItemsTxt.FileName
+	p.propOffset  = uniqueItemsTxt.Prop1
+	p.levelOffset = uniqueItemsTxt.Lvl
+	p.nameOffset  = uniqueItemsTxt.Index
 	return getProps(p)
 }
 
@@ -213,14 +216,11 @@ func randomizeUniqueProps(s scrambler) {
 }
 
 // Get Set Props
-func getAllSetProps(d2files d2file.D2Files) (Props, Items) {
-	p := propGetter{
-		d2files:     d2files,
-		fileName:    setsTxt.FileName,
-		propOffset:  setsTxt.PCode2a,
-		levelOffset: setsTxt.Level,
-		nameOffset:  setsTxt.Index,
-	}
+func getAllSetProps(p propGetter) (Props, Items) {
+	p.fileName    = setsTxt.FileName
+	p.propOffset  = setsTxt.PCode2a
+	p.levelOffset = setsTxt.Level
+	p.nameOffset  = setsTxt.Index
 	return getProps(p)
 }
 
@@ -235,14 +235,11 @@ func randomizeSetProps(s scrambler) {
 }
 
 // Get Set Items Props
-func getAllSetItemsProps(d2files d2file.D2Files) (Props, Items) {
-	p := propGetter{
-		d2files:     d2files,
-		fileName:    setItemsTxt.FileName,
-		propOffset:  setItemsTxt.Prop1,
-		levelOffset: setItemsTxt.Lvl,
-		nameOffset:  setItemsTxt.Index,
-	}
+func getAllSetItemsProps(p propGetter) (Props, Items) {
+	p.fileName    = setItemsTxt.FileName
+	p.propOffset  = setItemsTxt.Prop1
+	p.levelOffset = setItemsTxt.Lvl
+	p.nameOffset  = setItemsTxt.Index
 	return getProps(p)
 }
 
@@ -257,14 +254,11 @@ func randomizeSetItemsProps(s scrambler) {
 }
 
 // Get RW Props
-func getAllRWProps(d2files d2file.D2Files) (Props, Items) {
-	p := propGetter{
-		d2files:     d2files,
-		fileName:    runesTxt.FileName,
-		propOffset:  runesTxt.T1Code1,
-		levelOffset: -1,
-		nameOffset:  runesTxt.RuneName,
-	}
+func getAllRWProps(p propGetter) (Props, Items) {
+	p.fileName    = runesTxt.FileName
+	p.propOffset  = runesTxt.T1Code1
+	p.levelOffset = -1
+	p.nameOffset  = runesTxt.RuneName
 	return getProps(p)
 }
 
@@ -398,7 +392,7 @@ func scrambleRow(s scrambler, f *d2file.D2File, idx int, level int) {
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 
 	//If using balanced prop counts, override the random count
-	if opts.BalancedPropCount {
+	if s.opts.BalancedPropCount {
 		item := s.items[randInt(0, len(s.items))]
 		if s.opts.IsBalanced {
 			for item.Lvl-s.lvl > 10 {
