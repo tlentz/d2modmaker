@@ -38,5 +38,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5",
+    "@types/redux-form": "^8.2.7",
+    "react-router-dom": "^5.2.0"
   }
 }
