@@ -95,7 +95,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 100,
+    "UniqueItemDropRate": -1,
     "RuneDropRate": -1,
     "StartWithCube": true,
     "Cowzzz": true,
@@ -103,7 +103,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
-        "IsBalanced": false,
+        "IsBalanced": true,
         "BalancedPropCount":true,
         "MinProps": -1,
         "MaxProps": -1,
