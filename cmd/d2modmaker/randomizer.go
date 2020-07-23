@@ -30,15 +30,24 @@ type Prop struct {
 // Props is a slice of Prop
 type Props = []Prop
 
+// Item represents an item
+type Item struct {
+	Name    string
+	Lvl     int
+	Affixes	Props
+}
+// Items is a slice of Item
+type Items = []Item
 // RandomOptions are the options for the randomizer
 type RandomOptions struct {
-	Randomize    bool  `json:"Randomize"`
-	Seed         int64 `json:"Seed"`
-	IsBalanced   bool  `json:"IsBalanced"`   // bucketizes props [0-30] [31-60] [61+]
-	MinProps     int   `json:"MinProps"`     // minimum number of non blank props on an item
-	MaxProps     int   `json:"MaxProps"`     // maximum number of non blank props on an item
-	PerfectProps bool  `json:"PerfectProps"` // sets min/max to max
-	UseOSkills   bool  `json:"UseOSkills"`   // +3 Fireball (Sorceress Only) -> +3 Fireball
+	Randomize         bool  `json:"Randomize"`
+	Seed              int64 `json:"Seed"`
+	IsBalanced        bool  `json:"IsBalanced"`   		// Allows Props only from items up to 10 levels higher
+	BalancedPropCount bool  `json:"BalancedPropCount"`  // Picks prop count from a vanilla item up to 10 levels higher
+	MinProps          int   `json:"MinProps"`     		// minimum number of non blank props on an item
+	MaxProps          int   `json:"MaxProps"`     		// maximum number of non blank props on an item
+	PerfectProps      bool  `json:"PerfectProps"` 		// sets min/max to max
+	UseOSkills        bool  `json:"UseOSkills"`   		// +3 Fireball (Sorceress Only) -> +3 Fireball
 }
 
 func getRandomOptions(cfg *ModConfig) RandomOptions {
@@ -69,12 +78,13 @@ func Randomize(cfg *ModConfig, d2files d2file.D2Files) {
 	opts := getRandomOptions(cfg)
 	rand.Seed(opts.Seed)
 
-	props := getAllProps(opts, d2files)
+	props, items := getAllProps(opts, d2files)
 
 	s := scrambler{
 		opts:         opts,
 		d2files:      d2files,
 		props:        props,
+		items:		  items,
 	}
 
 	randomizeUniqueProps(s)
@@ -92,24 +102,31 @@ func writePropsToFile(props Props) {
 }
 
 // Returns all props bucketized
-func getAllProps(opts RandomOptions, d2files d2file.D2Files) Props {
+func getAllProps(opts RandomOptions, d2files d2file.D2Files) (Props, Items) {
 	props := Props{}
+	items := Items{}
 	
-	uniqueItemProps := getAllUniqueProps(d2files)
-	props = append(props, uniqueItemProps...)
+	newProps, newItems := getAllUniqueProps(d2files);
+	props = append(props, newProps...)
+	items = append(items, newItems...)
 	
-	setProps := getAllSetProps(d2files)
-	props = append(props, setProps...)
+	newProps, newItems = getAllSetProps(d2files);
+	props = append(props, newProps...)
+	//items = append(items, newItems...) //These aren't really items
 	
-	setItemProps := getAllSetItemsProps(d2files)
-	props = append(props, setItemProps...)
+	newProps, newItems = getAllSetItemsProps(d2files);
+	props = append(props, newProps...)
+	items = append(items, newItems...) 
 	
-	runeWordProps := getAllRWProps(d2files)
-	props = append(props, runeWordProps...)
+	newProps, newItems = getAllRWProps(d2files);
+	props = append(props, newProps...)
+	items = append(items, newItems...)
 	
-	gemProps := getAllGemsProps(d2files)
-	props = append(props, gemProps...)
+//	newProps, newItems = getAllGemsProps(d2files);
+//	props = append(props, newProps...)
+//	items = append(items, newItems...) 
 
+	//TODO: move this to getProps so that we don't need to apply it to Items separately
 	for i := range props {
 		// Set all props Min to the Max value
 		if opts.PerfectProps {
@@ -123,24 +140,26 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) Props {
 		}
 	}
 
-	return props
+	return props, items
 }
 
 type propGetter struct {
-	d2files    d2file.D2Files
-	props      Props
-	fileName   string
-	propOffset int
-	lvl        int			
+	d2files    	d2file.D2Files
+	props      	Props
+	fileName   	string
+	propOffset 	int
+	levelOffset int
+	nameOffset 	int
 }
 
-func getProps(p propGetter) (Props) {
+func getProps(p propGetter) (Props, Items) {
 	f := d2file.GetOrCreateFile(p.d2files, p.fileName)
 	props := Props{}
+	items := Items{}
 	for _, row := range f.Rows {
 		lvl := 0
-		if( p.lvl >= 0 ) {
-			mbLvl, err := strconv.Atoi(row[p.lvl])
+		if( p.levelOffset >= 0 ) {
+			mbLvl, err := strconv.Atoi(row[p.levelOffset])
 			if err == nil {
 				lvl = mbLvl
 			}
@@ -148,6 +167,10 @@ func getProps(p propGetter) (Props) {
 			//TODO: It would be nice to not call getMiscItemLevels every time
 			lvl = getRunewordLevel(row, getMiscItemLevels(p.d2files))
 		}
+
+		item := Item{}
+		item.Name = row[p.nameOffset];
+		item.Lvl = lvl;
 
 		for i := p.propOffset; i < len(row)-3; i += 4 {
 			prop := Prop{
@@ -159,19 +182,25 @@ func getProps(p propGetter) (Props) {
 			}
 			if prop.Name != "" {
 				props = append(props, prop)
+				item.Affixes = append(item.Affixes, prop)
 			}
 		}
+		
+		if item.Name != "" && len(item.Affixes) > 0 {
+			items = append(items, item)
+		}
 	}
-	return props
+	return props, items
 }
 
 // Get Unique Props
-func getAllUniqueProps(d2files d2file.D2Files) Props {
+func getAllUniqueProps(d2files d2file.D2Files) (Props, Items) {
 	p := propGetter{
-		d2files:    d2files,
-		fileName:   uniqueItemsTxt.FileName,
-		propOffset: uniqueItemsTxt.Prop1, 
-		lvl:        uniqueItemsTxt.Lvl,
+		d2files:     d2files,
+		fileName:    uniqueItemsTxt.FileName,
+		propOffset:  uniqueItemsTxt.Prop1, 
+		levelOffset: uniqueItemsTxt.Lvl,
+		nameOffset:	 uniqueItemsTxt.Index,
 	}
 	return getProps(p)
 }
@@ -187,12 +216,13 @@ func randomizeUniqueProps(s scrambler) {
 }
 
 // Get Set Props
-func getAllSetProps(d2files d2file.D2Files) Props {
+func getAllSetProps(d2files d2file.D2Files) (Props, Items) {
 	p := propGetter{
-		d2files:    d2files,
-		fileName:   setsTxt.FileName,
-		propOffset: setsTxt.PCode2a, 
-		lvl:        setsTxt.Level,
+		d2files:     d2files,
+		fileName:    setsTxt.FileName,
+		propOffset:  setsTxt.PCode2a, 
+		levelOffset: setsTxt.Level,
+		nameOffset:  setsTxt.Index,
 	}
 	return getProps(p)
 }
@@ -208,12 +238,13 @@ func randomizeSetProps(s scrambler) {
 }
 
 // Get Set Items Props
-func getAllSetItemsProps(d2files d2file.D2Files) Props {
+func getAllSetItemsProps(d2files d2file.D2Files) (Props, Items) {
 	p := propGetter{
-		d2files:    d2files,
-		fileName:   setItemsTxt.FileName,
-		propOffset: setItemsTxt.Prop1, 
-		lvl:        setItemsTxt.Lvl,
+		d2files:     d2files,
+		fileName:    setItemsTxt.FileName,
+		propOffset:  setItemsTxt.Prop1, 
+		levelOffset: setItemsTxt.Lvl,
+		nameOffset:  setItemsTxt.Index,
 	}
 	return getProps(p)
 }
@@ -229,12 +260,13 @@ func randomizeSetItemsProps(s scrambler) {
 }
 
 // Get RW Props
-func getAllRWProps(d2files d2file.D2Files) Props {
+func getAllRWProps(d2files d2file.D2Files) (Props, Items) {
 	p := propGetter{
-		d2files:    d2files,
-		fileName:   runesTxt.FileName,
-		propOffset: runesTxt.T1Code1, 
-		lvl:        -1,
+		d2files:     d2files,
+		fileName:    runesTxt.FileName,
+		propOffset:  runesTxt.T1Code1, 
+		levelOffset: -1,
+		nameOffset:  runesTxt.RuneName,
 	}
 	return getProps(p)
 }
@@ -340,6 +372,7 @@ type scrambler struct {
 	opts         RandomOptions
 	d2files      d2file.D2Files
 	props	     Props
+	items	     Items
 	fileName     string
 	propOffset   int
 	minMaxProps  minMaxProps
@@ -367,6 +400,17 @@ func scramble(s scrambler) {
 func scrambleRow(s scrambler, f *d2file.D2File, idx int, level int) {
 	//Choose a random number of props between min and max
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
+	
+	//If using balanced prop counts, override the random count
+	if opts.BalancedPropCount {
+		item := s.items[randInt(0, len(s.items))]
+		if s.opts.IsBalanced {
+			for item.Lvl - s.lvl > 10 {
+				item = s.items[randInt(0, len(s.items))]
+			}
+		}
+		numProps = len(item.Affixes)
+	}
 	
 	// fill in the props 
 	for currentNumProps := 0; currentNumProps < s.itemMaxProps; currentNumProps++ {
