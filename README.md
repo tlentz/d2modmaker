@@ -70,7 +70,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
         * Will use this seed for randomization
         * Set to `-1` to generate a random seed
     * **IsBalanced** `bool`
-        * bucketizes props by levels `[0-30] [31-60] [61+]` so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
+        * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
     * **MinProps** `int`
         * Minimum number of non blank props that spawn on an item
         * Set to `-1` to omit
@@ -137,6 +137,15 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+
+## v0.4.1
+* Refactors IsBalanced mode
+   * Now item properties are selected from items up to 10 levels above
+   * This replaces the 0-30, 31-60, and 61+ buckets
+* Fixes bugs with Runeword property parsing and randomizing
+   * Runeword props were previously always added to the 0-30 bucket, allowing them on all items regardles of runeword levels
+   * Runewords were previously assigned props only from the 0-30 bucket.
+   * Runeword properties and randomization are now assigned by the level requirement of their highest rune.
 
 ## v0.4.0
 * Adds new feature `MeleeSplash`
