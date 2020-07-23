@@ -128,20 +128,6 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (Props, Items) {
 	//	props = append(props, gemProps...)
 	//	items = append(items, gems...)
 
-	//TODO: move this to getProps so that we don't need to apply it to Items separately
-	for i := range props {
-		// Set all props Min to the Max value
-		if opts.PerfectProps {
-			props[i].Min = props[i].Max
-		}
-		// sets skill = oskill
-		if opts.UseOSkills {
-			if props[i].Name == "skill" {
-				props[i].Name = "oskill"
-			}
-		}
-	}
-
 	return props, items
 }
 
@@ -183,6 +169,15 @@ func getProps(p propGetter) (Props, Items) {
 				Lvl:  lvl,
 			}
 			if prop.Name != "" {
+				if opts.PerfectProps {
+					prop.Min = prop.Max
+				}
+				if opts.UseOSkills {
+					if prop.Name == "skill" {
+						prop.Name = "oskill"
+					}
+				}
+				
 				props = append(props, prop)
 				item.Affixes = append(item.Affixes, prop)
 			}
