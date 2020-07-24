@@ -15,6 +15,7 @@
         "Seed": -1,
         "IsBalanced": true,
         "BalancedPropCount": true,
+        "AllowDuplicateProps": false,
         "MinProps": -1,
         "MaxProps": -1,
         "UseOSkills": true,
