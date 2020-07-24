@@ -5,17 +5,18 @@ import { createMuiTheme } from '@material-ui/core/styles';
 // A custom theme for this app
 const theme = createMuiTheme({
     palette: {
+        type: "dark",
         primary: {
-            main: '#556cd6',
+            main: 'rgb(103,15,18)',
         },
         secondary: {
-            main: '#19857b',
+            main: 'rgb(55,55,55)',
         },
         error: {
             main: red.A400,
         },
         background: {
-            default: '#fff',
+            default: 'black',
         },
     },
 });

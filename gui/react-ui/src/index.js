@@ -6,7 +6,11 @@ import theme from "./theme";
 import App from './App';
 
 ReactDOM.render(
-  <App />,
+  <ThemeProvider theme={theme}>
+    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+    <CssBaseline />
+    <App />
+  </ThemeProvider>,
   document.querySelector('#root'),
 );
 
