@@ -1,5 +1,5 @@
 init:
-	npx create-react-app react-ui --template redux-typescript
+	npx create-react-app react-ui --template cra-template-material-ui-only
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:9999 npm run build
 
 build:
