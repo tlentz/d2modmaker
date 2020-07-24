@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  background: url("./images/wallpaper.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .App-logo {

@@ -6,10 +6,11 @@ build:
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:9999 npm run build
 	go build -o bin/gui cmd/main.go
 
-start:
+start-react:
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:9999 npm run start
-	go build -o bin/gui cmd/main.go
-	bin/gui --listen 127.0.0.1:9999 --start react-ui/build
+
+start-server:
+	go run cmd/main.go --listen 127.0.0.1:9999 --build react-ui/build
 
 run: build
 	bin/gui --listen 127.0.0.1:9999 --build react-ui/build
