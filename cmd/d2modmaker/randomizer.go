@@ -44,12 +44,13 @@ type Items = []Item
 type RandomOptions struct {
 	Randomize         bool  `json:"Randomize"`
 	Seed              int64 `json:"Seed"`
-	IsBalanced        bool  `json:"IsBalanced"`        // Allows Props only from items up to 10 levels higher
-	BalancedPropCount bool  `json:"BalancedPropCount"` // Picks prop count from a vanilla item up to 10 levels higher
-	MinProps          int   `json:"MinProps"`          // minimum number of non blank props on an item
-	MaxProps          int   `json:"MaxProps"`          // maximum number of non blank props on an item
-	PerfectProps      bool  `json:"PerfectProps"`      // sets min/max to max
-	UseOSkills        bool  `json:"UseOSkills"`        // +3 Fireball (Sorceress Only) -> +3 Fireball
+	IsBalanced        bool  `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
+	BalancedPropCount bool  `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
+	AllowDupProps     bool  `json:"AllowDuplicateProps"` // Allow two props of the same type to be placed on an item
+	MinProps          int   `json:"MinProps"`            // minimum number of non blank props on an item
+	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
+	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
+	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
 }
 
 func getRandomOptions(cfg *ModConfig) RandomOptions {
@@ -109,11 +110,11 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (Props, Items) {
 	items := Items{}
 
 	p := propGetter{
-		d2files:	d2files,
-		opts:		opts,
+		d2files: d2files,
+		opts:    opts,
 	}
-	
-	uniqueItemProps, uniqueItems  := getAllUniqueProps(p)
+
+	uniqueItemProps, uniqueItems := getAllUniqueProps(p)
 	props = append(props, uniqueItemProps...)
 	items = append(items, uniqueItems...)
 
@@ -138,7 +139,7 @@ func getAllProps(opts RandomOptions, d2files d2file.D2Files) (Props, Items) {
 
 type propGetter struct {
 	d2files     d2file.D2Files
-	opts		RandomOptions
+	opts        RandomOptions
 	props       Props
 	fileName    string
 	propOffset  int
@@ -157,7 +158,7 @@ func getProps(p propGetter) (Props, Items) {
 			if err == nil {
 				lvl = mbLvl
 			}
-		} else { //Runes.txt doesn't have a level column
+		} else if p.fileName == runesTxt.FileName { //Runes.txt doesn't have a level column
 			//TODO: It would be nice to not call getMiscItemLevels every time
 			lvl = getRunewordLevel(row, getMiscItemLevels(p.d2files))
 		}
@@ -183,7 +184,7 @@ func getProps(p propGetter) (Props, Items) {
 						prop.Name = "oskill"
 					}
 				}
-				
+
 				props = append(props, prop)
 				item.Affixes = append(item.Affixes, prop)
 			}
@@ -198,10 +199,10 @@ func getProps(p propGetter) (Props, Items) {
 
 // Get Unique Props
 func getAllUniqueProps(p propGetter) (Props, Items) {
-	p.fileName    = uniqueItemsTxt.FileName
-	p.propOffset  = uniqueItemsTxt.Prop1
+	p.fileName = uniqueItemsTxt.FileName
+	p.propOffset = uniqueItemsTxt.Prop1
 	p.levelOffset = uniqueItemsTxt.Lvl
-	p.nameOffset  = uniqueItemsTxt.Index
+	p.nameOffset = uniqueItemsTxt.Index
 	return getProps(p)
 }
 
@@ -217,10 +218,10 @@ func randomizeUniqueProps(s scrambler) {
 
 // Get Set Props
 func getAllSetProps(p propGetter) (Props, Items) {
-	p.fileName    = setsTxt.FileName
-	p.propOffset  = setsTxt.PCode2a
+	p.fileName = setsTxt.FileName
+	p.propOffset = setsTxt.PCode2a
 	p.levelOffset = setsTxt.Level
-	p.nameOffset  = setsTxt.Index
+	p.nameOffset = setsTxt.Index
 	return getProps(p)
 }
 
@@ -236,10 +237,10 @@ func randomizeSetProps(s scrambler) {
 
 // Get Set Items Props
 func getAllSetItemsProps(p propGetter) (Props, Items) {
-	p.fileName    = setItemsTxt.FileName
-	p.propOffset  = setItemsTxt.Prop1
+	p.fileName = setItemsTxt.FileName
+	p.propOffset = setItemsTxt.Prop1
 	p.levelOffset = setItemsTxt.Lvl
-	p.nameOffset  = setItemsTxt.Index
+	p.nameOffset = setItemsTxt.Index
 	return getProps(p)
 }
 
@@ -255,10 +256,10 @@ func randomizeSetItemsProps(s scrambler) {
 
 // Get RW Props
 func getAllRWProps(p propGetter) (Props, Items) {
-	p.fileName    = runesTxt.FileName
-	p.propOffset  = runesTxt.T1Code1
+	p.fileName = runesTxt.FileName
+	p.propOffset = runesTxt.T1Code1
 	p.levelOffset = -1
-	p.nameOffset  = runesTxt.RuneName
+	p.nameOffset = runesTxt.RuneName
 	return getProps(p)
 }
 
@@ -310,13 +311,13 @@ func getBalancedRandomProp(opts RandomOptions, lvl int, props Props) Prop {
 
 	for prop.Name == "" {
 		prop = props[randInt(0, numProps)]
-
 		//Check if this prop is balanced if using that feature
 		if opts.IsBalanced && prop.Lvl-lvl > 10 {
 			// Blank the prop name and pick again
 			prop.Name = ""
 		}
 	}
+
 	return prop
 }
 
@@ -402,17 +403,42 @@ func scrambleRow(s scrambler, f *d2file.D2File, idx int, level int) {
 		numProps = util.MinInt(len(item.Affixes), s.minMaxProps.maxNumProps)
 	}
 
+	//map to track duplicate properties
+	propList := make(map[string]bool)
+
 	// fill in the props
 	for currentNumProps := 0; currentNumProps < s.itemMaxProps; currentNumProps++ {
 		prop := Prop{Name: "", Par: "", Min: "", Max: ""}
 		if currentNumProps < numProps {
 			prop = getBalancedRandomProp(s.opts, level, s.props)
+
+			propIdString := prop.getId()
+			for propList[propIdString] {
+				prop = getBalancedRandomProp(s.opts, s.lvl, s.props)
+				propIdString = prop.getId()
+			}
+
+			// Add used prop to the prop list if duplicate properties are not allowed
+			// Always add aura to the prop list because multiple auras on an item are broken
+			if !s.opts.AllowDupProps || propIdString == "aura" {
+				propList[propIdString] = true
+			}
 		}
 		i := s.propOffset + currentNumProps*4
 		f.Rows[idx][i] = prop.Name
 		f.Rows[idx][i+1] = prop.Par
 		f.Rows[idx][i+2] = prop.Min
 		f.Rows[idx][i+3] = prop.Max
+	}
+}
+
+func (p *Prop) getId() string {
+	if p.Name == "aura" {
+		// Two auras do not work even if they are different types
+		return p.Name
+	} else {
+		// Otherwise include both the prop type and sub-type
+		return p.Name + p.Par
 	}
 }
 

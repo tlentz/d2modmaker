@@ -71,10 +71,13 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
         * Set to `-1` to generate a random seed
     * **IsBalanced** `bool`
         * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
+    * **AllowDuplicateProps** `bool`
+        * If this value is false, the same prop type will not be placed on an item twice
+        * E.g. two instances of all resist will not get stacked on the same randomized item
     * **BalancedPropCount** `bool`
-        * Pick prop count on items based on counts from vanilla items.
+        * Pick prop count on items based on counts from vanilla items
         * Picks from items up to 10 levels higher when randomizing
-        * Enabling this setting will make MinProps and MaxProps unused.
+        * Enabling this setting will make MinProps and MaxProps unused
     * **MinProps** `int`
         * Minimum number of non blank props that spawn on an item
         * Set to `-1` to omit
@@ -143,13 +146,8 @@ Thanks!
 
 # Change Log
 
-## v0.4.2
-* Adds a new randomization option: BalancedPropCount
-   * This option enables picking the prop count for items from the counts on vanilla items
-   * The count is pulled from items up to 10 levels above the item being randomized
-   * The MinProps and MaxProps settings will be ignored if this is enabled
-
-## v0.4.1
+## Coming Soon!
+* Randomization has been reworked. Old seeds are invalidated.
 * Refactors IsBalanced mode
    * Now item properties are selected from items up to 10 levels above
    * This replaces the 0-30, 31-60, and 61+ buckets
@@ -157,6 +155,13 @@ Thanks!
    * Runeword props were previously always added to the 0-30 bucket, allowing them on all items regardles of runeword levels
    * Runewords were previously assigned props only from the 0-30 bucket.
    * Runeword properties and randomization are now assigned by the level requirement of their highest rune.
+* Adds a new randomization option: BalancedPropCount
+   * This option enables picking the prop count for items from the counts on vanilla items
+   * The count is pulled from items up to 10 levels above the item being randomized
+   * The MinProps and MaxProps settings will be ignored if this is enabled
+* Adds a new randomization option: AllowDuplicateProps
+   * If this property is false (default), the same property type will not be added to an item twice (e.g. two instances of resist all)
+* Prevents two auras from being placed on the same item. This is bugged in the game, and one aura would not work.
 
 ## v0.4.0
 * Adds new feature `MeleeSplash`
