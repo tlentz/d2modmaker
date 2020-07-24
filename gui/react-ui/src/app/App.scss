@@ -1,0 +1,54 @@
+.App {
+  text-align: center;
+  background: url("../images/wallpaper.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  overflow: hidden;
+
+  .App-Outer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(black, 0.25);
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    .App-Inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-grow: 1;
+      flex-shrink: 1;
+      width: 75%;
+      height: 100%;
+      background: rgba(black, 0.75);
+      overflow: auto;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-float infinite 3s ease-in-out;
+  }
+}
+
+@keyframes App-logo-float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px)
+  }
+  100% {
+    transform: translateY(0px)
+  }
+}
