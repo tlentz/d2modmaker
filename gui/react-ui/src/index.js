@@ -2,15 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
-import CheckoutForm from './components/CheckoutForm/CheckoutForm';
-import theme from './theme';
+import theme from "./theme";
+import App from './App';
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    <CheckoutForm />
-  </ThemeProvider>,
+  <App />,
   document.querySelector('#root'),
 );
 
