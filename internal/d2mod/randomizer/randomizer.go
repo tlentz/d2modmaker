@@ -1,9 +1,6 @@
 package randomizer
 
 import (
-	//	"encoding/json"
-	//	"fmt"
-	//	"io/ioutil"
 	"math/rand"
 	"strconv"
 	"time"
@@ -61,7 +58,6 @@ func Run(cfg *config.Data, d2files d2file.D2Files) {
 	randomizeSetProps(s)
 	randomizeSetItemsProps(s)
 	randomizeRWProps(s)
-	// writePropsToFile(props)
 }
 
 func getRandomOptions(cfg *config.Data) config.RandomOptions {
@@ -86,13 +82,6 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 	cfg.RandomOptions.Seed = defaultCfg.Seed
 	return defaultCfg
 }
-
-//func writePropsToFile(props Props) {
-//	filePath := outDir + "props.json"
-//	fmt.Println("Writing " + filePath)
-//	file, _ := json.MarshalIndent(props, "", " ")
-//	_ = ioutil.WriteFile(filePath, file, 0644)
-//}
 
 // Returns all props bucketized
 func getAllProps(opts config.RandomOptions, d2files d2file.D2Files) (Props, Items) {

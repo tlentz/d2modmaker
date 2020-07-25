@@ -16,7 +16,6 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/stacksizes"
 	"github.com/tlentz/d2modmaker/internal/d2mod/townskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/treasure"
-	//"github.com/tlentz/d2modmaker/internal/d2file/txts/magicSuffix"
 
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -89,18 +88,8 @@ func Make(outDir string, cfgPath string) {
 
 func writeSeed(cfg config.Data, outDir string) {
 	filePath := outDir + "Seed.txt"
-	// fmt.Println("writing " + filePath)
 	f, err := os.Create(filePath)
 	util.Check(err)
 	defer f.Close()
 	f.WriteString(fmt.Sprintf("%d\n", cfg.RandomOptions.Seed))
 }
-
-//func printFile() {
-//	d2files := d2file.D2Files{}
-//	f := d2file.GetOrCreateFile(d2files, magicSuffix.FileName)
-//	for i := range f.Headers {
-//		fmt.Println(f.Headers[i], " = ", i)
-//	}
-//	panic("")
-//}
