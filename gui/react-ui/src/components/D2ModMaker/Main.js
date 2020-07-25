@@ -35,7 +35,7 @@ const defaultCfg = {
   RuneDropRate: -1,
   StartWithCube: true,
   Cowzzz: true,
-  EnterToExit: true,
+  EnterToExit: false,
   RandomOptions: {
     Randomize: true,
     Seed: -1,
@@ -100,6 +100,26 @@ export default function D2ModMaker() {
     );
   };
 
+  const mkCheckbox = ({ key, tooltip }) => {
+    return (
+      <React.Fragment>
+        <FormControlLabel
+          control={<Checkbox color="primary" name={key} value={state[key]} />}
+          label={key}
+          checked={state[key]}
+          onChange={(e, checked) => {
+            return setState({ ...state, [key]: checked });
+          }}
+        />
+        <StyledTooltip title={tooltip} placement="bottom" enterDelay={250}>
+          <span className={"help-icon"}>
+            <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+          </span>
+        </StyledTooltip>
+      </React.Fragment>
+    );
+  };
+
   const seed = () => {
     if (state.RandomOptions.Seed >= 1) {
       return state.RandomOptions.Seed;
@@ -132,7 +152,214 @@ export default function D2ModMaker() {
     }
   };
 
-  const propCounts = () => {};
+  const qolOptions = () => {
+    return (
+      <React.Fragment>
+        <Typography
+          variant="h6"
+          align={"center"}
+          className={"HeaderText2"}
+          gutterBottom
+        >
+          Quality of Life
+        </Typography>
+        <Grid container>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "EnableTownSkills",
+              tooltip: "Enable the ability to use all skills in town.",
+            })}
+          </Grid>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "StartWithCube",
+              tooltip: "Newly created characters will start with a cube.",
+            })}
+          </Grid>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "Cowzzz",
+              tooltip:
+                "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal4.",
+            })}
+          </Grid>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "IncreaseStackSizes",
+              tooltip:
+                "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack sizes to 100.",
+            })}
+          </Grid>
+        </Grid>
+      </React.Fragment>
+    );
+  };
+
+  const otherOptions = () => {
+    return (
+      <React.Fragment>
+        <Typography
+          variant="h6"
+          align={"center"}
+          className={"HeaderText2"}
+          gutterBottom
+        >
+          Other Awesome Options
+        </Typography>
+        <Grid container>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "MeleeSplash",
+              tooltip:
+                "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels.",
+            })}
+          </Grid>
+        </Grid>
+        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+          <Typography
+            id="min-num-props"
+            align={"center"}
+            gutterBottom
+            className={"primary"}
+          >
+            Monster Density
+            <StyledTooltip
+              title={
+                "Increases monster density throughout the map by the given factor."
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={1}
+            getAriaValueText={valuetext}
+            aria-labelledby="MonsterDensity"
+            step={1}
+            min={1}
+            max={30}
+            marks={[
+              {
+                value: 1,
+                label: "Vanilla",
+              },
+              {
+                value: 30,
+                label: "Insanity",
+              },
+            ]}
+            valueLabelDisplay="on"
+            onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
+          />
+        </Grid>
+      </React.Fragment>
+    );
+  };
+
+  const dropRateOptions = () => {
+    return (
+      <React.Fragment>
+        <Typography
+          variant="h6"
+          align={"center"}
+          className={"HeaderText2"}
+          gutterBottom
+        >
+          Drop Rates
+        </Typography>
+        <Grid container>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "NoDropZero",
+              tooltip: "Guarantees that a monster drops something upon death.",
+            })}
+          </Grid>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "QuestDrops",
+              tooltip: "Act bosses will always drop quest drops.",
+            })}
+          </Grid>
+        </Grid>
+        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+          <Typography
+            id="UniqueItemDropRate"
+            align={"center"}
+            gutterBottom
+            className={"primary slider-label"}
+          >
+            Unique Item Drop Rate
+            <StyledTooltip
+              title={
+                "Increases the drop rate of unique and set items.  When using this setting, high values prevent some monsters from dropping set items."
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={1}
+            getAriaValueText={valuetext}
+            aria-labelledby="UniqueItemDropRate"
+            step={1}
+            min={1}
+            max={1000}
+            valueLabelDisplay="on"
+            onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
+          />
+        </Grid>
+        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+          <Typography
+            id="RuneDropRate"
+            align={"center"}
+            gutterBottom
+            className={"primary slider-label"}
+          >
+            Rune Drop Rate
+            <StyledTooltip
+              title={
+                "Increases rune drop rates. Each increase of 1 raises the drop rate of the highest runes by ~5% cumulatively. E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100."
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={1}
+            getAriaValueText={valuetext}
+            aria-labelledby="RuneDropRate"
+            step={1}
+            min={1}
+            max={100}
+            marks={[
+              {
+                value: 1,
+                label: "Vanilla",
+              },
+              {
+                value: 100,
+                label: "Zod 1/33",
+              },
+            ]}
+            valueLabelDisplay="on"
+            onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
+          />
+        </Grid>
+      </React.Fragment>
+    );
+  };
 
   const randomOptions = () => {
     return (
@@ -143,7 +370,7 @@ export default function D2ModMaker() {
           className={"HeaderText2"}
           gutterBottom
         >
-          Random Options
+          Randomization
         </Typography>
 
         <Grid container>
@@ -180,7 +407,7 @@ export default function D2ModMaker() {
         </Grid>
 
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             {mkRandoCheckbox({
               key: "AllowDuplicateProps",
               tooltip:
@@ -206,7 +433,7 @@ export default function D2ModMaker() {
           </Grid>
         </Grid>
 
-        <Grid item>
+        <Grid item alignItems={"center"} className={"SliderWrapper"}>
           <Typography
             id="min-num-props"
             align={"center"}
@@ -238,7 +465,7 @@ export default function D2ModMaker() {
             }
           />
         </Grid>
-        <Grid item>
+        <Grid item alignItems={"center"} className={"SliderWrapper"}>
           <Typography
             id="MaxProps"
             gutterBottom
@@ -284,22 +511,12 @@ export default function D2ModMaker() {
       <Button variant="contained" color="primary" className={"run-btn"}>
         Run
       </Button>
-      {randomOptions()}
-      <React.Fragment>
-        {/*<Grid container spacing={3}>*/}
-        {/*  <Grid item xs={12}>*/}
-        {/*    {createCheckbox("MeleeSplash")}*/}
-        {/*    {createCheckbox("IncreaseStackSizes")}*/}
-        {/*    {createCheckbox("EnableTownSkills")}*/}
-        {/*    {createCheckbox("NoDropZero")}*/}
-        {/*    {createCheckbox("QuestDrops")}*/}
-        {/*    {createCheckbox("UniqueItemDropRate")}*/}
-        {/*    {createCheckbox("RuneDropRate")}*/}
-        {/*    {createCheckbox("StartWithCube")}*/}
-        {/*    {createCheckbox("Cowzzz")}*/}
-        {/*  </Grid>*/}
-        {/*</Grid>*/}
-      </React.Fragment>
+      <div className={"D2ModMakerContainerInner"}>
+        {randomOptions()}
+        {qolOptions()}
+        {dropRateOptions()}
+        {otherOptions()}
+      </div>
     </div>
   );
 }
