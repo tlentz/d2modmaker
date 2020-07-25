@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tlentz/d2modmaker/internal/assets"
+	"github.com/tlentz/d2modmaker/internal/d2file/assets"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
@@ -102,3 +102,12 @@ func CheckD2FileErr(d2file *D2File, err error) {
 func MergeRows(f1 *D2File, f2 D2File) {
 	f1.Rows = append(f1.Rows, f2.Rows...)
 }
+
+//func printFile() {
+//	d2files := d2file.D2Files{}
+//	f := d2file.GetOrCreateFile(d2files, magicSuffix.FileName)
+//	for i := range f.Headers {
+//		fmt.Println(f.Headers[i], " = ", i)
+//	}
+//	panic("")
+//}
