@@ -1,8 +1,9 @@
 .D2ModMakerContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;
     height: 100%;
     width: 100%;
+    max-width: 500px;
+    text-align: left;
     border-radius: 10px;
 }
