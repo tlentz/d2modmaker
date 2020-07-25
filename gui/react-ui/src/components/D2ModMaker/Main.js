@@ -154,36 +154,40 @@ export default function D2ModMaker() {
 
   const qolOptions = () => {
     return (
-      <React.Fragment>
+      <Grid container>
         <Typography
-          variant="h6"
+          variant="h4"
           align={"center"}
           className={"HeaderText2"}
           gutterBottom
         >
           Quality of Life
         </Typography>
+
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             {mkCheckbox({
               key: "EnableTownSkills",
               tooltip: "Enable the ability to use all skills in town.",
             })}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             {mkCheckbox({
               key: "StartWithCube",
               tooltip: "Newly created characters will start with a cube.",
             })}
           </Grid>
-          <Grid item xs={4}>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={6}>
             {mkCheckbox({
               key: "Cowzzz",
               tooltip:
                 "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal4.",
             })}
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             {mkCheckbox({
               key: "IncreaseStackSizes",
               tooltip:
@@ -191,7 +195,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-      </React.Fragment>
+      </Grid>
     );
   };
 
@@ -199,7 +203,7 @@ export default function D2ModMaker() {
     return (
       <React.Fragment>
         <Typography
-          variant="h6"
+          variant="h4"
           align={"center"}
           className={"HeaderText2"}
           gutterBottom
@@ -215,7 +219,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
             id="min-num-props"
             align={"center"}
@@ -285,7 +289,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
             id="UniqueItemDropRate"
             align={"center"}
@@ -316,7 +320,7 @@ export default function D2ModMaker() {
             onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
           />
         </Grid>
-        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
             id="RuneDropRate"
             align={"center"}
@@ -363,9 +367,9 @@ export default function D2ModMaker() {
 
   const randomOptions = () => {
     return (
-      <Grid item>
+      <React.Fragment>
         <Typography
-          variant="h6"
+          variant="h4"
           align={"center"}
           className={"HeaderText2"}
           gutterBottom
@@ -433,7 +437,7 @@ export default function D2ModMaker() {
           </Grid>
         </Grid>
 
-        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
             id="min-num-props"
             align={"center"}
@@ -465,7 +469,7 @@ export default function D2ModMaker() {
             }
           />
         </Grid>
-        <Grid item alignItems={"center"} className={"SliderWrapper"}>
+        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
             id="MaxProps"
             gutterBottom
@@ -497,7 +501,7 @@ export default function D2ModMaker() {
             }
           />
         </Grid>
-      </Grid>
+      </React.Fragment>
     );
   };
 
@@ -512,10 +516,14 @@ export default function D2ModMaker() {
         Run
       </Button>
       <div className={"D2ModMakerContainerInner"}>
-        {randomOptions()}
-        {qolOptions()}
-        {dropRateOptions()}
-        {otherOptions()}
+        <Divider></Divider>
+        <Grid container>{randomOptions()}</Grid>
+        <Divider></Divider>
+        <Grid container>{otherOptions()}</Grid>
+        <Divider></Divider>
+        <Grid container> {qolOptions()}</Grid>
+        <Divider></Divider>
+        <Grid container>{dropRateOptions()}</Grid>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ $white: #f5f5f9;
     flex-direction: column;
     height: 100%;
     width: 100%;
-    max-width: 650px;
+    max-width: 800px;
     text-align: left;
     overflow: hidden;
 
@@ -22,6 +22,11 @@ $white: #f5f5f9;
             padding-left: 35px;
             padding-right: 35px;
         }
+
+        .MuiDivider-root {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
     }
 
 
@@ -29,6 +34,7 @@ $white: #f5f5f9;
         color: $red;
         text-shadow: 2px 2px black;
         font-weight: 400;
+        min-height: 95px;
     }
 
     .HeaderText2 {
@@ -50,7 +56,7 @@ $white: #f5f5f9;
     .MuiFormControlLabel-root {
         margin-right: 3px;
     }
-    #min-num-props, #max-num-props, .slider-label {
+    #min-num-props, #max-num-props,{
         margin-bottom: 35px;
     }
 
