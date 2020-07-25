@@ -207,17 +207,16 @@ export default function D2ModMaker() {
           align={"center"}
           className={"HeaderText2"}
           gutterBottom
+          xs={12}
         >
           Other Awesome Options
         </Typography>
-        <Grid container>
-          <Grid item xs={4}>
-            {mkCheckbox({
-              key: "MeleeSplash",
-              tooltip:
-                "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels.",
-            })}
-          </Grid>
+        <Grid item xs={12}>
+          {mkCheckbox({
+            key: "MeleeSplash",
+            tooltip:
+              "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels.",
+          })}
         </Grid>
         <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
@@ -268,7 +267,7 @@ export default function D2ModMaker() {
     return (
       <React.Fragment>
         <Typography
-          variant="h6"
+          variant="h4"
           align={"center"}
           className={"HeaderText2"}
           gutterBottom
@@ -373,6 +372,7 @@ export default function D2ModMaker() {
           align={"center"}
           className={"HeaderText2"}
           gutterBottom
+          xs={12}
         >
           Randomization
         </Typography>
@@ -428,7 +428,7 @@ export default function D2ModMaker() {
         </Grid>
 
         <Grid container>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             {mkRandoCheckbox({
               key: "BalancedPropCount",
               tooltip:
@@ -436,10 +436,9 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-
         <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
           <Typography
-            id="min-num-props"
+            id="MinProps"
             align={"center"}
             gutterBottom
             className={"primary"}
@@ -458,7 +457,7 @@ export default function D2ModMaker() {
           <Slider
             defaultValue={0}
             getAriaValueText={valuetext}
-            aria-labelledby="min-num-props"
+            aria-labelledby="MinProps"
             step={1}
             max={20}
             marks={propMarks}
@@ -516,14 +515,15 @@ export default function D2ModMaker() {
         Run
       </Button>
       <div className={"D2ModMakerContainerInner"}>
-        <Divider></Divider>
+        {divider()}
         <Grid container>{randomOptions()}</Grid>
-        <Divider></Divider>
+        {divider()}
         <Grid container>{otherOptions()}</Grid>
-        <Divider></Divider>
+        {divider()}
         <Grid container> {qolOptions()}</Grid>
-        <Divider></Divider>
+        {divider()}
         <Grid container>{dropRateOptions()}</Grid>
+        {divider()}
       </div>
     </div>
   );
@@ -562,3 +562,11 @@ const StyledTooltip = withStyles((theme) => ({
     fontWeight: 800,
   },
 }))(Tooltip);
+
+const divider = () => {
+  return (
+    <div className={"divider"}>
+      <Divider></Divider>
+    </div>
+  );
+};

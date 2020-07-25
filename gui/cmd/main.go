@@ -59,7 +59,7 @@ func main() {
 		errs <- srv.ListenAndServe()
 	}()
 
-	launchWebView()
+	openBrowser(uiURL)
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
