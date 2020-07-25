@@ -1,6 +1,5 @@
 *.pyc
 notebooks/
-txts/
 enquettar/
 .ipynb_checkpoints/
 UniqueItems_randomized.txt

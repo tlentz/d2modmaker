@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/magicSuffixTxt"
+	"github.com/tlentz/d2modmaker/internal/d2mod"
 )
 
 var (
@@ -33,15 +32,5 @@ func main() {
 	fmt.Println("", "D2 Mod Maker", version)
 	fmt.Println(line)
 
-	// printFile()
-	makeMod()
-}
-
-func printFile() {
-	d2files := d2file.D2Files{}
-	f := d2file.GetOrCreateFile(d2files, magicSuffixTxt.FileName)
-	for i := range f.Headers {
-		fmt.Println(f.Headers[i], " = ", i)
-	}
-	panic("")
+	d2mod.Make(outDir, cfgPath)
 }

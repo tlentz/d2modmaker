@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tlentz/d2modmaker/internal/assets"
+	"github.com/tlentz/d2modmaker/internal/d2file/assets"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
