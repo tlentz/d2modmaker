@@ -1,3 +1,5 @@
+$red: rgb(103,15,18);
+$white: #f5f5f9;
 .D2ModMakerContainer {
     display: flex;
     flex-direction: column;
@@ -6,4 +8,38 @@
     max-width: 500px;
     text-align: left;
     border-radius: 10px;
+
+
+    .HeaderText {
+        color: $red;
+        text-shadow: 2px 2px black;
+        font-weight: 400;
+    }
+
+    .HeaderText2 {
+        color: $red;
+        text-shadow: 2px 2px black;
+        font-weight: 400;
+    }
+
+    .rc-input-number {
+        display: inline-flex;
+        vertical-align: middle;
+    }
+
+    .help-icon {
+        svg {
+            transform: scale(0.8);
+        }
+    }
+    .MuiFormControlLabel-root {
+        margin-right: 3px;
+    }
+    #min-num-props, #max-num-props {
+        margin-bottom: 35px;
+    }
+
+    .run-btn {
+        margin-bottom: 20px;
+    }
 }
