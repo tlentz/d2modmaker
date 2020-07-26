@@ -6,7 +6,7 @@ import (
 )
 
 // Handler returns http.Handler for API endpoint
-func Handler() http.HandlerFunc {
+func RunHandler() http.HandlerFunc {
 	return func(res http.ResponseWriter, req *http.Request) {
 		res.Header().Set("Content-Type", "application/json")
 
