@@ -41,3 +41,9 @@ func Read(filePath string) Data {
 	_ = json.Unmarshal([]byte(file), &data)
 	return data
 }
+
+func Parse(jsonData []byte) Data {
+	data := Data{}
+	_ = json.Unmarshal(jsonData, &data)
+	return data
+}

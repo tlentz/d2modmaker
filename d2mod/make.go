@@ -7,23 +7,27 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2file"
 	"github.com/tlentz/d2modmaker/internal/d2file/assets"
 
-	"github.com/tlentz/d2modmaker/internal/d2mod/config"
-	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
-	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
-	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
-	"github.com/tlentz/d2modmaker/internal/d2mod/randomizer"
-	"github.com/tlentz/d2modmaker/internal/d2mod/splash"
-	"github.com/tlentz/d2modmaker/internal/d2mod/stacksizes"
-	"github.com/tlentz/d2modmaker/internal/d2mod/townskills"
-	"github.com/tlentz/d2modmaker/internal/d2mod/treasure"
+	"github.com/tlentz/d2modmaker/d2mod/config"
+	"github.com/tlentz/d2modmaker/d2mod/cows"
+	"github.com/tlentz/d2modmaker/d2mod/monsterdensity"
+	"github.com/tlentz/d2modmaker/d2mod/qol"
+	"github.com/tlentz/d2modmaker/d2mod/randomizer"
+	"github.com/tlentz/d2modmaker/d2mod/splash"
+	"github.com/tlentz/d2modmaker/d2mod/stacksizes"
+	"github.com/tlentz/d2modmaker/d2mod/townskills"
+	"github.com/tlentz/d2modmaker/d2mod/treasure"
 
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-func Make(outDir string, cfgPath string) {
+func MakeFromCfgPath(outDir string, cfgPath string) {
+	cfg := config.Read(cfgPath)
+	Make(outDir, cfg)
+}
+
+func Make(outDir string, cfg config.Data) {
 	//printFile()
 
-	cfg := config.Read(cfgPath)
 	d2files := d2file.D2Files{}
 
 	os.RemoveAll(outDir + "/data/")

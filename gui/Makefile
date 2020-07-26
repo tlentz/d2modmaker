@@ -19,8 +19,7 @@ sr:
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:8148 npm run start
 
 # build react and build server
-build: br
-	bs
+build: br bs
 
 # run the server
 run: ss

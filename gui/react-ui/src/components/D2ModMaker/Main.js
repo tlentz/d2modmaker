@@ -23,6 +23,8 @@ import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import HelpIcon from "@material-ui/icons/Help";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
+const axios = require('axios');
+
 const defaultCfg = {
   Version: "v0.5.0",
   MeleeSplash: true,
@@ -218,7 +220,7 @@ export default function D2ModMaker() {
               "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels.",
           })}
         </Grid>
-        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
             id="min-num-props"
             align={"center"}
@@ -288,7 +290,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
             id="UniqueItemDropRate"
             align={"center"}
@@ -319,7 +321,7 @@ export default function D2ModMaker() {
             onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
           />
         </Grid>
-        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
             id="RuneDropRate"
             align={"center"}
@@ -436,7 +438,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
             id="MinProps"
             align={"center"}
@@ -468,7 +470,7 @@ export default function D2ModMaker() {
             }
           />
         </Grid>
-        <Grid item alignItems={"center"} xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
             id="MaxProps"
             gutterBottom
@@ -511,7 +513,12 @@ export default function D2ModMaker() {
           <Typography variant={"h2"}>D2 Mod Maker</Typography>
         </Badge>
       </Grid>
-      <Button variant="contained" color="primary" className={"run-btn"}>
+      <Button
+        variant="contained"
+        color="primary"
+        className={"run-btn"}
+        onClick={() => { makeRunRequest(state) }}
+      >
         Run
       </Button>
       <div className={"D2ModMakerContainerInner"}>
@@ -570,3 +577,21 @@ const divider = () => {
     </div>
   );
 };
+
+async function makeRunRequest(data) {
+
+  const headers = {
+    'Content-Type': 'text/plain'
+  };
+
+  await axios.post(
+    'http://localhost:8148/api/run', data, { headers })
+    .then(response => {
+      console.log("Success ========>", response);
+    })
+    .catch(error => {
+      console.log("Error ========>", error);
+    }
+    );
+
+}

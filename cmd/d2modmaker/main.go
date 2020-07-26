@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/tlentz/d2modmaker/internal/d2mod"
+	"github.com/tlentz/d2modmaker/d2mod"
 )
 
 var (
@@ -32,5 +32,5 @@ func main() {
 	fmt.Println("", "D2 Mod Maker", version)
 	fmt.Println(line)
 
-	d2mod.Make(outDir, cfgPath)
+	d2mod.MakeFromCfgPath(outDir, cfgPath)
 }

@@ -1,25 +1,29 @@
 package api
 
 import (
-	"encoding/json"
+	"io/ioutil"
 	"net/http"
+
+	"github.com/tlentz/d2modmaker/d2mod"
+	"github.com/tlentz/d2modmaker/d2mod/config"
 )
 
 // Handler returns http.Handler for API endpoint
 func RunHandler() http.HandlerFunc {
-	return func(res http.ResponseWriter, req *http.Request) {
-		res.Header().Set("Content-Type", "application/json")
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 
-		body, err := json.Marshal(map[string]interface{}{
-			"data": "Hello, world",
-		})
+		body, err := ioutil.ReadAll(r.Body)
 
 		if err != nil {
-			res.WriteHeader(500)
+			cfg := config.Parse(body)
+			d2mod.Make("~/d2-mod-maker-dist/", cfg)
+			w.WriteHeader(500)
 			return
 		}
 
-		res.WriteHeader(200)
-		res.Write(body)
+		w.WriteHeader(200)
+		w.Write(body)
 	}
 }

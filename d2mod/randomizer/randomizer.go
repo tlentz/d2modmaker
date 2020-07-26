@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tlentz/d2modmaker/internal/d2mod/config"
+	"github.com/tlentz/d2modmaker/d2mod/config"
 
 	"github.com/tlentz/d2modmaker/internal/d2file"
 	"github.com/tlentz/d2modmaker/internal/d2file/txts/gems"

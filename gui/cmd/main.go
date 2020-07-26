@@ -15,6 +15,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/tlentz/d2modmaker/gui/api"
 	"github.com/tlentz/d2modmaker/gui/server"
@@ -78,15 +79,18 @@ func main() {
 		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
 	})
 
-	r.HandleFunc("/api/run", api.RunHandler())
+	r.HandleFunc("/api/run", api.RunHandler()).Methods("POST")
 
 	// This will serve files under http://localhost:<port>/static/<filename>
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticPath))))
 	// react app
 	r.PathPrefix("/").Handler(server.Handler(cfg.buildPath))
 
+	// add logging
+	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
+
 	srv := &http.Server{
-		Handler: r,
+		Handler: loggedRouter,
 		Addr:    "127.0.0.1:" + cfg.port,
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
