@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/assets"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
@@ -21,14 +20,8 @@ import (
 )
 
 func Make(outDir string, cfgPath string) {
-	//printFile()
-
 	cfg := config.Read(cfgPath)
-	d2files := d2file.D2Files{}
-
-	os.RemoveAll(outDir + "/data/")
-	err := os.MkdirAll(outDir+assets.DataGlobalExcel, 0755)
-	util.Check(err)
+	d2files := d2fs.NewFiles(cfg.SourceDir, outDir)
 
 	if cfg.MeleeSplash {
 		splash.Jewels(outDir, d2files)
@@ -75,7 +68,7 @@ func Make(outDir string, cfgPath string) {
 		randomizer.Run(&cfg, d2files)
 	}
 
-	d2file.WriteFiles(d2files, outDir)
+	d2files.Write()
 	writeSeed(cfg, outDir)
 	util.PP(cfg)
 	fmt.Println("===========================")

@@ -1,12 +1,12 @@
 package qol
 
 import (
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/charStats"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/charStats"
 )
 
-func StartWithCube(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(d2files, charStats.FileName)
+func StartWithCube(d2files d2fs.Files) {
+	f := d2files.Get(charStats.FileName)
 	itemOffset := charStats.Item1
 	countOffset := 2
 	for idx, row := range f.Rows {

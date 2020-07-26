@@ -3,14 +3,14 @@ package monsterdensity
 import (
 	"strconv"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/levels"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/levels"
 
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-func Scale(d2files d2file.D2Files, scaleFactor float64) {
-	f := d2file.GetOrCreateFile(d2files, levels.FileName)
+func Scale(d2files d2fs.Files, scaleFactor float64) {
+	f := d2files.Get(levels.FileName)
 	maxScale := 30.0
 	mult := util.MinFloat(scaleFactor, maxScale)
 	maxDensity := 10000

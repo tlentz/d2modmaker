@@ -7,13 +7,13 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/gems"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/misc"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/runes"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/setItems"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/sets"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/uniqueItems"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/gems"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/misc"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -41,7 +41,7 @@ type Item struct {
 type Items = []Item
 
 // Randomize randomizes all items based on the RandomOptions
-func Run(cfg *config.Data, d2files d2file.D2Files) {
+func Run(cfg *config.Data, d2files d2fs.Files) {
 	opts := getRandomOptions(cfg)
 	rand.Seed(opts.Seed)
 
@@ -84,7 +84,7 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 }
 
 // Returns all props bucketized
-func getAllProps(opts config.RandomOptions, d2files d2file.D2Files) (Props, Items) {
+func getAllProps(opts config.RandomOptions, d2files d2fs.Files) (Props, Items) {
 	props := Props{}
 	items := Items{}
 
@@ -117,7 +117,7 @@ func getAllProps(opts config.RandomOptions, d2files d2file.D2Files) (Props, Item
 }
 
 type propGetter struct {
-	d2files     d2file.D2Files
+	d2files     d2fs.Files
 	opts        config.RandomOptions
 	props       Props
 	fileName    string
@@ -127,7 +127,7 @@ type propGetter struct {
 }
 
 func getProps(p propGetter) (Props, Items) {
-	f := d2file.GetOrCreateFile(p.d2files, p.fileName)
+	f := p.d2files.Get(p.fileName)
 	props := Props{}
 	items := Items{}
 	for _, row := range f.Rows {
@@ -249,7 +249,7 @@ func randomizeRWProps(s scrambler) {
 	s.itemMaxProps = runes.MaxNumProps
 	s.minMaxProps = getMinMaxProps(s.opts, runes.MaxNumProps)
 
-	f := d2file.GetOrCreateFile(s.d2files, runes.FileName)
+	f := s.d2files.Get(runes.FileName)
 	miscLevels := getMiscItemLevels(s.d2files)
 	for idx, row := range f.Rows {
 		level := getRunewordLevel(row, miscLevels)
@@ -266,8 +266,8 @@ func getRunewordLevel(row []string, miscLevels map[string]int) int {
 }
 
 // Get Gem Props
-func getAllGemsProps(d2files d2file.D2Files) Props {
-	f := d2file.GetOrCreateFile(d2files, gems.FileName)
+func getAllGemsProps(d2files d2fs.Files) Props {
+	f := d2files.Get(gems.FileName)
 	propOffset := gems.WeaponMod1Code
 	props := Props{}
 	for _, row := range f.Rows {
@@ -300,8 +300,8 @@ func getBalancedRandomProp(opts config.RandomOptions, lvl int, props Props) Prop
 	return prop
 }
 
-func getMiscItemLevels(d2files d2file.D2Files) map[string]int {
-	f := d2file.GetOrCreateFile(d2files, misc.FileName)
+func getMiscItemLevels(d2files d2fs.Files) map[string]int {
+	f := d2files.Get(misc.FileName)
 	itemMap := make(map[string]int)
 	for _, row := range f.Rows {
 		n, err := strconv.Atoi(row[misc.Level])
@@ -340,7 +340,7 @@ func getMinMaxProps(opts config.RandomOptions, maxItemProps int) minMaxProps {
 
 type scrambler struct {
 	opts         config.RandomOptions
-	d2files      d2file.D2Files
+	d2files      d2fs.Files
 	props        Props
 	items        Items
 	fileName     string
@@ -356,7 +356,7 @@ type minMaxProps struct {
 }
 
 func scramble(s scrambler) {
-	f := d2file.GetOrCreateFile(s.d2files, s.fileName)
+	f := s.d2files.Get(s.fileName)
 	for idx, row := range f.Rows {
 		level := 0
 		rowLvl, err := strconv.Atoi(row[s.lvl])
@@ -367,7 +367,7 @@ func scramble(s scrambler) {
 	}
 }
 
-func scrambleRow(s scrambler, f *d2file.D2File, idx int, level int) {
+func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 	//Choose a random number of props between min and max
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 

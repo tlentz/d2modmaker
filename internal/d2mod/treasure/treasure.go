@@ -4,13 +4,13 @@ import (
 	"math"
 	"strconv"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/itemRatio"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/treasureClassEx"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/itemRatio"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/treasureClassEx"
 )
 
-func SetNoDropZero(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(d2files, treasureClassEx.FileName)
+func SetNoDropZero(d2files d2fs.Files) {
+	f := d2files.Get(treasureClassEx.FileName)
 	for idx, row := range f.Rows {
 		if row[treasureClassEx.NoDrop] != "" {
 			f.Rows[idx][treasureClassEx.NoDrop] = "0"
@@ -18,8 +18,8 @@ func SetNoDropZero(d2files d2file.D2Files) {
 	}
 }
 
-func EnableQuestDrops(d2files d2file.D2Files) {
-	f := d2file.GetOrCreateFile(d2files, treasureClassEx.FileName)
+func EnableQuestDrops(d2files d2fs.Files) {
+	f := d2files.Get(treasureClassEx.FileName)
 	diffOffsets := []int{0, 1, 2} // norm, nm, hell
 	bossQOffset := 3
 	for idx, row := range f.Rows {
@@ -38,8 +38,8 @@ func EnableQuestDrops(d2files d2file.D2Files) {
 	}
 }
 
-func ScaleUniqueDropRate(d2files d2file.D2Files, d float64) {
-	f := d2file.GetOrCreateFile(d2files, itemRatio.FileName)
+func ScaleUniqueDropRate(d2files d2fs.Files, d float64) {
+	f := d2files.Get(itemRatio.FileName)
 
 	one := func(n int) int {
 		if n < 1 {
@@ -81,8 +81,8 @@ func ScaleUniqueDropRate(d2files d2file.D2Files, d float64) {
 	}
 }
 
-func ScaleRuneDropRate(d2files d2file.D2Files, rateScale float64) {
-	f := d2file.GetOrCreateFile(d2files, treasureClassEx.FileName)
+func ScaleRuneDropRate(d2files d2fs.Files, rateScale float64) {
+	f := d2files.Get(treasureClassEx.FileName)
 
 	// Clip rateScale to valid 1-100 range
 	if rateScale > 100.0 {
