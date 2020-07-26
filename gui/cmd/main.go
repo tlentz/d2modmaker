@@ -69,7 +69,7 @@ type ServerConfig struct {
 }
 
 func main() {
-	cfg := ServerConfig{port: "8145", buildPath: path.Clean("react-ui/build")}
+	cfg := ServerConfig{port: "8148", buildPath: path.Clean("react-ui/build")}
 	staticPath := path.Join(cfg.buildPath, "/static/")
 	r := mux.NewRouter()
 
