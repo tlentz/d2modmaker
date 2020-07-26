@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/tlentz/d2modmaker/d2mod"
-	"github.com/tlentz/d2modmaker/d2mod/config"
+	"github.com/tlentz/d2modmaker/internal/d2mod"
+	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 )
 
 // Handler returns http.Handler for API endpoint

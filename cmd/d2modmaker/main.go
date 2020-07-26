@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/tlentz/d2modmaker/d2mod"
+	"github.com/tlentz/d2modmaker/internal/d2mod"
 )
 
 var (
