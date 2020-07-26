@@ -24,6 +24,9 @@ This should be compatible with PlugY and other things such as:
 The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
 
 ## ModConfig Options
+* **SourceDir** `string`
+    * Specifies the directory the source text files are read from
+    * If this is omitted, or set to "", the built-in 113c data files will be used. 
 * **IncreaseStackSizes** `bool`
     * Increases book of tp to 100
     * Increases book of id to 100
@@ -43,18 +46,18 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     * Enables quest drops for boss kills always
 * **UniqueItemDropRate** `float`
     * Will increase the rate in which uniques/sets drop
-	* When using this setting, high values will prevent some monsters from dropping set items.
-		* Act bosses at approximately 10
-		* Mini bosses at approximately 85
-		* Other special monsters at approximately 200
-		* All other monsters at approximately 450
+    * When using this setting, high values will prevent some monsters from dropping set items.
+        * Act bosses at approximately 10
+        * Mini bosses at approximately 85
+        * Other special monsters at approximately 200
+        * All other monsters at approximately 450
     * Set to `-1` to omit
 * **RuneDropRate** `float`
-	* Valid values are from 1 (vanilla drop rate) - 100 (even chance for all runes)
-	* Does not change the maximum rune any enemy can drop.
-	* Scales exponetially:
-		* Each increase of 1 raises the drop rate of the highest runes by ~5% cumulatively
-		* E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
+    * Valid values are from 1 (vanilla drop rate) - 100 (even chance for all runes)
+    * Does not change the maximum rune any enemy can drop.
+    * Scales exponetially:
+        * Each increase of 1 raises the drop rate of the highest runes by ~5% cumulatively
+        * E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
 * **StartWithCube** `bool`
     * Characters will start with cube when created
 * **Cowzzz** `bool`
@@ -162,6 +165,7 @@ Thanks!
 * Adds a new randomization option: AllowDuplicateProps
    * If this property is false (default), the same property type will not be added to an item twice (e.g. two instances of resist all)
 * Prevents two auras from being placed on the same item. This is bugged in the game, and one aura would not work.
+* Adds an option to specify the directory to read source Diablo 2 text files from instead of using the built-in 1.13c data.
 
 ## v0.4.0
 * Adds new feature `MeleeSplash`
