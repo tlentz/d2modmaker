@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/assets"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
@@ -20,22 +19,19 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-func MakeFromCfgPath(outDir string, cfgPath string) {
+func MakeFromCfgPath(defaultOutDir string, cfgPath string) {
 	cfg := config.Read(cfgPath)
-	Make(outDir, cfg)
+	Make(defaultOutDir, cfg)
 }
 
-func Make(outDir string, cfg config.Data) {
-	//printFile()
-
-	d2files := d2file.D2Files{}
-
-	os.RemoveAll(outDir + "/data/")
-	err := os.MkdirAll(outDir+assets.DataGlobalExcel, 0755)
-	util.Check(err)
+func Make(defaultOutDir string, cfg config.Data) {
+	if cfg.OutputDir == "" {
+		cfg.OutputDir = defaultOutDir
+	}
+	d2files := d2fs.NewFiles(cfg.SourceDir, cfg.OutputDir)
 
 	if cfg.MeleeSplash {
-		splash.Jewels(outDir, d2files)
+		splash.Jewels(cfg.OutputDir, d2files)
 	}
 
 	if cfg.IncreaseStackSizes {
@@ -79,8 +75,8 @@ func Make(outDir string, cfg config.Data) {
 		randomizer.Run(&cfg, d2files)
 	}
 
-	d2file.WriteFiles(d2files, outDir)
-	writeSeed(cfg, outDir)
+	d2files.Write()
+	writeSeed(cfg)
 	util.PP(cfg)
 	fmt.Println("===========================")
 	fmt.Println("Done!")
@@ -90,8 +86,8 @@ func Make(outDir string, cfg config.Data) {
 	}
 }
 
-func writeSeed(cfg config.Data, outDir string) {
-	filePath := outDir + "Seed.txt"
+func writeSeed(cfg config.Data) {
+	filePath := cfg.OutputDir + "Seed.txt"
 	f, err := os.Create(filePath)
 	util.Check(err)
 	defer f.Close()

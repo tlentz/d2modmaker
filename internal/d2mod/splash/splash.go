@@ -4,13 +4,13 @@ import (
 	"io"
 	"os"
 
-	"github.com/tlentz/d2modmaker/internal/d2file"
-	"github.com/tlentz/d2modmaker/internal/d2file/assets"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/itemStatCost"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/magicSuffix"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/missiles"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/properties"
-	"github.com/tlentz/d2modmaker/internal/d2file/txts/skills"
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/itemStatCost"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/magicSuffix"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/missiles"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/properties"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/skills"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
@@ -19,7 +19,7 @@ const (
 	splashDir   = "/splash/"
 )
 
-func Jewels(outDir string, d2files d2file.D2Files) {
+func Jewels(outDir string, d2files d2fs.Files) {
 	mergeSplashFile(missiles.FileName, d2files)
 	mergeSplashFile(skills.FileName, d2files)
 	mergeSplashFile(itemStatCost.FileName, d2files)
@@ -45,10 +45,9 @@ func copyPatchString(outDir string) {
 	util.Check(err)
 }
 
-func mergeSplashFile(fileName string, d2files d2file.D2Files) {
-	splashFile, err := d2file.ReadD2File(fileName, splashDir)
-	util.Check(err)
+func mergeSplashFile(fileName string, d2files d2fs.Files) {
+	splashFile := d2fs.ReadAsset(fileName, splashDir)
 
-	modFile := d2file.GetOrCreateFile(d2files, fileName)
-	d2file.MergeRows(modFile, *splashFile)
+	modFile := d2files.Get(fileName)
+	d2fs.MergeRows(modFile, *splashFile)
 }
