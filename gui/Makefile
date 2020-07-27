@@ -1,3 +1,5 @@
+REACT_BUILD = react-ui/build
+
 init:
 	npx create-react-app react-ui --template cra-template-material-ui-only
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:8148 npm run build
@@ -17,6 +19,20 @@ br:
 # start react for dev mode
 sr:
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:8148 npm run start
+
+# copy the build folder of the react app to bin
+copy_react_build: 
+	rm -rf bin/react-ui/
+	mkdir -p bin/react-ui/
+	cp -r react-ui/build bin/react-ui
+
+# copy the templates to bin
+copy_templates:
+	rm -rf bin/templates
+	cp -r templates bin/
+
+# batch all copies
+copy_files: copy_react_build copy_templates
 
 # build react and build server
 build: br bs
