@@ -1,5 +1,3 @@
-REACT_BUILD = react-ui/build
-
 init:
 	npx create-react-app react-ui --template cra-template-material-ui-only
 	cd react-ui && PUBLIC_URL=http://127.0.0.1:8148 npm run build
