@@ -19,12 +19,15 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-func Make(outDir string, cfgPath string) {
+func Make(defaultOutDir string, cfgPath string) {
 	cfg := config.Read(cfgPath)
-	d2files := d2fs.NewFiles(cfg.SourceDir, outDir)
+	if cfg.OutputDir == "" {
+		cfg.OutputDir = defaultOutDir
+	}
+	d2files := d2fs.NewFiles(cfg.SourceDir, cfg.OutputDir)
 
 	if cfg.MeleeSplash {
-		splash.Jewels(outDir, d2files)
+		splash.Jewels(cfg.OutputDir, d2files)
 	}
 
 	if cfg.IncreaseStackSizes {
@@ -69,7 +72,7 @@ func Make(outDir string, cfgPath string) {
 	}
 
 	d2files.Write()
-	writeSeed(cfg, outDir)
+	writeSeed(cfg)
 	util.PP(cfg)
 	fmt.Println("===========================")
 	fmt.Println("Done!")
@@ -79,8 +82,8 @@ func Make(outDir string, cfgPath string) {
 	}
 }
 
-func writeSeed(cfg config.Data, outDir string) {
-	filePath := outDir + "Seed.txt"
+func writeSeed(cfg config.Data) {
+	filePath := cfg.OutputDir + "Seed.txt"
 	f, err := os.Create(filePath)
 	util.Check(err)
 	defer f.Close()

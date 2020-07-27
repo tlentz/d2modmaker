@@ -21,6 +21,7 @@ type RandomOptions struct {
 // data is the configuration used to build the mod
 type Data struct {
 	SourceDir              string        `json:"SourceDir"`
+	OutputDir              string        `json:"OutputDir"`
 	MeleeSplash            bool          `json:"MeleeSplash"`
 	IncreaseStackSizes     bool          `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity float64       `json:"IncreaseMonsterDensity"`
