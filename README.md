@@ -166,6 +166,9 @@ Thanks!
    * If this property is false (default), the same property type will not be added to an item twice (e.g. two instances of resist all)
 * Prevents two auras from being placed on the same item. This is bugged in the game, and one aura would not work.
 * Adds an option to specify the directory to read source Diablo 2 text files from instead of using the built-in 1.13c data.
+* Adds an option to specify the output directory.
+* NEW USER INTERFACE!
+![v0.5.0_ux](/images/v0.5.0_ux.png)
 
 ## v0.4.0
 * Adds new feature `MeleeSplash`
