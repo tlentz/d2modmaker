@@ -276,7 +276,7 @@ export default function D2ModMaker() {
             defaultValue={1}
             getAriaValueText={valuetext}
             aria-labelledby="MonsterDensity"
-            step={1}
+            step={0.5}
             min={1}
             max={30}
             marks={[
@@ -346,9 +346,9 @@ export default function D2ModMaker() {
             defaultValue={1}
             getAriaValueText={valuetext}
             aria-labelledby="UniqueItemDropRate"
-            step={1}
+            step={0.5}
             min={1}
-            max={1000}
+            max={100}
             valueLabelDisplay="on"
             onChange={(e, n) => setState({ ...state, UniqueItemDropRate: n })}
           />
@@ -377,7 +377,7 @@ export default function D2ModMaker() {
             defaultValue={1}
             getAriaValueText={valuetext}
             aria-labelledby="RuneDropRate"
-            step={1}
+            step={0.5}
             min={1}
             max={100}
             marks={[
