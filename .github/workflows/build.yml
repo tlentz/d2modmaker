@@ -31,4 +31,6 @@ jobs:
         path: ./src/github.com/${{ github.repository }}/gui
     - name: Build React
       working-directory: ./src/github.com/${{ github.repository }}
-      run: cd ./gui && make br
+      run: |
+        cd ./gui
+        pwd
