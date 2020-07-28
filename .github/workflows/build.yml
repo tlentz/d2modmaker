@@ -34,4 +34,4 @@ jobs:
       run: bin/build_frontend
     - name: Build Backend
       working-directory: ./src/github.com/${{ github.repository }}
-      run: bin/build_backend
+      run: go build gui/cmd/main.go
