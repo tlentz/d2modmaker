@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cd ./gui/react-ui && npm install
-cd ./gui && make br
+cd ./gui/react-ui
+npm install
+make br
