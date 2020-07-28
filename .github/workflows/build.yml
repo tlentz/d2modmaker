@@ -28,14 +28,10 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
       with:
-        path: ./src/github.com/${{ github.repository }}/gui
+        path: ./src/github.com/${{ github.repository }}
     - name: Build React
       working-directory: ./src/github.com/${{ github.repository }}
-      run: |
-        cd ./gui
-        make br
-    - name: Build Go
+      run: bin/build_frontend
+    - name: Build Backend
       working-directory: ./src/github.com/${{ github.repository }}
-      run: |
-        cd ./gui
-        make sr
+      run: bin/build_backend
