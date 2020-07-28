@@ -1,7 +1,9 @@
 package api
 
 import (
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod"
@@ -17,13 +19,15 @@ func RunHandler() http.HandlerFunc {
 		body, err := ioutil.ReadAll(r.Body)
 
 		if err != nil {
-			cfg := config.Parse(body)
-			d2mod.Make("~/d2-mod-maker-dist/", cfg)
 			w.WriteHeader(500)
+			log.Fatal(err)
 			return
-		}
+		} else {
+			cfg := config.Parse(body)
+			d2mod.Make("./", cfg)
 
-		w.WriteHeader(200)
-		w.Write(body)
+			w.WriteHeader(200)
+			fmt.Println("Done!")
+		}
 	}
 }

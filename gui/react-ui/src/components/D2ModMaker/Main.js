@@ -1,8 +1,14 @@
 import React from "react";
 import "./Main.scss";
-import {withStyles} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import {Button, Checkbox, FormControlLabel, Grid, Tooltip,} from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Tooltip,
+} from "@material-ui/core";
 import Slider from "@material-ui/core/Slider";
 import InputNumber from "rc-input-number";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
@@ -10,7 +16,7 @@ import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 
-const axios = require('axios');
+const axios = require("axios");
 
 const defaultCfg = {
   Version: "v0.5.0",
@@ -175,28 +181,53 @@ export default function D2ModMaker() {
     );
   };
 
-
   const dirOptions = () => {
     return (
       <Grid container>
         <Grid container spacing={5}>
           <Grid item xs={6}>
-              <TextField
-                  id="source-dir"
-                  label="Source Directory"
-                  value={state.SourceDir}
-                  onChange={(e) => setState({ ...state, "SourceDir": e.target.value })}
-                  fullWidth
-              />
+            <StyledTooltip
+              title={
+                "The path to the source directory containing the diablo 2 source files. Leave this blank to use 113c source files. example: C:/d2/data/global/excel/"
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+            <TextField
+              id="source-dir"
+              label="Source Directory"
+              value={state.SourceDir}
+              onChange={(e) =>
+                setState({ ...state, SourceDir: e.target.value })
+              }
+              fullWidth
+            />
           </Grid>
           <Grid item xs={6}>
-              <TextField
-                  id="source-dir"
-                  label="Output Directory"
-                  value={state.OutputDir}
-                  onChange={(e) => setState({ ...state, "OutputDir": e.target.value })}
-                  fullWidth
-              />
+            <StyledTooltip
+              title={
+                "The directory that the data folder will be placed. Leave blank to use current directory. This requires a trailing slash. example: /Users/{username}/{folder}/"
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+            <TextField
+              id="output-dir"
+              label="Output Directory"
+              value={state.OutputDir}
+              onChange={(e) =>
+                setState({ ...state, OutputDir: e.target.value })
+              }
+              fullWidth
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -519,7 +550,9 @@ export default function D2ModMaker() {
         variant="contained"
         color="primary"
         className={"run-btn"}
-        onClick={() => { makeRunRequest(state) }}
+        onClick={() => {
+          makeRunRequest(state);
+        }}
       >
         Run
       </Button>
@@ -583,19 +616,16 @@ const divider = () => {
 };
 
 async function makeRunRequest(data) {
-
   const headers = {
-    'Content-Type': 'text/plain'
+    "Content-Type": "text/plain",
   };
 
-  await axios.post(
-    'http://localhost:8148/api/run', data, { headers })
-    .then(response => {
+  await axios
+    .post("http://localhost:8148/api/run", data, { headers })
+    .then((response) => {
       console.log("Success ========>", response);
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("Error ========>", error);
-    }
-    );
-
+    });
 }
