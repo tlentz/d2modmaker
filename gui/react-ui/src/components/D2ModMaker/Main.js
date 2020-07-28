@@ -8,11 +8,14 @@ import InputNumber from "rc-input-number";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
+import TextField from "@material-ui/core/TextField";
 
 const axios = require('axios');
 
 const defaultCfg = {
   Version: "v0.5.0",
+  SourceDir: "",
+  OutputDir: "",
   MeleeSplash: true,
   IncreaseStackSizes: true,
   IncreaseMonsterDensity: 1,
@@ -166,6 +169,34 @@ export default function D2ModMaker() {
               tooltip:
                 "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack sizes to 100.",
             })}
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  };
+
+
+  const dirOptions = () => {
+    return (
+      <Grid container>
+        <Grid container spacing={5}>
+          <Grid item xs={6}>
+              <TextField
+                  id="source-dir"
+                  label="Source Directory"
+                  value={state.SourceDir}
+                  onChange={(e) => setState({ ...state, "SourceDir": e.target.value })}
+                  fullWidth
+              />
+          </Grid>
+          <Grid item xs={6}>
+              <TextField
+                  id="source-dir"
+                  label="Output Directory"
+                  value={state.OutputDir}
+                  onChange={(e) => setState({ ...state, "OutputDir": e.target.value })}
+                  fullWidth
+              />
           </Grid>
         </Grid>
       </Grid>
@@ -501,6 +532,8 @@ export default function D2ModMaker() {
         <Grid container> {qolOptions()}</Grid>
         {divider()}
         <Grid container>{dropRateOptions()}</Grid>
+        {divider()}
+        <Grid container>{dirOptions()}</Grid>
         {divider()}
       </div>
     </div>
