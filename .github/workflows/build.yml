@@ -33,4 +33,9 @@ jobs:
       working-directory: ./src/github.com/${{ github.repository }}
       run: |
         cd ./gui
-        pwd
+        make br
+    - name: Build Go
+      working-directory: ./src/github.com/${{ github.repository }}
+      run: |
+        cd ./gui
+        make sr
