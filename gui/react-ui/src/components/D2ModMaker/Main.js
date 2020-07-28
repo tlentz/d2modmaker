@@ -1,28 +1,14 @@
 import React from "react";
 import "./Main.scss";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import {withStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab";
-import {
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Grid,
-  Tooltip,
-  ButtonGroup,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
+import {Button, Checkbox, FormControlLabel, Grid, Tooltip,} from "@material-ui/core";
 import Slider from "@material-ui/core/Slider";
 import InputNumber from "rc-input-number";
-import RefreshIcon from "@material-ui/icons/Refresh";
 import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
-import HelpIcon from "@material-ui/icons/Help";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
+
 const axios = require('axios');
 
 const defaultCfg = {
