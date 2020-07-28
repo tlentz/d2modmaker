@@ -1,21 +1,40 @@
 #!/bin/bash
+
+# set to production mode
 D2ModMakerMode="production"
+# read the version
 VERSION=`cat VERSION.txt`
 
 rm -rf ./dist/
 mkdir -p ./dist/
 
+# npm install
+cd gui/react-ui && npm install
+# build react app
+cd ../ && make br
+# go back to root dir
+cd ..
+
+# copy the react files
+mkdir -p dist/react-ui/
+cp -r gui/react-ui/build dist/react-ui
+
+# copy the template
+cp -r gui/templates dist/
+
+# specify all platforms to build for
 PLATFORMS="darwin/amd64"
 PLATFORMS="$PLATFORMS windows/amd64 windows/386"
 PLATFORMS="$PLATFORMS linux/amd64 linux/386"
 
+# build binary for each platform
 for PLATFORM in $PLATFORMS; do
   GOOS=${PLATFORM%/*}
   GOARCH=${PLATFORM#*/}
   BIN_FILENAME="./dist/d2modmaker-${GOOS}-${GOARCH}"
   WITHFLAGS="-ldflags \"-X 'main.mode=$D2ModMakerMode' -X 'main.version=$VERSION'\""
   if [[ "${GOOS}" == "windows" ]]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
-  CMD="GOOS=${GOOS} GOARCH=${GOARCH} go build ${WITHFLAGS} -o ${BIN_FILENAME} ./cmd/d2modmaker"
+  CMD="GOOS=${GOOS} GOARCH=${GOARCH} go build ${WITHFLAGS} -o ${BIN_FILENAME} ./gui/cmd/main.go"
   echo "${CMD}"
   eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
 done
@@ -27,6 +46,6 @@ if [[ "${FAILURES}" != "" ]]; then
   exit 1
 fi
 
-cp cfg.json ./dist/cfg.json
+# cp cfg.json ./dist/cfg.json
 # cp -r assets/113c-data/ ./dist/113c-data/
 cp README.md ./dist/README.md

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,52 +15,96 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gorilla/handlers"
+	"github.com/gorilla/mux"
 	"github.com/tlentz/d2modmaker/gui/api"
 	"github.com/tlentz/d2modmaker/gui/server"
-	webview "github.com/webview/webview"
-	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
-var version = "1.0.0"
-var uiURL = "http://localhost:9999/"
+// spaHandler implements the http.Handler interface, so we can use it
+// to respond to HTTP requests. The path to the static directory and
+// path to the index file within that static directory are used to
+// serve the SPA in the given static directory.
+type spaHandler struct {
+	staticPath string
+	indexPath  string
+}
 
-func main() {
-	cfg := struct {
-		BuildPath string
-		Listen    string
-	}{}
-
-	kp := kingpin.New(filepath.Base(os.Args[0]), "Demo of create-react-app intergration into golang http server")
-	kp.Version(version)
-	kp.Flag("listen", "Which address should be listened").Required().StringVar(&cfg.Listen)
-	kp.Flag("build", "Path to the build directory of the project created using create-react-app").Required().StringVar(&cfg.BuildPath)
-	kp.HelpFlag.Short('h')
-
-	if _, err := kp.Parse(os.Args[1:]); err != nil {
-		kp.Usage(os.Args[1:])
-		os.Exit(1)
+// ServeHTTP inspects the URL path to locate a file within the static dir
+// on the SPA handler. If a file is found, it will be served. If not, the
+// file located at the index path on the SPA handler will be served. This
+// is suitable behavior for serving an SPA (single page application).
+func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// get the absolute path to prevent directory traversal
+	path, err := filepath.Abs(r.URL.Path)
+	if err != nil {
+		// if we failed to get the absolute path respond with a 400 bad request
+		// and stop
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	buildPath := path.Clean(cfg.BuildPath)
-	staticPath := path.Join(buildPath, "/static/")
+	// prepend the path with the path to the static directory
+	path = filepath.Join(h.staticPath, path)
 
-	mux := http.NewServeMux()
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(staticPath))))
-	mux.Handle("/api", api.Handler())
-	mux.Handle("/", server.Handler(buildPath))
+	// check whether a file exists at the given path
+	_, err = os.Stat(path)
+	if os.IsNotExist(err) {
+		// file does not exist, serve index.html
+		http.ServeFile(w, r, filepath.Join(h.staticPath, h.indexPath))
+		return
+	} else if err != nil {
+		// if we got an error (that wasn't that the file doesn't exist) stating the
+		// file, return a 500 internal server error and stop
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// otherwise, use http.FileServer to serve the static dir
+	http.FileServer(http.Dir(h.staticPath)).ServeHTTP(w, r)
+}
+
+type ServerConfig struct {
+	port      string `json:"port"`      // port for the server to listen on
+	buildPath string `json:"buildPath"` // create-react-app
+}
+
+func main() {
+	cfg := ServerConfig{port: "8148", buildPath: path.Clean("react-ui/build")}
+	staticPath := path.Join(cfg.buildPath, "/static/")
+	r := mux.NewRouter()
+
+	r.HandleFunc("/api/health", func(w http.ResponseWriter, r *http.Request) {
+		// an example API handler
+		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
+	})
+
+	r.HandleFunc("/api/run", api.RunHandler()).Methods("POST")
+
+	// This will serve files under http://localhost:<port>/static/<filename>
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticPath))))
+	// react app
+	r.PathPrefix("/").Handler(server.Handler(cfg.buildPath))
+
+	// add logging
+	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 
 	srv := &http.Server{
-		Addr:    cfg.Listen,
-		Handler: mux,
+		Handler: loggedRouter,
+		Addr:    "127.0.0.1:" + cfg.port,
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
 
 	errs := make(chan error, 1)
 	go func() {
-		fmt.Println("Starting", cfg.Listen)
+		fmt.Println("Starting", srv.Addr)
 		errs <- srv.ListenAndServe()
 	}()
 
-	launchWebView()
+	// launch the browser
+	openBrowser("http://localhost:" + cfg.port + "/")
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
@@ -80,16 +125,7 @@ func main() {
 		fmt.Println("Failed to shutdown server:", err.Error())
 		os.Exit(1)
 	}
-}
 
-func launchWebView() {
-	debug := true
-	w := webview.New(debug)
-	defer w.Destroy()
-	w.SetTitle("D2 Mod Maker")
-	w.SetSize(960, 540, webview.HintNone)
-	w.Navigate(uiURL)
-	w.Run()
 }
 
 //OpenBrowser - Opens your default browser, depending on the OS you are on.

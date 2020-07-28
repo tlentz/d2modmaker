@@ -19,8 +19,12 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-func Make(defaultOutDir string, cfgPath string) {
+func MakeFromCfgPath(defaultOutDir string, cfgPath string) {
 	cfg := config.Read(cfgPath)
+	Make(defaultOutDir, cfg)
+}
+
+func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.OutputDir == "" {
 		cfg.OutputDir = defaultOutDir
 	}

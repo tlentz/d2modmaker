@@ -32,5 +32,5 @@ func main() {
 	fmt.Println("", "D2 Mod Maker", version)
 	fmt.Println(line)
 
-	d2mod.Make(outDir, cfgPath)
+	d2mod.MakeFromCfgPath(outDir, cfgPath)
 }
