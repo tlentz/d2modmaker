@@ -30,4 +30,4 @@ jobs:
       with:
         path: ./src/github.com/${{ github.repository }}/gui
     - name: Make Build
-      run: cd ./src/github.com/${{ github.repository }}/gui && make build
+      run: make build
