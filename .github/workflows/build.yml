@@ -1,6 +1,6 @@
 name: Build CI
 
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   build:
@@ -30,6 +30,5 @@ jobs:
       with:
         path: ./src/github.com/${{ github.repository }}/gui
     - name: Build React
-      run: cd ./src/github.com/${{ github.repository }}/gui && make br
-    - name: Build Server
-      run: cd ./src/github.com/${{ github.repository }}/gui && make bs
+      # run: cd ./src/github.com/${{ github.repository }}/gui && make br
+      run: cd ./src/github.com/${{ github.repository }}/gui && ls
