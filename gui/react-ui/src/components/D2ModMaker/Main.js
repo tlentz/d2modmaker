@@ -111,7 +111,6 @@ export default function D2ModMaker() {
   };
 
   const newSeed = () => {
-    console.log(state.RandomOptions.Seed);
     return Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
   };
 
@@ -124,7 +123,7 @@ export default function D2ModMaker() {
             min={1}
             max={Number.MAX_SAFE_INTEGER}
             style={{ width: 100 }}
-            value={seed()}
+            value={state.RandomOptions.Seed}
             onChange={(value) => {
               return updateRandomOptions(state, "Seed", value);
             }}
@@ -255,7 +254,7 @@ export default function D2ModMaker() {
         </Grid>
         <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
-            id="min-num-props"
+            id="MonsterDensity"
             align={"center"}
             gutterBottom
             className={"primary"}
@@ -351,7 +350,7 @@ export default function D2ModMaker() {
             min={1}
             max={1000}
             valueLabelDisplay="on"
-            onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
+            onChange={(e, n) => setState({ ...state, UniqueItemDropRate: n })}
           />
         </Grid>
         <Grid item xs={12} className={"SliderWrapper"}>
@@ -392,7 +391,7 @@ export default function D2ModMaker() {
               },
             ]}
             valueLabelDisplay="on"
-            onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
+            onChange={(e, n) => setState({ ...state, RuneDropRate: n })}
           />
         </Grid>
       </React.Fragment>
@@ -420,11 +419,39 @@ export default function D2ModMaker() {
             })}
           </Grid>
           <Grid item xs={8}>
-            {mkRandoCheckbox({
-              key: "UseSeed",
-              tooltip:
-                "Provide a specific seed to use.  Toggling on/off will generate a new seed.",
-            })}
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    name={"UseSeed"}
+                    value={state.RandomOptions["UseSeed"]}
+                  />
+                }
+                label={"UseSeed"}
+                checked={state.RandomOptions["UseSeed"]}
+                onChange={(e, checked) => {
+                  return setState(
+                    updateRandomOptions(
+                      updateRandomOptions(state, "UseSeed", checked),
+                      "Seed",
+                      checked ? seed() : -1
+                    )
+                  );
+                }}
+              />
+              <StyledTooltip
+                title={
+                  "Provide a specific seed to use.  Toggling on/off will generate a new seed."
+                }
+                placement="bottom"
+                enterDelay={250}
+              >
+                <span className={"help-icon"}>
+                  <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+                </span>
+              </StyledTooltip>
+            </React.Fragment>
             {seedInput()}
           </Grid>
         </Grid>
@@ -539,6 +566,7 @@ export default function D2ModMaker() {
     );
   };
 
+  console.log(state);
   return (
     <div className="D2ModMakerContainer">
       <Grid container alignItems={"center"} className={"HeaderText"}>
@@ -568,6 +596,7 @@ export default function D2ModMaker() {
         {divider()}
         <Grid container>{dirOptions()}</Grid>
         {divider()}
+        {/*<pre id={"state"}>{JSON.stringify(state, null, 2)}</pre>*/}
       </div>
     </div>
   );
