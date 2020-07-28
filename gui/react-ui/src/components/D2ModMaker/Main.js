@@ -38,23 +38,8 @@ const defaultCfg = {
   },
 };
 
-function getStepContent(step) {
-  return step;
-}
-
 export default function D2ModMaker() {
   const [state, setState] = React.useState(defaultCfg);
-
-  const createCheckbox = (key) => (
-    <FormControlLabel
-      control={<Checkbox color="primary" name={key} value={state[key]} />}
-      label={key}
-      checked={state[key]}
-      onChange={(e, checked) => {
-        setState({ ...state, [key]: checked });
-      }}
-    />
-  );
 
   const updateRandomOptions = (oldState, key, val) => {
     let randomOptions = oldState.RandomOptions;
