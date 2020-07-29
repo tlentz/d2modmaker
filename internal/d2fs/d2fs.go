@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -28,8 +29,8 @@ func NewFiles(sourceDir string, outDir string) Files {
 	files := Files{sourceDir: sourceDir, outDir: outDir}
 	files.cache = make(map[string]*File)
 
-	os.RemoveAll(files.outDir + "/data/")
-	err := os.MkdirAll(files.outDir+assets.DataGlobalExcel, 0755)
+	os.RemoveAll(path.Join(files.outDir, "/data/"))
+	err := os.MkdirAll(path.Join(files.outDir, assets.DataGlobalExcel), 0755)
 	util.Check(err)
 
 	return files
@@ -39,22 +40,22 @@ func NewFiles(sourceDir string, outDir string) Files {
 func (d2files *Files) Read(filename string) *File {
 	if d2files.sourceDir == "" {
 		// open csvfile
-		csvfile, err := assets.Assets.Open(assets.DataDir + filename)
+		csvfile, err := assets.Assets.Open(path.Join(assets.DataDir, filename))
 		//TODO: figure out how to move this out of if/else
 		checkError(filename, err)
 		defer csvfile.Close()
 		return importCsv(csvfile, filename)
 	} else {
-		csvfile, err := os.Open(d2files.sourceDir + filename)
+		csvfile, err := os.Open(path.Join(d2files.sourceDir, filename))
 		checkError(filename, err)
 		defer csvfile.Close()
 		return importCsv(csvfile, filename)
 	}
 }
 
-func ReadAsset(filename string, path string) *File {
+func ReadAsset(filename string, filePath string) *File {
 	// open csvfile
-	csvfile, err := assets.Assets.Open(path + filename)
+	csvfile, err := assets.Assets.Open(path.Join(filePath, filename))
 	checkError(filename, err)
 	defer csvfile.Close()
 
@@ -95,13 +96,13 @@ func importCsv(csvfile io.Reader, filename string) *File {
 // WriteFiles writes all d2 files
 func (d2files *Files) Write() {
 	for _, d2file := range d2files.cache {
-		// fmt.Println("writing " + d2files.outDir + d2file.FileName)
+		// fmt.Println("writing " + path.Join(d2files.outDir, d2file.FileName))
 		d2file.write(d2files.outDir)
 	}
 }
 
 func (d2file *File) write(outDir string) {
-	file, err := os.Create(outDir + assets.DataGlobalExcel + d2file.FileName)
+	file, err := os.Create(path.Join(outDir, assets.DataGlobalExcel, d2file.FileName))
 	checkError(d2file.FileName, err)
 	defer file.Close()
 
