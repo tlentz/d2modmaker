@@ -3,6 +3,7 @@ package splash
 import (
 	"io"
 	"os"
+	"path"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
@@ -33,11 +34,11 @@ func copyPatchString(outDir string) {
 	util.Check(err)
 	defer from.Close()
 
-	patchstringDir := outDir + assets.PatchStringDest
+	patchstringDir := path.Join(outDir, assets.PatchStringDest)
 	err2 := os.MkdirAll(patchstringDir, 0755)
 	util.Check(err2)
 
-	to, err := os.OpenFile(patchstringDir+patchstring, os.O_RDWR|os.O_CREATE, 0666)
+	to, err := os.OpenFile(path.Join(patchstringDir, patchstring), os.O_RDWR|os.O_CREATE, 0666)
 	util.Check(err)
 	defer to.Close()
 
