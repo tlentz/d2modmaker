@@ -92,33 +92,6 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
     * **PerfectProps** `bool`
         * All props will have the max value for min/max values
 
-## Example ModConfig
-```json
-{
-    "MeleeSplash": true,
-    "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 1,
-    "EnableTownSkills": true,
-    "NoDropZero": true,
-    "QuestDrops": true,
-    "UniqueItemDropRate": -1,
-    "RuneDropRate": -1,
-    "StartWithCube": true,
-    "Cowzzz": true,
-    "EnterToExit": true,
-    "RandomOptions": {
-        "Randomize": true,
-        "Seed": -1,
-        "IsBalanced": true,
-        "BalancedPropCount":true,
-        "MinProps": -1,
-        "MaxProps": -1,
-        "UseOSkills": true,
-        "PerfectProps": false
-    }
-}
-```
-
 # Screenshots
 ### Nagel
 ![Nagel](https://i.imgur.com/1zOKK3q.png)
@@ -134,6 +107,18 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 ![MonsterDensity: 30](https://i.imgur.com/d6iCBZA.png)
 ### Melee Splash
 ![Melee Splash](https://i.imgur.com/7qqDycZ.png)
+
+# How to use UI
+1. Launch d2modmaker binary
+2. Go to http://localhost:8148
+3. Press `Load Config`
+4. Change all the things
+5. Save Config
+6. Run
+
+**NOTE** `Load Config` will read the `cfg.json` in the same directory as the d2modmaker binary into the UI.
+**NOTE** `Save Config` will write `cfg.json` to the same directory as the d2modmaker binary
+**NOTE** `Run` will run the program with the current `cfg.json` loaded into the UI.  If you want to save the cfg that you just ran, you need to press `Save Config`
 
 # Support
 <a href="https://www.buymeacoffee.com/tlentz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
