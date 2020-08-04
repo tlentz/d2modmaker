@@ -7,6 +7,8 @@
 
 The idea behind this project is to play Diablo II the way that you want to play.  Every option in the `ModConfig` is optional.
 
+![v0.5.0_ux](/images/v0.5.0_ux.png)
+
 # Links
 * [Repository](https://github.com/tlentz/d2modmaker)
 * [Releases](https://github.com/tlentz/d2modmaker/releases)
