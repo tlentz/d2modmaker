@@ -8,6 +8,7 @@ import (
 // RandomOptions are the options for the randomizer
 type RandomOptions struct {
 	Randomize         bool  `json:"Randomize"`
+	UseSeed           bool  `json:"UseSeed"`
 	Seed              int64 `json:"Seed"`
 	IsBalanced        bool  `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
 	BalancedPropCount bool  `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
@@ -20,6 +21,7 @@ type RandomOptions struct {
 
 // data is the configuration used to build the mod
 type Data struct {
+	Version                string        `json:"Version"`
 	SourceDir              string        `json:"SourceDir"`
 	OutputDir              string        `json:"OutputDir"`
 	MeleeSplash            bool          `json:"MeleeSplash"`
@@ -36,16 +38,47 @@ type Data struct {
 	RandomOptions          RandomOptions `json:"RandomOptions"`
 }
 
+func DefaultData() Data {
+	return Data{
+		Version:                "v0.5.0",
+		SourceDir:              "",
+		OutputDir:              "",
+		MeleeSplash:            true,
+		IncreaseStackSizes:     true,
+		IncreaseMonsterDensity: 1,
+		EnableTownSkills:       true,
+		NoDropZero:             true,
+		QuestDrops:             true,
+		UniqueItemDropRate:     1,
+		RuneDropRate:           1,
+		StartWithCube:          true,
+		Cowzzz:                 true,
+		EnterToExit:            false,
+		RandomOptions: RandomOptions{
+			Randomize:         true,
+			UseSeed:           false,
+			Seed:              -1,
+			IsBalanced:        true,
+			BalancedPropCount: true,
+			AllowDupProps:     false,
+			MinProps:          0,
+			MaxProps:          20,
+			PerfectProps:      false,
+			UseOSkills:        true,
+		},
+	}
+}
+
 // ReadCfg reads a ModConfig from the given json file
 func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
-	data := Data{}
+	data := DefaultData()
 	_ = json.Unmarshal([]byte(file), &data)
 	return data
 }
 
 func Parse(jsonData []byte) Data {
-	data := Data{}
+	data := DefaultData()
 	_ = json.Unmarshal(jsonData, &data)
 	return data
 }

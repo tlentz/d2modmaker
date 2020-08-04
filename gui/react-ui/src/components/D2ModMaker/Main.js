@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Main.scss";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import {
   Button,
+  ButtonGroup,
   Checkbox,
   FormControlLabel,
   Grid,
@@ -15,7 +16,8 @@ import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-
+import { set } from "lodash";
+const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
@@ -28,27 +30,43 @@ const defaultCfg = {
   EnableTownSkills: true,
   NoDropZero: true,
   QuestDrops: true,
-  UniqueItemDropRate: -1,
-  RuneDropRate: -1,
+  UniqueItemDropRate: 1,
+  RuneDropRate: 1,
   StartWithCube: true,
   Cowzzz: true,
   EnterToExit: false,
   RandomOptions: {
     Randomize: true,
-    Seed: -1,
     UseSeed: false,
+    Seed: -1,
     IsBalanced: true,
     BalancedPropCount: true,
-    AllowDuplicateProps: false,
-    MinProps: -1,
-    MaxProps: -1,
-    UseOSkills: true,
+    AllowDupProps: false,
+    MinProps: 0,
+    MaxProps: 20,
     PerfectProps: false,
+    UseOSkills: true,
   },
 };
 
 export default function D2ModMaker() {
   const [state, setState] = React.useState(defaultCfg);
+
+  async function loadConfig() {
+    const result = await axios("http://localhost:8148/api/cfg")
+    var data = _.merge(defaultCfg, result.data);
+    var data = result.data;
+    data.Version = defaultCfg.Version;
+    return data;
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      let data = await loadConfig();
+      setState(data);
+    }
+    fetchData();
+  }, [])
 
   const updateRandomOptions = (oldState, key, val) => {
     let randomOptions = oldState.RandomOptions;
@@ -254,12 +272,12 @@ export default function D2ModMaker() {
         </Grid>
         <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
-            id="MonsterDensity"
+            id="IncreaseMonsterDensity"
             align={"center"}
             gutterBottom
             className={"primary"}
           >
-            Monster Density
+            Increase Monster Density
             <StyledTooltip
               title={
                 "Increases monster density throughout the map by the given factor."
@@ -275,7 +293,7 @@ export default function D2ModMaker() {
           <Slider
             defaultValue={1}
             getAriaValueText={valuetext}
-            aria-labelledby="MonsterDensity"
+            aria-labelledby="IncreaseMonsterDensity"
             step={0.5}
             min={1}
             max={30}
@@ -290,7 +308,7 @@ export default function D2ModMaker() {
               },
             ]}
             valueLabelDisplay="on"
-            onChange={(e, n) => setState({ ...state, MonsterDensity: n })}
+            onChange={(e, n) => setState({ ...state, IncreaseMonsterDensity: n })}
           />
         </Grid>
       </React.Fragment>
@@ -475,7 +493,7 @@ export default function D2ModMaker() {
         <Grid container>
           <Grid item xs={4}>
             {mkRandoCheckbox({
-              key: "AllowDuplicateProps",
+              key: "AllowDupProps",
               tooltip:
                 "If turned off, prevents the same prop from being placed on an item more than once. e.g. two instances of all resist will not get stacked on the same randomized item.",
             })}
@@ -566,24 +584,52 @@ export default function D2ModMaker() {
     );
   };
 
-  console.log(state);
   return (
     <div className="D2ModMakerContainer">
-      <Grid container alignItems={"center"} className={"HeaderText"}>
+      <Grid container alignItems={"center"} className={"HeaderText MainHeader"}>
         <Badge badgeContent={state.Version} color="primary">
           <Typography variant={"h2"}>D2 Mod Maker</Typography>
         </Badge>
       </Grid>
-      <Button
-        variant="contained"
-        color="primary"
-        className={"run-btn"}
-        onClick={() => {
-          makeRunRequest(state);
-        }}
+      <ButtonGroup
+        size="large" color="primary" aria-label="large outlined primary button group"
+        fullWidth={true}
+        className="btns"
       >
-        Run
+        <Button
+          onClick={async () => {
+            let cfg = await loadConfig();
+            console.log(cfg);
+            setState({ ...cfg });
+          }}
+        >
+          Load Config
+        </Button>
+        <Button
+          onClick={() => saveConfig(state)}
+        >
+          Save Config
+        </Button>
+        <Button
+          onClick={() => makeRunRequest(state)}
+        >
+          Run
+        </Button>
+      </ButtonGroup>
+      {/* <Grid container spacing={10}>
+        <Grid item xs={4}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={"run-btn"}
+            onClick={() => {
+              makeRunRequest(state);
+            }}
+          >
+            Run
       </Button>
+        </Grid> */}
+
       <div className={"D2ModMakerContainerInner"}>
         {divider()}
         <Grid container>{randomOptions()}</Grid>
@@ -598,7 +644,7 @@ export default function D2ModMaker() {
         {divider()}
         {/*<pre id={"state"}>{JSON.stringify(state, null, 2)}</pre>*/}
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -651,6 +697,22 @@ async function makeRunRequest(data) {
 
   await axios
     .post("http://localhost:8148/api/run", data, { headers })
+    .then((response) => {
+      console.log("Success ========>", response);
+    })
+    .catch((error) => {
+      console.log("Error ========>", error);
+    });
+}
+
+function saveConfig(data) {
+  console.log(data);
+  const headers = {
+    "Content-Type": "text/plain",
+  };
+
+  axios
+    .post("http://localhost:8148/api/cfg", data, { headers })
     .then((response) => {
       console.log("Success ========>", response);
     })
