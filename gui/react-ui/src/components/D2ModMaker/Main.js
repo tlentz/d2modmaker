@@ -60,6 +60,14 @@ export default function D2ModMaker() {
     return data;
   }
 
+  useEffect(() => {
+    async function fetchData() {
+      let data = await loadConfig();
+      setState(data);
+    }
+    fetchData();
+  }, [])
+
   const updateRandomOptions = (oldState, key, val) => {
     let randomOptions = oldState.RandomOptions;
     randomOptions[key] = val;
