@@ -116,6 +116,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 5. Save Config
 6. Run
 
+**NOTE** The d2modmaker binary must be in the same directory as the `cfg.json`, and both the `templates` and `react-ui` folders.
+
 **NOTE** `Load Config` will read the `cfg.json` in the same directory as the d2modmaker binary into the UI.
 
 **NOTE** `Save Config` will write `cfg.json` to the same directory as the d2modmaker binary
