@@ -32,15 +32,15 @@ jobs:
       with:
         path: ./src/github.com/${{ github.repository }}
     - name: "Version Number" 
-        uses: pCYSl5EDgo/cat@master
-        id: version
-        with:
+      uses: pCYSl5EDgo/cat@master
+      id: version
+      with:
           path: ./src/github.com/${{ github.repository }}/VERSION.txt
     - run: echo $TEXT
-        env:
+      env:
           TEXT: ${{ steps.version.outputs.text }}
     - name: Build
-        run: cd ./src/github.com/${{ github.repository }} && bin/build
+      run: cd ./src/github.com/${{ github.repository }} && bin/build
     - name: Archive
       uses: papeloto/action-zip@v1
       with:
