@@ -117,7 +117,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 6. Run
 
 **NOTE** `Load Config` will read the `cfg.json` in the same directory as the d2modmaker binary into the UI.
+
 **NOTE** `Save Config` will write `cfg.json` to the same directory as the d2modmaker binary
+
 **NOTE** `Run` will run the program with the current `cfg.json` loaded into the UI.  If you want to save the cfg that you just ran, you need to press `Save Config`
 
 # Support
@@ -134,7 +136,7 @@ Thanks!
 
 # Change Log
 
-## Coming Soon!
+## v0.5.0
 * Randomization has been reworked. Old seeds are invalidated.
 * Refactors IsBalanced mode
    * Now item properties are selected from items up to 10 levels above
