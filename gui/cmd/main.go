@@ -80,6 +80,8 @@ func main() {
 	})
 
 	r.HandleFunc("/api/run", api.RunHandler()).Methods("POST")
+	r.HandleFunc("/api/cfg", api.GetConfigHandler()).Methods("GET")
+	r.HandleFunc("/api/cfg", api.SaveConfigHandler()).Methods("POST")
 
 	// This will serve files under http://localhost:<port>/static/<filename>
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticPath))))
