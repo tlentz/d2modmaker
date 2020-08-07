@@ -5,7 +5,7 @@
 
 # D2 Mod Maker
 
-![D2_Mod_Logo_V4.png](/images/D2_Mod_Logo_V4.png)
+![D2_Mod_Logo_V3.png](/images/D2_Mod_Logo_V3.png)
 
 The idea behind this project is to play Diablo II the way that you want to play.  Every option in the `ModConfig` is optional.
 
