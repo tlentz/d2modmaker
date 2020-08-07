@@ -3,9 +3,11 @@
 <a href="https://www.buymeacoffee.com/tlentz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
 
-# D2 Mod Maker
+<p align="center">
+  <img width="400" height="400" src="/images/D2_Mod_Logo_V3.png">
+</p>
 
-![D2_Mod_Logo_V3.png](/images/D2_Mod_Logo_V3.png)
+# D2 Mod Maker
 
 The idea behind this project is to play Diablo II the way that you want to play.  Every option in the `ModConfig` is optional.
 
