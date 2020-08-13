@@ -291,7 +291,11 @@ func randomizeGemAndRuneProps(s scrambler) {
 
 func shuffleGemsByColor(s scrambler) {
 	f := s.d2files.Get(s.fileName)
-	origRows := f.Rows
+	origRows := make([][]string, len(f.Rows))
+	for i := range origRows {
+		origRows[i] = make([]string, len(f.Rows[i]))
+		copy(origRows[i], f.Rows[i])
+	}
 
 	// 5 rows = 1 color
 	// 7 colors total
@@ -307,7 +311,11 @@ func shuffleGemsByColor(s scrambler) {
 
 func shuffleGemsByTier(s scrambler) {
 	f := s.d2files.Get(s.fileName)
-	origRows := f.Rows
+	origRows := make([][]string, len(f.Rows))
+	for i := range origRows {
+		origRows[i] = make([]string, len(f.Rows[i]))
+		copy(origRows[i], f.Rows[i])
+	}
 
 	// 5 rows = 1 color
 	// 7 colors total
@@ -328,7 +336,11 @@ func shuffleGemsByTier(s scrambler) {
 
 func shuffleRuneProperties(s scrambler) {
 	f := s.d2files.Get(s.fileName)
-	origRows := f.Rows
+	origRows := make([][]string, len(f.Rows))
+	for i := range origRows {
+		origRows[i] = make([]string, len(f.Rows[i]))
+		copy(origRows[i], f.Rows[i])
+	}
 
 	const firstRuneRow = 36
 	const lastRuneRow = 68
