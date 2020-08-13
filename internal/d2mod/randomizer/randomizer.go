@@ -282,7 +282,8 @@ func randomizeGemAndRuneProps(s scrambler) {
 	s.propOffset = gems.NumMods
 
 	// do gem shuffle by category/color
-	shuffleGemsByColor(s)
+	//shuffleGemsByColor(s)
+	shuffleGemsByTier(s)
 
 	// shuffle rune properties
 	shuffleRuneProperties(s)
@@ -300,6 +301,27 @@ func shuffleGemsByColor(s scrambler) {
 	for i, o := range order {
 		for j := 0; j < 5; j++ {
 			swapGemPropertiesFromCache(s, f, origRows, (i*5)+j, (o*5)+j)
+		}
+	}
+}
+
+func shuffleGemsByTier(s scrambler) {
+	f := s.d2files.Get(s.fileName)
+	origRows := f.Rows
+
+	// 5 rows = 1 color
+	// 7 colors total
+	order := [][]int{makeRange(0, 6), makeRange(0, 6), makeRange(0, 6), makeRange(0, 6), makeRange(0, 6)}
+
+	// each tier has their own order
+	for tier := 0; tier < len(order); tier++ {
+		rand.Shuffle(len(order[tier]), func(i, j int) { order[tier][i], order[tier][j] = order[tier][j], order[tier][i] })
+	}
+
+	// progresses sequentially through 7 chips, then 7 flawed, etc.
+	for i, o := range order {
+		for j := 0; j < 7; j++ {
+			swapGemPropertiesFromCache(s, f, origRows, (j*5)+i, (o[j]*5)+i)
 		}
 	}
 }
