@@ -144,6 +144,11 @@ Thanks!
 
 # Change Log
 
+
+## v0.5.1
+
+* Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
+
 ## v0.5.0
 * Randomization has been reworked. Old seeds are invalidated.
 * Refactors IsBalanced mode
