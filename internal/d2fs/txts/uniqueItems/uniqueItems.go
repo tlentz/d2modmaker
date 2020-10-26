@@ -7,6 +7,13 @@ const (
 	MaxNumProps = 12
 )
 
+// Misc Names
+const (
+	Gheed = "Gheed's Fortune"
+	Anni  = "Annihilus"
+	Torch = "Hellfire Torch"
+)
+
 // Header Indexes
 const (
 	Index        = 0
