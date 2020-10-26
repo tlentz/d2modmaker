@@ -36,7 +36,16 @@ func AllowKingKill(d2files d2fs.Files) {
 		name := row[superUniques.Name]
 
 		if name == superUniques.CowKing {
-			suF.Rows[idx][superUniques.HcIdx] = "1"
+			tmp2 := make([]string, len(row))
+			// copy row to tmp2
+			copy(tmp2, row)
+			// rename things to make a fake CowKing
+			tmp2[superUniques.Class] = "bunny"
+			tmp2[superUniques.Superunique] = "The Fake King"
+			tmp2[superUniques.Name] = "The Fake King"
+			suF.Rows = append(suF.Rows, tmp2)
+			// change the True King ID
+			suF.Rows[idx][superUniques.HcIdx] = "66"
 		}
 	}
 }

@@ -5,6 +5,7 @@ on:
     branches:
       - tlentz/**
       - dl/**
+      - wraith/**
 
 jobs:
   build:
