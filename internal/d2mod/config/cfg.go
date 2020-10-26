@@ -21,39 +21,45 @@ type RandomOptions struct {
 
 // data is the configuration used to build the mod
 type Data struct {
-	Version                string        `json:"Version"`
-	SourceDir              string        `json:"SourceDir"`
-	OutputDir              string        `json:"OutputDir"`
-	MeleeSplash            bool          `json:"MeleeSplash"`
-	IncreaseStackSizes     bool          `json:"IncreaseStackSizes"`
-	IncreaseMonsterDensity float64       `json:"IncreaseMonsterDensity"`
-	EnableTownSkills       bool          `json:"EnableTownSkills"`
-	NoDropZero             bool          `json:"NoDropZero"`
-	QuestDrops             bool          `json:"QuestDrops"`
-	UniqueItemDropRate     float64       `json:"UniqueItemDropRate"`
-	RuneDropRate           float64       `json:"RuneDropRate"`
-	StartWithCube          bool          `json:"StartWithCube"`
-	Cowzzz                 bool          `json:"Cowzzz"`
-	EnterToExit            bool          `json:"EnterToExit"`
-	RandomOptions          RandomOptions `json:"RandomOptions"`
+	Version                 string        `json:"Version"`
+	SourceDir               string        `json:"SourceDir"`
+	OutputDir               string        `json:"OutputDir"`
+	MeleeSplash             bool          `json:"MeleeSplash"`
+	IncreaseStackSizes      bool          `json:"IncreaseStackSizes"`
+	IncreaseMonsterDensity  float64       `json:"IncreaseMonsterDensity"`
+	EnableTownSkills        bool          `json:"EnableTownSkills"`
+	NoDropZero              bool          `json:"NoDropZero"`
+	QuestDrops              bool          `json:"QuestDrops"`
+	UniqueItemDropRate      float64       `json:"UniqueItemDropRate"`
+	RuneDropRate            float64       `json:"RuneDropRate"`
+	StartWithCube           bool          `json:"StartWithCube"`
+	Cowzzz                  bool          `json:"Cowzzz"`
+	RemoveLevelRequirements bool          `json:"RemoveLevelRequirements"`
+	RemoveAttRequirements   bool          `json:"RemoveAttRequirements"`
+	RemoveUniqCharmLimit    bool          `json:"RemoveUniqCharmLimit"`
+	EnterToExit             bool          `json:"EnterToExit"`
+	RandomOptions           RandomOptions `json:"RandomOptions"`
 }
 
 func DefaultData() Data {
 	return Data{
-		Version:                "v0.5.0",
-		SourceDir:              "",
-		OutputDir:              "",
-		MeleeSplash:            true,
-		IncreaseStackSizes:     true,
-		IncreaseMonsterDensity: 1,
-		EnableTownSkills:       true,
-		NoDropZero:             true,
-		QuestDrops:             true,
-		UniqueItemDropRate:     1,
-		RuneDropRate:           1,
-		StartWithCube:          true,
-		Cowzzz:                 true,
-		EnterToExit:            false,
+		Version:                 "v0.6.0",
+		SourceDir:               "",
+		OutputDir:               "",
+		MeleeSplash:             true,
+		IncreaseStackSizes:      true,
+		IncreaseMonsterDensity:  1,
+		EnableTownSkills:        true,
+		NoDropZero:              true,
+		QuestDrops:              true,
+		UniqueItemDropRate:      1,
+		RuneDropRate:            1,
+		StartWithCube:           true,
+		Cowzzz:                  true,
+		RemoveLevelRequirements: false,
+		RemoveAttRequirements:   false,
+		RemoveUniqCharmLimit:    false,
+		EnterToExit:             false,
 		RandomOptions: RandomOptions{
 			Randomize:         true,
 			UseSeed:           false,

@@ -144,6 +144,13 @@ Thanks!
 
 # Change Log
 
+## v0.6.0 
+
+* Adds new feature `RemoveLevelRequirements` - Removes level requirements from items (Level requirements from Oskills on items still apply!).
+* Adds new feature `RemoveAttRequirements` - Removes attribute (str/dex) requirements from items.
+* Adds new feature `RemoveUniqCharmLimit` - Removes limit of 1 Annihilus/Torch/Gheed's in inventory.
+
+* Cowzzz fix from v0.5.1 may not work properly, it's still being tested. We recommend to use PlugY for that.
 
 ## v0.5.1
 

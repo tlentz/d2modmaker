@@ -3,6 +3,7 @@ package qol
 import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/charStats"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 )
 
 func StartWithCube(d2files d2fs.Files) {
@@ -18,4 +19,16 @@ func StartWithCube(d2files d2fs.Files) {
 			}
 		}
 	}
+}
+
+func RemoveUniqCharmLimit(d2files d2fs.Files) {
+
+	uniqtxt := d2files.Get(uniqueItems.FileName)
+	for i := range uniqtxt.Rows {
+		name := uniqtxt.Rows[i][uniqueItems.Index]
+		if name == uniqueItems.Anni || name == uniqueItems.Torch || name == uniqueItems.Gheed {
+			uniqtxt.Rows[i][uniqueItems.Carry1] = ""
+		}
+	}
+
 }
