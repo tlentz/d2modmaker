@@ -72,30 +72,30 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
-#### RandomOptions `RandomOptions`
-##### Randomize `bool`
+## RandomOptions `RandomOptions`
+#### Randomize `bool`
 * Will randomize if set to true
-##### Seed `int`
+#### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
-##### IsBalanced `bool`
+#### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
-##### AllowDuplicateProps `bool`
+#### AllowDuplicateProps `bool`
 * If this value is false, the same prop type will not be placed on an item twice
 * E.g. two instances of all resist will not get stacked on the same randomized item
-##### BalancedPropCount `bool`
+#### BalancedPropCount `bool`
 * Pick prop count on items based on counts from vanilla items
 * Picks from items up to 10 levels higher when randomizing
 * Enabling this setting will make MinProps and MaxProps unused
-##### MinProps `int`
+#### MinProps `int`
 * Minimum number of non blank props that spawn on an item
 * Set to `-1` to omit
-##### MaxProps `int`
+#### MaxProps `int`
 * Maximum number of non blank props that spawn on an item
 * Set to `-1` to omit
-##### UseOSkills `bool`
+#### UseOSkills `bool`
 * Will change class only skills to oskills
-##### PerfectProps `bool`
+#### PerfectProps `bool`
 * All props will have the max value for min/max values
 
 # Screenshots
