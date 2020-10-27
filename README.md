@@ -30,73 +30,73 @@ This should be compatible with PlugY and other things such as:
 The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
 
 ## ModConfig Options
-* **SourceDir** `string`
-    * Specifies the directory the source text files are read from
-    * If this is omitted, or set to "", the built-in 113c data files will be used. 
-* **IncreaseStackSizes** `bool`
-    * Increases book of tp to 100
-    * Increases book of id to 100
-    * Increases arrows maxstack to 511
-    * Increases bolts maxstack to 511
-    * Increases key stack sizes to 100
-* **IncreaseMonsterDensity** `float`
-    * Will increase the density of all areas by the given multiplier
-    * `MAX: 30.0`
-    * `MIN: 0.0`
-    * Set to `-1` to omit
-* **EnableTownSkills** `bool`
-    * Enables all skills in town
-* **NoDropZero** `bool`
-    * Sets "NoDrop" = 0 (Monsters will always drop items)
-* **QuestDrops** `bool`
-    * Enables quest drops for boss kills always
-* **UniqueItemDropRate** `float`
-    * Will increase the rate in which uniques/sets drop
-    * When using this setting, high values will prevent some monsters from dropping set items.
-        * Act bosses at approximately 10
-        * Mini bosses at approximately 85
-        * Other special monsters at approximately 200
-        * All other monsters at approximately 450
-    * Set to `-1` to omit
-* **RuneDropRate** `float`
-    * Valid values are from 1 (vanilla drop rate) - 100 (even chance for all runes)
-    * Does not change the maximum rune any enemy can drop.
-    * Scales exponetially:
-        * Each increase of 1 raises the drop rate of the highest runes by ~5% cumulatively
-        * E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
-* **StartWithCube** `bool`
-    * Characters will start with cube when created
+#### SourceDir `string`
+* Specifies the directory the source text files are read from
+* If this is omitted, or set to "", the built-in 113c data files will be used. 
+#### IncreaseStackSizes `bool`
+* Increases book of tp to 100
+* Increases book of id to 100
+* Increases arrows maxstack to 511
+* Increases bolts maxstack to 511
+* Increases key stack sizes to 100
+#### IncreaseMonsterDensity `float`
+* Will increase the density of all areas by the given multiplier
+* `MAX: 30.0`
+* `MIN: 0.0`
+* Set to `-1` to omit
+#### EnableTownSkills `bool`
+* Enables all skills in town
+#### NoDropZero `bool`
+* Sets "NoDrop" = 0 (Monsters will always drop items)
+#### QuestDrops `bool`
+* Enables quest drops for boss kills always
+#### UniqueItemDropRate `float`
+* Will increase the rate in which uniques/sets drop
+* When using this setting, high values will prevent some monsters from dropping set items.
+* Act bosses at approximately 10
+* Mini bosses at approximately 85
+* Other special monsters at approximately 200
+* All other monsters at approximately 450
+* Set to `-1` to omit
+#### RuneDropRate `float`
+* Valid values are from 1 (vanilla drop rate) - 100 (even chance for all runes)
+* Does not change the maximum rune any enemy can drop.
+* Scales exponetially:
+* Each increase of 1 raises the drop rate of the highest runes by ~5% cumulatively
+	* E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
+#### StartWithCube `bool`
+* Characters will start with cube when created
 * **Cowzzz** `bool`
-    * Enables ability to kill cow king and still make cow portal
-    * Adds ability to cube 1 town portal scroll to make the cow portal
-* **EnterToExit** `bool`
-    * If this is true, this will require the user to press enter to close the program
-    * If false, it will not prompt user input
-* **RandomOptions** `RandomOptions`
-    * **Randomize** `bool`
-        * Will randomize if set to true
-    * **Seed** `int`
-        * Will use this seed for randomization
-        * Set to `-1` to generate a random seed
-    * **IsBalanced** `bool`
-        * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
-    * **AllowDuplicateProps** `bool`
-        * If this value is false, the same prop type will not be placed on an item twice
-        * E.g. two instances of all resist will not get stacked on the same randomized item
-    * **BalancedPropCount** `bool`
-        * Pick prop count on items based on counts from vanilla items
-        * Picks from items up to 10 levels higher when randomizing
-        * Enabling this setting will make MinProps and MaxProps unused
-    * **MinProps** `int`
-        * Minimum number of non blank props that spawn on an item
-        * Set to `-1` to omit
-    * **MaxProps** `int`
-        * Maximum number of non blank props that spawn on an item
-        * Set to `-1` to omit
-    * **UseOSkills** `bool`
-        * Will change class only skills to oskills
-    * **PerfectProps** `bool`
-        * All props will have the max value for min/max values
+* Enables ability to kill cow king and still make cow portal
+* Adds ability to cube 1 town portal scroll to make the cow portal
+#### EnterToExit `bool`
+* If this is true, this will require the user to press enter to close the program
+* If false, it will not prompt user input
+#### RandomOptions `RandomOptions`
+##### Randomize `bool`
+* Will randomize if set to true
+##### Seed `int`
+* Will use this seed for randomization
+* Set to `-1` to generate a random seed
+##### IsBalanced `bool`
+* Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
+##### AllowDuplicateProps `bool`
+* If this value is false, the same prop type will not be placed on an item twice
+* E.g. two instances of all resist will not get stacked on the same randomized item
+##### BalancedPropCount `bool`
+* Pick prop count on items based on counts from vanilla items
+* Picks from items up to 10 levels higher when randomizing
+* Enabling this setting will make MinProps and MaxProps unused
+##### MinProps `int`
+* Minimum number of non blank props that spawn on an item
+* Set to `-1` to omit
+##### MaxProps `int`
+* Maximum number of non blank props that spawn on an item
+* Set to `-1` to omit
+##### UseOSkills `bool`
+* Will change class only skills to oskills
+##### PerfectProps `bool`
+* All props will have the max value for min/max values
 
 # Screenshots
 ### Nagel
