@@ -70,11 +70,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Enables ability to kill cow king and still make cow portal
 * Adds ability to cube 1 town portal scroll to make the cow portal
 #### RemoveLevelRequirements `bool`
-    * Removes level requirements from items. (Oskill level requirements still apply!)
+* Removes level requirements from items. (Oskill level requirements still apply!)
 #### RemoveAttRequirements** `bool`
-    * Removes attribute requirements from items.
+* Removes attribute requirements from items.
 #### RemoveUniqCharmLimit** `bool`
-    * Allows to carry more than 1 unique charm of the same type.
+* Allows to carry more than 1 unique charm of the same type.
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
