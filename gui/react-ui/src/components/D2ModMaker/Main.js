@@ -16,12 +16,12 @@ import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import { set } from "lodash";
+
 const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.0",
+  Version: "v0.5.1",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -34,6 +34,9 @@ const defaultCfg = {
   RuneDropRate: 1,
   StartWithCube: true,
   Cowzzz: true,
+  RemoveLevelRequirements: false,
+  RemoveAttRequirements: false,
+  RemoveUniqCharmLimit: false,
   EnterToExit: false,
   RandomOptions: {
     Randomize: true,
@@ -55,7 +58,7 @@ export default function D2ModMaker() {
   async function loadConfig() {
     const result = await axios("http://localhost:8148/api/cfg")
     var data = _.merge(defaultCfg, result.data);
-    var data = result.data;
+    data = result.data;
     data.Version = defaultCfg.Version;
     return data;
   }
@@ -193,6 +196,33 @@ export default function D2ModMaker() {
                 "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack sizes to 100.",
             })}
           </Grid>
+
+          <Grid item xs={6}>
+            {mkCheckbox({
+              key: "RemoveLevelRequirements",
+              tooltip:
+                "Removes level requirements from items.",
+            })}
+          </Grid>
+
+          <Grid item xs={6}>
+            {mkCheckbox({
+              key: "RemoveAttRequirements",
+              tooltip:
+                "Removes stat requirements from items.",
+            })}
+          </Grid>
+
+          <Grid item xs={6}>
+            {mkCheckbox({
+              key: "RemoveUniqCharmLimit",
+              tooltip:
+                "Removes unique charm limit in inventory.",
+            })}
+          </Grid>
+
+
+
         </Grid>
       </Grid>
     );

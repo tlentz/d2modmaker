@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.0",
+    "Version": "v0.5.1",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -12,6 +12,9 @@
     "RuneDropRate": 1,
     "StartWithCube": true,
     "Cowzzz": true,
+    "RemoveLevelRequirements": false,
+	"RemoveAttRequirements":   false,
+	"RemoveUniqCharmLimit":    false,
     "EnterToExit": true,
     "RandomOptions": {
         "Randomize": true,
