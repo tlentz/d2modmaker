@@ -66,9 +66,15 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 	* E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
 #### StartWithCube `bool`
 * Characters will start with cube when created
-* **Cowzzz** `bool`
+#### Cowzzz `bool`
 * Enables ability to kill cow king and still make cow portal
 * Adds ability to cube 1 town portal scroll to make the cow portal
+#### RemoveLevelRequirements `bool`
+* Removes level requirements from items. (Oskill level requirements still apply!)
+#### RemoveAttRequirements** `bool`
+* Removes attribute requirements from items.
+#### RemoveUniqCharmLimit** `bool`
+* Allows to carry more than 1 unique charm of the same type.
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
@@ -148,6 +154,12 @@ Thanks!
 ## v0.5.1
 
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
+* Adds new feature `RemoveLevelRequirements`
+    * Removes level requirements from items (Oskill level requirements still apply!).
+* Adds new feature `RemoveAttRequirements` 
+    * Removes attribute requirements from items.
+* Adds new feature `RemoveUniqCharmLimit`
+    * Allows to carry more than 1 unique charm of the same type.
 
 ## v0.5.0
 * Randomization has been reworked. Old seeds are invalidated.

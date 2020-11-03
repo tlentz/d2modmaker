@@ -3,7 +3,7 @@ package charStats
 // File Constants
 const (
 	FileName   = "CharStats.txt"
-	NumColumns = 41
+	NumColumns = 79
 )
 
 // Header Indexes
