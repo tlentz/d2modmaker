@@ -80,6 +80,9 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 	defaultCfg.UseOSkills = cfg.RandomOptions.UseOSkills
 
 	cfg.RandomOptions.Seed = defaultCfg.Seed
+
+	defaultCfg.BalancedPropCount = cfg.RandomOptions.BalancedPropCount
+
 	return defaultCfg
 }
 

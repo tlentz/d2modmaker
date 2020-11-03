@@ -160,6 +160,7 @@ Thanks!
     * Removes attribute requirements from items.
 * Adds new feature `RemoveUniqCharmLimit`
     * Allows to carry more than 1 unique charm of the same type.
+* Fix for BalancedPropCount not applying
 
 ## v0.5.0
 * Randomization has been reworked. Old seeds are invalidated.
