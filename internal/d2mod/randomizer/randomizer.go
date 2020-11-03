@@ -83,6 +83,7 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 
 	defaultCfg.BalancedPropCount = cfg.RandomOptions.BalancedPropCount
 
+	defaultCfg.PreserveVanilla = cfg.RandomOptions.PreserveVanilla
 	return defaultCfg
 }
 
@@ -215,6 +216,14 @@ func randomizeSetProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
 	s.lvl = sets.Level
 	scramble(s)
+	if s.opts.PreserveVanilla {
+		f := s.d2files.Get(s.fileName);
+		for _, row := range f.Rows[len(f.Rows)/2:len(f.Rows)] {
+			if row[1] != "" {
+				row[1] = row[1] + " R"
+			}
+		}
+	}
 }
 
 // Get Set Items Props
@@ -234,6 +243,16 @@ func randomizeSetItemsProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, setItems.MaxNumProps)
 	s.lvl = setItems.Lvl
 	scramble(s)
+	
+	if s.opts.PreserveVanilla {
+		f := s.d2files.Get(s.fileName);
+		for _, row := range f.Rows[len(f.Rows)/2:len(f.Rows)] {
+			if row[1] != "" {
+				row[1] = row[1] + " R"
+			}
+		}
+	}
+	
 }
 
 // Get RW Props
@@ -253,8 +272,14 @@ func randomizeRWProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, runes.MaxNumProps)
 
 	f := s.d2files.Get(runes.FileName)
+	
+	var arlen = len(f.Rows)
+	if s.opts.PreserveVanilla {
+		f.Rows = append(f.Rows,f.Rows...)
+	}
+	
 	miscLevels := getMiscItemLevels(s.d2files)
-	for idx, row := range f.Rows {
+	for idx, row := range f.Rows[0:arlen] {
 		level := getRunewordLevel(row, miscLevels)
 		scrambleRow(s, f, idx, level)
 	}
@@ -360,7 +385,13 @@ type minMaxProps struct {
 
 func scramble(s scrambler) {
 	f := s.d2files.Get(s.fileName)
-	for idx, row := range f.Rows {
+	var arlen = len(f.Rows)
+	if s.opts.PreserveVanilla {
+		newrows := make([][]string,len(f.Rows),len(f.Rows))
+		f.Rows = append(f.Rows,newrows...)
+		//fmt.Print(f.FileName + " "); fmt.Println(arlen)
+	}
+	for idx, row := range f.Rows[0:arlen] {
 		level := 0
 		rowLvl, err := strconv.Atoi(row[s.lvl])
 		if err == nil {
@@ -387,6 +418,24 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 
 	//map to track duplicate properties
 	propList := make(map[string]bool)
+	
+	var destidx = idx 
+	
+	if s.opts.PreserveVanilla {
+		destidx = (len(f.Rows) / 2)  + idx 
+		f.Rows[destidx] = make([]string,len(f.Rows[idx]))
+		// Deep copy the old row to the new row
+			// Quest items are level 0 items.  Don't clone them.
+		for idx2,col := range f.Rows[idx] {
+			if f.Rows[idx][6] == "0" {
+				f.Rows[destidx][idx2] = ""
+			} else {
+				f.Rows[destidx][idx2] = col
+			}
+		}
+		
+		f.Rows[destidx][0] = f.Rows[idx][0] + " R"
+	}
 
 	// fill in the props
 	for currentNumProps := 0; currentNumProps < s.itemMaxProps; currentNumProps++ {
@@ -407,10 +456,11 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 			}
 		}
 		i := s.propOffset + currentNumProps*4
-		f.Rows[idx][i] = prop.Name
-		f.Rows[idx][i+1] = prop.Par
-		f.Rows[idx][i+2] = prop.Min
-		f.Rows[idx][i+3] = prop.Max
+		f.Rows[destidx][i] = prop.Name
+		f.Rows[destidx][i+1] = prop.Par
+		f.Rows[destidx][i+2] = prop.Min
+		f.Rows[destidx][i+3] = prop.Max
+
 	}
 }
 
