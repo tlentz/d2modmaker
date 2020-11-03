@@ -16,7 +16,7 @@ import HelpOutlineOutlinedIcon from "@material-ui/icons/HelpOutlineOutlined";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import { set } from "lodash";
+
 const _ = require('lodash');
 const axios = require("axios");
 
@@ -58,7 +58,7 @@ export default function D2ModMaker() {
   async function loadConfig() {
     const result = await axios("http://localhost:8148/api/cfg")
     var data = _.merge(defaultCfg, result.data);
-    var data = result.data;
+    data = result.data;
     data.Version = defaultCfg.Version;
     return data;
   }
