@@ -6,6 +6,7 @@ on:
       - tlentz/**
       - dl/**
       - wraith/**
+      - obc/**
 
 jobs:
   build:
