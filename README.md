@@ -66,7 +66,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 	* E.g. Zod is 12.5x more common at 50 (1/418), and 156x (1/33) more common at 100.
 #### StartWithCube `bool`
 * Characters will start with cube when created
-#### Cowzzz** `bool`
+#### Cowzzz `bool`
 * Enables ability to kill cow king and still make cow portal
 * Adds ability to cube 1 town portal scroll to make the cow portal
 #### RemoveLevelRequirements `bool`
