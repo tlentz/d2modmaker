@@ -74,9 +74,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Adds ability to cube 1 town portal scroll to make the cow portal
 #### RemoveLevelRequirements `bool`
 * Removes level requirements from items. (Oskill level requirements still apply!)
-#### RemoveAttRequirements** `bool`
+#### RemoveAttRequirements `bool`
 * Removes attribute requirements from items.
-#### RemoveUniqCharmLimit** `bool`
+#### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
@@ -155,7 +155,6 @@ Thanks!
 
 
 ## v0.5.1
-
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
 * Adds new feature `RemoveLevelRequirements`
     * Removes level requirements from items (Oskill level requirements still apply!).
@@ -163,7 +162,7 @@ Thanks!
     * Removes attribute requirements from items.
 * Adds new feature `RemoveUniqCharmLimit`
     * Allows to carry more than 1 unique charm of the same type.
-* Fix for BalancedPropCount not applying
+* Fix for `BalancedPropCount` not applying
 
 ## v0.5.0
 * Randomization has been reworked. Old seeds are invalidated.
