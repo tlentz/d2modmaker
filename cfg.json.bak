@@ -4,12 +4,12 @@
     "OutputDir": "",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 3,
+    "IncreaseMonsterDensity": 1,
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 70,
-    "RuneDropRate": 70,
+    "UniqueItemDropRate": 1,
+    "RuneDropRate": 1,
     "StartWithCube": true,
     "Cowzzz": true,
     "RemoveLevelRequirements": false,
@@ -18,14 +18,14 @@
     "EnterToExit": true,
     "RandomOptions": {
         "Randomize": true,
-        "Seed": 1604444783207247207,
+        "Seed": 1604444783207247200,
         "IsBalanced": true,
         "BalancedPropCount": true,
         "AllowDuplicateProps": false,
-        "MinProps": 5,
+        "MinProps": 0,
         "MaxProps": 20,
         "UseOSkills": true,
-        "PerfectProps": true,
-        "NumClones": 1
+        "PerfectProps": false,
+	"PreserveVanilla": true
     }
 }

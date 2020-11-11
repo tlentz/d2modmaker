@@ -16,6 +16,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 
 	"github.com/tlentz/d2modmaker/internal/util"
+	"fmt"
 )
 
 // Prop represents an item affix
@@ -82,8 +83,9 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 	cfg.RandomOptions.Seed = defaultCfg.Seed
 
 	defaultCfg.BalancedPropCount = cfg.RandomOptions.BalancedPropCount
+	
+	defaultCfg.NumClones = cfg.RandomOptions.NumClones
 
-	defaultCfg.PreserveVanilla = cfg.RandomOptions.PreserveVanilla
 	return defaultCfg
 }
 
@@ -196,6 +198,8 @@ func randomizeUniqueProps(s scrambler) {
 	s.itemMaxProps = uniqueItems.MaxNumProps
 	s.minMaxProps = getMinMaxProps(s.opts, uniqueItems.MaxNumProps)
 	s.lvl = uniqueItems.Lvl
+	f := s.d2files.Get(s.fileName)
+	dupeTable(f, s.opts.NumClones)
 	scramble(s)
 }
 
@@ -216,14 +220,7 @@ func randomizeSetProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
 	s.lvl = sets.Level
 	scramble(s)
-	if s.opts.PreserveVanilla {
-		f := s.d2files.Get(s.fileName);
-		for _, row := range f.Rows[len(f.Rows)/2:len(f.Rows)] {
-			if row[1] != "" {
-				row[1] = row[1] + " R"
-			}
-		}
-	}
+
 }
 
 // Get Set Items Props
@@ -243,15 +240,6 @@ func randomizeSetItemsProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, setItems.MaxNumProps)
 	s.lvl = setItems.Lvl
 	scramble(s)
-	
-	if s.opts.PreserveVanilla {
-		f := s.d2files.Get(s.fileName);
-		for _, row := range f.Rows[len(f.Rows)/2:len(f.Rows)] {
-			if row[1] != "" {
-				row[1] = row[1] + " R"
-			}
-		}
-	}
 	
 }
 
@@ -273,13 +261,9 @@ func randomizeRWProps(s scrambler) {
 
 	f := s.d2files.Get(runes.FileName)
 	
-	var arlen = len(f.Rows)
-	if s.opts.PreserveVanilla {
-		f.Rows = append(f.Rows,f.Rows...)
-	}
 	
 	miscLevels := getMiscItemLevels(s.d2files)
-	for idx, row := range f.Rows[0:arlen] {
+	for idx, row := range f.Rows {
 		level := getRunewordLevel(row, miscLevels)
 		scrambleRow(s, f, idx, level)
 	}
@@ -382,16 +366,44 @@ type minMaxProps struct {
 	minNumProps int
 	maxNumProps int
 }
+// dupeTable: Creates a copy of the table N time, with several exceptions
+// - Quest items should not be duped
+// TODO: In the future if we have patchstring.tbl support we could use new names instead of copying the old names.
+func dupeTable(f *d2fs.File, numClones int) {
+	if (numClones > 10)  || (numClones < 0) {
+		numClones = 0
+		return
+	}
+	fmt.Printf("NumClones=%d\n", numClones)
+	//f := s.d2files.Get(s.fileName)
+	// Deep copy the old row to the new row
+	fmt.Printf("#rows before = %d\n",len(f.Rows[0]))
+	originalLength := len(f.Rows)
+	newrows := make([][]string,originalLength * numClones,originalLength * numClones)
+	f.Rows = append(f.Rows,newrows...)
+	fmt.Printf("#rows after = %d\n", len(f.Rows))
+	for i := 0; i < numClones; i++ {
+		for j := 0; j < originalLength; j++ {
+			fmt.Printf("OrigLen = %d\n",originalLength)
+			var destidx = (originalLength)  + i * originalLength + j
+			fmt.Printf("%d ", destidx)
+			f.Rows[destidx] = make([]string,len(f.Rows[j]))
+			for idx2,col := range f.Rows[j] {
+				f.Rows[destidx][idx2] = col
+			}
+			// Copy the name.
+			if f.Rows[j][6] == "0" {
+				// Quest items are level 0 items.  Don't clone them, make them be blank lines.
+				fmt.Printf("%s", f.Rows[j][0])
+				f.Rows[destidx][0] = "" // f.Rows[j][0]
+			}
+		}
+	}
 
+}
 func scramble(s scrambler) {
 	f := s.d2files.Get(s.fileName)
-	var arlen = len(f.Rows)
-	if s.opts.PreserveVanilla {
-		newrows := make([][]string,len(f.Rows),len(f.Rows))
-		f.Rows = append(f.Rows,newrows...)
-		//fmt.Print(f.FileName + " "); fmt.Println(arlen)
-	}
-	for idx, row := range f.Rows[0:arlen] {
+	for idx, row := range f.Rows {
 		level := 0
 		rowLvl, err := strconv.Atoi(row[s.lvl])
 		if err == nil {
@@ -402,6 +414,12 @@ func scramble(s scrambler) {
 }
 
 func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
+
+	if f.Rows[idx][1] == "" {
+		// Don't run scrambler on row dividers
+		return
+	}
+
 	//Choose a random number of props between min and max
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 
@@ -421,21 +439,6 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 	
 	var destidx = idx 
 	
-	if s.opts.PreserveVanilla {
-		destidx = (len(f.Rows) / 2)  + idx 
-		f.Rows[destidx] = make([]string,len(f.Rows[idx]))
-		// Deep copy the old row to the new row
-			// Quest items are level 0 items.  Don't clone them.
-		for idx2,col := range f.Rows[idx] {
-			if f.Rows[idx][6] == "0" {
-				f.Rows[destidx][idx2] = ""
-			} else {
-				f.Rows[destidx][idx2] = col
-			}
-		}
-		
-		f.Rows[destidx][0] = f.Rows[idx][0] + " R"
-	}
 
 	// fill in the props
 	for currentNumProps := 0; currentNumProps < s.itemMaxProps; currentNumProps++ {
@@ -474,9 +477,14 @@ func (p *Prop) getId() string {
 	}
 }
 
+// Beware: min <= randint < max   i.e. never returns max
 func randInt(min int, max int) int {
 	if min == max {
 		return min
 	}
 	return min + rand.Intn(max-min)
+}
+
+func shutupcompiler() {
+	fmt.Printf("")	// so compiler doesn't whine about having import fmt and not using it
 }

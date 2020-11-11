@@ -17,7 +17,7 @@ type RandomOptions struct {
 	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
 	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
 	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
-	PreserveVanilla   bool  `json:"PreserveVanilla"`     // Keep vanilla.  Randomize duplicate of existing rows instead of scrambling.
+	NumClones		  int   `json:"NumClones"`           // # of times to copy all rows in the table before randomizing props
 }
 
 // data is the configuration used to build the mod
@@ -44,7 +44,7 @@ type Data struct {
 
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.1",
+		Version:                 "v0.5.2",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -72,7 +72,7 @@ func DefaultData() Data {
 			MaxProps:          20,
 			PerfectProps:      false,
 			UseOSkills:        true,
-			PreserveVanilla:    true,
+			NumClones:         10,
 		},
 	}
 }
