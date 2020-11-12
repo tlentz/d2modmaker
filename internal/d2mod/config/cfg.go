@@ -72,7 +72,7 @@ func DefaultData() Data {
 			MaxProps:          20,
 			PerfectProps:      false,
 			UseOSkills:        true,
-			NumClones:         10,
+			NumClones:         9,		// Max for unqiues is 9. (can't go over 4096 lines)
 		},
 	}
 }

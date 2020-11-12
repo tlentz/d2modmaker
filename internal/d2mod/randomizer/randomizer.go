@@ -243,19 +243,21 @@ func getAllSetItemsProps(p propGetter) (Props, Items) {
 func randomizeSetItemsProps(s scrambler) {
 	s.fileName = setItems.FileName
 	s.propOffset = setItems.Prop1
-	s.itemMaxProps = 9							// TODO: Fix this hardcoding by changing setItems.go
+	s.itemMaxProps = 9							// OBC: TODO: Fix this hardcoding by changing setItems.go
 	s.minMaxProps = getMinMaxProps(s.opts, 9)
 	s.lvl = setItems.Lvl
 
-	f := s.d2files.Get(s.fileName)
-	dupeTable(f, s.opts.NumClones)
+	// OBC: The problem with dupeTable for sets is that if you
+	// ever reduce NumClones, existing items will disappear.
+	//f := s.d2files.Get(s.fileName)
+	//dupeTable(f, s.opts.NumClones)
 
 	scramble(s)
 
 	s.propOffset = setItems.AProp1a
 	s.itemMaxProps = 10
 	s.minMaxProps = getMinMaxProps(s.opts, 10) // (AProp1-AProp5) * 2 (a & b)
-	scramble(s)	// OBC:  This call to scramble should always generate 10 props even if balancedpropcount is on.
+	scramble(s)	// OBC:  It would be nice if this call to scramble would always generate 10 props even if balancedpropcount is on.
 	
 }
 
@@ -390,8 +392,8 @@ func dupeTable(f *d2fs.File, numClones int) {
 		numClones = 0
 		return
 	}
-	if (len(f.Rows) * numClones) > 4090 {		// Limit for any file is 4095 rows
-		numClones = int(len(f.Rows) / 4090)
+	if (len(f.Rows) * (numClones + 1)) > 4090 {		// Limit for any file is 4095 rows
+		numClones = int(4090 / len(f.Rows)) - 1
 		fmt.Printf("NumClones too large, clamped to %d\n", numClones)
 	}
 	// Deep copy the old row to the new clone row
@@ -415,6 +417,9 @@ func dupeTable(f *d2fs.File, numClones int) {
 	}
 
 }
+
+// blankprops:
+// 		Blanks all properties pointed to by the scrambler structure.
 func blankprops(s scrambler) {
 	var nblanked = 0
 	f := s.d2files.Get(s.fileName)
@@ -427,10 +432,9 @@ func blankprops(s scrambler) {
 			row[i+3] = ""
 			nblanked++
 		}
-
 	}
-	//fmt.Printf("%d props blanked\n", nblanked)
 }
+
 func scramble(s scrambler) {
 	f := s.d2files.Get(s.fileName)
 	for idx, row := range f.Rows {
