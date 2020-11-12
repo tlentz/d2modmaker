@@ -198,8 +198,10 @@ func randomizeUniqueProps(s scrambler) {
 	s.itemMaxProps = uniqueItems.MaxNumProps
 	s.minMaxProps = getMinMaxProps(s.opts, uniqueItems.MaxNumProps)
 	s.lvl = uniqueItems.Lvl
+
 	f := s.d2files.Get(s.fileName)
 	dupeTable(f, s.opts.NumClones)
+
 	scramble(s)
 }
 
@@ -239,6 +241,10 @@ func randomizeSetItemsProps(s scrambler) {
 	s.itemMaxProps = setItems.MaxNumProps
 	s.minMaxProps = getMinMaxProps(s.opts, setItems.MaxNumProps)
 	s.lvl = setItems.Lvl
+
+	f := s.d2files.Get(s.fileName)
+	dupeTable(f, s.opts.NumClones)
+
 	scramble(s)
 	
 }
@@ -370,23 +376,25 @@ type minMaxProps struct {
 // - Quest items should not be duped
 // TODO: In the future if we have patchstring.tbl support we could use new names instead of copying the old names.
 func dupeTable(f *d2fs.File, numClones int) {
-	if (numClones > 10)  || (numClones < 0) {
+	if (numClones < 1) {
 		numClones = 0
 		return
+	}
+	if (len(f.Rows) * numClones) > 4090 {		// Limit for any file is 4095 rows
+		numClones = int(len(f.Rows) / 4090)
+		fmt.Printf("NumClones too large, clamped to %d\n", numClones)
 	}
 	fmt.Printf("NumClones=%d\n", numClones)
 	//f := s.d2files.Get(s.fileName)
 	// Deep copy the old row to the new row
-	fmt.Printf("#rows before = %d\n",len(f.Rows[0]))
+	fmt.Printf("#rows before = %d\n",len(f.Rows))
 	originalLength := len(f.Rows)
 	newrows := make([][]string,originalLength * numClones,originalLength * numClones)
 	f.Rows = append(f.Rows,newrows...)
 	fmt.Printf("#rows after = %d\n", len(f.Rows))
 	for i := 0; i < numClones; i++ {
 		for j := 0; j < originalLength; j++ {
-			fmt.Printf("OrigLen = %d\n",originalLength)
 			var destidx = (originalLength)  + i * originalLength + j
-			fmt.Printf("%d ", destidx)
 			f.Rows[destidx] = make([]string,len(f.Rows[j]))
 			for idx2,col := range f.Rows[j] {
 				f.Rows[destidx][idx2] = col
@@ -394,7 +402,7 @@ func dupeTable(f *d2fs.File, numClones int) {
 			// Copy the name.
 			if f.Rows[j][6] == "0" {
 				// Quest items are level 0 items.  Don't clone them, make them be blank lines.
-				fmt.Printf("%s", f.Rows[j][0])
+				fmt.Printf("Quest Item:%s\n", f.Rows[j][0])
 				f.Rows[destidx][0] = "" // f.Rows[j][0]
 			}
 		}
@@ -483,8 +491,4 @@ func randInt(min int, max int) int {
 		return min
 	}
 	return min + rand.Intn(max-min)
-}
-
-func shutupcompiler() {
-	fmt.Printf("")	// so compiler doesn't whine about having import fmt and not using it
 }
