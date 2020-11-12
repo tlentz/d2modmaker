@@ -217,11 +217,16 @@ func getAllSetProps(p propGetter) (Props, Items) {
 // Randomize Set Props
 func randomizeSetProps(s scrambler) {
 	s.fileName = sets.FileName
+	// Old code that randomized full set bonuses
+	//s.propOffset = sets.PCode2a
+	//s.itemMaxProps = sets.MaxNumProps
+	//s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
+	//s.lvl = sets.Level
+	//scramble(s)
 	s.propOffset = sets.PCode2a
-	s.itemMaxProps = sets.MaxNumProps
 	s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
-	s.lvl = sets.Level
-	scramble(s)
+	s.itemMaxProps = sets.MaxNumProps
+	blankprops(s)
 
 }
 
@@ -238,14 +243,19 @@ func getAllSetItemsProps(p propGetter) (Props, Items) {
 func randomizeSetItemsProps(s scrambler) {
 	s.fileName = setItems.FileName
 	s.propOffset = setItems.Prop1
-	s.itemMaxProps = setItems.MaxNumProps
-	s.minMaxProps = getMinMaxProps(s.opts, setItems.MaxNumProps)
+	s.itemMaxProps = 9							// TODO: Fix this hardcoding by changing setItems.go
+	s.minMaxProps = getMinMaxProps(s.opts, 9)
 	s.lvl = setItems.Lvl
 
 	f := s.d2files.Get(s.fileName)
 	dupeTable(f, s.opts.NumClones)
 
 	scramble(s)
+
+	s.propOffset = setItems.AProp1a
+	s.itemMaxProps = 10
+	s.minMaxProps = getMinMaxProps(s.opts, 10) // (AProp1-AProp5) * 2 (a & b)
+	scramble(s)	// OBC:  This call to scramble should always generate 10 props even if balancedpropcount is on.
 	
 }
 
@@ -384,10 +394,10 @@ func dupeTable(f *d2fs.File, numClones int) {
 		numClones = int(len(f.Rows) / 4090)
 		fmt.Printf("NumClones too large, clamped to %d\n", numClones)
 	}
-	// Deep copy the old row to the new row
+	// Deep copy the old row to the new clone row
 	originalLength := len(f.Rows)
 	newrows := make([][]string,originalLength * numClones,originalLength * numClones)
-	fmt.Printf("#rows after = %d\n", len(f.Rows))
+	f.Rows = append(f.Rows,newrows...)
 	for i := 0; i < numClones; i++ {
 		for j := 0; j < originalLength; j++ {
 			var destidx = (originalLength)  + i * originalLength + j
@@ -395,7 +405,7 @@ func dupeTable(f *d2fs.File, numClones int) {
 			for idx2,col := range f.Rows[j] {
 				f.Rows[destidx][idx2] = col
 			}
-			// Copy the name.
+			// Zap name if it's a quest item... Dupes cause the quests to fail.
 			if f.Rows[j][6] == "0" {
 				// Quest items are level 0 items.  Don't clone them, make them be blank lines.
 				//fmt.Printf("Quest Item:%s\n", f.Rows[j][0])
@@ -404,6 +414,22 @@ func dupeTable(f *d2fs.File, numClones int) {
 		}
 	}
 
+}
+func blankprops(s scrambler) {
+	var nblanked = 0
+	f := s.d2files.Get(s.fileName)
+	for _, row := range f.Rows {
+		for propIndex := 0; propIndex < s.itemMaxProps; propIndex++ {
+			i := s.propOffset + propIndex*4
+			row[i] = ""
+			row[i+1] = ""
+			row[i+2] = ""
+			row[i+3] = ""
+			nblanked++
+		}
+
+	}
+	//fmt.Printf("%d props blanked\n", nblanked)
 }
 func scramble(s scrambler) {
 	f := s.d2files.Get(s.fileName)
