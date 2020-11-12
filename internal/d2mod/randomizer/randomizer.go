@@ -254,6 +254,7 @@ func randomizeSetItemsProps(s scrambler) {
 
 	scramble(s)
 
+	// Above scrambled props 1-9, now populate the partial set bonuses.
 	s.propOffset = setItems.AProp1a
 	s.itemMaxProps = 10
 	s.minMaxProps = getMinMaxProps(s.opts, 10) // (AProp1-AProp5) * 2 (a & b)
@@ -402,16 +403,16 @@ func dupeTable(f *d2fs.File, numClones int) {
 	f.Rows = append(f.Rows,newrows...)
 	for i := 0; i < numClones; i++ {
 		for j := 0; j < originalLength; j++ {
-			var destidx = (originalLength)  + i * originalLength + j
-			f.Rows[destidx] = make([]string,len(f.Rows[j]))
-			for idx2,col := range f.Rows[j] {
-				f.Rows[destidx][idx2] = col
+			var rowidx = (originalLength)  + i * originalLength + j
+			f.Rows[rowidx] = make([]string,len(f.Rows[j]))
+			for colidx,col := range f.Rows[j] {
+				f.Rows[rowidx][colidx] = col
 			}
 			// Zap name if it's a quest item... Dupes cause the quests to fail.
 			if f.Rows[j][6] == "0" {
 				// Quest items are level 0 items.  Don't clone them, make them be blank lines.
 				//fmt.Printf("Quest Item:%s\n", f.Rows[j][0])
-				f.Rows[destidx][0] = "" // f.Rows[j][0]
+				f.Rows[rowidx][0] = "" // f.Rows[j][0]
 			}
 		}
 	}
@@ -421,7 +422,6 @@ func dupeTable(f *d2fs.File, numClones int) {
 // blankprops:
 // 		Blanks all properties pointed to by the scrambler structure.
 func blankprops(s scrambler) {
-	var nblanked = 0
 	f := s.d2files.Get(s.fileName)
 	for _, row := range f.Rows {
 		for propIndex := 0; propIndex < s.itemMaxProps; propIndex++ {
@@ -430,7 +430,6 @@ func blankprops(s scrambler) {
 			row[i+1] = ""
 			row[i+2] = ""
 			row[i+3] = ""
-			nblanked++
 		}
 	}
 }
@@ -453,6 +452,10 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 		// Don't run scrambler on row dividers
 		return
 	}
+	if (level == 0) {
+		// Don't run scrambler on Quest items.  It may raise level requirements
+		return	
+	}
 
 	//Choose a random number of props between min and max
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
@@ -470,9 +473,6 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 
 	//map to track duplicate properties
 	propList := make(map[string]bool)
-	
-	var destidx = idx 
-	
 
 	// fill in the props
 	for currentNumProps := 0; currentNumProps < s.itemMaxProps; currentNumProps++ {
@@ -493,10 +493,10 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 			}
 		}
 		i := s.propOffset + currentNumProps*4
-		f.Rows[destidx][i] = prop.Name
-		f.Rows[destidx][i+1] = prop.Par
-		f.Rows[destidx][i+2] = prop.Min
-		f.Rows[destidx][i+3] = prop.Max
+		f.Rows[idx][i] = prop.Name
+		f.Rows[idx][i+1] = prop.Par
+		f.Rows[idx][i+2] = prop.Min
+		f.Rows[idx][i+3] = prop.Max
 
 	}
 }

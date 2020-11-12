@@ -22,7 +22,7 @@
         "IsBalanced": true,
         "BalancedPropCount": true,
         "AllowDuplicateProps": false,
-        "MinProps": 5,
+        "MinProps": 2,
         "MaxProps": 20,
         "UseOSkills": true,
         "PerfectProps": true,
