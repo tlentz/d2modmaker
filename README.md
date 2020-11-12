@@ -1,7 +1,5 @@
+[![Github All Releases](https://img.shields.io/github/downloads/tlentz/d2modmaker/total.svg)]()
 ![release](https://img.shields.io/github/v/release/tlentz/d2modmaker?include_prereleases&sort=semver)
-
-<a href="https://www.buymeacoffee.com/tlentz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
 
 <p align="center">
   <img width="400" height="400" src="/images/D2_Mod_Logo_V3.png">
@@ -18,7 +16,12 @@ The idea behind this project is to play Diablo II the way that you want to play.
 * [Releases](https://github.com/tlentz/d2modmaker/releases)
 * [Installation Guide](https://docs.google.com/document/d/1M5uY67giX4DGnXHxmApb-Uf5AUZdN5yquidAr2BUR_c/edit?usp=sharing)
 * [Discord Community](https://discord.gg/eQt2Z9b)
-* [Support this Project](https://www.buymeacoffee.com/tlentz)
+* [Support this Project](https://github.com/tlentz/d2modmaker#support)
+
+# Support
+
+<a href="https://www.buymeacoffee.com/tlentz" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3FMDQNDZN5N8S&currency_code=USD&source=url)
 
 # PlugY and Things
 This should be compatible with PlugY and other things such as:
@@ -71,9 +74,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Adds ability to cube 1 town portal scroll to make the cow portal
 #### RemoveLevelRequirements `bool`
 * Removes level requirements from items. (Oskill level requirements still apply!)
-#### RemoveAttRequirements** `bool`
+#### RemoveAttRequirements `bool`
 * Removes attribute requirements from items.
-#### RemoveUniqCharmLimit** `bool`
+#### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
@@ -152,7 +155,6 @@ Thanks!
 
 
 ## v0.5.1
-
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
 * Adds new feature `RemoveLevelRequirements`
     * Removes level requirements from items (Oskill level requirements still apply!).
@@ -160,7 +162,7 @@ Thanks!
     * Removes attribute requirements from items.
 * Adds new feature `RemoveUniqCharmLimit`
     * Allows to carry more than 1 unique charm of the same type.
-* Fix for BalancedPropCount not applying
+* Fix for `BalancedPropCount` not applying
 
 ## v0.5.0
 * Randomization has been reworked. Old seeds are invalidated.

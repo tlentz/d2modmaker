@@ -7,6 +7,7 @@ on:
       - dl/**
       - wraith/**
       - obc/**
+      - master
 
 jobs:
   build:
