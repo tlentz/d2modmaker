@@ -259,6 +259,12 @@ func randomizeSetItemsProps(s scrambler) {
 	s.itemMaxProps = 10
 	s.minMaxProps = getMinMaxProps(s.opts, 10) // (AProp1-AProp5) * 2 (a & b)
 	scramble(s)	// OBC:  It would be nice if this call to scramble would always generate 10 props even if balancedpropcount is on.
+
+	// Add Func (f.Rows[][16]) controls how the AProp* columns show up
+	// If Add Func == 2, then for each addition piece worn, a pair of props (a & b)
+	// will be added as Green partial set bonuses
+	// If Add Func == "", then all of the props in Prop* and AProp* show up at once.
+	setAddFunc(s, 2)	
 	
 }
 
@@ -405,14 +411,16 @@ func cloneTable(f *d2fs.File, numClones int) {
 		for j := 0; j < originalLength; j++ {
 			var rowidx = (originalLength)  + i * originalLength + j
 			f.Rows[rowidx] = make([]string,len(f.Rows[j]))
-			for colidx,col := range f.Rows[j] {
-				f.Rows[rowidx][colidx] = col
-			}
-			// Zap name if it's a quest item... Dupes cause the quests to fail.
-			if f.Rows[j][6] == "0" {
+			if f.Rows[j][6] != "0" {
+				for colidx,col := range f.Rows[j] {
+					f.Rows[rowidx][colidx] = col
+				} 
+			} else {
+				// Dupe quest items cause the quests to fail.
 				// Quest items are level 0 items.  Don't clone them, make them be blank lines.
 				//fmt.Printf("Quest Item:%s\n", f.Rows[j][0])
 				f.Rows[rowidx][0] = "" // f.Rows[j][0]
+				f.Rows[rowidx][len(f.Rows[j]) - 1] = "0"	// keep 0 in *eol
 			}
 		}
 	}
@@ -430,6 +438,22 @@ func blankprops(s scrambler) {
 			row[i+1] = ""
 			row[i+2] = ""
 			row[i+3] = ""
+		}
+	}
+}
+
+// Since the Sets.txt regenerating would alter set bonuses on existing items,
+// all of the props must exist in SetItems.txt.  (Sets props have been blanked)
+// AddFunc == "" would then not allow for the set piece to have any set bonuses, so
+// force AddFunc to use mode 2, where the AProp* props are treated as partial set bonuses
+func setAddFunc(s scrambler, newAddFunc int) {
+	if (newAddFunc > 2) || (newAddFunc < 0) {
+		newAddFunc = 2
+	}
+	f := s.d2files.Get(s.fileName)
+	for _, row := range f.Rows {
+		if row[1] != "" {
+			row[setItems.AddFunc] = fmt.Sprintf("%d",newAddFunc)
 		}
 	}
 }
