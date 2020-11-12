@@ -25,7 +25,7 @@
         "MinProps": 2,
         "MaxProps": 20,
         "UseOSkills": true,
-        "PerfectProps": true,
+        "PerfectProps": false,
         "NumClones": 9
     }
 }

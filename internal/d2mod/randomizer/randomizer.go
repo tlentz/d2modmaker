@@ -200,7 +200,7 @@ func randomizeUniqueProps(s scrambler) {
 	s.lvl = uniqueItems.Lvl
 
 	f := s.d2files.Get(s.fileName)
-	dupeTable(f, s.opts.NumClones)
+	cloneTable(f, s.opts.NumClones)
 
 	scramble(s)
 }
@@ -247,10 +247,10 @@ func randomizeSetItemsProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, 9)
 	s.lvl = setItems.Lvl
 
-	// OBC: The problem with dupeTable for sets is that if you
+	// OBC: The problem with cloneTable for sets is that if you
 	// ever reduce NumClones, existing items will disappear.
 	//f := s.d2files.Get(s.fileName)
-	//dupeTable(f, s.opts.NumClones)
+	//cloneTable(f, s.opts.NumClones)
 
 	scramble(s)
 
@@ -385,10 +385,10 @@ type minMaxProps struct {
 	minNumProps int
 	maxNumProps int
 }
-// dupeTable: Creates a copy of the table N time, with several exceptions
+// cloneTable: Creates a copy of the table N time, with several exceptions
 // - Quest items should not be duped
 // TODO: In the future if we have patchstring.tbl support we could use new names instead of copying the old names.
-func dupeTable(f *d2fs.File, numClones int) {
+func cloneTable(f *d2fs.File, numClones int) {
 	if (numClones < 1) {
 		numClones = 0
 		return

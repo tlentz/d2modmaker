@@ -17,7 +17,7 @@ type RandomOptions struct {
 	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
 	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
 	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
-	NumClones		  int   `json:"NumClones"`           // # of times to copy all rows in the table before randomizing props
+	NumClones         int   `json:"NumClones"`           // # of times to copy all rows in the table before randomizing props
 }
 
 // data is the configuration used to build the mod
