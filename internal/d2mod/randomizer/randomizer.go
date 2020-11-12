@@ -384,13 +384,9 @@ func dupeTable(f *d2fs.File, numClones int) {
 		numClones = int(len(f.Rows) / 4090)
 		fmt.Printf("NumClones too large, clamped to %d\n", numClones)
 	}
-	fmt.Printf("NumClones=%d\n", numClones)
-	//f := s.d2files.Get(s.fileName)
 	// Deep copy the old row to the new row
-	fmt.Printf("#rows before = %d\n",len(f.Rows))
 	originalLength := len(f.Rows)
 	newrows := make([][]string,originalLength * numClones,originalLength * numClones)
-	f.Rows = append(f.Rows,newrows...)
 	fmt.Printf("#rows after = %d\n", len(f.Rows))
 	for i := 0; i < numClones; i++ {
 		for j := 0; j < originalLength; j++ {
@@ -402,7 +398,7 @@ func dupeTable(f *d2fs.File, numClones int) {
 			// Copy the name.
 			if f.Rows[j][6] == "0" {
 				// Quest items are level 0 items.  Don't clone them, make them be blank lines.
-				fmt.Printf("Quest Item:%s\n", f.Rows[j][0])
+				//fmt.Printf("Quest Item:%s\n", f.Rows[j][0])
 				f.Rows[destidx][0] = "" // f.Rows[j][0]
 			}
 		}
