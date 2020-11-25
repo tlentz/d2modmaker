@@ -25,7 +25,7 @@ const (
 	Lvl          = 6
 	LvlReq       = 7
 	Code         = 8
-	Type_        = 9
+	Type         = 9
 	Uber         = 10
 	Carry1       = 11
 	CostMult     = 12

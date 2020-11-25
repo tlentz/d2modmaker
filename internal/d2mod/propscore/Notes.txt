@@ -1,0 +1,6 @@
+TODO:
+
+Implement better scoring of of set bonuses
+Reduce score across the board, 2 pc = 50%, 3 = 30%, 4 = 35%, 5 = 30%
+
+Implement Synergy bonuses.  (See PropScores.txt:SynergyGroup column)

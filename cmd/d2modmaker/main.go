@@ -7,7 +7,6 @@ import (
 )
 
 var (
-	dataDir string
 	outDir  string
 	cfgPath string
 	mode    string

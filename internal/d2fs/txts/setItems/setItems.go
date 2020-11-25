@@ -11,8 +11,8 @@ const (
 const (
 	Index        = 0
 	Set          = 1
-	Item         = 2
-	Item_        = 3
+	Item         = 2 // This is type, column header is "item"
+	Item_        = 3 // This is the types name, column header is "*item"
 	Rarity       = 4
 	Lvl          = 5
 	LvlReq       = 6

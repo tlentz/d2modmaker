@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -29,9 +30,21 @@ func NewFiles(sourceDir string, outDir string) Files {
 	files := Files{sourceDir: sourceDir, outDir: outDir}
 	files.cache = make(map[string]*File)
 
-	os.RemoveAll(path.Join(files.outDir, "/data/"))
+	//os.RemoveAll(path.Join(files.outDir, "/data/"))	// obc:  This is c4 approach, use sword instead
 	err := os.MkdirAll(path.Join(files.outDir, assets.DataGlobalExcel), 0755)
 	util.Check(err)
+
+	removefilenames, err := filepath.Glob(path.Join(files.outDir, assets.DataGlobalExcel+"*.txt"))
+	util.Check(err)
+	removefilenames2, err := filepath.Glob(path.Join(files.outDir, assets.PatchStringDest+"patchstring.tbl"))
+	util.Check(err)
+	removefilenames = append(removefilenames, removefilenames2...)
+
+	for _, f := range removefilenames {
+		if err := os.Remove(f); err != nil {
+			util.Check(err)
+		}
+	}
 
 	return files
 }
@@ -144,3 +157,6 @@ func MergeRows(f1 *File, f2 File) {
 //	}
 //	panic("")
 //}
+func DebugDumpFiles(f Files, filename string) {
+	fmt.Printf("%s\n", f.cache[filename])
+}

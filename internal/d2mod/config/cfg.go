@@ -18,6 +18,7 @@ type RandomOptions struct {
 	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
 	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
 	NumClones         int   `json:"NumClones"`           // # of times to copy all rows in the table before randomizing props
+	UsePropScores	  bool  `json:"UsePropScores"`		 // Use PropScore not scramble
 }
 
 // data is the configuration used to build the mod
@@ -68,11 +69,12 @@ func DefaultData() Data {
 			IsBalanced:        true,
 			BalancedPropCount: true,
 			AllowDupProps:     false,
-			MinProps:          0,
+			MinProps:          2,
 			MaxProps:          20,
 			PerfectProps:      false,
 			UseOSkills:        true,
 			NumClones:         9,		// Max for unqiues is 9. (can't go over 4096 lines)
+			UsePropScores:	   true,	// Use the new prop scoring algorithm (propscore.go) instead of scramble
 		},
 	}
 }
