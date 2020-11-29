@@ -179,9 +179,12 @@ dmg-und/lvl	60	0	0	lvl		120												212		The Vile Husk	UniqueItems	0
 dmg-undead	0	25	250	r	9	77												212		Bladebone	UniqueItems	0
 dmg-undead	0	200	300	r	67	100	25											212		RandomizeAdd9		0
 dmg/lvl	25	0	0	lvl		25												111	dmg	Headstriker	UniqueItems	0
-dmg%	0	5	250	r	5	250												105	dmg	The Gnasher	UniqueItems	0
+dmg%	0	5	30	r	15	90			armo						shld			105	dmg	War Bonnet	UniqueItems	0
+dmg%	0	5	80	r	10	160			shld	glov								105	dmg	Alma Negra	UniqueItems	0
+dmg%	0	5	30	r	5	30			weap									105	dmg	The Gnasher	UniqueItems	0
+dmg%	0	30	250	r	30	250			weap									105	dmg	The Gnasher	UniqueItems	0
 dmg%	0	250	430	r	250	430	29		weap	fset								105	dmg	RandomizeAdd10		0
-dmg%/lvl	24	0	0	lvl		75												105	dmg	Hellslayer	UniqueItems	0
+dmg%/lvl	24	0	0	lvl		75			weap									105	dmg	Hellslayer	UniqueItems	0
 dru		1	3	smm	16	72												125		Aldur's Watchtower	Sets	0
 dur	0	8	250	r	0	3									thro			213		Steelgoad	UniqueItems	0
 ease	0	-100	-10	r	5	1												30		Steeldriver	UniqueItems	0
