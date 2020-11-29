@@ -9,6 +9,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
+// Scale Adjust monster density in levels file by scaleFactor
 func Scale(d2files d2fs.Files, scaleFactor float64) {
 	f := d2files.Get(levels.FileName)
 	maxScale := 30.0

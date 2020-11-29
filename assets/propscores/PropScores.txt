@@ -11,7 +11,7 @@ adb-ltng/lvl	5	0	0	lvl		40												3		RandomizeAdd5		0
 abs-mag	0	3	15	r	3	15												3		Crescent Moon	Runes	0
 abs-mag/lvl	5	0	0	lvl		40												3		RandomizeAdd6		0
 abs-mag%	0	5	30	r	10	60												3		RandomizeAdd7		0
-ac	0	-100	-1	c	-1	-100												101	ac	Bladebone	UniqueItems	0
+ac	0	-100	-1	c	-5	0												101	ac	Dimoaks Hew	UniqueItems	0
 ac	0	0	600	r	0	60												101	ac	Bladebone	UniqueItems	0
 ac	0	600	800	r	60	80												101	ac	Enigma	Ruens	0
 ac-hth	0	40	200	r	2	10												101		Darkglow	UniqueItems	0
@@ -160,6 +160,7 @@ dmg-elem	33	63	324	rt	189	972												210	ele	Hellrack	UniqueItems	0
 dmg-elem	100	50	200	rt	150	600												210	ele	Famine	Runes	0
 dmg-fire	0	1	500	r	1	500												12	fire	Brainhew	UniqueItems	0
 dmg-ltng	0	1	333	r	1	333												13	ltng	The Chieftan	UniqueItems	0
+dmg-mag	0	0	50	r	0	50												211	mag	Azurewrath	UniqueItems	0
 dmg-mag	0	50	500	r	50	500	37											211	mag	Ginther's Rift	UniqueItems	0
 dmg-max	0	3	66	r	2	33												13	dmg	Goreshovel	UniqueItems	0
 dmg-min	0	1	15	r	1	15												14	dmg	Deathspade	UniqueItems	0
@@ -182,7 +183,7 @@ dmg%	0	5	250	r	5	250												105	dmg	The Gnasher	UniqueItems	0
 dmg%	0	250	430	r	250	430	29		weap	fset								105	dmg	RandomizeAdd10		0
 dmg%/lvl	24	0	0	lvl		75												105	dmg	Hellslayer	UniqueItems	0
 dru		1	3	smm	16	72												125		Aldur's Watchtower	Sets	0
-dur	0	8	250	r	0	3												213		Steelgoad	UniqueItems	0
+dur	0	8	250	r	0	3									thro			213		Steelgoad	UniqueItems	0
 ease	0	-100	-10	r	5	1												30		Steeldriver	UniqueItems	0
 ease	0	10	30	c	-10	-30												30		The Humongous	UniqueItems	0
 enr	0	2	50	r	1	25												23	mana	Iros Torch	UniqueItems	0
@@ -301,7 +302,7 @@ hit-skill	Bone Spirit	30	20	scl		120	49											44		Oath	Runes	0
 hit-skill	Chain Lightning	10	17	scl		18	47											44		Crescent Moon	Runes	0
 hit-skill	Charged Bolt	11	9	scl		12	57											44		Chaos	Runes	0
 hit-skill	Confuse	11	18	scl		6	51											44		Delirium	Runes	0
-hit-skill	Decrepify	33	1	scl		90	83											44	ac	The Reaper's Toll	UniqueItems	0
+hit-skill	Decrepify	33	1	scl		90	83											44	dmg	The Reaper's Toll	UniqueItems	0
 hit-skill	decrepify	30	1	scl		85	63											44	ac	Wrath	Runes	0
 hit-skill	Decrepify	20	15	scl		70	43											44	ac	Lawbringer	Runes	0
 hit-skill	Eruption	25	14	scl		33	77											44		Earthshifter	UniqueItems	0
@@ -341,8 +342,8 @@ hit-skill	Volcano	5	18	scl		4	67											44	fire	Doomsayer	Runes	0
 hit-skill	Weaken	8	3	scl		8	82											44	ac	Souldrain	UniqueItems	0
 howl	0	33	96	r	0	0												113	ac	Umes Lament	UniqueItems	0
 hp	0	5	100	r	1	25												26	ac	#REF!	SetItems	0
-hp	0	100	150	r	25	38	53			tors								26	ac	Immortal King	Sets	0
-hp	0	100	150	r	25	38				fset								26	ac	Immortal King	Sets	0
+hp	0	100	150	r	25	38	53		tors									26	ac	Immortal King	Sets	0
+hp	0	100	150	r	25	38			fset									26	ac	Immortal King	Sets	0
 hp/lvl	12	0	0	lvl		19												225	ac	Harlequin Crest	UniqueItems	0
 hp%	0	20	27	r	20	27												225	ac	Chromatic Ire	UniqueItems	0
 ignore-ac	0	1	1	r	60	60												253	dmg	Krintizs Skewer	UniqueItems	0
@@ -369,7 +370,7 @@ mag%	0	10	100	r	10	100												22	mag	Gull	UniqueItems	0
 mag%/lvl	10	0	0	lvl		62												22	mag	Skullder's Ire	UniqueItems	0
 magicarrow	0	1	20	r	1	2			miss									215		Witherstring	UniqueItems	0
 mana	0	5	200	r	1	20												24		Aldur's Watchtower	Sets	0
-mana	0	-50	-5	c	-150	-15												24		Err:502	UniqueItems	0
+mana	0	-50	-5	c	-50	-5												24		Err:502	UniqueItems	0
 mana-kill	0	2	20	r	2	20												121		Deathspade	UniqueItems	0
 mana/lvl	16	0	0	lvl		9												41	mana	Wizardspike	UniqueItems	0
 mana%	0	5	40	r	3	20												41	mana	Frostburn	UniqueItems	0
@@ -426,9 +427,9 @@ regen-mana	0	5	43	r	5	43												240	mana	Mindrend	UniqueItems	0
 regen-stam	0	10	50	r	0	0												108		Steeldriver	UniqueItems	0
 regen-stam/lvl	2	0	0	lvl		0												108		Natalya's Soul	SetItems	0
 rep-dur	25	0	0	lvl		0	5											37	eth	Warlord's Trust	UniqueItems	0
-rep-quant	40	0	0	lvl		10	5											39	eth	Wraithflight	UniqueItems	0
+rep-quant	40	0	0	lvl		10	5		thro									39	eth	Wraithflight	UniqueItems	0
 res-all	0	5	75	r	15	225												116		Heaven's Brethren	Sets	0
-res-all	0	-12	-1	c	-480	-40												116		RandomizeAdd12		0
+res-all	0	-12	-1	c	-72	-6												116		RandomizeAdd12		0
 res-all-max	0	5	15	r	30	90	14											241		Darkglow	UniqueItems	0
 res-cold	0	10	80	r	10	80												117		Fechmars Axe	UniqueItems	0
 res-cold-max	0	5	15	r	10	30	20											242		Hawkmail	UniqueItems	0
@@ -557,7 +558,7 @@ sock	3			s		30	43	Y	shld	tors	helm	weap			thro			122		Blade of Ali Baba	UniqueIt
 sock	0	1	3	r	3	10	22		helm	shld	weap	tors			thro			122				
 sock	0	1	5	r	3	30	69		helm	tors	weap				thro			122				
 sor		1	3	smm	16	72												125		Tal Rasha's Wrappings	Sets	0
-stack	0	60	60	r	5	5												141		Titan's Revenge	UniqueItems	0
+stack	0	60	60	r	5	5			thro									141		Titan's Revenge	UniqueItems	0
 stam	0	15	180	r	0	0												109		Cow King's Leathers	Sets	0
 stam/lvl	8	0	0	lvl		0												109		Sandstorm Trek	UniqueItems	0
 stamdrain	0	10	50	r	0	0												248		The Centurion	UniqueItems	0
@@ -570,7 +571,7 @@ stupidity	0	1	3	r	1	1												249	ac	Deathspade	UniqueItems	0
 stupidity	0	10	33	r			43											249	ac	RandomizeAdd14		0
 swing1	0	10	30	r	10	30												6	dmg	Bloodrise	UniqueItems	0
 swing2	0	5	60	r	5	60												6	dmg	Bladebone	UniqueItems	0
-swing2	0	50	80	r	50	100			am2	am7	amc	xbow	bow		rxb	8rx	6rx	6	dmg		Buriza	0
+swing2	0	50	80	r	50	100			am2	am7	amc	xbow	bow		rxb	8rx	6rx	6	dmg	Buriza	UniqueItems	0
 swing2	0	50	80	r	50	80			fset									6	dmg	Cleglaw's Brace	Sets	0
 swing3	0	15	50	r	15	50												6	dmg	Goreshovel	UniqueItems	0
 thorns	0	2	77	r	1	7												5		Stoutnail	UniqueItems	0

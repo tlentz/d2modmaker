@@ -6,10 +6,12 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/runewordlevels"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/gems"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
@@ -17,34 +19,34 @@ import (
 
 	"fmt"
 
-	"github.com/tlentz/d2modmaker/internal/d2mod/propscore"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-type Prop = d2items.Prop
-type Props = d2items.Props
+// Prop == d2items.Prop
+type Prop = prop.Prop
+
+// Props == d2items.Prop
+type Props = prop.Props
+
+// Item == d2items.Item
 type Item = d2items.Item
+
+// Items == d2items.Items
 type Items = d2items.Items
 
-// Randomize randomizes all items based on the RandomOptions
-func Run(cfg *config.Data, d2files d2fs.Files) {
+// Run Randomize randomizes all items based on the RandomOptions
+func Run(cfg *config.Data, d2files *d2fs.Files) {
 	opts := getRandomOptions(cfg)
 	rand.Seed(opts.Seed)
-
-	props, items := getAllProps(opts, d2files)
+	psi := propscores.NewPropScoresIndex(d2files)
+	tt := d2items.NewTypeTree(d2files)
+	props, items := getAllProps(opts, d2files, psi, *tt)
 
 	s := scrambler{
 		opts:    opts,
 		d2files: d2files,
 		props:   props,
 		items:   items,
-	}
-
-	if opts.UsePropScores == true {
-		fmt.Printf("Running PropScore\n")
-		propscore.ScoreAll(d2files, opts)
-	} else {
-		fmt.Printf("Running Scrambler\n")
 	}
 
 	randomizeUniqueProps(s)
@@ -83,28 +85,28 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 }
 
 // Returns all props bucketized
-func getAllProps(opts config.RandomOptions, d2files d2fs.Files) (Props, Items) {
+func getAllProps(opts config.RandomOptions, d2files *d2fs.Files, psi *propscores.PropScoresIndex, tt d2items.TypeTree) (Props, Items) {
 	props := Props{}
 	items := Items{}
-	var p d2items.PropGetter
+	var p *d2items.PropGetter
 
-	p = d2items.NewPropGetter(d2files, opts, uniqueItems.FileName)
-	uniqueItemProps, uniqueItems := d2items.GetProps(p)
+	p = d2items.NewPropGetter(d2files, opts, &uniqueItems.IFI, psi, tt)
+	uniqueItemProps, uniqueItems := p.GetProps()
 	props = append(props, uniqueItemProps...)
 	items = append(items, uniqueItems...)
 
-	p = d2items.NewPropGetter(d2files, opts, sets.FileName)
-	setProps, _ := d2items.GetProps(p)
-	props = append(props, setProps...)
+	p = d2items.NewPropGetter(d2files, opts, &sets.IFI, psi, tt)
+	setProps, _ := p.GetProps()
+	d2items.AppendProps(props, setProps)
 	//items = append(items, setBonuses...) //These aren't really items
 
-	p = d2items.NewPropGetter(d2files, opts, setItems.FileName)
-	setItemProps, setItems := d2items.GetProps(p)
+	p = d2items.NewPropGetter(d2files, opts, &setItems.IFI, psi, tt)
+	setItemProps, setItems := p.GetProps()
 	props = append(props, setItemProps...)
 	items = append(items, setItems...)
 
-	p = d2items.NewPropGetter(d2files, opts, runes.FileName)
-	runeWordProps, runewords := d2items.GetProps(p)
+	p = d2items.NewPropGetter(d2files, opts, &runes.IFI, psi, tt)
+	runeWordProps, runewords := p.GetProps()
 	props = append(props, runeWordProps...)
 	items = append(items, runewords...)
 
@@ -255,7 +257,7 @@ func getMinMaxProps(opts config.RandomOptions, maxItemProps int) minMaxProps {
 
 type scrambler struct {
 	opts         config.RandomOptions
-	d2files      d2fs.Files
+	d2files      *d2fs.Files
 	props        Props
 	items        Items
 	fileName     string
@@ -383,16 +385,16 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 		if currentNumProps < numProps {
 			prop = getBalancedRandomProp(s.opts, level, s.props)
 
-			propIdString := prop.GetId()
-			for propList[propIdString] {
+			propIDString := prop.GetID()
+			for propList[propIDString] {
 				prop = getBalancedRandomProp(s.opts, s.lvl, s.props)
-				propIdString = prop.GetId()
+				propIDString = prop.GetID() // FIXME: TODO: This doesn't prevent duplicate props i.e. ac/lvl with diff pars
 			}
 
 			// Add used prop to the prop list if duplicate properties are not allowed
 			// Always add aura to the prop list because multiple auras on an item are broken
-			if !s.opts.AllowDupProps || propIdString == "aura" {
-				propList[propIdString] = true
+			if !s.opts.AllowDupProps || propIDString == "aura" {
+				propList[propIDString] = true
 			}
 		}
 		i := s.propOffset + currentNumProps*4

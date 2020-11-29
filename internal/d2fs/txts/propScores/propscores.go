@@ -1,16 +1,9 @@
 package propscores
 
-import (
-	"strconv"
-	"strings"
-
-	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
-	"github.com/tlentz/d2modmaker/internal/d2mod/propscore/propscorepartype"
-)
-
 // File Constants
 const (
 	FileName   = "PropScores.txt"
+	Path       = "../propscores/" // Placing propscores in assets/propscores/
 	NumColumns = 21
 )
 
@@ -40,42 +33,3 @@ const (
 	SourceFile   = 21 // File the SourceItem came from
 	Eol          = 22
 )
-
-type Line struct {
-	Prop        d2items.Prop
-	PropParType int
-	ScoreMin    int
-	ScoreMax    int
-	MinLvl      int
-	NoTypeOvr   bool
-	Itypes      []string
-	Etypes      []string
-	SourceItem  string
-	SourceFile  string
-}
-type ScoreMap map[string][]Line // Used to grab all the Lines materialized from PropScores.txt for a given prop name
-
-func NewLine(Row []string) *Line {
-	var l Line
-	l.Prop = d2items.NewProp(Row[Prop], Row[Par], Row[Min], Row[Max])
-	l.PropParType = propscorepartype.Types[Row[PropParType]]
-	l.ScoreMin, _ = strconv.Atoi(Row[ScoreMin])
-	l.ScoreMax, _ = strconv.Atoi(Row[ScoreMax])
-	l.MinLvl, _ = strconv.Atoi(Row[MinLvl])
-	l.NoTypeOvr = (strings.Compare(Row[NoTypeOver], "Y") == 0)
-	for colIdx := Itype1; colIdx < Itype6; colIdx++ {
-		itype := Row[colIdx]
-		if itype != "" {
-			l.Itypes = append(l.Itypes, strings.TrimSpace(itype))
-		}
-	}
-	for colIdx := Etype1; colIdx < Etype3; colIdx++ {
-		etype := Row[colIdx]
-		if etype != "" {
-			l.Etypes = append(l.Etypes, strings.TrimSpace(etype))
-		}
-	}
-	l.SourceItem = Row[SourceItem]
-	l.SourceFile = Row[SourceFile]
-	return &l
-}

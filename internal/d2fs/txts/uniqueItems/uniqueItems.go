@@ -1,11 +1,33 @@
 package uniqueItems
 
+import (
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+)
+
 // File Constants
 const (
 	FileName    = "UniqueItems.txt"
 	NumColumns  = 70
 	MaxNumProps = 12
 )
+
+// FI FileInfo for UniqueItems
+var FI = d2fs.FileInfo{
+	FileName:   FileName,
+	FileNumber: filenumbers.UniqueItems,
+	NumColumns: NumColumns,
+}
+
+// IFI ItemFileInfo for UniqueItems
+var IFI = d2fs.ItemFileInfo{
+	FI:               FI,
+	ItemName:         Index,
+	Lvl:              Lvl,
+	FirstProp:        Prop1,
+	NumProps:         MaxNumProps,
+	HasEnabledColumn: true,
+}
 
 // Misc Names
 const (

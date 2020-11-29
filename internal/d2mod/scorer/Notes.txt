@@ -1,9 +1,13 @@
 TODO:
 
-Implement better scoring of of set bonuses
+<Done> Implement better scoring of of set bonuses
 Reduce score across the board, 2 pc = 50%, 3 = 30%, 4 = 35%, 5 = 30%
 
-Implement Synergy bonuses.  (See PropScores.txt:SynergyGroup column)
+
+<Done> Implement Synergy bonuses.  (See PropScores.txt:SynergyGroup column)
+
+Implement handling of class specific sets (Example: don't want +14 firewall showing up on Angelic full set bonus, i.e. something sorc could wear)
+Review all full set bonuses to determine if new lines need to be made in PropScores.txt with itype fset
 
 
 Discussion in dev chat about score balancing, specifically balance of 2h weapons.

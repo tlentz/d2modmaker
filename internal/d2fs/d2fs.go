@@ -26,6 +26,24 @@ type Files struct {
 	outDir    string
 }
 
+// FileInfo 1 declared in each file in d2fs\txts\
+type FileInfo struct {
+	FileName   string
+	FileNumber int // from package filenumbers
+	NumColumns int
+}
+
+// ItemFileInfo 1 declared in each file in d2fs\txtx\ that contains Items
+type ItemFileInfo struct {
+	FI               FileInfo
+	ItemName         int // Was going to call this Name but got confused about whether is Filename or Item name
+	Lvl              int // Column Index for Item Level
+	FirstProp        int // Column Index for first Prop
+	NumProps         int
+	HasEnabledColumn bool
+}
+
+// NewFiles Create a new Files from configured directories
 func NewFiles(sourceDir string, outDir string) Files {
 	files := Files{sourceDir: sourceDir, outDir: outDir}
 	files.cache = make(map[string]*File)
@@ -66,6 +84,7 @@ func (d2files *Files) Read(filename string) *File {
 	}
 }
 
+// ReadAsset Reads File directly from a csv file (not from vfs)
 func ReadAsset(filename string, filePath string) *File {
 	// open csvfile
 	csvfile, err := assets.Assets.Open(path.Join(filePath, filename))
@@ -127,7 +146,7 @@ func (d2file *File) write(outDir string) {
 	checkError(d2file.FileName, e)
 }
 
-// GetOrCreateFile returns the D2File at the given key otherwise creates it
+// Get returns the D2File at the given key otherwise creates it
 func (d2files *Files) Get(filename string) *File {
 	if val, ok := d2files.cache[filename]; ok {
 		return val
@@ -145,6 +164,8 @@ func checkError(filename string, err error) {
 	util.CheckError(fmt.Sprintf("Filename: %s", filename), err)
 }
 
+// MergeRows concatenate all rows from f2 into f1
+// FIXME: Shouldn't this be called AppendRows?
 func MergeRows(f1 *File, f2 File) {
 	f1.Rows = append(f1.Rows, f2.Rows...)
 }
@@ -157,6 +178,8 @@ func MergeRows(f1 *File, f2 File) {
 //	}
 //	panic("")
 //}
+
+// DebugDumpFiles Dump all of Files to console
 func DebugDumpFiles(f Files, filename string) {
 	fmt.Printf("%s\n", f.cache[filename])
 }

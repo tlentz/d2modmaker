@@ -27,7 +27,9 @@ func GetRunewordLevel(row []string, miscItemLevels map[string]int) int {
 	return rl
 }
 
-func GetMiscItemLevels(d2files d2fs.Files) map[string]int {
+// GetMiscItemLevels Return a map of MiscItems.txt("Name") string -> MiscItems.txt("Level") int
+// Builds from MiscItems.txt on first call
+func GetMiscItemLevels(d2files *d2fs.Files) map[string]int {
 	if len(miscItemLevelsCache) > 0 {
 		return miscItemLevelsCache
 	}
@@ -44,7 +46,7 @@ func GetMiscItemLevels(d2files d2fs.Files) map[string]int {
 			fmt.Printf("%s\n", row)
 			if row[misc.Code][0] == 'r' {
 				fmt.Printf("GetMiscItemLevels Row:%s\n", row[misc.Code])
-				d2fs.DebugDumpFiles(d2files, misc.FileName)
+				d2fs.DebugDumpFiles(*d2files, misc.FileName)
 
 				panic(3)
 			}
