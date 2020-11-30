@@ -1,7 +1,6 @@
 package weightrand
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 )
@@ -49,7 +48,7 @@ Generation:
 // calls to Generate will return a weighted random index
 func NewWeights(weights []int) *Weights {
 
-	fmt.Printf("NewWeights: len:%d [0]=%d [1]=%d\n", len(weights), weights[0], weights[1])
+	//fmt.Printf("NewWeights: len:%d [0]=%d [1]=%d\n", len(weights), weights[0], weights[1])
 	wr := Weights{}
 	if len(weights) == 0 {
 		log.Fatal("weightrand.NewWeights: no weights supplied")

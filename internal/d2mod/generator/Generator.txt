@@ -1,0 +1,15 @@
+The Generator will randomly generate new affixes for items fed to it.
+It will duplicate UniqueItems.txt up to NumClones times, except items that are disabled, quest items or dividers.
+
+Prop rolling:
+It will pick a target prop count and target item score based on the vanilla item.  
+
+For each property:
+It will calculate a target property score = 60% * (target item score - sum(already rolled prop scores))
+
+It will then roll a new PropScoreLine using a weighted distribution based on the # 
+of times a PropScoreLine was seen by the Scorer for that item type.
+If the Line is not suitable (item req level is < MinLvl, itype/etype doesn't match, etc) the prop is rerolled.
+
+For the rolled Line, it will then roll the Min and Max values(*) based on interpolation of +/-20 % around the target property score.
+(*) For some PropParTypes, the Minimum value is 0, for some what is rolled is Par (%/lvl).

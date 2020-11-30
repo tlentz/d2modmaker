@@ -23,11 +23,11 @@ type Generator struct {
 	Statistics *scorerstatistics.ScorerStatistics
 	//RowToLine  []propscores.Line // Map from a PropScores.txt row index to a propscore.Line
 	TypeTree *d2items.TypeTree
-	psi      *propscores.PropScoresIndex
+	psi      *propscores.Maps
 }
 
 // NewGenerator Initialize a Generator from Scorer statistics
-func NewGenerator(d2files *d2fs.Files, opts config.RandomOptions, tt *d2items.TypeTree, psi *propscores.PropScoresIndex, stats *scorerstatistics.ScorerStatistics) *Generator {
+func NewGenerator(d2files *d2fs.Files, opts config.RandomOptions, tt *d2items.TypeTree, psi *propscores.Maps, stats *scorerstatistics.ScorerStatistics) *Generator {
 	g := Generator{
 		d2files:    d2files,
 		opts:       opts,

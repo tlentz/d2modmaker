@@ -18,7 +18,11 @@ func scoreProp(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree, item
 	if p.Name[0] == '*' { // Blizz comments out with *
 		return 0
 	}
-	return calcPropScore(p, l)
+	score := calcPropScore(p, l)
+	if l.LvlScale {
+		score = util.Round32(float32(score) * float32(item.Lvl) / 50.0)
+	}
+	return score
 	/*
 			for _, line := range scorelines[p.Name] {
 				if checkPropScore(tt, p, item, line) {

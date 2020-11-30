@@ -85,7 +85,7 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 }
 
 // Returns all props bucketized
-func getAllProps(opts config.RandomOptions, d2files *d2fs.Files, psi *propscores.PropScoresIndex, tt d2items.TypeTree) (Props, Items) {
+func getAllProps(opts config.RandomOptions, d2files *d2fs.Files, psi *propscores.Maps, tt d2items.TypeTree) (Props, Items) {
 	props := Props{}
 	items := Items{}
 	var p *d2items.PropGetter

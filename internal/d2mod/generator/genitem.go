@@ -44,7 +44,11 @@ func GenItem(g *Generator, item *d2items.Item) *d2items.Item {
 	}
 	// TODO: Add better partial set bonus support
 	for (itemScore < int((float32(targetScore) * 0.8))) && (len(newi.Affixes) < targetPropCount) && (len(newi.Affixes) < g.IFI.NumProps) {
-		targetPropScore := util.MaxInt(0, int(float32((targetScore-itemScore))*0.6))
+		targetPropScore := targetScore - itemScore
+
+		if len(newi.Affixes) < targetPropCount-1 {
+			targetPropScore = util.MaxInt(0, int(float32((targetScore-itemScore))*0.6))
+		}
 		//log.Printf("GenItem TargetScore: %d TargetPropScore: %d", targetScore, targetPropScore)
 		if len(newi.Affixes) >= (targetPropCount - 1) {
 			targetPropScore = util.MaxInt(0, targetScore-itemScore)
@@ -79,6 +83,7 @@ func GenItem(g *Generator, item *d2items.Item) *d2items.Item {
 			return newi
 		}
 	}
-
+	// TODO: Write these statistics out to a file (Target score, Generated item score, # props Vanilla vs generated)
+	//fmt.Printf("Item\t%s\t%d\t%d\t%d\n", newi.Name, newi.FileNumber, targetScore, itemScore)
 	return newi
 }

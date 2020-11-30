@@ -18,6 +18,7 @@ type Line struct {
 	ScoreMin     int
 	ScoreMax     int
 	MinLvl       int
+	LvlScale     bool
 	NoTypeOvr    bool
 	Itypes       []string
 	Etypes       []string
@@ -32,7 +33,8 @@ type Line struct {
 // The list must be parsed with level, etype, itype restrictions etc. to find the right Line.
 type ScoreMap map[string][]*Line // Used to grab all the Lines materialized from PropScores.txt for a given prop name
 
-type PropScoresIndex struct {
+// Maps Maps to help with lookups into PropScores.txt
+type Maps struct {
 	PropLines ScoreMap // Map from Prop name to  array of PropScore.txt []Lines
 	RowLines  []*Line  // Array of Lines by RowIdx i.e. matching d2files.Rows[]
 }
@@ -46,7 +48,8 @@ func NewLine(Row []string, RowIndex int) *Line {
 	l.ScoreMin, _ = strconv.Atoi(Row[ScoreMin])
 	l.ScoreMax, _ = strconv.Atoi(Row[ScoreMax])
 	l.MinLvl, _ = strconv.Atoi(Row[MinLvl])
-	l.NoTypeOvr = (strings.Compare(Row[NoTypeOver], "Y") == 0)
+	l.LvlScale = (Row[LvlScale] == "Y")
+	l.NoTypeOvr = (Row[NoTypeOver] == "Y")
 	for colIdx := Itype1; colIdx < Itype6; colIdx++ {
 		itype := Row[colIdx]
 		if itype != "" {
@@ -68,11 +71,11 @@ func NewLine(Row []string, RowIndex int) *Line {
 
 // NewPropScoresIndex Reads PropScores.txt and populates PropScoresIndex,
 // a structure containing Lines indexed by both Prop Name and by PropScores.txt Row #
-func NewPropScoresIndex(d2files *d2fs.Files) *PropScoresIndex {
+func NewPropScoresIndex(d2files *d2fs.Files) *Maps {
 
 	scorefile := d2files.Read(path.Join(Path, FileName))
 
-	psi := PropScoresIndex{}
+	psi := Maps{}
 	psi.PropLines = ScoreMap{}
 	psi.RowLines = make([]*Line, len(scorefile.Rows))
 

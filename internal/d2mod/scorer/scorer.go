@@ -1,8 +1,6 @@
 package scorer
 
 import (
-	"fmt"
-
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
@@ -32,7 +30,7 @@ type Scorer struct {
 	//ScoreLineWeights []weights               // Keeps track of probabilities & counts for each type of item
 	Statistics *scorerstatistics.ScorerStatistics
 	TypeTree   *d2items.TypeTree
-	PSI        *propscores.PropScoresIndex
+	PSI        *propscores.Maps
 }
 
 func newScorer(d2files *d2fs.Files, opts config.RandomOptions) *Scorer {
@@ -83,10 +81,12 @@ func debugshow(s *Scorer) {
 			fmt.Printf("%s\t%s\n", ctype, ptype)
 		}
 	*/
-	fmt.Printf("--------------------------------------------------------\n")
-	fmt.Printf("Dumping Item Scores\n")
-	for key, el := range s.Statistics.ItemScores {
-		fmt.Printf("%s\t%d\n", key, el)
-	}
+	/*
+		fmt.Printf("--------------------------------------------------------\n")
+		fmt.Printf("Dumping Item Scores\n")
+		for key, el := range s.Statistics.ItemScores {
+			fmt.Printf("%s\t%d\n", key, el)
+		}
+	*/
 	//fmt.Printf("--------------------------------------------------------\n")
 }
