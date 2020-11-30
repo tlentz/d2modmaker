@@ -21,11 +21,11 @@ const (
 func RollAffix(g *Generator, item d2items.Item, sbm float32, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
 	targetPropScore = util.Round32(float32(targetPropScore) * (1 / sbm)) // Adjust the targetPropScore up in order to compensate for sbm
 
-	for rollcounter := 0; rollcounter < 500; rollcounter++ {
+	for rollcounter := 0; rollcounter < 50; rollcounter++ {
 		scoreFileRowIndex := w.Generate()
 		line := g.psi.RowLines[scoreFileRowIndex]
-		//log.Printf("RollAffix: %s: ScoreMax=%d T:%d TargetScore=%d\n", l.Prop.Name, l.ScoreMax, l.PropParType, targetPropScore)
-		if line.ScoreMax < (targetPropScore / 6) {
+		//log.Printf("RollAffix: %s: ScoreMax=%d T:%d TargetScore=%d\n", line.Prop.Name, line.ScoreMax, line.PropParType, targetPropScore)
+		if (line.ScoreMax * 2) < targetPropScore {
 			//log.Print("<Reroll S>")
 			continue
 		}
@@ -71,6 +71,7 @@ func RollAffix(g *Generator, item d2items.Item, sbm float32, colIdx int, targetP
 			log.Fatalf("calcPropScore: Unhandled Prop type %s:%d\n", newa.P.Name, line.PropParType)
 
 		}
+		g.numAffixRolls += rollcounter
 		return newa
 	}
 	log.Fatal("RollProp: Too many rolls (500).. couldn't find a a valid PropScore.txt line")

@@ -38,6 +38,9 @@ func genFile(g *Generator, ifi *d2fs.ItemFileInfo) {
 					if (g.IFI.HasEnabledColumn && (row[2] == "1")) || !g.IFI.HasEnabledColumn { // skip quest items
 						itemGenerated = true
 						newi := GenItem(g, item)
+						if newi.Affixes[0].ColIdx == 0 {
+							log.Panicf("genFile: 0 affixes: %s|%s|%s|%s", newi.Affixes[0].P.Name, newi.Affixes[0].P.Par, newi.Affixes[0].P.Min, newi.Affixes[0].P.Max)
+						}
 						newRow = newi.ToRow(*pg, row)
 					}
 				}

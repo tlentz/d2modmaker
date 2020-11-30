@@ -22,8 +22,9 @@ type Generator struct {
 	opts       config.RandomOptions
 	Statistics *scorerstatistics.ScorerStatistics
 	//RowToLine  []propscores.Line // Map from a PropScores.txt row index to a propscore.Line
-	TypeTree *d2items.TypeTree
-	psi      *propscores.Maps
+	TypeTree      *d2items.TypeTree
+	psi           *propscores.Maps
+	numAffixRolls int
 }
 
 // NewGenerator Initialize a Generator from Scorer statistics
@@ -53,4 +54,5 @@ func (g *Generator) Run() {
 	genFile(g, &setItems.IFI)
 	genFile(g, &sets.IFI)
 	genFile(g, &runes.IFI)
+	fmt.Printf("%d affixes rolled", g.numAffixRolls)
 }

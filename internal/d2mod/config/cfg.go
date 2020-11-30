@@ -7,21 +7,22 @@ import (
 
 // RandomOptions are the options for the randomizer
 type RandomOptions struct {
-	Randomize         bool  `json:"Randomize"`
-	UseSeed           bool  `json:"UseSeed"`
-	Seed              int64 `json:"Seed"`
-	IsBalanced        bool  `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
-	BalancedPropCount bool  `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
-	AllowDupProps     bool  `json:"AllowDuplicateProps"` // Allow two props of the same type to be placed on an item
-	MinProps          int   `json:"MinProps"`            // minimum number of non blank props on an item
-	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
-	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
-	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
-	NumClones         int   `json:"NumClones"`           // # of times to copy all rows in the table before randomizing props
-	UsePropScores	  bool  `json:"UsePropScores"`		 // Use PropScore not scramble
+	Randomize           bool    `json:"Randomize"`
+	UseSeed             bool    `json:"UseSeed"`
+	Seed                int64   `json:"Seed"`
+	IsBalanced          bool    `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
+	BalancedPropCount   bool    `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
+	AllowDupProps       bool    `json:"AllowDuplicateProps"` // Allow two props of the same type to be placed on an item
+	MinProps            int     `json:"MinProps"`            // minimum number of non blank props on an item
+	MaxProps            int     `json:"MaxProps"`            // maximum number of non blank props on an item
+	PerfectProps        bool    `json:"PerfectProps"`        // sets min/max to max
+	UseOSkills          bool    `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
+	NumClones           int     `json:"NumClones"`           // # of times to copy all rows in UniqueItems table before randomizing props
+	UsePropScores       bool    `json:"UsePropScores"`       // Use Scorer/Generator not Randomizer/scramble
+	PropScoreMultiplier float64 `json:"PropScoreMultiplier"` // Multiplier against the vanilla prop score.  > 1 better item, < 1 worse
 }
 
-// data is the configuration used to build the mod
+// Data is the configuration used to build the mod
 type Data struct {
 	Version                 string        `json:"Version"`
 	SourceDir               string        `json:"SourceDir"`
@@ -63,23 +64,24 @@ func DefaultData() Data {
 		RemoveUniqCharmLimit:    false,
 		EnterToExit:             false,
 		RandomOptions: RandomOptions{
-			Randomize:         true,
-			UseSeed:           false,
-			Seed:              -1,
-			IsBalanced:        true,
-			BalancedPropCount: true,
-			AllowDupProps:     false,
-			MinProps:          2,
-			MaxProps:          20,
-			PerfectProps:      false,
-			UseOSkills:        true,
-			NumClones:         9,		// Max for unqiues is 9. (can't go over 4096 lines)
-			UsePropScores:	   true,	// Use the new prop scoring algorithm (propscore.go) instead of scramble
+			Randomize:           true,
+			UseSeed:             false,
+			Seed:                -1,
+			IsBalanced:          true,
+			BalancedPropCount:   true,
+			AllowDupProps:       false,
+			MinProps:            2,
+			MaxProps:            20,
+			PerfectProps:        false,
+			UseOSkills:          true,
+			NumClones:           9,
+			UsePropScores:       true,
+			PropScoreMultiplier: 1, // 1 == Vanilla
 		},
 	}
 }
 
-// ReadCfg reads a ModConfig from the given json file
+// Read reads a ModConfig from the given json file
 func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
 	data := DefaultData()

@@ -363,7 +363,8 @@ levelup-skill	Blizzard	100	40	scl		1													223		Ice	Runes	0
 levelup-skill	Frost Nova	100	43	scl		1													223		Rainbow Facet	UniqueItems	0
 levelup-skill	Nova	100	41	scl		1													223		Rainbow Facet	UniqueItems	0
 levelup-skill	Venom	100	23	scl		10													223		Rainbow Facet	UniqueItems	0
-lifesteal	0	3	20	r	60	400													27	dmg	Hwanin's Majesty	Sets	0
+lifesteal	0	3	20	r	60	400		Y		weap									27	dmg	Hwanin's Majesty	Sets	0
+lifesteal	0	3	20	r	60	400										weap			27	dmg	Hwanin's Majesty	Sets	0
 light	0	1	8	r	0	0													25		Fechmars Axe	UniqueItems	0
 light	0	-4	-1	c	-4	-1													25		Darksight Helm	UniqueItems	0
 light-thorns	0	3	30	r	0	3													226		Coif of Glory	UniqueItems	0

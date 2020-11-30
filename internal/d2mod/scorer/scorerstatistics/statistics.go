@@ -91,21 +91,32 @@ func (ss *ScorerStatistics) SetupProbabilityWeights() {
 
 }
 */
+
+// SetupProbabilityWeights Set up weighted proability array so for the weighted random roller.
+// Each line in PropScores is counted as  (1 + 5 * # items of that type using this line) in
+// 5 different buckets (armor, weapons, etc)
+// The probability of any 1 line being picked for an item type at the start of the rolling process is then
+// Count for that line / (sum of all counts for that type of item)
 func (ss *ScorerStatistics) SetupProbabilityWeights() {
 	// Klunky because indexing an array doesn't increase its size, i.e. just easier to use a map.
 	// weightrand wants an array, so turn NumLines (map) into an array
+
+	// find max key in NumLines
+	maxidx := 0
 	for ssidx := range ss.TypeStatistics {
-		// find max key in NumLines
-		maxidx := 0
 		for rowIdx := range ss.TypeStatistics[ssidx].NumLines {
 			if rowIdx > maxidx {
 				maxidx = rowIdx
 			}
 		}
-		//buckets = make([]int, maxidx)
+	}
+	for ssidx := range ss.TypeStatistics {
 		buckets := make([]int, maxidx+1)
 		for rowIdx, count := range ss.TypeStatistics[ssidx].NumLines {
-			buckets[rowIdx] += count
+			buckets[rowIdx] += count * 5
+		}
+		for idx := range buckets {
+			buckets[idx]++
 		}
 		ss.TypeStatistics[ssidx].Weights = weightrand.NewWeights(buckets)
 	}

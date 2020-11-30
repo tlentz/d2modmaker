@@ -143,7 +143,7 @@ func (item *Item) ToRow(pg PropGetter, row []string) []string {
 		}
 		colIdx := aff.ColIdx
 		if colIdx == 0 {
-			log.Fatal("Item.ToRow: colIdx == 0")
+			log.Panicf("Item.ToRow: colIdx == 0: %s|%s|%s|%s", aff.P.Name, aff.P.Par, aff.P.Min, aff.P.Max)
 		}
 		newrow[colIdx] = aff.P.Name
 		newrow[colIdx+1] = aff.P.Par
@@ -180,11 +180,11 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 // NewAffixFromLine Used by Generator, create an Affix from a PropScores.txt Line
 func NewAffixFromLine(line *propscores.Line, colIdx int, setBonusMultiplier float32) *Affix {
 	aff := Affix{
-		P: line.Prop,
+		P:                  line.Prop,
+		Line:               line,
+		ColIdx:             colIdx,
+		SetBonusMultiplier: setBonusMultiplier,
 	}
-	aff.Line = line
-	aff.ColIdx = colIdx
-	aff.SetBonusMultiplier = setBonusMultiplier
 	return &aff
 }
 
