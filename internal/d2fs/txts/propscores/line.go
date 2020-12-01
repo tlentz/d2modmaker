@@ -1,7 +1,6 @@
 package propscores
 
 import (
-	"path"
 	"strconv"
 	"strings"
 
@@ -73,7 +72,9 @@ func NewLine(Row []string, RowIndex int) *Line {
 // a structure containing Lines indexed by both Prop Name and by PropScores.txt Row #
 func NewPropScoresIndex(d2files *d2fs.Files) *Maps {
 
-	scorefile := d2files.Read(path.Join(Path, FileName))
+	//scorefile := d2files.Read(path.Join(Path, FileName))
+	//scorefile := d2files.Get(path.Join(Path, FileName))
+	scorefile := d2fs.ReadAsset(FileName, Path)
 
 	psi := Maps{}
 	psi.PropLines = ScoreMap{}
