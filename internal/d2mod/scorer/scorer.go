@@ -61,7 +61,7 @@ func Run(d2files *d2fs.Files, opts config.RandomOptions) *Scorer {
 }
 
 func debugshow(s *Scorer) {
-	//fmt.Printf("-----------------------Debugging------------------------\n")
+	//fmt.Printf("==========Debugging============\n")
 	/*
 		for propname, lines := range ScoreLines {
 			fmt.Printf("%s\t%d\n", propname, len(lines))
@@ -75,18 +75,18 @@ func debugshow(s *Scorer) {
 		}
 	*/
 	/*
-		fmt.Printf("--------------------------------------------------------\n")
-		fmt.Printf("*****\nDumping typemap\n*****\n")
-		for ctype, ptype := range s.TypeMap {
-			fmt.Printf("%s\t%s\n", ctype, ptype)
-		}
+		fmt.Printf("===============================\n")
+			fmt.Printf("*****\nDumping typemap\n*****\n")
+			for ctype, ptype := range s.TypeMap {
+				fmt.Printf("%s\t%s\n", ctype, ptype)
+			}
 	*/
 	/*
-		fmt.Printf("--------------------------------------------------------\n")
-		fmt.Printf("Dumping Item Scores\n")
-		for key, el := range s.Statistics.ItemScores {
-			fmt.Printf("%s\t%d\n", key, el)
-		}
+		fmt.Printf("===============================\n")
+			fmt.Printf("Dumping Item Scores\n")
+			for key, el := range s.Statistics.ItemScores {
+				fmt.Printf("%s\t%d\n", key, el)
+			}
 	*/
-	//fmt.Printf("--------------------------------------------------------\n")
+	//fmt.Printf("===============================\n")
 }

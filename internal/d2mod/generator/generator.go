@@ -47,12 +47,12 @@ func NewGenerator(d2files *d2fs.Files, opts config.RandomOptions, tt *d2items.Ty
 //  This routine and its children require the statistics gathered by propscorer to function
 // Statistics are in Scorer:scoreLineWeights
 func (g *Generator) Run() {
-	fmt.Println("************************")
-	fmt.Println("* GenFiles             *")
-	fmt.Println("************************")
+	fmt.Println("===============================")
+	fmt.Println("| GenFiles                    |")
+	fmt.Println("===============================")
 	genFile(g, &uniqueItems.IFI)
 	genFile(g, &setItems.IFI)
 	genFile(g, &sets.IFI)
 	genFile(g, &runes.IFI)
-	fmt.Printf("%d affixes rolled", g.numAffixRolls)
+	fmt.Printf("%d affixes rolled\n", g.numAffixRolls)
 }

@@ -18,67 +18,47 @@ const (
 )
 
 // RollAffix Randomly roll a new Prop for a given item
-func RollAffix(g *Generator, item d2items.Item, sbm float32, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
-	targetPropScore = util.Round32(float32(targetPropScore) * (1 / sbm)) // Adjust the targetPropScore up in order to compensate for sbm
+// This assumes the targetPropScore has already been weighted by the SetBonusMultipler
+func RollAffix(g *Generator, item *d2items.Item, sbm float32, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
+	line := rollPropScoreLine(g, item, colIdx, targetPropScore, w)
+	newa := d2items.NewAffixFromLine(line, colIdx, sbm)
 
-	for rollcounter := 0; rollcounter < 50; rollcounter++ {
-		scoreFileRowIndex := w.Generate()
-		line := g.psi.RowLines[scoreFileRowIndex]
-		//log.Printf("RollAffix: %s: ScoreMax=%d T:%d TargetScore=%d\n", line.Prop.Name, line.ScoreMax, line.PropParType, targetPropScore)
-		if (line.ScoreMax * 2) < targetPropScore {
-			//log.Print("<Reroll S>")
-			continue
-		}
-		if !d2items.CheckIETypes(g.TypeTree, item.Types[0], line.Itypes, line.Etypes) {
-			//log.Print("<Reroll T>")
-			continue
-		}
-		if item.Lvl < line.MinLvl {
-			//log.Print("<Reroll L>")
-			continue
-		}
-		newa := d2items.NewAffixFromLine(line, colIdx, sbm)
-
-		switch line.PropParType {
-		case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
-			//fmt.Printf("RollAffix: %d %d-%d -> ", targetPropScore, newa.P.Val.Min, newa.P.Val.Max)
-			newa.P.Val.Min, newa.P.Val.Max = rollRange(newa.P.Val.Min, newa.P.Val.Max, line, item.Lvl, targetPropScore)
+	switch newa.Line.PropParType {
+	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
+		//fmt.Printf("RollAffix: %d %d-%d -> ", targetPropScore, newa.P.Val.Min, newa.P.Val.Max)
+		newa.P.Val.Min, newa.P.Val.Max = rollRange(newa.P.Val.Min, newa.P.Val.Max, newa.Line, item.Lvl, targetPropScore)
+		newa.P.Min = strconv.Itoa(newa.P.Val.Min)
+		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
+		//fmt.Printf("%s-%s\n", newa.P.Min, newa.P.Max)
+	case propscorespartype.Lvl: // (pts or %)/lvl prop min & max are empty/ignored
+		newa.P.Val.Par = rollMax(newa.P.Val.Par, newa.Line, item.Lvl, targetPropScore)
+		newa.P.Par = strconv.Itoa(newa.P.Val.Par)
+	case propscorespartype.Scl: // Skill, %chance, Level
+		// OBC: I'm too lazy to roll both chance and level as that makes the targetscore calculation
+		// a lot more complex, so roll either Chance or Level.
+		if rand.Intn(4) >= 2 {
+			// Roll Chance
+			newa.P.Val.Min = rollMax(newa.P.Val.Min, newa.Line, item.Lvl, targetPropScore)
 			newa.P.Min = strconv.Itoa(newa.P.Val.Min)
+		} else {
+			// Roll Level
+			newa.P.Val.Max = rollMax(newa.P.Val.Max, newa.Line, item.Lvl, targetPropScore)
 			newa.P.Max = strconv.Itoa(newa.P.Val.Max)
-			//fmt.Printf("%s-%s\n", newa.P.Min, newa.P.Max)
-		case propscorespartype.Lvl: // (pts or %)/lvl prop min & max are empty/ignored
-			newa.P.Val.Par = rollMax(newa.P.Val.Par, line, item.Lvl, targetPropScore)
-			newa.P.Par = strconv.Itoa(newa.P.Val.Par)
-		case propscorespartype.Scl: // Skill, %chance, Level
-			// OBC: I'm too lazy to roll both chance and level as that makes the targetscore calculation
-			// a lot more complex, so roll either Chance or Level.
-			if rand.Intn(4) >= 2 {
-				// Roll Chance
-				newa.P.Val.Min = rollMax(newa.P.Val.Min, line, item.Lvl, targetPropScore)
-				newa.P.Min = strconv.Itoa(newa.P.Val.Min)
-			} else {
-				// Roll Level
-				newa.P.Val.Max = rollMax(newa.P.Val.Max, line, item.Lvl, targetPropScore)
-				newa.P.Max = strconv.Itoa(newa.P.Val.Max)
-			}
-		case propscorespartype.Sch: // Skill, #charges, Level
-			// Don't touch # charges... roll for Level
-			newa.P.Val.Max = rollMax(newa.P.Val.Max, line, item.Lvl, targetPropScore)
-			newa.P.Max = strconv.Itoa(newa.P.Val.Max)
-		case propscorespartype.S:
-			// Nothing to adjust here
-		default:
-			log.Fatalf("calcPropScore: Unhandled Prop type %s:%d\n", newa.P.Name, line.PropParType)
-
 		}
-		g.numAffixRolls += rollcounter
-		return newa
+	case propscorespartype.Sch: // Skill, #charges, Level
+		// Don't touch # charges... roll for Level
+		newa.P.Val.Max = rollMax(newa.P.Val.Max, newa.Line, item.Lvl, targetPropScore)
+		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
+	case propscorespartype.S:
+		// Nothing to adjust here
+	default:
+		log.Fatalf("calcPropScore: Unhandled Prop type %s:%d\n", newa.P.Name, newa.Line.PropParType)
+
 	}
-	log.Fatal("RollProp: Too many rolls (500).. couldn't find a a valid PropScore.txt line")
-	panic(1)
+	return newa
 }
 
-// rollRange:  Calculate a min & max value +/- PropVariance centered around targetPropScore
+// rollRange:  Calculate a min & max value +/- PropVariance centered around targetPropScore.
 func rollRange(min int, max int, line *propscores.Line, itemLvl int, targetPropScore int) (int, int) {
 	newAvg := util.Interpolate(targetPropScore, targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
 	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
@@ -87,9 +67,14 @@ func rollRange(min int, max int, line *propscores.Line, itemLvl int, targetPropS
 	newMin := newAvg - variance
 
 	newMin = util.MaxInt(newMin, min)
+	newMin = util.MinInt(newMin, max)
 	newMax = util.MinInt(newMax, max)
+	newMax = util.MaxInt(newMax, min)
 
-	return newMax, newMin
+	if min > max {
+		log.Fatalf("rollRange min > max: %+v", line)
+	}
+	return newMin, newMax
 }
 
 // rollMax:  Roll for a maximum value within 20% (PropVariance = 0.2) of the targetPropScore
@@ -111,4 +96,75 @@ func rollMax(max int, line *propscores.Line, itemLvl int, targetPropScore int) i
 		newMax = 1
 	}
 	return newMax
+}
+
+// rollPropScoreLine Find a line in PropScores.txt where Line.ScoreMin < targetLineScore < Line.ScoreMax
+func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineScore int, w *weightrand.Weights) *propscores.Line {
+	var closestLine *propscores.Line
+	var closestLineDelta = 999999999 // couldn't get a portable answer for maximum value of int.
+	rollcounter := 0
+	for rollcounter = 0; rollcounter < 100; rollcounter++ {
+		scoreFileRowIndex := w.Generate()
+		line := g.psi.RowLines[scoreFileRowIndex]
+		//log.Printf("rollPropScoreLine: %s: ScoreMax=%d T:%d TargetScore=%d\n", line.Prop.Name, line.ScoreMax, line.PropParType, targetPropScore)
+		if !d2items.CheckIETypes(g.TypeTree, item.Types[0], line.Itypes, line.Etypes) {
+			//log.Print("<Reroll T>")
+			continue
+		}
+		if item.Lvl < line.MinLvl {
+			//log.Print("<Reroll L>")
+			continue
+		}
+		if checkGroups(line.Group, item) {
+			line = nil
+			continue
+		}
+
+		if closestLine == nil {
+			closestLine = line
+		}
+		// var lineDelta int
+		//fmt.Printf("%s %d <%d %d %d>\n", item.Name, closestLineDelta, line.ScoreMin, targetLineScore, line.ScoreMax)
+		switch {
+		case targetLineScore >= line.ScoreMax:
+			lineDelta := targetLineScore - line.ScoreMax
+			if lineDelta < closestLineDelta {
+				closestLine = line
+				closestLineDelta = lineDelta
+			}
+		case targetLineScore <= line.ScoreMin:
+			lineDelta := line.ScoreMin - targetLineScore
+			if lineDelta < closestLineDelta {
+				closestLine = line
+				closestLineDelta = lineDelta
+			}
+		default:
+			closestLine = line
+			closestLineDelta = 0
+			break
+		}
+	}
+	if closestLineDelta > 0 {
+		//log.Println(item.Affixes)
+		//log.Printf("rollPropScoreLine: Couldn't hit target: %s: %d %d", item.Name, closestLineDelta, targetLineScore)
+
+	}
+	g.numAffixRolls += rollcounter
+	return closestLine
+}
+
+// checkGroups Returns true if any Affix on item is a member of the same group
+func checkGroups(group string, item *d2items.Item) bool {
+	if group == "" {
+		log.Fatalf("Empty PropScores.txt Group")
+	}
+	for _, a := range item.Affixes {
+		if a.Line.Group == "" {
+			log.Fatalf("Empty PropScores.txt Group")
+		}
+		if a.Line.Group == group {
+			return true
+		}
+	}
+	return false
 }
