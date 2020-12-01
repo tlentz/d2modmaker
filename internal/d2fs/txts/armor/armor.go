@@ -56,7 +56,7 @@ const (
 	Stackable        = 45
 	Minstack         = 46
 	Maxstack         = 47
-	Type1            = 48
+	Type             = 48
 	Type2            = 49
 	Dropsound        = 50
 	Dropsfxframe     = 51

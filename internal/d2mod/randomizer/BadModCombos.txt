@@ -1,0 +1,25 @@
+Conflicting mods:
+Replenishes quantity 	on non-thrown
++ <class> skill tree 	to wrong class on class specific items (+ to traps on a zon bow)
++ <class> skill		to wrong class on class specific items (+ to sorc skills on a barb helmet)
++ <Class ranged> skill 	on melee weapon (+3 box/xbow on a sword)
++ Box/Xbow skills	On Shield/melee weaon
+Piercing Attack		on non ranged weapons
+Fires explosive Arrows	on non ranged weapons
+Increased Stack Size	on non-thrown
++Block%			2handers
+-req			jewelry
+
+
+
+
+Buggy
+Leap			oskill (non barbs don't have leap animation)
+
+
+Unbalanced
++ %dmg			Non weapons
+Defense			Weapon
+Knockback		Non Weapons
+40% faster run/walk	non-boots
+

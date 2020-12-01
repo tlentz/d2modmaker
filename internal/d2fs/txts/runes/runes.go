@@ -1,11 +1,30 @@
 package runes
 
+import (
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+)
+
 // File Constants
 const (
 	FileName    = "Runes.txt"
 	NumColumns  = 49
 	MaxNumProps = 7
 )
+
+var FI = d2fs.FileInfo{
+	FileName:   FileName,
+	FileNumber: filenumbers.Runes,
+	NumColumns: NumColumns,
+}
+var IFI = d2fs.ItemFileInfo{
+	FI:               FI,
+	ItemName:         RuneName,
+	Lvl:              -1, // Runes doesn't have a Lvl column
+	FirstProp:        T1Code1,
+	NumProps:         MaxNumProps,
+	HasEnabledColumn: true,
+}
 
 // Header Indexes
 const (

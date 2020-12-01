@@ -1,11 +1,30 @@
 package sets
 
+import (
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+)
+
 // File Constants
 const (
 	FileName    = "Sets.txt"
 	NumColumns  = 69
 	MaxNumProps = 16
 )
+
+var FI = d2fs.FileInfo{
+	FileName:   FileName,
+	FileNumber: filenumbers.Sets,
+	NumColumns: NumColumns,
+}
+var IFI = d2fs.ItemFileInfo{
+	FI:               FI,
+	ItemName:         Index,
+	Lvl:              Level,
+	FirstProp:        PCode2a,
+	NumProps:         MaxNumProps,
+	HasEnabledColumn: false,
+}
 
 // Header Indexes
 const (

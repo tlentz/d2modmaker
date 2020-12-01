@@ -9,7 +9,7 @@ const (
 // Header Indexes
 const (
 	Name             = 0
-	Type1            = 1
+	Type             = 1
 	Type2            = 2
 	Code             = 3
 	AlternateGfx     = 4

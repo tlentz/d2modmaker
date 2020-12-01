@@ -1,6 +1,6 @@
 {
-    "Version": "v0.5.1",
-    "SourceDir": "",
+    "Version": "v0.5.2alpha1",
+    "SourceDir": "../../assets/113c-data/",
     "OutputDir": "",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
@@ -15,16 +15,19 @@
     "RemoveLevelRequirements": false,
 	"RemoveAttRequirements":   false,
 	"RemoveUniqCharmLimit":    false,
-    "EnterToExit": true,
+    "EnterToExit": false,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
         "IsBalanced": true,
         "BalancedPropCount": true,
         "AllowDuplicateProps": false,
-        "MinProps": 0,
+        "MinProps": 2,
         "MaxProps": 20,
         "UseOSkills": true,
-        "PerfectProps": false
+        "PerfectProps": false,
+        "NumClones": 9,
+        "UsePropScores": true,
+        "PropScoreMultiplier": 1.0
     }
 }
