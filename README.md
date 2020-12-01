@@ -1,5 +1,5 @@
 [![Github All Releases](https://img.shields.io/github/downloads/tlentz/d2modmaker/total.svg)]()
-![release](https://img.shields.io/github/v/release/tlentz/d2modmaker?include_prereleases&sort=semver)
+![release](https://img.shields.io/github/v/release/tlentz/d2modmaker)
 
 <p align="center">
   <img width="400" height="400" src="/images/D2_Mod_Logo_V3.png">
