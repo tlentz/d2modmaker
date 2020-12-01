@@ -65,6 +65,16 @@ func rollRange(min int, max int, line *propscores.Line, itemLvl int, targetPropS
 	variance := util.Round32(float32((max - min)) * (PropVariance / 2.0))
 	newMax := newAvg + variance
 	newMin := newAvg - variance
+	roundTo := 1
+	delta := (float32(max) - float32(min))
+	if util.Absf32(delta) >= 30 {
+		roundTo = 5
+	}
+	if util.Absf32(delta) >= 70 {
+		roundTo = 10
+	}
+	newMin = util.Round32(float32(newMin)/float32(roundTo)) * roundTo
+	newMax = util.Round32(float32(newMax)/float32(roundTo)) * roundTo
 
 	newMin = util.MaxInt(newMin, min)
 	newMin = util.MinInt(newMin, max)
