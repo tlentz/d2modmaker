@@ -153,7 +153,10 @@ Thanks!
 
 # Change Log
 
-
+## v0.5.2-alpha-3
+* Added Scorer & Generator modules.
+   * Scorer reads in Unique, Sets, Setitems & Runes and calculates scores for each item.
+   * Generator uses the scores from the Scorer to generate new weighted random properties with are then filtered according to score.  It will keep generating props until it reaches # props on vanilla item + 4 (if BalancedPropCount) or MaxProps.  It also scales the min & max values based on the target score.
 ## v0.5.1
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
 * Adds new feature `RemoveLevelRequirements`
