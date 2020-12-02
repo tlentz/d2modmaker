@@ -7,10 +7,12 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
+	"github.com/tlentz/d2modmaker/internal/d2mod/generator"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
 	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
 	"github.com/tlentz/d2modmaker/internal/d2mod/randomizer"
 	"github.com/tlentz/d2modmaker/internal/d2mod/reqs"
+	"github.com/tlentz/d2modmaker/internal/d2mod/scorer"
 	"github.com/tlentz/d2modmaker/internal/d2mod/splash"
 	"github.com/tlentz/d2modmaker/internal/d2mod/stacksizes"
 	"github.com/tlentz/d2modmaker/internal/d2mod/townskills"
@@ -18,11 +20,13 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
+//MakeFromCfgPath ??
 func MakeFromCfgPath(defaultOutDir string, cfgPath string) {
 	cfg := config.Read(cfgPath)
 	Make(defaultOutDir, cfg)
 }
 
+// Make Run all the enabled d2 modules
 func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.OutputDir == "" {
 		cfg.OutputDir = defaultOutDir
@@ -58,12 +62,10 @@ func Make(defaultOutDir string, cfg config.Data) {
 		cows.AllowKingKill(d2files)
 	}
 
-	if cfg.RemoveLevelRequirements {
-		reqs.RemoveLevelRequirements(d2files)
-	}
-
-	if cfg.RemoveAttRequirements {
-		reqs.RemoveAttRequirements(d2files)
+	// Calculate scores  before any alterations to items.
+	var s *scorer.Scorer
+	if cfg.RandomOptions.UsePropScores {
+		s = scorer.Run(&d2files, cfg.RandomOptions)
 	}
 
 	if cfg.UniqueItemDropRate > 0 {
@@ -83,7 +85,20 @@ func Make(defaultOutDir string, cfg config.Data) {
 	}
 
 	if cfg.RandomOptions.Randomize {
-		randomizer.Run(&cfg, d2files)
+		if cfg.RandomOptions.UsePropScores {
+			g := generator.NewGenerator(&d2files, cfg.RandomOptions, s.TypeTree, s.PSI, s.Statistics)
+			g.Run()
+		} else {
+			randomizer.Run(&cfg, &d2files)
+		}
+	}
+
+	if cfg.RemoveLevelRequirements {
+		reqs.RemoveLevelRequirements(d2files)
+	}
+
+	if cfg.RemoveAttRequirements {
+		reqs.RemoveAttRequirements(d2files)
 	}
 
 	d2files.Write()

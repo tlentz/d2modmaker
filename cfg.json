@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.1",
+    "Version": "v0.5.2-alpha-2",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -8,23 +8,26 @@
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
-    "UniqueItemDropRate": 1,
-    "RuneDropRate": 1,
+    "UniqueItemDropRate": 70,
+    "RuneDropRate": 70,
     "StartWithCube": true,
     "Cowzzz": true,
     "RemoveLevelRequirements": false,
 	"RemoveAttRequirements":   false,
 	"RemoveUniqCharmLimit":    false,
-    "EnterToExit": true,
+    "EnterToExit": false,
     "RandomOptions": {
         "Randomize": true,
         "Seed": -1,
         "IsBalanced": true,
         "BalancedPropCount": true,
         "AllowDuplicateProps": false,
-        "MinProps": 0,
+        "MinProps": 2,
         "MaxProps": 20,
         "UseOSkills": true,
-        "PerfectProps": false
+        "PerfectProps": true,
+        "NumClones": 9,
+        "UsePropScores": true,
+        "PropScoreMultiplier": 1.0
     }
 }

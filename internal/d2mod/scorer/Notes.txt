@@ -1,0 +1,93 @@
+TODO:
+
+<Done> Implement better scoring of of set bonuses
+Reduce score across the board, 2 pc = 50%, 3 = 30%, 4 = 35%, 5 = 30%
+
+
+<Done> Implement Synergy bonuses.  (See PropScores.txt:SynergyGroup column)
+
+Implement handling of class specific sets (Example: don't want +14 firewall showing up on Angelic full set bonus, i.e. something sorc could wear)
+Review all full set bonuses to determine if new lines need to be made in PropScores.txt with itype fset
+
+
+Discussion in dev chat about score balancing, specifically balance of 2h weapons.
+
+[8:29 PM] EMPY: Any feedback on the above top 20?  Any look suspicious?  (I think the trang-oul is the full set bonus)
+[8:29 PM] EMPY: Oh!  I don't have any synergy group calculations in there yet.
+[8:30 PM] EMPY: gotta get that back in and start using it.   Not sure how to weight the synergies though.
+[8:31 PM] EMPY: (%ed & min dmg & max damage are all in the same synergy group for example)
+[8:33 PM] EMPY: Breath of the dying has %ed, 60% speed & 12-15% life steal... that should push its score much higher on the list.
+[8:38 PM] Deadlock39: Doesn't really look right generally, but it's poetically not bad for a first pass on trying to score things.
+[8:39 PM] Deadlock39: Things like trangs are strange because the huge skill bonuses would be absurd on a sorc, but are otherwise meh.
+[8:39 PM] EMPY: Remember to think of it in terms of properties, not properties on a particular item type.
+[8:40 PM] EMPY: can trangs be worn by non-sorcs?
+[8:40 PM] Deadlock39: Only necro
+[8:40 PM] EMPY: Hmmmm
+[8:40 PM] Deadlock39: Can complete it
+[8:41 PM] EMPY: I need to put that restriction on that prop
+[8:41 PM] Deadlock39: It has a necro shield
+[8:41 PM] EMPY: I think I havete force that +14 firewall prop to only spawn on necro-only gear... make sense?
+[8:42 PM] Deadlock39: All the class sets have a specific item.
+[8:42 PM] Deadlock39: Honestly, that whole weirdness could be considered a single prop. The Vampire morph and the 3 big + fire skills.
+[8:43 PM] Deadlock39: Except the Vampire morph sucks
+[8:43 PM] EMPY: I could force to necro only gear or put a column in Sets that describes it as a necro only set?
+[8:44 PM] Deadlock39: I would consider looking at something like the slashdiablo armoury/ladder and compare what people are using end of ladder to your top 20
+[8:45 PM] Deadlock39: Enigma and infinity should be head and shoulders #1 and #2
+[8:45 PM] Deadlock39: Their props are too game breaking
+[8:47 PM] Deadlock39: None uses beast. Faith is okay, if you're taking its aura and giving it to something that isn't a bow it's rank is more reasonable
+[8:48 PM] Deadlock39: Grief is missing from top 20
+[8:49 PM] Deadlock39: Things like botd, cranium basher appear to indicate you've rated high ed too high. No one uses those things (mostly because grief is OP)
+[8:52 PM] Deadlock39: Things change drastically if you let them off the slot they appear. Not sure if that is allowed in the mode you are imagining. Like the redemption aura from Phoenix is really OP in my experience, but I think it doesn't get used due to opportunity cost.
+[8:52 PM] EMPY: on paper that cranium basher is pretty sick... ed, min & max dmg, crush, AND amp
+[8:53 PM] Deadlock39: Yeah, it's 2H though, so trash (I presume is the downfall)
+[8:55 PM] Deadlock39: Again if you let that fall on a 1H it might totally change things. Lots of context to consider with the prop balance on items.
+[8:55 PM] EMPY: hmmmm
+[8:56 PM] EMPY: How should I take 1h vs 2h into account in scoring?
+[8:56 PM] Deadlock39: Like a big ole negative starting score for any 2H weapon probably due to lost opportunity cost from amazing shields.
+[8:57 PM] Deadlock39: Might be able to make balanced 2H items if you account for it correctly.
+[8:57 PM] Deadlock39: Roll a set of shield props for them too when you generate.
+[8:58 PM] EMPY: flat or %, like 50%  or 60% * score?
+[8:58 PM] Deadlock39: No idea...
+[8:58 PM] Deadlock39: Negative the average score of a similar level shield.
+[9:00 PM] Deadlock39: You give up the props, defense, and block of a shield when you go 2H, so they kind of have to be amazing to have any chance.
+[9:00 PM] EMPY: so vanilla isn't properly balanced for 2h?
+[9:00 PM] Deadlock39: In some cases you totally don't care about the defense, so as long as you could make up for the props you'd use it.
+[9:00 PM] Deadlock39: Nah, no one uses 2h
+[9:01 PM] Deadlock39: Spirit is too good.
+[9:01 PM] EMPY: so like if you had red dmg on a 2h?
+[9:01 PM] EMPY: like dmg% reduction
+[9:02 PM] Deadlock39: Maybe. I think you make usable 2H items if you just roll the weapon props, and then roll props for a shield add add those too.
+[9:02 PM] Deadlock39: Whatever they happen to be
+[9:02 PM] EMPY: Hmmm
+[9:03 PM] Deadlock39: Random gets rid of problems like spirit, so that helps too
+[9:03 PM] Deadlock39: Guaranteed life mana and 2 skills in your shield slot is way too good
+[9:04 PM] Deadlock39: A bunch of res too
+[9:05 PM] Deadlock39: Might end up over tuned, but I think it would be a good place to start if you want to try to tackle the 2H problem.
+[9:06 PM] EMPY: My idea was to score the vanilla item, then generate props to match the score of the vanilla item.
+[9:06 PM] EMPY: That blows up if the vanilla item sucks.
+[9:06 PM] Deadlock39: Well, lots of vanilla items suck
+[9:06 PM] EMPY: i.e. if I do that 2h reduction thing then the vanilla scores get lowered
+[9:06 PM] EMPY: Hmm
+[9:07 PM] EMPY: I could go a score curve purely based on level?
+[9:07 PM] EMPY: level & slot
+[9:08 PM] Deadlock39: You can just continue with trying to match vanilla. I might be steering you the wrong way. Fixing 2H is a separate issue all together.
+[9:08 PM] EMPY: I could make that an option.
+[9:08 PM] Deadlock39: Right
+[9:09 PM] EMPY: The nice part about matching score is that it covers over the rarity differences that my code can't really see.
+[9:10 PM] Deadlock39: Should probably consider 2H and 1H props separately though?
+[9:10 PM] EMPY: I can totally make 2 lines, and exclude 2h from 1 & 1h from the other.
+[9:10 PM] EMPY: just another line in the SS
+[9:11 PM] EMPY: for each prop we want that way
+[9:11 PM] Deadlock39: I sucks to pigeon hole things too much though. You start to end up with things not being as random as you might like.
+[9:11 PM] EMPY: Unique items are hand tuned
+[9:11 PM] EMPY: My goal is for it to feel like hand tuned but still be random, i.e. suprise you/keep you interested.   And to top it all off balanced
+[9:12 PM] EMPY: which is a really tough target to hit
+[9:13 PM] Deadlock39: Agree. It's an ambitious goal.
+[9:13 PM] Deadlock39: Vanilla doesn't really feel that "tuned" to me.
+[9:14 PM] Deadlock39: There are a bunch of items that are "for" a particular build. Some of them would be good if the build didn't suck.
+[9:15 PM] Deadlock39: Some of them are insane like griffs because infinity makes light sorc OP.
+[9:15 PM] Deadlock39: Some of them are just OP on purpose like grief and enigma
+[9:16 PM] Deadlock39: Some try to be like botd, but fall short.
+[9:17 PM] Deadlock39: If bow zon wasn't such a weak build comparatively, faith would probably be up in the top tier.
+[9:18 PM] Deadlock39: I can ramble forever though, and it's probably very minimally helpful so I'll stop for now. I've got to call it a night.
+[9:18 PM] EMPY: gn, and thx for the feedback :slight_smile:

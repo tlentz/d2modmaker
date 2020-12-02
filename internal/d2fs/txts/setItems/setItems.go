@@ -1,5 +1,10 @@
 package setItems
 
+import (
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+)
+
 // File Constants
 const (
 	FileName    = "SetItems.txt"
@@ -7,12 +12,29 @@ const (
 	MaxNumProps = 19
 )
 
+// FI File Info for setItems
+var FI = d2fs.FileInfo{
+	FileName:   FileName,
+	FileNumber: filenumbers.SetItems,
+	NumColumns: NumColumns,
+}
+
+// IFI  ItemFileInfo for setItems
+var IFI = d2fs.ItemFileInfo{
+	FI:               FI,
+	ItemName:         Index,
+	Lvl:              LvlReq, // Use LvlReq, not Lvl
+	FirstProp:        Prop1,
+	NumProps:         MaxNumProps,
+	HasEnabledColumn: false,
+}
+
 // Header Indexes
 const (
 	Index        = 0
 	Set          = 1
-	Item         = 2
-	Item_        = 3
+	Item         = 2 // This is type, column header is "item"
+	StarItem     = 3 // This is the types name, column header is "*item"
 	Rarity       = 4
 	Lvl          = 5
 	LvlReq       = 6
