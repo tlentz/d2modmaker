@@ -116,25 +116,38 @@ NextItemType:
 	return true
 }
 
-// CheckIETypes Check than any of item.Types is a child of propscores.Line.Itypes and not a child of propscore.Line.Etypes
-func CheckIETypes(tt *TypeTree, itemType string, Itypes []string, Etypes []string) bool {
-	//fmt.Printf("checkIETypes: %s %s <%d>%s <%d>%s\n", item.Name, item.Types, len(line.Itypes), line.Itypes, len(line.Etypes), line.Etypes)
-	for _, etype := range Etypes {
-		if CheckTypeTree(tt, itemType, etype) {
-			//fmt.Printf("efail\n")
-			return false
+// CheckIETypes Check that any of item.Types is a child of propscores.Line.Itypes and not a child of propscore.Line.Etypes
+func CheckIETypes(tt *TypeTree, itemTypes []string, Itypes []string, Etypes []string) bool {
+	//fmt.Printf("checkIETypes: %s/%s/%s\n", itemTypes, Itypes, Etypes)
+
+	isExcluded := false
+	if len(Etypes) > 0 {
+		isExcluded = true
+	}
+	for _, itemType := range itemTypes {
+		for _, etype := range Etypes {
+			if !CheckTypeTree(tt, itemType, etype) && (etype != "") {
+				//fmt.Printf("efail\n")
+				isExcluded = false
+			}
 		}
+	}
+	if isExcluded {
+		//fmt.Printf("isExcluded\n")
+		return false
 	}
 
 	if len(Itypes) == 0 {
 		return true
 	}
-	for _, itype := range Itypes {
-		if CheckTypeTree(tt, itemType, itype) {
-			//fmt.Printf("isucceed\n")
-			return true
+	for _, itemType := range itemTypes {
+		for _, itype := range Itypes {
+			if CheckTypeTree(tt, itemType, itype) {
+				//fmt.Printf("isucceed\n")
+				return true
+			}
 		}
 	}
-	//fmt.Printf("ifail(%s -> %s checked)\n", item.Types, line.Itypes)
+	//fmt.Printf("ifail(%s -> %s/%s checked)\n", itemTypes, Itypes, Etypes)
 	return false // has item.Types but no match
 }

@@ -10,6 +10,9 @@ import (
 
 // checkPropScore Determine if a given prop matches a given line from PropScores.txt
 // Checks (based on PropParType) Par, Min < Avg(Prop & Max) < Max and Itype/Etype restrictions
+// Checks (based on PropParType) Par, Min < Avg(Prop & Max) < Max and Itype/Etype restrictions
+// Checks (based on PropParType) Par, Min < Avg(Prop & Max) < Max and Itype/Etype restrictions
+// Checks (based on PropParType) Par, Min < Avg(Prop & Max) < Max and Itype/Etype restrictions
 func checkPropScore(tt *TypeTree, p prop.Prop, item Item, line *propscores.Line) bool {
 	//fmt.Printf("checkPropScore: %s|%s>%s|%s\n", p.Name, p.Par, line.Prop.Name, line.Prop.Par)
 
@@ -17,7 +20,7 @@ func checkPropScore(tt *TypeTree, p prop.Prop, item Item, line *propscores.Line)
 		return false
 	}
 	switch line.PropParType {
-	case propscorespartype.R, propscorespartype.Rp, propscorespartype.C:
+	case propscorespartype.R, propscorespartype.Rp, propscorespartype.C, propscorespartype.Req:
 		// LMin < Avg(Min,Max) < LMax
 		avg := (p.Val.Min + p.Val.Max) / 2
 
@@ -70,9 +73,9 @@ func checkPropScore(tt *TypeTree, p prop.Prop, item Item, line *propscores.Line)
 		}
 
 	default:
-		log.Fatalf("PropScores.txt has a line with missing PropParType")
+		log.Fatalf("PropScores.txt has a line with and unknown PropParType")
 	}
 	//log.Println(item.Name)
 	//log.Println(item.Types)
-	return CheckIETypes(tt, item.Types[0], line.Itypes, line.Etypes)
+	return CheckIETypes(tt, item.Types, line.Itypes, line.Etypes)
 }

@@ -152,7 +152,10 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
-
+## v0.5.2-alpha-4
+* Fixes to Scorer for MinProps support
+* Added r= PropParType to allow generation of props in multiples of 5 or 10
+* Balancing, and more balancing in PropScores.txt mainly to do with damage, but also restricted 1-100% mana steal to staves, 15% max for everything else.
 ## v0.5.2-alpha-3
 * Added Scorer & Generator modules.
    * Scorer reads in Unique, Sets, Setitems & Runes and calculates scores for each item.

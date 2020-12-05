@@ -26,10 +26,15 @@ func RollAffix(g *Generator, item *d2items.Item, sbm float32, colIdx int, target
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
 		//fmt.Printf("RollAffix: %d %d-%d -> ", targetPropScore, newa.P.Val.Min, newa.P.Val.Max)
-		newa.P.Val.Min, newa.P.Val.Max = rollRange(newa.P.Val.Min, newa.P.Val.Max, newa.Line, item.Lvl, targetPropScore)
+		newa.P.Val.Min, newa.P.Val.Max = rollRange(newa.P.Val.Min, newa.P.Val.Max, newa.Line.ScoreMin, newa.Line.ScoreMax, item.Lvl, targetPropScore, true)
 		newa.P.Min = strconv.Itoa(newa.P.Val.Min)
 		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
 		//fmt.Printf("%s-%s\n", newa.P.Min, newa.P.Max)
+	case propscorespartype.Req:
+		newa.P.Val.Min, newa.P.Val.Max = rollRange(newa.P.Val.Min, newa.P.Val.Max, newa.Line.ScoreMin, newa.Line.ScoreMax, item.Lvl, targetPropScore, false)
+		newa.P.Min = strconv.Itoa(newa.P.Val.Min)
+		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
+
 	case propscorespartype.Lvl: // (pts or %)/lvl prop min & max are empty/ignored
 		newa.P.Val.Par = rollMax(newa.P.Val.Par, newa.Line, item.Lvl, targetPropScore)
 		newa.P.Par = strconv.Itoa(newa.P.Val.Par)
@@ -59,18 +64,24 @@ func RollAffix(g *Generator, item *d2items.Item, sbm float32, colIdx int, target
 }
 
 // rollRange:  Calculate a min & max value +/- PropVariance centered around targetPropScore.
-func rollRange(min int, max int, line *propscores.Line, itemLvl int, targetPropScore int) (int, int) {
-	newAvg := util.Interpolate(targetPropScore, targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
+func rollRange(min int, max int, scoreMin int, scoreMax int, itemLvl int, targetPropScore int, applyVariance bool) (int, int) {
+	if min > max {
+		log.Fatalf("rollRange: min > max: (%d %d)", min, max)
+	}
+	newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
 	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
-	variance := util.Round32(float32((max - min)) * (PropVariance / 2.0))
+	variance := 0
+	if applyVariance {
+		variance = util.Round32(float32((max - min)) * (PropVariance / 2.0))
+	}
 	newMax := newAvg + variance
 	newMin := newAvg - variance
 	roundTo := 1
-	delta := (float32(max) - float32(min))
-	if util.Absf32(delta) >= 30 {
+	largest := util.MaxInt(util.AbsInt(max), util.AbsInt(min))
+	if largest >= 30 {
 		roundTo = 5
 	}
-	if util.Absf32(delta) >= 70 {
+	if largest >= 70 {
 		roundTo = 10
 	}
 	newMin = util.Round32(float32(newMin)/float32(roundTo)) * roundTo
@@ -81,9 +92,6 @@ func rollRange(min int, max int, line *propscores.Line, itemLvl int, targetPropS
 	newMax = util.MinInt(newMax, max)
 	newMax = util.MaxInt(newMax, min)
 
-	if min > max {
-		log.Fatalf("rollRange min > max: %+v", line)
-	}
 	return newMin, newMax
 }
 
@@ -117,7 +125,7 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineS
 		scoreFileRowIndex := w.Generate()
 		line := g.psi.RowLines[scoreFileRowIndex]
 		//log.Printf("rollPropScoreLine: %s: ScoreMax=%d T:%d TargetScore=%d\n", line.Prop.Name, line.ScoreMax, line.PropParType, targetPropScore)
-		if !d2items.CheckIETypes(g.TypeTree, item.Types[0], line.Itypes, line.Etypes) {
+		if !d2items.CheckIETypes(g.TypeTree, item.Types, line.Itypes, line.Etypes) {
 			//log.Print("<Reroll T>")
 			continue
 		}
@@ -135,15 +143,22 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineS
 		}
 		// var lineDelta int
 		//fmt.Printf("%s %d <%d %d %d>\n", item.Name, closestLineDelta, line.ScoreMin, targetLineScore, line.ScoreMax)
+		// Adjust for cases where Min < Max
+		scoreMin := line.ScoreMin
+		scoreMax := line.ScoreMax
+		if line.ScoreMax < line.ScoreMin {
+			scoreMax = line.ScoreMin
+			scoreMin = line.ScoreMax
+		}
 		switch {
-		case targetLineScore >= line.ScoreMax:
-			lineDelta := targetLineScore - line.ScoreMax
+		case targetLineScore >= scoreMax:
+			lineDelta := targetLineScore - scoreMax
 			if lineDelta < closestLineDelta {
 				closestLine = line
 				closestLineDelta = lineDelta
 			}
-		case targetLineScore <= line.ScoreMin:
-			lineDelta := line.ScoreMin - targetLineScore
+		case targetLineScore <= scoreMin:
+			lineDelta := scoreMin - targetLineScore
 			if lineDelta < closestLineDelta {
 				closestLine = line
 				closestLineDelta = lineDelta

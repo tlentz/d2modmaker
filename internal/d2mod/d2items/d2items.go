@@ -171,7 +171,7 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 		}
 	}
 	if (item.Lvl > 0) && ((pg.IFI.HasEnabledColumn && row[2] == "1") || (!pg.IFI.HasEnabledColumn)) {
-		log.Fatalf("NewAffix: Couldn't find line in PropScores.txt for %s[%d] %s|%s|%s|%s", item.Name, item.Lvl, aff.P.Name, aff.P.Par, aff.P.Min, aff.P.Max)
+		log.Fatalf("NewAffixFromRow: Couldn't find line in PropScores.txt for %s[%d] %s|%s|%s|%s", item.Name, item.Lvl, aff.P.Name, aff.P.Par, aff.P.Min, aff.P.Max)
 	}
 	return &aff
 }

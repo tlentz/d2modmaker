@@ -3,19 +3,21 @@ package propscorespartype
 // All types from PropScores.txt column PropParType
 const (
 	R   = 1 // Regular
-	Rp  = 2
-	Rt  = 3
-	Lvl = 4
-	S   = 5
-	Scl = 6
-	Smm = 7
-	Sch = 8
-	C   = 9
+	Req = 2
+	Rp  = 3
+	Rt  = 4
+	Lvl = 5
+	S   = 6
+	Scl = 7
+	Smm = 8
+	Sch = 9
+	C   = 10
 )
 
 // Types Map from string to the constant
 var Types = map[string]int{
 	"r":   R,   // _, Min, Max		 	Par is supposed to be empty
+	"r=":  Req, // _, Min,Max			Min & Max on generated item to be same value
 	"rp":  Rp,  // ?, Min, Max		 	Don't touch Par
 	"rt":  Rt,  // Time, Min, Max
 	"lvl": Lvl, // Lvl, _, _				%/Lvl: % or pts per Level
