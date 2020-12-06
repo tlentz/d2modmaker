@@ -12,12 +12,13 @@ abs-mag	0	3	15	r=	3	15													3		Crescent Moon	Runes	0
 abs-mag/lvl	5	0	0	lvl		40													3		RandomizeAdd6		0
 abs-mag%	0	5	30	r=	10	60													3		RandomizeAdd7		0
 ac	0	-100	-1	c	-5	0													101	ac	Dimoaks Hew	UniqueItems	0
-ac	0	0	600	r=	0	60													101	ac	Bladebone	UniqueItems	0
-ac	0	600	800	r=	60	80													101	ac	Enigma	Runes	0
+ac	0	0	350	r=	0	=D15*0.3				weap						aspe			101	ac	Bladebone	UniqueItems	0
+ac	0	0	600	r=	0	60				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
+ac	0	600	800	r=	60	80										weap			101	ac	Enigma	Runes	0
 ac-hth	0	40	200	r=	2	10													101		Darkglow	UniqueItems	0
 ac-miss	0	10	400	r=	1	20													101		Coif of Glory	UniqueItems	0
 ac/lvl	40	0	0	lvl		30													101	ac	Swordguard	UniqueItems	0
-ac%	0	10	150	r=	1	80		Y		weap									101	ac	Duskdeep	UniqueItems	0
+ac%	0	10	150	r=	1	80				weap									101	ac	Duskdeep	UniqueItems	0
 ac%	0	10	375	r=	1	38		Y								weap			101	ac	Duskdeep	UniqueItems	0
 addxp	0	5	10	r=	50	100				cm1	rod								200		Annihilus	UniqueItems	0
 all-stats	0	3	30	r=	6	60													16		Azurewrath	UniqueItems	0
@@ -127,9 +128,9 @@ charged	Venom	11	3	sch		5													44		Arachnid Mesh	UniqueItems	0
 charged	Volcano	30	14	sch		1													44		Earthshifter	UniqueItems	0
 cheap	0	10	15	r=	20	30													203		Gheed's Fortune	UniqueItems	0
 cold-len	0	75	250	r=	0	0													137		Gravenspine	UniqueItems	0
-cold-max	0	2	14	r=	1	=D130*1.5													204	cold	Gravenspine	UniqueItems	0
+cold-max	0	2	14	r=	1	=D131*1.5													204	cold	Gravenspine	UniqueItems	0
 cold-min	0	1	6	r=	2	12													9	cold	Gravenspine	UniqueItems	0
-crush	0	5	75	r=	25	375													205	dmg	The Gnasher	UniqueItems	0
+crush	0	5	75	r=	20	150													205	dmg	The Gnasher	UniqueItems	0
 deadly	0	15	100	r=	30	200													206	dmg	Steelgoad	UniqueItems	0
 deadly/lvl	12	0	0	lvl		150													206	dmg	Headstriker	UniqueItems	0
 death-skill	Blizzard	100	37	scl		0													207		Rainbow Facet	UniqueItems	0
@@ -154,8 +155,8 @@ dmg-cold	150	10	30	r	30	70	16												10	cold	Shadowfang	UniqueItems	0
 dmg-cold	150	30	400	r	70	810	16												10	cold	Shadowfang	UniqueItems	0
 dmg-cold	200	32	196	r	74	402	59												10	cold	Buriza-Do Kyanon	UniqueItems	0
 dmg-cold	250	250	500	r	520	1000	87												10	cold	Azurewrath	UniqueItems	0
-dmg-dem/lvl	15	0	0	lvl		45													209	dmg	Widowmaker	Runes	0
-dmg-demon	0	25	380	r=	12	190													209	dmg	Dark Clan Crusher	UniqueItems	0
+dmg-dem/lvl	15	0	0	lvl		45													209		Widowmaker	Runes	0
+dmg-demon	0	25	380	r=	12	190													209		Dark Clan Crusher	UniqueItems	0
 dmg-elem		55	160	rt	330	960													210	ele	Hellrack	UniqueItems	0
 dmg-elem	33	63	324	rt	378	1944													210	ele	Hellrack	UniqueItems	0
 dmg-elem	100	50	200	rt	300	1200													210	ele	Famine	Runes	0
@@ -163,9 +164,9 @@ dmg-fire	0	1	500	r	1	1000													12	fire	Brainhew	UniqueItems	0
 dmg-ltng	0	1	333	r	1	666													13	ltng	The Chieftan	UniqueItems	0
 dmg-mag	0	0	50	r	0	100													211	mag	Azurewrath	UniqueItems	0
 dmg-mag	0	50	500	r	100	1000	37												211	mag	Ginther's Rift	UniqueItems	0
-dmg-max	0	3	66	r=	6	=D166*1.5													13	dmg	Goreshovel	UniqueItems	0
+dmg-max	0	3	66	r=	6	=D167*1.5													13	dmg	Goreshovel	UniqueItems	0
 dmg-min	0	1	15	r=	2	30													14	dmg	Deathspade	UniqueItems	0
-dmg-norm	0	3	100	r	3	100													212	dmg	Rusthandle	UniqueItems	0
+dmg-norm	0	3	100	r	3	200													212	dmg	Rusthandle	UniqueItems	0
 dmg-pois	50	125	255	rt	125	255	43												16	pois	Rainbow Facet	UniqueItems	0
 dmg-pois	70	30	255	rt	30	255													16	pois	Serpent Lord	UniqueItems	0
 dmg-pois	75	30	200	rt	30	200													16	pois	Serpent Lord	UniqueItems	0
@@ -198,7 +199,7 @@ extra-fire	0	3	50	r	3	50													217	fire	Dragonscale	UniqueItems	0
 extra-ltng	0	3	50	r	3	50													218	ltng	Griffon's Eye	UniqueItems	0
 extra-pois	0	3	50	r	3	50													219	pois	Rainbow Facet	UniqueItems	0
 fade		1	1	s		0	22			fset									220	ac	Natalya's Odium	Sets	0
-fire-max	0	6	54	r=	6	=D201*1.5													221	fire	Bladebone	UniqueItems	0
+fire-max	0	6	54	r=	6	=D202*1.5													221	fire	Bladebone	UniqueItems	0
 fire-min	0	3	23	r=	6	46													11	fire	Bladebone	UniqueItems	0
 fireskill		1	3	smm	12	36													125	fire	Leaf	Runes	0
 freeze	0	1	4	r	10	11													224		Fechmars Axe	UniqueItems	0
@@ -351,7 +352,7 @@ hp	0	5	100	r=	20	400	25												26	ac		SetItems	0
 hp	0	100	200	r=	300	600	53			tors	belt								26	ac	Immortal King	Sets	0
 hp		100	150	r=	300	450				fset									26	ac	Immortal King	Sets	0
 hp/lvl	12	0	0	lvl		19													225	ac	Harlequin Crest	UniqueItems	0
-hp%		10	30	r	=2.5*C354	=2.5*D354													225	ac	Chromatic Ire	UniqueItems	0
+hp%		10	30	r	=2.5*C355	=2.5*D355													225	ac	Chromatic Ire	UniqueItems	0
 ignore-ac		1	1	s	60	60													253	dmg	Krintizs Skewer	UniqueItems	0
 ignore-ac	1	1	1	s	60	60													253	dmg	Lightsabre	UniqueItems	0
 indestruct		1	1	s	5	5													39	eth	Butcher's Pupil	UniqueItems	0
@@ -394,7 +395,7 @@ move3		30	40	r=	30	40				boot	fset								35		Hwanin's Majesty	Sets	0
 nec		1	3	r	16	72													125		Trang-Oul's Avatar	Sets	0
 nofreeze	0	1	1	r	50	50													228		The Jade Tan Do	UniqueItems	0
 noheal		1	1	s	50	50													20		Blacktongue	UniqueItems	0
-openwounds		10	100	r	20	200													229		The Gnasher	UniqueItems	0
+openwounds		10	100	r=	5	50													229		The Gnasher	UniqueItems	0
 oskill	Arctic Blast	7	14	smm	1	2	78												306	cold	Frostwind	UniqueItems	0
 oskill	Battle Command	2	6	smm	40	95	57												311		Call to Arms	Runes	0
 oskill	Battle Cry	1	4	smm	4	8	57												313		Call to Arms	Runes	0
@@ -581,7 +582,7 @@ stack	0	60	60	r	5	5				thro									141		Titan's Revenge	UniqueItems	0
 stam	0	15	180	r=	0	0													109		Cow King's Leathers	Sets	0
 stam/lvl	8	0	0	lvl		0													109		Sandstorm Trek	UniqueItems	0
 stamdrain	0	10	50	r=	0	0													248		The Centurion	UniqueItems	0
-stamdrain	1	-25	-15	c	-25	-15													248		Duress	Runes	0
+stamdrain		-25	-15	c	-25	-15													248		Duress	Runes	0
 state	fullsetgeneric	1	1	s	0	0	21			fset									252		Aldur's Watchtower	Sets	0
 state	monsterset	1	1	s	0	0	32			fset									252		Trang-Oul's Avatar	Sets	0
 str	0	2	50	r=	1	5													31		Naj's Ancient Set	Sets	0

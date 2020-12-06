@@ -3,7 +3,6 @@ package generator
 import (
 	"log"
 	"math/rand"
-	"strconv"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer"
@@ -11,20 +10,20 @@ import (
 )
 
 // GenItem returns a new item with random affixes based on supplied item
-func GenItem(g *Generator, item *d2items.Item) *d2items.Item {
+func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	if g.Statistics == nil {
 		log.Fatalln("GenItems: generator statistics was not initialized")
 	}
-	its := g.Statistics.GetItemTypeStatistics(g.TypeTree, item.FileNumber, item.Types[0]) // FIXME: This is broken for runewords that work in both weapons & armor...
+	its := g.Statistics.GetItemTypeStatistics(g.TypeTree, oldItem.FileNumber, oldItem.Types[0]) // FIXME: This is broken for runewords that work in both weapons & armor...
 	if len(its.NumLines) == 0 {
 		log.Panic("item statistics structure empty")
 	}
 	its.Weights.Generate()
-	targetScore := util.Round32(float32(g.Statistics.ItemScores[item.Name]) * float32(g.opts.PropScoreMultiplier))
+	targetScore := util.Round32(float32(g.Statistics.ItemScores[oldItem.Name]) * float32(g.opts.PropScoreMultiplier))
 	targetPropCount := 0
 	maxProps := 0
 	if g.opts.BalancedPropCount {
-		targetPropCount = len(item.Affixes)
+		targetPropCount = len(oldItem.Affixes)
 		maxProps = util.MinInt(targetPropCount+4, g.IFI.NumProps) // With BalancedPropCount allow 4 extra props worth of breathing room to hit the score target
 	} else {
 		if g.IFI.NumProps == 0 {
@@ -37,7 +36,7 @@ func GenItem(g *Generator, item *d2items.Item) *d2items.Item {
 		targetPropCount = minProps + rand.Intn(maxProps-minProps+1) // beware how Intn behaves...
 		targetPropCount = util.MinInt(targetPropCount, g.IFI.NumProps)
 	}
-	newi := item.CloneWithoutAffixes()
+	newi := oldItem.CloneWithoutAffixes()
 	newi.Affixes = []d2items.Affix{}
 	var rollCount int
 	itemScore := 0
@@ -75,12 +74,19 @@ func GenItem(g *Generator, item *d2items.Item) *d2items.Item {
 			targetPropScore = util.Round32(float32(targetPropScore) / sbm)
 			//log.Printf("genItem: #Affixes: %d TargetScore: %d TargetPropScore: %d itemScore:%d", len(newi.Affixes), targetScore, targetPropScore, itemScore)
 
-			newAffix := RollAffix(g, newi, sbm, newColIdx, targetPropScore, its.Weights)
+			newAffix := RollAffix(g, newi, newColIdx, targetPropScore, its.Weights)
+			if newAffix.ScoreMult == 0 {
+				log.Panicf("GenItem: RollAffix returned affix with ScoreMult == 0")
+			}
 			newi.Affixes = append(newi.Affixes, *newAffix)
-			itemScore = scorer.ScoreItem(g.Statistics, g.TypeTree, *newi) // Doing full item score because of SynergyGroup calculation
+			itemScore = scorer.ScoreItem(g.Statistics, g.TypeTree, newi) // Doing full item score because of SynergyGroup calculation
+			// if itemScore == 0 {
+
+			// 	log.Panicf("%+v\n", newi)
+			// }
 			affixRollCount++
 			if (affixRollCount > 200) && (len(newi.Affixes) >= targetPropCount) {
-				//log.Fatalf("genItem: > 100 rolls for %s", newi.Name)
+				//log.Fatalf("GenItem: > 100 rolls for %s", newi.Name)
 				break
 			}
 			if ((itemScore > minItemScore) && (itemScore < maxItemScore)) && (len(newi.Affixes) >= targetPropCount) {
@@ -102,15 +108,12 @@ func GenItem(g *Generator, item *d2items.Item) *d2items.Item {
 		log.Printf("genItem: Count(tgt/itm/max) %d/%d/%d, Scores(min/itm/tgt/max): %d/%d/%d/%d,  %s last aff=%s", len(newi.Affixes), targetPropCount, maxProps, minItemScore, itemScore, targetScore, maxItemScore, item.Name, lastAffixName)
 	*/
 	if (itemScore < minItemScore) || (itemScore > maxItemScore) {
-		log.Printf("genItem: Missed target: #  Prop Count (tgt/itm/max) %2d/%2d/%d, Scores(Vanilla <min itm max>): %5d <%5d %5d %5d> -- %s", targetPropCount, len(newi.Affixes), maxProps, g.Statistics.ItemScores[item.Name], minItemScore, itemScore, maxItemScore, newi.Name)
+		log.Printf("genItem: Missed target: #  Prop Count (tgt/itm/max) %2d/%2d/%d, Scores(Vanilla <min itm max>): %5d <%5d %5d %5d> -- %s", targetPropCount, len(newi.Affixes), maxProps, g.Statistics.ItemScores[oldItem.Name], minItemScore, itemScore, maxItemScore, newi.Name)
 	}
-	for _, a := range newi.Affixes {
-		aMax, _ := strconv.Atoi(a.P.Max)
-		if aMax > 800 {
-			log.Println(a)
-			panic(5)
-		}
+	if minItemScore == 0 && maxItemScore == 0 {
+		log.Panicf("%+v", newi)
 	}
+	scorer.WriteItemScore(g.d2files, g.IFI, newi, false)
 	return newi
 }
 func checkDupeGroups(item *d2items.Item) bool {

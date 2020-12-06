@@ -25,6 +25,9 @@ type Affix struct {
 	SetBonusMultiplier float32
 	ColIdx             int
 	Line               *propscores.Line
+	RawScore           int
+	ScoreMult          float32
+	AdjustedScore      int
 }
 
 // ItemAffixes list of Affixes (containing props) on an Item
@@ -39,6 +42,7 @@ type Item struct {
 	RowIdx     int      // Row# this item came from/going to
 	Types      []string // Similar to typeOffsets, can be empty, 1 or up to 6.
 	Enabled    bool     // false when row[2] == 1 in Runes or UniqueItems, true otherwise
+	Score      int
 }
 
 // Items is a slice of Item
@@ -160,6 +164,7 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 		P: prop.NewProp(row[colIdx], row[colIdx+1], row[colIdx+2], row[colIdx+3]),
 	}
 	aff.SetBonusMultiplier = CalcSetBonusMultiplier(pg.IFI.FI.FileNumber, colIdx)
+	aff.ScoreMult = aff.SetBonusMultiplier
 	for _, line := range pg.psi.PropLines[aff.P.Name] {
 		//line := pg.psi.PropLines[aff.P.Name][idx]
 		if checkPropScore(&pg.tt, aff.P, item, line) {
@@ -177,13 +182,15 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 }
 
 // NewAffixFromLine Used by Generator, create an Affix from a PropScores.txt Line
-func NewAffixFromLine(line *propscores.Line, colIdx int, setBonusMultiplier float32) *Affix {
+func NewAffixFromLine(line *propscores.Line, colIdx int, filenumber int) *Affix {
 	aff := Affix{
 		P:                  line.Prop,
 		Line:               line,
 		ColIdx:             colIdx,
-		SetBonusMultiplier: setBonusMultiplier,
+		SetBonusMultiplier: CalcSetBonusMultiplier(filenumber, colIdx),
 	}
+	aff.ScoreMult = aff.SetBonusMultiplier
+	// aff.SetBonusMultiplier = CalcSetBonusMultiplier(pg.IFI.FI.FileNumber, colIdx)
 	return &aff
 }
 

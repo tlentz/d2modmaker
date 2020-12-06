@@ -68,20 +68,21 @@ func NewFiles(sourceDir string, outDir string) Files {
 }
 
 // ReadD2File reads a given d2 file
-func (d2files *Files) Read(filename string) *File {
+func (d2files *Files) Read(filepath string, filename string) *File {
 	if d2files.sourceDir == "" {
 		// open csvfile
-		csvfile, err := assets.Assets.Open(path.Join(assets.DataDir, filename))
+		//csvfile, err := assets.Assets.Open(path.Join(assets.DataDir, filename))
+		csvfile, err := assets.Assets.Open(path.Join(filepath, filename))
 		//TODO: figure out how to move this out of if/else
 		checkError(filename, err)
 		defer csvfile.Close()
 		return importCsv(csvfile, filename)
-	} else {
-		csvfile, err := os.Open(path.Join(d2files.sourceDir, filename))
-		checkError(filename, err)
-		defer csvfile.Close()
-		return importCsv(csvfile, filename)
 	}
+	csvfile, err := os.Open(path.Join(d2files.sourceDir, filename))
+	checkError(filename, err)
+	defer csvfile.Close()
+	return importCsv(csvfile, filename)
+
 }
 
 // ReadAsset Reads File directly from a csv file (not from vfs)
@@ -128,7 +129,7 @@ func importCsv(csvfile io.Reader, filename string) *File {
 // WriteFiles writes all d2 files
 func (d2files *Files) Write() {
 	for _, d2file := range d2files.cache {
-		// fmt.Println("writing " + path.Join(d2files.outDir, d2file.FileName))
+		//fmt.Println("writing " + path.Join(d2files.outDir, d2file.FileName))
 		d2file.write(d2files.outDir)
 	}
 }
@@ -146,13 +147,28 @@ func (d2file *File) write(outDir string) {
 	checkError(d2file.FileName, e)
 }
 
-// Get returns the D2File at the given key otherwise creates it
+// Get returns the D2File at the given key otherwise creates it.
+// Using assets.DataDir as path
 func (d2files *Files) Get(filename string) *File {
 	if val, ok := d2files.cache[filename]; ok {
 		return val
 	}
 
-	file := d2files.Read(filename)
+	file := d2files.Read(assets.DataDir, filename)
+
+	d2files.cache[filename] = file
+
+	return file
+}
+
+// GetWithPath read a tab delimited text file from pathname & filename
+// The Get routines add the filename to the cache, which gets
+// written out by Write.
+func (d2files *Files) GetWithPath(pathname string, filename string) *File {
+	if val, ok := d2files.cache[filename]; ok {
+		return val
+	}
+	file := d2files.Read(pathname, filename)
 
 	d2files.cache[filename] = file
 

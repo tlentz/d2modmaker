@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	synergyBonus = 1.1 // 10% increase.  Applies n time to every prop that has n siblings in same SynergyGroup
+	synergyBonus = 1.1 // 10% increase.  Applies n times to every prop that has n siblings in same SynergyGroup
 	twoHandNerf  = 0.7 // 30% decrease.  2handers (not 1 or 2handers) scores reduced due to hogging the shield slot.
 )
 

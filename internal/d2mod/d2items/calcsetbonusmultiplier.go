@@ -1,6 +1,8 @@
 package d2items
 
 import (
+	"log"
+
 	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
@@ -8,8 +10,12 @@ import (
 
 // CalcSetBonusMultiplier Set Bonuses are valued lower than native item props. Returns multiplier to scale the
 // Prop score based on how many items it takes to trigger the set bonus.
+// Prop score based on how many items it takes to trigger the set bonus.
 func CalcSetBonusMultiplier(filenumber int /* item Item,*/, colIndex int) float32 {
 	sbn := 0
+	if colIndex == 0 {
+		log.Fatalf("CalcSetBonusMultiplier: colIndex == 0")
+	}
 	if filenumber == filenumbers.Sets {
 		switch colIndex {
 		case sets.PCode2a, sets.PCode2b:

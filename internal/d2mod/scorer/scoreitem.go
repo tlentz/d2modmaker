@@ -1,8 +1,8 @@
 package scorer
 
 import (
+	"fmt"
 	"log"
-	"math"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
@@ -10,58 +10,67 @@ import (
 )
 
 // ScoreItem .
-func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* scorelines *propscores.ScoreMap,*/, item d2items.Item) int {
+func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* scorelines *propscores.ScoreMap,*/, item *d2items.Item) int {
 
-	var scores []int = make([]int, len(item.Affixes)) // scores by affix index, needed for synergy calc
-	//var sgroups []string = make([]string, len(item.Affixes)) //  synergy groups to apply syn.  individually
-	sgroups := make([]string, len(item.Affixes))
+	//var sgroups []string = make([]string, len(item.Affixes))
 	if len(item.Affixes) == 0 {
 		log.Panic("No Affixes")
 	}
-	for idx, aff := range item.Affixes {
+	sgroups := make([]string, len(item.Affixes)) //  synergy groups to apply syn.  individually
+	for idx := range item.Affixes {
 		//sbm := CalcSetBonusMultiplier(item.FileNumber, item, pidx)
 
 		//pscore, synergygroup := scoreProp(ss, tt, scorelines, item, item.Affixes[pidx])
-		if aff.Line == nil {
+		if item.Affixes[idx].Line == nil {
 			log.Fatalf("ScoreItem: Affix with no line encountered %s", item.Name)
 		}
 
-		sgroups[idx] = aff.Line.SynergyGroup
-		affixRawScore := scoreAffix(ss, tt, item, aff)
-		if aff.SetBonusMultiplier == 0 {
+		sgroups[idx] = item.Affixes[idx].Line.SynergyGroup
+		scoreAffix(ss, tt, *item, &item.Affixes[idx])
+		if item.Affixes[idx].SetBonusMultiplier == 0 {
 			log.Panic("SetBonumMultiplier == 0")
 		}
-		scores = append(scores, util.Round32(float32(affixRawScore)*aff.SetBonusMultiplier))
 	}
 
 	// Compute & add Synergy bonuses
 	//NextProp:
-	for idx, aff := range item.Affixes {
+	for idx := range item.Affixes {
 
 		if sgroups[idx] != "" {
-			for oidx, oaff := range item.Affixes {
-				if (&aff != &oaff) && (sgroups[idx] == sgroups[oidx]) {
+			for oidx := range item.Affixes {
+				if (idx != oidx) && (sgroups[idx] == sgroups[oidx]) {
 					//fmt.Printf("SynBonus:%s:%s<%s>%s %d", item.Name, p.Name, sgroups[pidx], op.Name, scores[pidx])
-					scores[idx] = util.Round32(float32(scores[idx]) * synergyBonus)
+					//scores[idx] = util.Round32(float32(scores[idx]) * synergyBonus)
+					item.Affixes[idx].ScoreMult = item.Affixes[idx].ScoreMult * synergyBonus
 					//fmt.Printf("->%d\n", scores[pidx])
 					//continue NextProp	// per macohan, 10% per other prop in same synergygroup. uncomment for flat 10%
+					//fmt.Printf("%d", item.Affixes[idx].RawScore)
 				}
 			}
 		}
 	}
-	//log.Printf("Scores: %v", scores)
-	score := 0
-	for _, s := range scores {
-		score += s
-	}
-
 	// Check if is a 2hander, and apply 2hander nerf if it is
 	// pole staf bow xbow abow aspe spea
 	//fmt.Printf("2h check: %s\n", item.Name)
-	if d2items.CheckTwoHander(tt, item) {
+	if d2items.CheckTwoHander(tt, *item) {
 		//fmt.Printf("2hander: %s\n", item.Name)
-		score = int(math.Round(float64(score) * twoHandNerf))
+		//score = int(math.Round(float64(score) * twoHandNerf))
+		for idx := range item.Affixes {
+			item.Affixes[idx].ScoreMult = item.Affixes[idx].ScoreMult * twoHandNerf
+		}
+	}
+
+	//log.Printf("Scores: %v", scores)
+	score := 0
+	for idx := range item.Affixes {
+		if item.Affixes[idx].ScoreMult == 0 {
+			fmt.Printf("%v\n", item)
+			log.Panicf("ScoreItem: Score multiplier not set")
+		}
+		item.Affixes[idx].AdjustedScore = util.Round32(float32(item.Affixes[idx].RawScore) * item.Affixes[idx].ScoreMult)
+		score += item.Affixes[idx].AdjustedScore
 	}
 	//log.Printf("ScoreItem:\t%s\t%d\n", item.Name, score)
+	item.Score = score
 	return score
 }

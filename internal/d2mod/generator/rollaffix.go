@@ -19,9 +19,9 @@ const (
 
 // RollAffix Randomly roll a new Prop for a given item
 // This assumes the targetPropScore has already been weighted by the SetBonusMultipler
-func RollAffix(g *Generator, item *d2items.Item, sbm float32, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
+func RollAffix(g *Generator, item *d2items.Item, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
 	line := rollPropScoreLine(g, item, colIdx, targetPropScore, w)
-	newa := d2items.NewAffixFromLine(line, colIdx, sbm)
+	newa := d2items.NewAffixFromLine(line, colIdx, g.IFI.FI.FileNumber)
 
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:

@@ -32,11 +32,11 @@ func genFile(g *Generator, ifi *d2fs.ItemFileInfo) {
 			row := f.Rows[rowIdx]
 			newRow := row
 			item := d2items.NewItem(*pg, rowIdx, row)
-			itemGenerated := false
+			isClone := false
 			if item != nil {
 				if item.Lvl != 0 {
 					if (g.IFI.HasEnabledColumn && (row[2] == "1")) || !g.IFI.HasEnabledColumn { // skip quest items
-						itemGenerated = true
+						isClone = true
 						newi := GenItem(g, item)
 						if newi.Affixes[0].ColIdx == 0 {
 							log.Panicf("genFile: 0 affixes: %s|%s|%s|%s", newi.Affixes[0].P.Name, newi.Affixes[0].P.Par, newi.Affixes[0].P.Min, newi.Affixes[0].P.Max)
@@ -46,7 +46,7 @@ func genFile(g *Generator, ifi *d2fs.ItemFileInfo) {
 				}
 			}
 			if i != 0 {
-				if itemGenerated {
+				if isClone {
 					f.Rows = append(f.Rows, newRow)
 				}
 
