@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	// PropVariance controls the range between min & max that a randomly rolled prop/affix will have
-	PropVariance = 0.2
+	// DeviationRatio specifies the + & - range difference between targetPropScore and the max targetPropScore that a randomly rolled prop/affix will have
+	DeviationRatio = 0.1
 )
 
 // RollAffix Randomly roll a new Prop for a given item
@@ -22,7 +22,6 @@ const (
 func RollAffix(g *Generator, item *d2items.Item, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
 	line := rollPropScoreLine(g, item, colIdx, targetPropScore, w)
 	newa := d2items.NewAffixFromLine(line, colIdx, g.IFI.FI.FileNumber)
-
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
 		//fmt.Printf("RollAffix: %d %d-%d -> ", targetPropScore, newa.P.Val.Min, newa.P.Val.Max)
@@ -60,24 +59,27 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, targetPropScore int
 		log.Fatalf("calcPropScore: Unhandled Prop type %s:%d\n", newa.P.Name, newa.Line.PropParType)
 
 	}
+	// if line.Prop.Name == "dmg-fire" || line.Prop.Name == "dmg-cold" {
+	// 	fmt.Printf("%+v\n", newa.P)
+	// }
 	return newa
 }
 
 // rollRange:  Calculate a min & max value +/- PropVariance centered around targetPropScore.
-func rollRange(min int, max int, scoreMin int, scoreMax int, itemLvl int, targetPropScore int, applyVariance bool) (int, int) {
+func rollRange(min int, max int, scoreMin int, scoreMax int, itemLvl int, targetPropScore int, applyDeviation bool) (int, int) {
 	if min > max {
 		log.Fatalf("rollRange: min > max: (%d %d)", min, max)
 	}
-	newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
-	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
-	variance := 0
-	if applyVariance {
-		variance = util.Round32(float32((max - min)) * (PropVariance / 2.0))
+	//newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
+	deviation := 0
+	if applyDeviation {
+		deviation = util.AbsInt(util.Round64(rand.NormFloat64() * 0.4 * float64(targetPropScore)))
 	}
-	newMax := newAvg + variance
-	newMin := newAvg - variance
+	newMin := util.Interpolate(targetPropScore-deviation, targetPropScore-deviation, scoreMin, scoreMax, min, max)
+	newMax := util.Interpolate(targetPropScore+deviation, targetPropScore+deviation, scoreMin, scoreMax, min, max)
+	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
 	roundTo := 1
-	largest := util.MaxInt(util.AbsInt(max), util.AbsInt(min))
+	largest := util.MaxInt(util.AbsInt(newMin), util.AbsInt(newMax))
 	if largest >= 30 {
 		roundTo = 5
 	}
@@ -100,11 +102,11 @@ func rollMax(max int, line *propscores.Line, itemLvl int, targetPropScore int) i
 	if max < 0 {
 		log.Fatalf("rollMax: upper limit cannot be negative: Prop:%s: %d", line.Prop.Name, max)
 	}
-	if targetPropScore > util.Round32(float32(line.ScoreMax)*(1.0-PropVariance)) {
+	if targetPropScore > util.Round32(float32(line.ScoreMax)*(1.0-DeviationRatio)) {
 		return max
 	}
 	newMax := util.Interpolate(targetPropScore, targetPropScore, line.ScoreMin, line.ScoreMax, 0, max)
-	targetvariance := float32(newMax) * PropVariance
+	targetvariance := float32(newMax) * DeviationRatio
 	newMax += util.Round32((rand.Float32() * targetvariance * 2) - targetvariance)
 	if newMax > max {
 		newMax = line.Prop.Val.Max

@@ -62,6 +62,8 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 
 			targetPropScore := targetScore - itemScore
 			if len(newi.Affixes) < (targetPropCount - 1) {
+				targetPropScore = calcTargetPropScore(len(newi.Affixes), targetPropCount, maxProps, itemScore, targetScore)
+
 				numAffixesLeft := util.MaxInt(0, targetPropCount-len(newi.Affixes))
 				if numAffixesLeft > 0 {
 					targetPropScore = util.MaxInt(0, int(float32((targetScore-itemScore))/float32(numAffixesLeft)))
@@ -115,6 +117,35 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	}
 	scorer.WriteItemScore(g.d2files, g.IFI, newi, false)
 	return newi
+}
+func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount int, itemScore int, targetScore int) int {
+	if numItemAffixes-1 >= targetPropCount {
+		return targetScore - itemScore
+	}
+	numAffixesLeft := targetPropCount - numItemAffixes
+	negDev := float32(0.0)
+	posDev := float32(0)
+	switch numAffixesLeft {
+	case 1:
+		log.Panic("shouldn't get here")
+	case 2:
+		negDev = 0.4
+		posDev = 0.75
+	case 3:
+		negDev = 0.3
+		posDev = 0.75
+	case 4:
+		negDev = -0.1
+		posDev = 0.70
+	default:
+		negDev = -0.3
+		posDev = 0.6
+	}
+	minScore := util.Round32(negDev * float32((targetScore - itemScore)))
+	maxScore := util.Round32(posDev * float32((targetScore - itemScore)))
+
+	return minScore + util.Round32(rand.Float32()*float32(maxScore-minScore))
+
 }
 func checkDupeGroups(item *d2items.Item) bool {
 	for idxa, a := range item.Affixes {

@@ -11,7 +11,7 @@ adb-ltng/lvl	5	0	0	lvl		40													3		RandomizeAdd5		0
 abs-mag	0	3	15	r=	3	15													3		Crescent Moon	Runes	0
 abs-mag/lvl	5	0	0	lvl		40													3		RandomizeAdd6		0
 abs-mag%	0	5	30	r=	10	60													3		RandomizeAdd7		0
-ac	0	-100	-1	c	-5	0													101	ac	Dimoaks Hew	UniqueItems	0
+ac	0	-100	-1	c	-5	-1													101	ac	Dimoaks Hew	UniqueItems	0
 ac	0	0	350	r=	0	=D15*0.3				weap						aspe			101	ac	Bladebone	UniqueItems	0
 ac	0	0	600	r=	0	60				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
 ac	0	600	800	r=	60	80										weap			101	ac	Enigma	Runes	0
@@ -160,9 +160,9 @@ dmg-demon	0	25	380	r=	12	190													209		Dark Clan Crusher	UniqueItems	0
 dmg-elem		55	160	rt	330	960													210	ele	Hellrack	UniqueItems	0
 dmg-elem	33	63	324	rt	378	1944													210	ele	Hellrack	UniqueItems	0
 dmg-elem	100	50	200	rt	300	1200													210	ele	Famine	Runes	0
-dmg-fire	0	1	500	r	1	1000													12	fire	Brainhew	UniqueItems	0
+dmg-fire		1	500	r	1	1000													12	fire	Brainhew	UniqueItems	0
 dmg-ltng	0	1	333	r	1	666													13	ltng	The Chieftan	UniqueItems	0
-dmg-mag	0	0	50	r	0	100													211	mag	Azurewrath	UniqueItems	0
+dmg-mag	0	1	50	r	2	100													211	mag	Azurewrath	UniqueItems	0
 dmg-mag	0	50	500	r	100	1000	37												211	mag	Ginther's Rift	UniqueItems	0
 dmg-max	0	3	66	r=	6	=D167*1.5													13	dmg	Goreshovel	UniqueItems	0
 dmg-min	0	1	15	r=	2	30													14	dmg	Deathspade	UniqueItems	0
@@ -441,7 +441,7 @@ regen-mana	0	5	43	r	5	43													240	mana	Mindrend	UniqueItems	0
 regen-stam	0	10	50	r	0	0													108		Steeldriver	UniqueItems	0
 regen-stam/lvl	2	0	0	lvl		0													108		Natalya's Soul	SetItems	0
 rep-dur	25	0	0	lvl		0	5												37	eth	Warlord's Trust	UniqueItems	0
-rep-quant	40	0	0	lvl		10	5			thro									39	eth	Wraithflight	UniqueItems	0
+rep-quant	40	0	0	lvl		10	5		Y	thro									39	eth	Wraithflight	UniqueItems	0
 res-all	0	5	75	r=	15	225													116		Heaven's Brethren	Sets	0
 res-all	0	-12	-1	c	-72	-6													116		RandomizeAdd12		0
 res-all-max	0	5	15	r	30	90	14												241		Darkglow	UniqueItems	0
