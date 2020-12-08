@@ -152,6 +152,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-6
+* Fixes to +skills to prevent +5 all & +3 class showing up on same item
+* Made +class skill cheaper on class specific
 ## v0.5.2-alpha-5
 * Fix to stamdrain prop
 ## v0.5.2-alpha-4
