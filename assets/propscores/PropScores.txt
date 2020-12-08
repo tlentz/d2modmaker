@@ -12,16 +12,16 @@ abs-mag	0	3	15	r=	3	15													3		Crescent Moon	Runes	0
 abs-mag/lvl	5	0	0	lvl		40													3		RandomizeAdd6		0
 abs-mag%	0	5	30	r=	10	60													3		RandomizeAdd7		0
 ac	0	-100	-1	c	-5	-1													101	ac	Dimoaks Hew	UniqueItems	0
-ac	0	0	350	r=	0	=D15*0.3				weap						aspe			101	ac	Bladebone	UniqueItems	0
+ac	0	0	350	r=	0	105				weap						aspe			101	ac	Bladebone	UniqueItems	0
 ac	0	0	600	r=	0	60				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
 ac	0	600	800	r=	60	80										weap			101	ac	Enigma	Runes	0
 ac-hth	0	40	200	r=	2	10													101		Darkglow	UniqueItems	0
 ac-miss	0	10	400	r=	1	20													101		Coif of Glory	UniqueItems	0
-ac/lvl	40	0	0	lvl		30													101	ac	Swordguard	UniqueItems	0
-ac%	0	10	150	r=	1	80				weap									101	ac	Duskdeep	UniqueItems	0
-ac%	0	10	375	r=	1	38		Y								weap			101	ac	Duskdeep	UniqueItems	0
+ac/lvl	40	0	0	lvl		30										weap	amu	rin	101	ac	Swordguard	UniqueItems	0
+ac%	0	10	150	r=	1	80				weap	amu	rin							101	ac	Duskdeep	UniqueItems	0
+ac%	0	10	375	r=	1	38		Y								weap	amu	rin	101	ac	Duskdeep	UniqueItems	0
 addxp	0	5	10	r=	50	100				cm1	rod								200		Annihilus	UniqueItems	0
-all-stats	0	3	30	r=	=C24*12	=D24*12													16		Azurewrath	UniqueItems	0
+all-stats	0	3	30	r=	36	360													16		Azurewrath	UniqueItems	0
 allskills		1	3	r	50	300													125	skills	Mang Song's Lesson	UniqueItems	0
 allskills		4	5	r	500	750													125	skills	Mang Song's Lesson	UniqueItems	0
 ama		1	3	r	35	210										ama			125	skills	M'avina's Battle Hymn	Sets	0
@@ -65,7 +65,7 @@ bar		1	3	r	30	150				bar									125	skills	Immortal King	Sets	0
 block	0	10	55	r=	1	5													7	block	Twitchthroe	UniqueItems	0
 block2	0	10	65	r=	1	7													7	block	Pelta Lunata	UniqueItems	0
 block3	0	30	40	r=	3	4													255	block	Heaven's Taebaek	SetItems	0
-bloody	0	3	5	r															202		Swordback Hold	UniqueItems	0
+bloody	0	3	5	r	0	0													202		Swordback Hold	UniqueItems	0
 cast1	0	10	20	r=	10	20													8		Spellsteel	UniqueItems	0
 cast2	0	10	50	r=	10	50													8		Maelstromwrath	UniqueItems	0
 cast3	0	20	50	r=	20	50													8		Irices Shard	UniqueItems	0
@@ -132,7 +132,7 @@ charged	Venom	11	3	sch		5													44		Arachnid Mesh	UniqueItems	0
 charged	Volcano	30	14	sch		1													44		Earthshifter	UniqueItems	0
 cheap	0	10	15	r=	20	30													203		Gheed's Fortune	UniqueItems	0
 cold-len	0	75	250	r=	0	0													137		Gravenspine	UniqueItems	0
-cold-max	0	2	14	r=	1	=D135*1.5													204	cold	Gravenspine	UniqueItems	0
+cold-max	0	2	14	r=	1	21													204	cold	Gravenspine	UniqueItems	0
 cold-min	0	1	6	r=	2	12													9	cold	Gravenspine	UniqueItems	0
 crush	0	5	75	r=	20	150													205	dmg	The Gnasher	UniqueItems	0
 deadly	0	15	100	r=	30	200													206	dmg	Steelgoad	UniqueItems	0
@@ -170,7 +170,7 @@ dmg-ltng	0	1	100	r	1	180													13	ltng	The Chieftan	UniqueItems	0
 dmg-ltng	0	1	333	r	180	300													13	ltng	The Chieftan	UniqueItems	0
 dmg-mag	0	1	50	r	2	100													211	mag	Azurewrath	UniqueItems	0
 dmg-mag	0	50	500	r	100	650	37												211	mag	Ginther's Rift	UniqueItems	0
-dmg-max	0	3	66	r=	6	=D173*1.5													13	dmg	Goreshovel	UniqueItems	0
+dmg-max	0	3	66	r=	6	99													13	dmg	Goreshovel	UniqueItems	0
 dmg-min	0	1	15	r=	2	30													14	dmg	Deathspade	UniqueItems	0
 dmg-norm	0	3	100	r	3	200													212	dmg	Rusthandle	UniqueItems	0
 dmg-pois	50	125	255	rt	125	255	43												16	pois	Rainbow Facet	UniqueItems	0
@@ -206,7 +206,7 @@ extra-fire	0	3	50	r	3	50													217	fire	Dragonscale	UniqueItems	0
 extra-ltng	0	3	50	r	3	50													218	ltng	Griffon's Eye	UniqueItems	0
 extra-pois	0	3	50	r	3	50													219	pois	Rainbow Facet	UniqueItems	0
 fade		1	1	s		0	22			fset									220	ac	Natalya's Odium	Sets	0
-fire-max	0	6	54	r=	6	=D209*1.5													221	fire	Bladebone	UniqueItems	0
+fire-max	0	6	54	r=	6	81													221	fire	Bladebone	UniqueItems	0
 fire-min	0	3	23	r=	6	46													11	fire	Bladebone	UniqueItems	0
 fireskill		1	3	smm	12	36													125	fire	Leaf	Runes	0
 freeze	0	1	4	r	10	11													224		Fechmars Axe	UniqueItems	0
@@ -360,7 +360,7 @@ hp	0	5	100	r=	20	400	25												26	ac		SetItems	0
 hp	0	100	200	r=	300	600	53			tors	belt								26	ac	Immortal King	Sets	0
 hp		100	150	r=	300	450				fset									26	ac	Immortal King	Sets	0
 hp/lvl	12	0	0	lvl		19													225	ac	Harlequin Crest	UniqueItems	0
-hp%		10	30	r	=2.5*C363	=2.5*D363													225	ac	Chromatic Ire	UniqueItems	0
+hp%		10	30	r	25	75													225	ac	Chromatic Ire	UniqueItems	0
 ignore-ac		1	1	s	60	60													253	dmg	Krintizs Skewer	UniqueItems	0
 ignore-ac	1	1	1	s	60	60													253	dmg	Lightsabre	UniqueItems	0
 indestruct		1	1	s	5	5										rune			39	dmg	Butcher's Pupil	UniqueItems	0
@@ -552,13 +552,13 @@ skill	Redemption	2	4	smm	2	4	80												403		The Reedeemer	UniqueItems	0
 skill	Skeleton Mastery	1	2	smm	10	20	74												404		Marrowwalk	UniqueItems	0
 skill	Teeth	4	5	smm	2	3	84												405		Boneshade	UniqueItems	0
 skill	Wake of Fire Sentry	1	2	smm	2	4	75												406	fire	Firelizard's Talons	UniqueItems	0
-skill-rand	3	10	29	s			30												407		Ormus' Robes	UniqueItems	0
-skill-rand	3	36	60	s			30												407		Ormus' Robes	UniqueItems	0
-skill-rand	3	67	75	s			30												407		Ormus' Robes	UniqueItems	0
-skill-rand	3	96	121	s			30												407		Ormus' Robes	UniqueItems	0
-skill-rand	3	140	152	s			30												407		Ormus' Robes	UniqueItems	0
-skill-rand	3	225	250	s			30												407		Ormus' Robes	UniqueItems	0
-skill-rand	3	252	282	s			30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	10	29	s		100	30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	36	60	s		100	30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	67	75	s		100	30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	96	121	s		100	30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	140	152	s		100	30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	225	250	s		100	30												407		Ormus' Robes	UniqueItems	0
+skill-rand	3	252	282	s		100	30												407		Ormus' Robes	UniqueItems	0
 skilltab	0	1	4	smm	10	40	39												408		Bloodraven's Charge	UniqueItems	0
 skilltab	1	1	4	smm	10	40	70												409		M'avina's Embrace	SetItems	0
 skilltab	2	1	4	smm	10	40	50												410		Thunderstroke	UniqueItems	0
@@ -599,7 +599,7 @@ state	monsterset	1	1	s	0	0	32			fset									252		Trang-Oul's Avatar	Sets	0
 str	0	2	50	r=	1	5													31		Naj's Ancient Set	Sets	0
 str/lvl	6	0	0	lvl		3													42		Enigma	Runes	0
 stupidity	0	1	3	r	1	1													249	ac	Deathspade	UniqueItems	0
-stupidity	0	10	33	r			43												249	ac	RandomizeAdd14		0
+stupidity	0	10	33	r	1	6	43												249	ac	RandomizeAdd14		0
 swing1	0	10	30	r=	10	30													6	dmg	Bloodrise	UniqueItems	0
 swing2	0	5	60	r=	5	60													6	dmg	Bladebone	UniqueItems	0
 swing2	0	50	80	r=	50	100				am2	am7	amc	xbow	bow		rxb	8rx	6rx	6	dmg	Buriza	UniqueItems	0

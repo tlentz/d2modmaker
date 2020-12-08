@@ -15,3 +15,6 @@ This information is used by the Generator to weight the probabilities of rolling
 
 The Scorer will reduce the score of properties that are partial or full set bonuses.
 It will also reduce the score for all 2-handed weapons that can't be wielded 1-handed.
+
+When the Scorer reads the PropScores.txt file in it keeps a index of all the props by name.  When a prop is read from an item file it scans every matching 
+PropScores line with that name starting from the first one encountered during read until it finds a match in both Min-Max and itype & etype.

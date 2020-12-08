@@ -48,6 +48,9 @@ func calcPropScore(p prop.Prop, line *propscores.Line) int {
 	switch line.PropParType {
 	case propscorespartype.R, propscorespartype.Req, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
 		score = util.Interpolate(p.Val.Min, p.Val.Max, line.Prop.Val.Min, line.Prop.Val.Max, line.ScoreMin, line.ScoreMax)
+		// if line.Prop.Name == "ac%" {
+		// 	log.Printf("%s:%d/%d/%d/%d %d \n %+v", line.Prop.Name, p.Val.Min, p.Val.Max, line.ScoreMin, line.ScoreMax, score, line)
+		// }
 	case propscorespartype.Lvl: // (pts or %)/lvl prop min & max are empty/ignored
 		if line.Prop.Val.Par == 0 {
 			log.Fatalf("calcPropScore: PropsScore.txt prop %s has 0 for Par", line.Prop.Name)
