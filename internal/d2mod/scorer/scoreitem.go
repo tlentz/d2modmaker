@@ -26,7 +26,9 @@ func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* sc
 		}
 
 		sgroups[idx] = item.Affixes[idx].Line.SynergyGroup
-		scoreAffix(ss, tt, *item, &item.Affixes[idx])
+		scoreAffix(ss, tt, item, &item.Affixes[idx])
+		//fmt.Printf("~%s %+v %d~\n", item.Affixes[idx].P.Name, item.Affixes[idx], affScore)
+
 		if item.Affixes[idx].SetBonusMultiplier == 0 {
 			log.Panic("SetBonumMultiplier == 0")
 		}
@@ -35,13 +37,13 @@ func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* sc
 	// Compute & add Synergy bonuses
 	//NextProp:
 	for idx := range item.Affixes {
-
+		item.Affixes[idx].SynergyMultiplier = 1
 		if sgroups[idx] != "" {
 			for oidx := range item.Affixes {
 				if (idx != oidx) && (sgroups[idx] == sgroups[oidx]) {
 					//fmt.Printf("SynBonus:%s:%s<%s>%s %d", item.Name, p.Name, sgroups[pidx], op.Name, scores[pidx])
 					//scores[idx] = util.Round32(float32(scores[idx]) * synergyBonus)
-					item.Affixes[idx].ScoreMult = item.Affixes[idx].ScoreMult * synergyBonus
+					item.Affixes[idx].SynergyMultiplier = item.Affixes[idx].SynergyMultiplier * synergyBonus
 					//fmt.Printf("->%d\n", scores[pidx])
 					//continue NextProp	// per macohan, 10% per other prop in same synergygroup. uncomment for flat 10%
 					//fmt.Printf("%d", item.Affixes[idx].RawScore)
@@ -52,22 +54,23 @@ func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* sc
 	// Check if is a 2hander, and apply 2hander nerf if it is
 	// pole staf bow xbow abow aspe spea
 	//fmt.Printf("2h check: %s\n", item.Name)
-	if d2items.CheckTwoHander(tt, *item) {
-		//fmt.Printf("2hander: %s\n", item.Name)
-		//score = int(math.Round(float64(score) * twoHandNerf))
-		for idx := range item.Affixes {
-			item.Affixes[idx].ScoreMult = item.Affixes[idx].ScoreMult * twoHandNerf
-		}
-	}
+	// Disabling 2hander math
+	// if d2items.CheckTwoHander(tt, *item) {
+	// 	//fmt.Printf("2hander: %s\n", item.Name)
+	// 	//score = int(math.Round(float64(score) * twoHandNerf))
+	// 	for idx := range item.Affixes {
+	// 		item.Affixes[idx].ScoreMult = item.Affixes[idx].ScoreMult * twoHandNerf
+	// 	}
+	// }
 
 	//log.Printf("Scores: %v", scores)
 	score := 0
 	for idx := range item.Affixes {
-		if item.Affixes[idx].ScoreMult == 0 {
+		if item.Affixes[idx].SetBonusMultiplier == 0 || item.Affixes[idx].SynergyMultiplier == 0 {
 			fmt.Printf("%v\n", item)
-			log.Panicf("ScoreItem: Score multiplier not set")
+			log.Panicf("ScoreItem: a score multiplier is not set")
 		}
-		item.Affixes[idx].AdjustedScore = util.Round32(float32(item.Affixes[idx].RawScore) * item.Affixes[idx].ScoreMult)
+		item.Affixes[idx].AdjustedScore = util.Round32(float32(item.Affixes[idx].RawScore) * item.Affixes[idx].SetBonusMultiplier * item.Affixes[idx].SynergyMultiplier)
 		score += item.Affixes[idx].AdjustedScore
 	}
 	//log.Printf("ScoreItem:\t%s\t%d\n", item.Name, score)

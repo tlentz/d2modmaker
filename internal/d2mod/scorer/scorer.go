@@ -41,7 +41,7 @@ func newScorer(d2files *d2fs.Files, opts config.RandomOptions) *Scorer {
 		Group:        map[d2items.Prop]string{},
 		SynergyGroup: map[d2items.Prop]string{},
 		items:        map[string]*d2items.Item{},
-		Statistics:   scorerstatistics.NewScorerStatistics(),
+		Statistics:   scorerstatistics.NewScorerStatistics(d2files),
 		TypeTree:     d2items.NewTypeTree(d2files),
 		PSI:          propscores.NewPropScoresIndex(d2files),
 	}

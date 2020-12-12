@@ -27,6 +27,7 @@ const (
 	File = iota
 	Item
 	Lvl
+	Pbucket
 	VanillaFlag
 	ItemScore
 	Prop1

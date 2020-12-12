@@ -3,6 +3,9 @@ package config
 import (
 	"encoding/json"
 	"io/ioutil"
+	"time"
+
+	"github.com/tlentz/d2modmaker/internal/util"
 )
 
 // RandomOptions are the options for the randomizer
@@ -46,7 +49,7 @@ type Data struct {
 
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-6",
+		Version:                 "v0.5.2-alpha-7",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -86,11 +89,20 @@ func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
 	data := DefaultData()
 	_ = json.Unmarshal([]byte(file), &data)
+	data.audit()
 	return data
 }
 
 func Parse(jsonData []byte) Data {
 	data := DefaultData()
 	_ = json.Unmarshal(jsonData, &data)
+	data.audit()
 	return data
+}
+
+func (d *Data) audit() {
+	if !d.RandomOptions.UseSeed {
+		d.RandomOptions.Seed = time.Now().UnixNano()
+	}
+	d.RandomOptions.NumClones = util.MaxInt(0, d.RandomOptions.NumClones)
 }

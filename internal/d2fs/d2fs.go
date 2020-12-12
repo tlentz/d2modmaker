@@ -37,6 +37,7 @@ type FileInfo struct {
 type ItemFileInfo struct {
 	FI               FileInfo
 	ItemName         int // Was going to call this Name but got confused about whether is Filename or Item name
+	Code             int // Column Index for Item Code
 	Lvl              int // Column Index for Item Level
 	FirstProp        int // Column Index for first Prop
 	NumProps         int

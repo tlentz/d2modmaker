@@ -152,6 +152,10 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-7
+* Many bugfixes.
+* Widened out the allowable range of props rolled in the beginning.
+* Added per-slot-ish probability buckets based on item code and type
 ## v0.5.2-alpha-6
 * Fixes to +skills to prevent +5 all & +3 class showing up on same item
 * Made +class skill cheaper on class specific

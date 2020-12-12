@@ -36,7 +36,7 @@ type Items = d2items.Items
 
 // Run Randomize randomizes all items based on the RandomOptions
 func Run(cfg *config.Data, d2files *d2fs.Files) {
-	opts := getRandomOptions(cfg)
+	opts := cfg.RandomOptions
 	rand.Seed(opts.Seed)
 	psi := propscores.NewPropScoresIndex(d2files)
 	tt := d2items.NewTypeTree(d2files)
@@ -53,35 +53,6 @@ func Run(cfg *config.Data, d2files *d2fs.Files) {
 	randomizeSetProps(s)
 	randomizeSetItemsProps(s)
 	randomizeRWProps(s)
-}
-
-func getRandomOptions(cfg *config.Data) config.RandomOptions {
-	/*	defaultCfg := config.RandomOptions{
-			Seed:     time.Now().UnixNano(),
-			MinProps: -1,
-			MaxProps: -1,
-		}
-		if cfg.RandomOptions.Seed >= 0 {
-			defaultCfg.Seed = cfg.RandomOptions.Seed
-		}
-		defaultCfg.IsBalanced = cfg.RandomOptions.IsBalanced
-		if cfg.RandomOptions.MaxProps >= 0 {
-			defaultCfg.MaxProps = cfg.RandomOptions.MaxProps
-		}
-		if cfg.RandomOptions.MinProps >= 0 {
-			defaultCfg.MinProps = cfg.RandomOptions.MinProps
-		}
-		defaultCfg.PerfectProps = cfg.RandomOptions.PerfectProps
-		defaultCfg.UseOSkills = cfg.RandomOptions.UseOSkills
-
-		cfg.RandomOptions.Seed = defaultCfg.Seed
-
-		defaultCfg.BalancedPropCount = cfg.RandomOptions.BalancedPropCount
-
-		defaultCfg.NumClones = cfg.RandomOptions.NumClones
-
-		return defaultCfg */
-	return cfg.RandomOptions
 }
 
 // Returns all props bucketized

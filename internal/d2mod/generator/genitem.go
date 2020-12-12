@@ -1,9 +1,13 @@
 package generator
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 
+	"github.com/tlentz/d2modmaker/internal/d2fs"
+	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -14,7 +18,7 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	if g.Statistics == nil {
 		log.Fatalln("GenItems: generator statistics was not initialized")
 	}
-	its := g.Statistics.GetItemTypeStatistics(g.TypeTree, oldItem.FileNumber, oldItem.Types[0]) // FIXME: This is broken for runewords that work in both weapons & armor...
+	its := g.Statistics.GetItemTypeStatistics(oldItem) // FIXME: This is broken for runewords that work in both weapons & armor...
 	if len(its.NumLines) == 0 {
 		log.Panic("item statistics structure empty")
 	}
@@ -43,52 +47,58 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	minItemScore := util.Round32(float32(targetScore) - util.Absf32((float32(targetScore) * 0.4)))
 	maxItemScore := util.Round32(float32(targetScore) + util.Absf32((float32(targetScore) * 0.4)))
 
-	// Loop while checking score
-	//for ((itemScore < minItemScore) || (itemScore > maxItemScore)) && (rollCount < 200) {
-
 	for rollCount = 0; rollCount < 10; rollCount++ {
 		// Roll/Reroll entire item
 		newi.Affixes = []d2items.Affix{}
 		itemScore = 0
-		//log.Printf("genItem: # Target Prop Count %d, Scores(min/tgt/max): %d/%d/%d %s", targetPropCount, minItemScore, targetScore, maxItemScore, item.Name)
+		//log.Printf("genItem: # Target Prop Count %d, Scores(min/tgt/max): %d/%d/%d %s", targetPropCount, minItemScore, targetScore, maxItemScore, oldItem.Name)
 		if targetPropCount == 0 {
 			log.Printf("genItem: # Item Affixes=%d, Opts.MinProps=%d, Opts.MaxProps=%d, File NumProps=%d", len(newi.Affixes), g.opts.MinProps, g.opts.MaxProps, g.IFI.NumProps)
 			log.Panic("genItem: 0 targetPropCount")
 		}
 		// TODO: Add better partial set bonus support
-		// Roll each prop, checking that the item doesn't
+		// Roll each prop, checking that the item score doesn't go out of bounds (between minItemScore & maxItemScore) and < maxProps
 		affixRollCount := 0
 		for len(newi.Affixes) < maxProps { // len(newi.Affixes) < maxProps {
 
-			targetPropScore := targetScore - itemScore
-			if len(newi.Affixes) < (targetPropCount - 1) {
-				targetPropScore = calcTargetPropScore(len(newi.Affixes), targetPropCount, maxProps, itemScore, targetScore)
-
-				numAffixesLeft := util.MaxInt(0, targetPropCount-len(newi.Affixes))
-				if numAffixesLeft > 0 {
-					targetPropScore = util.MaxInt(0, int(float32((targetScore-itemScore))/float32(numAffixesLeft)))
-				} else {
-					targetPropScore = targetScore - itemScore
-				}
+			minPropScore, targetPropScore, maxPropScore := calcTargetPropScore(len(newi.Affixes), targetPropCount, maxProps, itemScore, targetScore)
+			if targetPropScore < minPropScore || targetPropScore > maxPropScore {
+				log.Panicf("targetPropScore not between min & max")
 			}
-			newColIdx := len(newi.Affixes)*4 + g.IFI.FirstProp
+			newColIdx := getNewColIdx(*g.IFI, oldItem, newi)
+			if newColIdx <= 0 {
+				log.Panicf("%d colidx %+v", newColIdx, newi)
+			}
 			sbm := d2items.CalcSetBonusMultiplier(g.IFI.FI.FileNumber, newColIdx)
 			targetPropScore = util.Round32(float32(targetPropScore) / sbm)
 			//log.Printf("genItem: #Affixes: %d TargetScore: %d TargetPropScore: %d itemScore:%d", len(newi.Affixes), targetScore, targetPropScore, itemScore)
 
-			newAffix := RollAffix(g, newi, newColIdx, targetPropScore, its.Weights)
-			if newAffix.ScoreMult == 0 {
+			newAffix := RollAffix(g, newi, newColIdx, minPropScore, targetPropScore, maxPropScore, its.Weights)
+			if newAffix.SetBonusMultiplier == 0 {
 				log.Panicf("GenItem: RollAffix returned affix with ScoreMult == 0")
 			}
 			newi.Affixes = append(newi.Affixes, *newAffix)
+			//oldItemScore := itemScore
 			itemScore = scorer.ScoreItem(g.Statistics, g.TypeTree, newi) // Doing full item score because of SynergyGroup calculation
-			// if itemScore == 0 {
+			//affixScore := itemScore - oldItemScore
 
+			//log.Printf("genItem: itemScore = %d %+v", itemScore, newi)
+			// This check fails for LvlScale
+			// if affixScore < minPropScore || affixScore > maxPropScore {
+			// 	log.Printf("Problem with RollAffix: (Actual) min/tgt/max:(%d) %d %d %d", affixScore, minPropScore, targetPropScore, maxPropScore)
+			// 	log.Printf("%+v", newAffix.P)
+			// 	log.Printf("%+v", newAffix.Line)
+			// 	log.Printf("%+v", newi)
+			// 	panic(1)
+			// }
+
+			// if itemScore == 0 {
 			// 	log.Panicf("%+v\n", newi)
 			// }
+
 			affixRollCount++
 			if (affixRollCount > 200) && (len(newi.Affixes) >= targetPropCount) {
-				//log.Fatalf("GenItem: > 100 rolls for %s", newi.Name)
+				log.Fatalf("GenItem: > 200 rolls for %s", newi.Name)
 				break
 			}
 			if ((itemScore > minItemScore) && (itemScore < maxItemScore)) && (len(newi.Affixes) >= targetPropCount) {
@@ -115,19 +125,21 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	if minItemScore == 0 && maxItemScore == 0 {
 		log.Panicf("%+v", newi)
 	}
-	scorer.WriteItemScore(g.d2files, g.IFI, newi, false)
+	scorer.WriteItemScore(g.Statistics, g.d2files, g.IFI, newi, false)
 	return newi
 }
-func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount int, itemScore int, targetScore int) int {
-	if numItemAffixes-1 >= targetPropCount {
-		return targetScore - itemScore
-	}
+func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount int, itemScore int, targetScore int) (int, int, int) {
 	numAffixesLeft := targetPropCount - numItemAffixes
+	if numAffixesLeft <= 1 {
+		delta := util.AbsInt((targetScore * 40) / 100)
+		//fmt.Printf("#Props:%d, %d %d %d\n", numAffixesLeft, itemScore-delta, targetScore-itemScore, itemScore+delta)
+		return targetScore - itemScore - delta, targetScore - itemScore, targetScore - itemScore + delta
+	}
 	negDev := float32(0.0)
 	posDev := float32(0)
 	switch numAffixesLeft {
 	case 1:
-		log.Panic("shouldn't get here")
+		log.Panicf("shouldn't get here: %d %d", numItemAffixes, targetPropCount)
 	case 2:
 		negDev = 0.4
 		posDev = 0.75
@@ -141,10 +153,27 @@ func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount i
 		negDev = -0.3
 		posDev = 0.6
 	}
+	if targetScore < itemScore {
+		negDev, posDev = posDev, negDev
+	}
 	minScore := util.Round32(negDev * float32((targetScore - itemScore)))
 	maxScore := util.Round32(posDev * float32((targetScore - itemScore)))
-
-	return minScore + util.Round32(rand.Float32()*float32(maxScore-minScore))
+	targetPropScore := minScore + util.Round32(rand.Float32()*float32(maxScore-minScore))
+	if targetPropScore > maxScore || targetPropScore < minScore {
+		log.Panicf("targetPropScore out of bounds")
+	}
+	if itemScore > targetScore && (maxScore > 0) {
+		if minScore > 0 {
+			log.Panic("minScore should be negative")
+		}
+		maxScore = 0
+		targetPropScore = minScore
+	}
+	if itemScore > 3*targetScore && (targetScore > 100) {
+		fmt.Printf("Score Item/Tgt/#p - Min/Tgt/Max: %d/%d/%d - %d/%d/%d\n", itemScore, targetScore, numAffixesLeft, minScore, targetPropScore, maxScore)
+		panic(1)
+	}
+	return minScore, targetPropScore, maxScore
 
 }
 func checkDupeGroups(item *d2items.Item) bool {
@@ -157,4 +186,47 @@ func checkDupeGroups(item *d2items.Item) bool {
 		}
 	}
 	return false
+}
+func getNewColIdx(ifi d2fs.ItemFileInfo, oldItem *d2items.Item, newItem *d2items.Item) int {
+	newItemAffixIndex := len(newItem.Affixes)
+	newColIdx := -1
+	switch {
+	case oldItem.FileNumber == filenumbers.Sets:
+		if len(newItem.Affixes) < len(oldItem.Affixes) {
+			newColIdx = oldItem.Affixes[newItemAffixIndex].ColIdx
+		} else {
+			// search for a gap in full set bonuses first
+			newColIdx = findUnusedColIdx(newItem, sets.FCode1, sets.FCode8)
+			if newColIdx < 0 {
+				// search for gap in partial set bonus area
+				newColIdx = findUnusedColIdx(newItem, sets.FCode1, sets.FCode8)
+				if newColIdx < 0 {
+					// assertion: Shouldn't hit here unless # affix math is buggered
+					log.Panicln("Logic error in getNewColIdx")
+				}
+			}
+		}
+	case oldItem.FileNumber == filenumbers.SetItems:
+		if len(newItem.Affixes) < len(oldItem.Affixes) {
+			newColIdx = oldItem.Affixes[newItemAffixIndex].ColIdx
+		} else {
+			newColIdx = findUnusedColIdx(newItem, ifi.FirstProp, (ifi.NumProps-1)*4+ifi.FirstProp)
+			if newColIdx < 0 {
+				log.Panicf("Logic error or ran out of affixes")
+			}
+		}
+	default:
+		newColIdx = len(newItem.Affixes)*4 + ifi.FirstProp
+	}
+	return newColIdx
+}
+func findUnusedColIdx(newItem *d2items.Item, startCol int, endCol int) int {
+	for i := startCol; i <= endCol; i += 4 {
+		for idx := range newItem.Affixes {
+			if newItem.Affixes[idx].ColIdx == i {
+				return i
+			}
+		}
+	}
+	return -1
 }

@@ -42,6 +42,7 @@ func NewTypeTree(d2files *d2fs.Files) *TypeTree {
 		tt.addTypeParent(r[itemTypes.Code], r[itemTypes.Equiv1])
 		tt.addTypeParent(r[itemTypes.Code], r[itemTypes.Equiv2])
 	}
+
 	return &tt
 }
 

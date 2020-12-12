@@ -23,6 +23,7 @@ var FI = d2fs.FileInfo{
 var IFI = d2fs.ItemFileInfo{
 	FI:               FI,
 	ItemName:         Index,
+	Code:             Code,
 	Lvl:              Lvl,
 	FirstProp:        Prop1,
 	NumProps:         MaxNumProps,

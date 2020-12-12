@@ -20,13 +20,14 @@ type Props = prop.Props
 
 // Affix Contains Prop + it's position on an item and matching PropScores.txt Line
 type Affix struct {
-	P                  prop.Prop
-	PSet               int
+	P        prop.Prop
+	PSet     int
+	ColIdx   int
+	Line     *propscores.Line
+	RawScore int
+	//ScoreMult          float32
 	SetBonusMultiplier float32
-	ColIdx             int
-	Line               *propscores.Line
-	RawScore           int
-	ScoreMult          float32
+	SynergyMultiplier  float32
 	AdjustedScore      int
 }
 
@@ -41,6 +42,7 @@ type Item struct {
 	FileNumber int      // filenumber this item came from/going to
 	RowIdx     int      // Row# this item came from/going to
 	Types      []string // Similar to typeOffsets, can be empty, 1 or up to 6.
+	Code       string   // Item Code
 	Enabled    bool     // false when row[2] == 1 in Runes or UniqueItems, true otherwise
 	Score      int
 }
@@ -87,6 +89,15 @@ func NewItem(pg PropGetter, rowIdx int, row []string) *Item {
 	}
 	if pg.IFI.FI.FileName == sets.FileName {
 		item.Types = append(item.Types, "fset")
+	}
+	switch {
+	case pg.IFI.FI.FileNumber == filenumbers.Runes:
+		// Fudging it by using item Type instead of Code.  This means codes must be loaded into pBuckets too.
+		item.Code = row[pg.typeOffsets[0]]
+	case pg.IFI.FI.FileNumber == filenumbers.Sets:
+		item.Code = "fset"
+	default:
+		item.Code = row[pg.IFI.Code]
 	}
 	item.FileNumber = pg.IFI.FI.FileNumber
 	item.RowIdx = rowIdx
@@ -164,7 +175,7 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 		P: prop.NewProp(row[colIdx], row[colIdx+1], row[colIdx+2], row[colIdx+3]),
 	}
 	aff.SetBonusMultiplier = CalcSetBonusMultiplier(pg.IFI.FI.FileNumber, colIdx)
-	aff.ScoreMult = aff.SetBonusMultiplier
+	aff.ColIdx = colIdx
 	for _, line := range pg.psi.PropLines[aff.P.Name] {
 		//line := pg.psi.PropLines[aff.P.Name][idx]
 		if checkPropScore(&pg.tt, aff.P, item, line) {
@@ -175,6 +186,7 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 			return &aff
 		}
 	}
+
 	if (item.Lvl > 0) && ((pg.IFI.HasEnabledColumn && row[2] == "1") || (!pg.IFI.HasEnabledColumn)) {
 		log.Fatalf("NewAffixFromRow: Couldn't find line in PropScores.txt for %s[%d] %s|%s|%s|%s", item.Name, item.Lvl, aff.P.Name, aff.P.Par, aff.P.Min, aff.P.Max)
 	}
@@ -189,7 +201,6 @@ func NewAffixFromLine(line *propscores.Line, colIdx int, filenumber int) *Affix 
 		ColIdx:             colIdx,
 		SetBonusMultiplier: CalcSetBonusMultiplier(filenumber, colIdx),
 	}
-	aff.ScoreMult = aff.SetBonusMultiplier
 	// aff.SetBonusMultiplier = CalcSetBonusMultiplier(pg.IFI.FI.FileNumber, colIdx)
 	return &aff
 }

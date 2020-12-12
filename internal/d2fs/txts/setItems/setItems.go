@@ -23,6 +23,7 @@ var FI = d2fs.FileInfo{
 var IFI = d2fs.ItemFileInfo{
 	FI:               FI,
 	ItemName:         Index,
+	Code:             Item,
 	Lvl:              LvlReq, // Use LvlReq, not Lvl
 	FirstProp:        Prop1,
 	NumProps:         MaxNumProps,
@@ -33,7 +34,7 @@ var IFI = d2fs.ItemFileInfo{
 const (
 	Index        = 0
 	Set          = 1
-	Item         = 2 // This is type, column header is "item"
+	Item         = 2 // This is type or code?, column header is "item"
 	StarItem     = 3 // This is the types name, column header is "*item"
 	Rarity       = 4
 	Lvl          = 5

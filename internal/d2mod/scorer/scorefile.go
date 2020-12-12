@@ -19,7 +19,7 @@ func scoreFile(s *Scorer, ifi *d2fs.ItemFileInfo) {
 		if items[idx].Score == 0 && items[idx].Lvl > 50 {
 			log.Panicf("%+v", items[idx])
 		}
-		WriteItemScore(s.d2files, s.IFI, &items[idx], true)
+		WriteItemScore(s.Statistics, s.d2files, s.IFI, &items[idx], true)
 	}
 	return
 }

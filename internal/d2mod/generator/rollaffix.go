@@ -19,8 +19,8 @@ const (
 
 // RollAffix Randomly roll a new Prop for a given item
 // This assumes the targetPropScore has already been weighted by the SetBonusMultipler
-func RollAffix(g *Generator, item *d2items.Item, colIdx int, targetPropScore int, w *weightrand.Weights) *d2items.Affix {
-	line := rollPropScoreLine(g, item, colIdx, targetPropScore, w)
+func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, targetPropScore int, propScoreMax int, w *weightrand.Weights) *d2items.Affix {
+	line := rollPropScoreLine(g, item, colIdx, propScoreMin, targetPropScore, propScoreMax, w)
 	newa := d2items.NewAffixFromLine(line, colIdx, g.IFI.FI.FileNumber)
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
@@ -80,10 +80,10 @@ func rollRange(min int, max int, scoreMin int, scoreMax int, itemLvl int, target
 	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
 	roundTo := 1
 	largest := util.MaxInt(util.AbsInt(newMin), util.AbsInt(newMax))
-	if largest >= 30 {
+	if largest >= 15 {
 		roundTo = 5
 	}
-	if largest >= 70 {
+	if largest >= 50 {
 		roundTo = 10
 	}
 	newMin = util.Round32(float32(newMin)/float32(roundTo)) * roundTo
@@ -118,15 +118,27 @@ func rollMax(max int, line *propscores.Line, itemLvl int, targetPropScore int) i
 	return newMax
 }
 
-// rollPropScoreLine Find a line in PropScores.txt where Line.ScoreMin < targetLineScore < Line.ScoreMax
-func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineScore int, w *weightrand.Weights) *propscores.Line {
+// rollPropScoreLine Find a line in PropScores.txt where Line.ScoreMin < targetPropScore < Line.ScoreMax
+func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, targetPropScore int, propScoreMax int, w *weightrand.Weights) *propscores.Line {
+
+	// These tests don't work on sets
+	// if targetPropScore < propScoreMin {
+	// 	log.Panic("targetPropScore not > propScoreMin")
+	// }
+	// if targetPropScore > propScoreMax {
+	// 	log.Panic("targetPropScore not < propScoreMax")
+	// }
+
 	var closestLine *propscores.Line
 	var closestLineDelta = 999999999 // couldn't get a portable answer for maximum value of int.
 	rollcounter := 0
-	for rollcounter = 0; rollcounter < 100; rollcounter++ {
+	MaxRolls := 100
+DoneRolling:
+	for rollcounter = 0; rollcounter < MaxRolls; rollcounter++ {
+
 		scoreFileRowIndex := w.Generate()
 		line := g.psi.RowLines[scoreFileRowIndex]
-		//log.Printf("rollPropScoreLine: %s: ScoreMax=%d T:%d TargetScore=%d\n", line.Prop.Name, line.ScoreMax, line.PropParType, targetPropScore)
+		//log.Printf("rollPropScoreLine: %s: ScoreMax=%d T:%d Score Min/Tgt/Max:%d/%d/%d %t\n", line.Prop.Name, line.ScoreMax, line.PropParType, propScoreMin, targetPropScore, propScoreMax, line.LvlScale)
 		if !d2items.CheckIETypes(g.TypeTree, item.Types, line.Itypes, line.Etypes) {
 			//log.Print("<Reroll T>")
 			continue
@@ -144,7 +156,7 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineS
 			closestLine = line
 		}
 		// var lineDelta int
-		//fmt.Printf("%s %d <%d %d %d>\n", item.Name, closestLineDelta, line.ScoreMin, targetLineScore, line.ScoreMax)
+		//log.Printf("rollPropScoreLine: %s Delta: %d <%d %d %d> %t %d %d\n", item.Name, closestLineDelta, line.ScoreMin, targetPropScore, line.ScoreMax, line.LvlScale, propScoreMin, propScoreMax)
 		// Adjust for cases where Min < Max
 		scoreMin := line.ScoreMin
 		scoreMax := line.ScoreMax
@@ -152,15 +164,20 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineS
 			scoreMax = line.ScoreMin
 			scoreMin = line.ScoreMax
 		}
+		if line.LvlScale {
+			scoreMin = util.Round32(float32(scoreMin) * float32(item.Lvl) / 50.0)
+			scoreMax = util.Round32(float32(scoreMax) * float32(item.Lvl) / 50.0)
+		}
+
 		switch {
-		case targetLineScore >= scoreMax:
-			lineDelta := targetLineScore - scoreMax
+		case propScoreMin > scoreMax:
+			lineDelta := propScoreMin - scoreMax
 			if lineDelta < closestLineDelta {
 				closestLine = line
 				closestLineDelta = lineDelta
 			}
-		case targetLineScore <= scoreMin:
-			lineDelta := scoreMin - targetLineScore
+		case propScoreMax < scoreMin:
+			lineDelta := scoreMin - propScoreMax
 			if lineDelta < closestLineDelta {
 				closestLine = line
 				closestLineDelta = lineDelta
@@ -168,14 +185,23 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, targetLineS
 		default:
 			closestLine = line
 			closestLineDelta = 0
-			break
+			//log.Printf("rollPropScoreLine: Found on %d rolls: %s %d/%d/%d\n", rollcounter+1, line.Prop.Name, scoreMin, targetPropScore, scoreMax)
+			break DoneRolling
 		}
 	}
-	if closestLineDelta > 0 {
-		//log.Println(item.Affixes)
-		//log.Printf("rollPropScoreLine: Couldn't hit target: %s: %d %d", item.Name, closestLineDelta, targetLineScore)
+	// if closestLineDelta != 0 {
+	// 	//log.Println(item.Affixes)
+	// 	log.Printf("rollPropScoreLine: Couldn't hit target: %s: %d %d", item.Name, closestLineDelta, targetPropScore)
 
-	}
+	// }
+	// if rollcounter == MaxRolls {
+	// 	if closestLineDelta > 100 {
+	// 		log.Printf("Hit maxrolls trying to roll %d Closest:%d ", targetPropScore, closestLineDelta)
+	// 		log.Printf("closestLine:%+v\n\n", closestLine)
+	// 		log.Printf("Item:%+v", item)
+	// 		panic(1)
+	// 	}
+	//}
 	g.numAffixRolls += rollcounter
 	return closestLine
 }

@@ -12,7 +12,7 @@ import (
 )
 
 // scoreProp returns
-func scoreProp(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree, item d2items.Item, p prop.Prop, l *propscores.Line) int {
+func scoreProp(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree, item *d2items.Item, p prop.Prop, l *propscores.Line) int {
 	//fmt.Printf(" %s/%s/%s/%s\n", p.Name, p.Par, p.Min, p.Max)
 
 	if p.Name[0] == '*' { // Blizz comments out with *
@@ -48,9 +48,10 @@ func calcPropScore(p prop.Prop, line *propscores.Line) int {
 	switch line.PropParType {
 	case propscorespartype.R, propscorespartype.Req, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
 		score = util.Interpolate(p.Val.Min, p.Val.Max, line.Prop.Val.Min, line.Prop.Val.Max, line.ScoreMin, line.ScoreMax)
-		// if line.Prop.Name == "ac%" {
-		// 	log.Printf("%s:%d/%d/%d/%d %d \n %+v", line.Prop.Name, p.Val.Min, p.Val.Max, line.ScoreMin, line.ScoreMax, score, line)
-		// }
+		//if line.Prop.Name == "manasteal" {
+		//log.Printf("calcPropScore: %s Min/Max ScoreMin/ScoreMax/Score: %d/%d %d/%d/%d", line.Prop.Name, p.Val.Min, p.Val.Max, line.ScoreMin, score, line.ScoreMax)
+		//log.Printf("%+v", line)
+		//}
 	case propscorespartype.Lvl: // (pts or %)/lvl prop min & max are empty/ignored
 		if line.Prop.Val.Par == 0 {
 			log.Fatalf("calcPropScore: PropsScore.txt prop %s has 0 for Par", line.Prop.Name)
@@ -60,15 +61,15 @@ func calcPropScore(p prop.Prop, line *propscores.Line) int {
 		if p.Par != line.Prop.Par {
 			log.Fatalf("calcPropScore: SCL par mismatch %s %s <> %s\n", p.Name, p.Par, line.Prop.Par)
 		}
-		v := p.Val.Min + (p.Val.Max * 100)
-		lmax := line.Prop.Val.Min + (line.Prop.Val.Max * 100)
+		v := p.Val.Min * p.Val.Max
+		lmax := line.Prop.Val.Min * line.Prop.Val.Max
 		score = util.Interpolate(v, v, 0, lmax, line.ScoreMin, line.ScoreMax)
 	case propscorespartype.Sch: // Skill, #charges, Level
 		score = util.Interpolate(p.Val.Max, p.Val.Max, 0, line.Prop.Val.Max, line.ScoreMin, line.ScoreMax)
 	case propscorespartype.S:
 		score = line.ScoreMax
 	default:
-		log.Fatalf("calcPropScore: Can't score type %s:%d\n", p.Name, line.PropParType)
+		log.Fatalf("calcPropScore: Unknown PropScores.txt ParType %s/%d on line#%d\n", p.Name, line.PropParType, line.RowIndex)
 
 	}
 	return score

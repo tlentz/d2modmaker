@@ -1,7 +1,9 @@
 package scorerstatistics
 
 import (
-	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+	"log"
+
+	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/weightrand"
@@ -17,20 +19,38 @@ type ItemTypeStatistics struct {
 	NumLines      map[int]int         // Records # of times a PropScore.txt line was seen that applied to an item, by row index
 	Weights       *weightrand.Weights //
 }
+type pBucketMap map[string]string
 
 // ScorerStatistics Results from the Scorer
 type ScorerStatistics struct {
-	TypeStatistics [5]ItemTypeStatistics
-	ItemScores     ItemScoreMap //
+	TypeStatistics []ItemTypeStatistics
+
+	pBucket        *pBucketMap // From Armor[Type] & Weapons[Type], : Maps membership of item into groups for doing weighted probability calc
+	pBucketIndexes map[string]int
+
+	ItemScores ItemScoreMap // Vanilla item scores, used as target scores
 }
 
 // NewScorerStatistics .
-func NewScorerStatistics() *ScorerStatistics {
+func NewScorerStatistics(d2files *d2fs.Files) *ScorerStatistics {
 	ss := ScorerStatistics{}
 	ss.ItemScores = ItemScoreMap{}
-	for idx := range &ss.TypeStatistics {
+
+	ss.pBucket = newpBucketMap(d2files)
+	ss.pBucketIndexes = make(map[string]int)
+	nextBucketIndex := 1
+	for _, p := range *ss.pBucket {
+		if ss.pBucketIndexes[p] == 0 {
+			ss.pBucketIndexes[p] = nextBucketIndex
+			nextBucketIndex++
+		}
+	}
+	//fmt.Printf("%+v\n", ss.pBucket)
+	ss.TypeStatistics = make([]ItemTypeStatistics, nextBucketIndex)
+	for idx := range ss.TypeStatistics {
 		ss.TypeStatistics[idx].NumLines = map[int]int{}
 	}
+
 	return &ss
 }
 
@@ -38,34 +58,26 @@ func NewScorerStatistics() *ScorerStatistics {
 //var ScoreLines propscores.ScoreMap
 
 // AddScoreLineWeight  Increases the weight for a specific prop on an item
-func (ss *ScorerStatistics) AddScoreLineWeight(tt *d2items.TypeTree, item d2items.Item, line *propscores.Line) {
+func (ss *ScorerStatistics) AddScoreLineWeight(tt *d2items.TypeTree, item *d2items.Item, line *propscores.Line) {
 
-	its := ss.GetItemTypeStatistics(tt, item.FileNumber, item.Types[0])
+	its := ss.GetItemTypeStatistics(item)
 	//fmt.Printf("Len NumLines = %d\n", len(its.NumLines))
 	its.NumLines[line.RowIndex]++
 }
 
 // GetItemTypeStatistics Return the statistics for a given item type
-func (ss *ScorerStatistics) GetItemTypeStatistics(tt *d2items.TypeTree, filenumber int, itemType string) *ItemTypeStatistics {
-	if filenumber == filenumbers.Sets {
-		//fmt.Println("GetWeights:set")
-		return &ss.TypeStatistics[setWeightIndex]
+func (ss *ScorerStatistics) GetItemTypeStatistics(item *d2items.Item) *ItemTypeStatistics {
+	bucketName := (*ss.pBucket)[item.Code]
+	if bucketName == "" {
+		log.Panicf("Unknown item type %s, check PBucketList.txt\n%+v", item.Code, ss.pBucket)
 	}
-	if d2items.CheckTypeTree(tt, itemType, "armo") {
-		//fmt.Println("GetWeights:armo")
-		return &ss.TypeStatistics[armorWeightIndex]
-	}
-	if d2items.CheckTypeTree(tt, itemType, "weap") {
-		//fmt.Println("GetWeights:weap")
-		return &ss.TypeStatistics[weaponWeightIndex]
-	}
-	if d2items.CheckTypeTree(tt, itemType, "rin") || d2items.CheckTypeTree(tt, itemType, "amu") {
-		//fmt.Println("GetWeights:rin")
-		return &ss.TypeStatistics[jewelryWeightIndex]
-	}
-	// Quest items i.e. vip
-	//fmt.Println("GetWeights:Unknown")
-	return &ss.TypeStatistics[unknownWeightIndex]
+	bucketIndex := ss.pBucketIndexes[bucketName]
+	return &ss.TypeStatistics[bucketIndex]
+}
+
+// GetBucketName Gets name of the bucket that is used for probability based weighting
+func (ss *ScorerStatistics) GetBucketName(item *d2items.Item) string {
+	return (*ss.pBucket)[item.Code]
 }
 
 /*
