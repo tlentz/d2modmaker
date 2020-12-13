@@ -47,6 +47,9 @@ func NewLine(Row []string, RowIndex int) *Line {
 	l.PropParType = propscorespartype.Types[Row[PropParType]]
 	l.ScoreMin, _ = strconv.Atoi(Row[ScoreMin])
 	l.ScoreMax, _ = strconv.Atoi(Row[ScoreMax])
+	if l.PropParType == propscorespartype.S {
+		l.ScoreMin = l.ScoreMax
+	}
 	l.ScoreLimit, _ = strconv.Atoi(Row[ScoreLim])
 	l.MinLvl, _ = strconv.Atoi(Row[MinLvl])
 	l.LvlScale = (Row[LvlScale] == "Y")

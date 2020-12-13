@@ -49,7 +49,7 @@ type Data struct {
 
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-8",
+		Version:                 "v0.5.2-alpha-9",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,

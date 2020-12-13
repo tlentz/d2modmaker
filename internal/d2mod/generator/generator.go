@@ -2,6 +2,7 @@ package generator
 
 import (
 	"fmt"
+	"math/rand"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
@@ -37,9 +38,9 @@ func NewGenerator(d2files *d2fs.Files, opts config.RandomOptions, tt *d2items.Ty
 		Statistics: stats,
 	}
 	g.Statistics.SetupProbabilityWeights()
-	if g.Statistics.TypeStatistics[0].Weights == nil {
-		panic(1)
-	}
+
+	rand.Seed(opts.Seed)
+
 	return &g
 }
 

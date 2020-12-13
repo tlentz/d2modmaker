@@ -9,6 +9,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
 	"github.com/tlentz/d2modmaker/internal/d2mod/generator"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
+	"github.com/tlentz/d2modmaker/internal/d2mod/oskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
 	"github.com/tlentz/d2modmaker/internal/d2mod/randomizer"
 	"github.com/tlentz/d2modmaker/internal/d2mod/reqs"
@@ -99,6 +100,9 @@ func Make(defaultOutDir string, cfg config.Data) {
 
 	if cfg.RemoveAttRequirements {
 		reqs.RemoveAttRequirements(d2files)
+	}
+	if cfg.RandomOptions.UseOSkills {
+		oskills.ConvertSkillsToOSkills(&d2files, cfg)
 	}
 
 	d2files.Write()

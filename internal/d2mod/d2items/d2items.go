@@ -141,6 +141,8 @@ func (item *Item) ToRow(pg PropGetter, row []string) []string {
 
 	// First copy everything but the props
 	newrow := make([]string, len(row))
+
+	// Erase existing props
 	for colIdx, c := range row {
 		if (colIdx >= pg.IFI.FirstProp) && (colIdx < (pg.IFI.FirstProp + (pg.IFI.NumProps * 4))) {
 			newrow[colIdx] = ""
@@ -164,6 +166,9 @@ func (item *Item) ToRow(pg PropGetter, row []string) []string {
 		newrow[colIdx+1] = aff.P.Par
 		newrow[colIdx+2] = aff.P.Min
 		newrow[colIdx+3] = aff.P.Max
+		// if pg.Opts.UseOSkills && (aff.P.Name == "skill") {
+		// 	newrow[colIdx] = "oskill"
+		// }
 
 	}
 	return newrow

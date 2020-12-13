@@ -152,6 +152,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-9
+* Fix for ScoreLimit not applying correctly to proppartype s (skill)
+* Made oskill conversion its own module, run after Generator or Randomizer
 ## v0.5.2-alpha-8
 * Added PropScores.txt:ScoreLimit -- Limits the max score rolled for a new affix to % of vanilla item score.
 ## v0.5.2-alpha-7

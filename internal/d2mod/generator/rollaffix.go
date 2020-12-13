@@ -32,7 +32,11 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 		if targetPropScore > scoreCap {
 			fmt.Printf("Capping %s:%s %d->%d", item.Name, line.Prop.Name, targetPropScore, scoreCap)
 		}
+
 		targetPropScore = util.MinInt(targetPropScore, scoreCap)
+		if targetPropScore < propScoreMin {
+			log.Panicf("RollAffix: Logic bug: targetPropScore < propScoreMin")
+		}
 	}
 
 	switch newa.Line.PropParType {
@@ -189,10 +193,13 @@ DoneRolling:
 		if line.ScoreLimit > 0 {
 			//ScoreLimit specified verify this prop doesn't go over it.
 			scoreCap := (vanillaScore * line.ScoreLimit) / 100
-			if scoreCap < targetPropScore {
-				//log.Printf("rollPropScoreLine Limiting %s:%s from %d to %d:", item.Name, line.Prop.Name, targetPropScore, scoreCap)
+			if (scoreCap < targetPropScore) || (scoreCap < scoreMin) {
+				//log.Printf("rollPropScoreLine Skipping %s:%s from %d to %d:", item.Name, line.Prop.Name, targetPropScore, scoreCap)
 				continue
 			}
+			//if line.Prop.Name == "meleesplash" {
+			//log.Printf("rollPropScoreLine Limiting %s:%s Min/Tgt/Max %d/%d/%d to Min/Max/Cap (%d/%d/%d)", item.Name, line.Prop.Name, propScoreMin, targetPropScore, propScoreMax, scoreMin, scoreMax, scoreCap)
+			//}
 			scoreMax = util.MinInt(scoreMax, scoreCap)
 		}
 
