@@ -1,6 +1,7 @@
 package generator
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"strconv"
@@ -22,6 +23,18 @@ const (
 func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, targetPropScore int, propScoreMax int, w *weightrand.Weights) *d2items.Affix {
 	line := rollPropScoreLine(g, item, colIdx, propScoreMin, targetPropScore, propScoreMax, w)
 	newa := d2items.NewAffixFromLine(line, colIdx, g.IFI.FI.FileNumber)
+
+	if line.ScoreLimit > 0 {
+		//ScoreLimit specified verify this prop doesn't go over it.
+		vanillaScore := g.Statistics.ItemScores[item.Name]
+		scoreCap := (vanillaScore * line.ScoreLimit) / 100
+		//log.Printf("RollAffix: found limit %s %s Van/Cap/Tgt %d/%d/%d ScoreLimit:%d", item.Name, line.Prop.Name, vanillaScore, scoreCap, targetPropScore, line.ScoreLimit)
+		if targetPropScore > scoreCap {
+			fmt.Printf("Capping %s:%s %d->%d", item.Name, line.Prop.Name, targetPropScore, scoreCap)
+		}
+		targetPropScore = util.MinInt(targetPropScore, scoreCap)
+	}
+
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
 		//fmt.Printf("RollAffix: %d %d-%d -> ", targetPropScore, newa.P.Val.Min, newa.P.Val.Max)
@@ -70,13 +83,14 @@ func rollRange(min int, max int, scoreMin int, scoreMax int, itemLvl int, target
 	if min > max {
 		log.Fatalf("rollRange: min > max: (%d %d)", min, max)
 	}
-	//newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
+	newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
+	//newMin := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
 	deviation := 0
 	if applyDeviation {
 		deviation = util.AbsInt(util.Round64(rand.NormFloat64() * 0.4 * float64(targetPropScore)))
 	}
-	newMin := util.Interpolate(targetPropScore-deviation, targetPropScore-deviation, scoreMin, scoreMax, min, max)
-	newMax := util.Interpolate(targetPropScore+deviation, targetPropScore+deviation, scoreMin, scoreMax, min, max)
+	newMin := newAvg - deviation
+	newMax := newAvg + deviation
 	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
 	roundTo := 1
 	largest := util.MaxInt(util.AbsInt(newMin), util.AbsInt(newMax))
@@ -132,9 +146,10 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, propScoreMi
 	var closestLine *propscores.Line
 	var closestLineDelta = 999999999 // couldn't get a portable answer for maximum value of int.
 	rollcounter := 0
-	MaxRolls := 100
+	maxRolls := 100
+	vanillaScore := g.Statistics.ItemScores[item.Name]
 DoneRolling:
-	for rollcounter = 0; rollcounter < MaxRolls; rollcounter++ {
+	for rollcounter = 0; rollcounter < maxRolls; rollcounter++ {
 
 		scoreFileRowIndex := w.Generate()
 		line := g.psi.RowLines[scoreFileRowIndex]
@@ -164,9 +179,21 @@ DoneRolling:
 			scoreMax = line.ScoreMin
 			scoreMin = line.ScoreMax
 		}
+
 		if line.LvlScale {
 			scoreMin = util.Round32(float32(scoreMin) * float32(item.Lvl) / 50.0)
 			scoreMax = util.Round32(float32(scoreMax) * float32(item.Lvl) / 50.0)
+		}
+		// TODO: SynergyBonus calculation
+
+		if line.ScoreLimit > 0 {
+			//ScoreLimit specified verify this prop doesn't go over it.
+			scoreCap := (vanillaScore * line.ScoreLimit) / 100
+			if scoreCap < targetPropScore {
+				//log.Printf("rollPropScoreLine Limiting %s:%s from %d to %d:", item.Name, line.Prop.Name, targetPropScore, scoreCap)
+				continue
+			}
+			scoreMax = util.MinInt(scoreMax, scoreCap)
 		}
 
 		switch {

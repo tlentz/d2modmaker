@@ -70,7 +70,9 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 				log.Panicf("%d colidx %+v", newColIdx, newi)
 			}
 			sbm := d2items.CalcSetBonusMultiplier(g.IFI.FI.FileNumber, newColIdx)
+			minPropScore = util.Round32(float32(minPropScore) / sbm)
 			targetPropScore = util.Round32(float32(targetPropScore) / sbm)
+			maxPropScore = util.Round32(float32(maxPropScore) / sbm)
 			//log.Printf("genItem: #Affixes: %d TargetScore: %d TargetPropScore: %d itemScore:%d", len(newi.Affixes), targetScore, targetPropScore, itemScore)
 
 			newAffix := RollAffix(g, newi, newColIdx, minPropScore, targetPropScore, maxPropScore, its.Weights)

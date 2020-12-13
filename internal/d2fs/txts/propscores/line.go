@@ -13,18 +13,19 @@ import (
 type Line struct {
 	RowIndex     int
 	Prop         prop.Prop
-	PropParType  int // See constants in propscorepartype
-	ScoreMin     int
-	ScoreMax     int
-	MinLvl       int
-	LvlScale     bool
-	NoTypeOvr    bool
-	Itypes       []string
-	Etypes       []string
-	Group        string
-	SynergyGroup string
-	SourceItem   string
-	SourceFile   string
+	PropParType  int      // See constants in propscorepartype
+	ScoreMin     int      // Score for Prop.Min or 0, type dependent
+	ScoreMax     int      // Score for Prop.Max, Prop.Par, or Prop.Min * Prop.Max:  type dependent
+	ScoreLimit   int      // Specifies a % limit which generated item cannot exceed for this prop
+	MinLvl       int      // Minimum level of item this prop can appear on
+	LvlScale     bool     // scale this item for 1/1 at level 50
+	NoTypeOvr    bool     // Don't allow type overriding for this prop
+	Itypes       []string // Include Types  If non-empty item must be one of these types or a child
+	Etypes       []string // Exclude Types  If non-empty item must not be one of these types or a child
+	Group        string   // Cannot roll 2 props from same group on same item.
+	SynergyGroup string   // This prop synergizes with other props in this SynergyGroup
+	SourceItem   string   // 1 example of this prop
+	SourceFile   string   // File for SourceItem
 }
 
 // ScoreMap map of Prop Name's to  PropScores.txt Lines
@@ -46,6 +47,7 @@ func NewLine(Row []string, RowIndex int) *Line {
 	l.PropParType = propscorespartype.Types[Row[PropParType]]
 	l.ScoreMin, _ = strconv.Atoi(Row[ScoreMin])
 	l.ScoreMax, _ = strconv.Atoi(Row[ScoreMax])
+	l.ScoreLimit, _ = strconv.Atoi(Row[ScoreLim])
 	l.MinLvl, _ = strconv.Atoi(Row[MinLvl])
 	l.LvlScale = (Row[LvlScale] == "Y")
 	l.NoTypeOvr = (Row[NoTypeOver] == "Y")

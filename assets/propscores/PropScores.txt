@@ -12,17 +12,18 @@ abs-mag	0	3	15	r=	3	15														3		Crescent Moon	Runes	0
 abs-mag/lvl	5	0	0	lvl		40														3		RandomizeAdd6		0
 abs-mag%	0	5	30	r=	10	60														3		RandomizeAdd7		0
 ac	0	-100	-1	c	-5	-1														101	ac	Dimoaks Hew	UniqueItems	0
-ac	0	0	350	r=	0	105	15				weap						aspe			101	ac	Bladebone	UniqueItems	0
-ac	0	0	600	r=	0	90	15				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
-ac	0	600	800	r=	60	80	15										weap			101	ac	Enigma	Runes	0
-ac-hth	0	40	200	r=	2	10	15													101		Darkglow	UniqueItems	0
-ac-miss	0	10	400	r=	1	20	15													101		Coif of Glory	UniqueItems	0
-ac/lvl	40	0	0	lvl		30	15										weap	amu	rin	101	ac	Swordguard	UniqueItems	0
-ac%	0	10	150	r=	1	80	15				weap	amu	rin							101	ac	Duskdeep	UniqueItems	0
-ac%	0	10	375	r=	1	38	15		Y								weap	amu	rin	101	ac	Duskdeep	UniqueItems	0
+ac	0	0	350	r=	0	105	10				weap						aspe			101	ac	Bladebone	UniqueItems	0
+ac	0	0	600	r=	0	90	10				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
+ac	0	600	800	r=	60	80	15	50									weap			101	ac	Enigma	Runes	0
+ac-hth	0	40	200	r=	2	10	5													101		Darkglow	UniqueItems	0
+ac-miss	0	10	400	r=	1	20	5													101		Coif of Glory	UniqueItems	0
+ac/lvl	40	0	0	lvl		30	10										weap	amu	rin	101	ac	Swordguard	UniqueItems	0
+ac%	0	10	150	r=	1	80	5				weap	amu	rin							101	ac	Duskdeep	UniqueItems	0
+ac%	0	10	375	r=	1	38	10		Y								weap	amu	rin	101	ac	Duskdeep	UniqueItems	0
 addxp	0	5	10	r=	50	100					cm1	rod								200		Annihilus	UniqueItems	0
 all-stats	0	3	30	r=	36	360														16		Azurewrath	UniqueItems	0
-allskills		1	3	r	50	300														125	skills	Mang Song's Lesson	UniqueItems	0
+allskills		1	3	r	50	300											rin			125	skills	Mang Song's Lesson	UniqueItems	0
+allskills		1	3	r	100	600					rin									125	skills	Mang Song's Lesson	UniqueItems	0
 allskills		4	5	r	500	750														125	skills	Mang Song's Lesson	UniqueItems	0
 ama		1	3	r	35	210											ama			125	skills	M'avina's Battle Hymn	Sets	0
 ama		1	3	r	30	150					ama									125	skills	M'avina's Battle Hymn	Sets	0
@@ -146,8 +147,8 @@ death-skill	Meteor	100	48	scl		0														207		Hand of Justice	Runes	0
 death-skill	Nova	100	44	scl		0														207		Medusa's Gaze	UniqueItems	0
 death-skill	Poison Nova	100	51	scl		0														207		Rainbow Facet	UniqueItems	0
 demon-heal	0	5	20	r=	2	10														208		Dark Clan Crusher	UniqueItems	0
-dex	0	2	35	r=	1	17														16		Gravenspine	UniqueItems	0
-dex/lvl	4	0	0	lvl		25														42		Blackoak Shield	UniqueItems	0
+dex	0	2	35	r=	1	10	2													16		Gravenspine	UniqueItems	0
+dex/lvl	4	0	0	lvl		15	2													42		Blackoak Shield	UniqueItems	0
 dmg	0	10	120	r	20	240														14	dmg	Stone Crusher	UniqueItems	0
 dmg	0	340	400	r	680	800		59												14	dmg	Grief runeword (Widowmaker)		0
 dmg-ac	0	-100	-50	r=	4	2														4	dmg	Woestave	UniqueItems	0
@@ -186,13 +187,13 @@ dmg-to-mana	0	5	50	r=	2	25														107		Howltusk	UniqueItems	0
 dmg-und/lvl	60	0	0	lvl		120														212		The Vile Husk	UniqueItems	0
 dmg-undead	0	25	250	r=	9	77														212		Bladebone	UniqueItems	0
 dmg-undead	0	200	300	r=	67	100		25												212		RandomizeAdd9		0
-dmg/lvl	25	0	0	lvl		25														111	dmg	Headstriker	UniqueItems	0
+dmg/lvl	25	0	0	lvl		234														111	dmg	Headstriker	UniqueItems	0
 dmg%	0	5	30	r=	15	90					armo						shld			105	dmg	War Bonnet	UniqueItems	0
 dmg%	0	5	80	r=	10	160					shld	glov								105	dmg	Alma Negra	UniqueItems	0
 dmg%	0	5	30	r=	3	15			Y		weap									105	dmg	The Gnasher	UniqueItems	0
 dmg%	0	30	250	r=	15	125			Y		weap									105	dmg	The Gnasher	UniqueItems	0
 dmg%	0	250	430	r=	125	215		29	Y		weap	fset								105	dmg	RandomizeAdd10		0
-dmg%/lvl	24	0	0	lvl		75					weap									105	dmg	Hellslayer	UniqueItems	0
+dmg%/lvl	24	0	0	lvl		75			Y		weap									105	dmg	Hellslayer	UniqueItems	0
 dru		1	3	r	35	210											dru			125	skills	Aldur's Watchtower	Sets	0
 dru		1	3	r	30	150					dru									125	skills	Aldur's Watchtower	Sets	0
 dur	0	8	250	r=	0	3											thro			213		Steelgoad	UniqueItems	0
@@ -354,13 +355,13 @@ hit-skill	Volcano	5	18	scl		4		67												44	fire	Doomsayer	Runes	0
 hit-skill	Weaken	8	3	scl		8		82												44	ac	Souldrain	UniqueItems	0
 howl	0	33	96	r	0	0														113	ac	Umes Lament	UniqueItems	0
 hp		-100	-5	c	-500	-25														26	ac		SetItems	0
-hp	0	5	50	r=	20	200														26	ac		SetItems	0
-hp	0	25	75	r=	20	400					amu									26	ac	The Cat's Eye	SetItems	0
-hp	0	5	100	r=	20	400		25												26	ac		SetItems	0
-hp	0	100	200	r=	300	600		53			tors	belt								26	ac	Immortal King	Sets	0
-hp		100	150	r=	300	450					fset									26	ac	Immortal King	Sets	0
+hp	0	5	50	r=	5	50	20													26	ac		SetItems	0
+hp	0	25	75	r=	25	75	20				amu									26	ac	The Cat's Eye	SetItems	0
+hp	0	5	100	r=	5	100	20	25												26	ac		SetItems	0
+hp	0	100	200	r=	100	200	20	53			tors	belt								26	ac	Immortal King	Sets	0
+hp		100	150	r=	100	150					fset									26	ac	Immortal King	Sets	0
 hp/lvl	12	0	0	lvl		19														225	ac	Harlequin Crest	UniqueItems	0
-hp%		10	30	r	25	75														225	ac	Chromatic Ire	UniqueItems	0
+hp%		10	30	r	25	75	30													225	ac	Chromatic Ire	UniqueItems	0
 ignore-ac		1	1	s	60	60														253	dmg	Krintizs Skewer	UniqueItems	0
 ignore-ac	1	1	1	s	60	60														253	dmg	Lightsabre	UniqueItems	0
 indestruct		1	1	s	5	5											rune			39	dmg	Butcher's Pupil	UniqueItems	0
@@ -388,7 +389,7 @@ mag%	0	10	100	r=	10	100														22	mag	Gull	UniqueItems	0
 mag%/lvl	10	0	0	lvl		300														22	mag	Skullder's Ire	UniqueItems	0
 magicarrow	0	1	20	r	5	50			Y		miss									215		Witherstring	UniqueItems	0
 mana	0	5	50	r=	1	20														24		Aldur's Watchtower	Sets	0
-mana	0	5	200	r=	1	20		25												24		Aldur's Watchtower	Sets	0
+mana	0	5	200	r=	1	20	20	25												24		Aldur's Watchtower	Sets	0
 mana	0	-50	-5	c	-50	-5														24		Err:502	UniqueItems	0
 mana-kill	0	2	20	r	2	20														121		Deathspade	UniqueItems	0
 mana/lvl	16	0	0	lvl		9														41	mana	Wizardspike	UniqueItems	0
@@ -583,10 +584,10 @@ skilltab	19	1	2	smm	10	40		22												428		Natalya's Shadow	SetItems	0
 skilltab	19	1	4	smm	10	40		73												428		Natalya's Shadow	SetItems	0
 skilltab	20	1	4	smm	10	40		50												429		Firelizard's Talons	UniqueItems	0
 slow	0	10	75	r=	1	15														247		The Generals Tan Do Li Ga	UniqueItems	0
-sock	2			s		20		39		Y	shld	tors	helm	weap			thro			122		Mosers Blessed Circle	UniqueItems	0
-sock	3			s		30		43		Y	shld	tors	helm	weap			thro			122		Blade of Ali Baba	UniqueItems	0
-sock	0	1	3	r	3	10		22			helm	shld	weap	tors			thro			122				
-sock	0	1	5	r	3	30		69			helm	tors	weap				thro			122				
+sock	2			s		20		39		Y	shld	tors	helm	weap			thro	rune		122		Mosers Blessed Circle	UniqueItems	0
+sock	3			s		30		43		Y	shld	tors	helm	weap			thro	rune		122		Blade of Ali Baba	UniqueItems	0
+sock	0	1	3	r	3	10		22			helm	shld	weap	tors			thro	rune		122				
+sock	0	1	5	r	3	30		69			helm	tors	weap				thro	rune		122				
 sor		1	3	r	35	210											sor			125	skills	Tal Rasha's Wrappings	Sets	0
 sor		1	3	r	30	150					sor									125	skills	Tal Rasha's Wrappings	Sets	0
 stack	0	60	60	r	5	5					thro									141		Titan's Revenge	UniqueItems	0
@@ -596,8 +597,8 @@ stamdrain	0	10	50	r=	0	0														248		The Centurion	UniqueItems	0
 stamdrain		-25	-15	c	-25	-15														248		Duress	Runes	0
 state	fullsetgeneric	1	1	s	0	0		21			fset									252		Aldur's Watchtower	Sets	0
 state	monsterset	1	1	s	0	0		32			fset									252		Trang-Oul's Avatar	Sets	0
-str	0	2	50	r=	1	5														31		Naj's Ancient Set	Sets	0
-str/lvl	6	0	0	lvl		3														42		Enigma	Runes	0
+str	0	2	50	r=	1	5	2													31		Naj's Ancient Set	Sets	0
+str/lvl	6	0	0	lvl		3	1													42		Enigma	Runes	0
 stupidity	0	1	3	r	1	1														249	ac	Deathspade	UniqueItems	0
 stupidity	0	10	33	r	1	6		43												249	ac	RandomizeAdd14		0
 swing1	0	10	30	r=	10	30														6	dmg	Bloodrise	UniqueItems	0

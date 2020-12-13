@@ -11,6 +11,7 @@ Review all full set bonuses to determine if new lines need to be made in PropSco
 
 Add ScoreCurve feature to enable curving the relationship between Min, Max & ScoreMin, ScoreMax.
 Add ScoreLimit feature to enable limiting the % of score allowed for a prop (AC can't hog more than 10% of score for example)
+Add separate seed for full set bonus generation.
 
 
 Discussion in dev chat about score balancing, specifically balance of 2h weapons.

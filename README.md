@@ -152,6 +152,8 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-8
+* Added PropScores.txt:ScoreLimit -- Limits the max score rolled for a new affix to % of vanilla item score.
 ## v0.5.2-alpha-7
 * Many bugfixes.
 * Widened out the allowable range of props rolled in the beginning.
