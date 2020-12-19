@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.2-alpha-9",
+    "Version": "v0.5.2-alpha-10",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -16,6 +16,7 @@
 	"RemoveAttRequirements":   false,
 	"RemoveUniqCharmLimit":    false,
     "EnterToExit": false,
+    "PerfectProps": true,
     "RandomOptions": {
         "Randomize": true,
         "UseSeed": false,
@@ -26,9 +27,19 @@
         "MinProps": 2,
         "MaxProps": 20,
         "UseOSkills": true,
-        "PerfectProps": true,
         "NumClones": 9,
         "UsePropScores": true,
         "PropScoreMultiplier": 1.0
+    },
+    "GeneratorOptions": {
+        "Generate": true,
+        "UseSeed": true,
+        "Seed": -1,
+        "SetsSeed":1234,
+        "BalancedPropCount": true,
+        "MinProps": 2,
+        "MaxProps": 20,
+        "NumClones": 9,
+        "PropScoreMultiplier": 1
     }
 }

@@ -72,7 +72,7 @@ func NewFiles(sourceDir string, outDir string) Files {
 func (d2files *Files) Read(filepath string, filename string) *File {
 	if d2files.sourceDir == "" {
 		// open csvfile
-		//csvfile, err := assets.Assets.Open(path.Join(assets.DataDir, filename))
+		//fmt.Printf("Opening %s  %s\n", filepath, filename)
 		csvfile, err := assets.Assets.Open(path.Join(filepath, filename))
 		//TODO: figure out how to move this out of if/else
 		checkError(filename, err)
@@ -87,7 +87,7 @@ func (d2files *Files) Read(filepath string, filename string) *File {
 }
 
 // ReadAsset Reads File directly from a csv file (not from vfs)
-func ReadAsset(filename string, filePath string) *File {
+func ReadAsset(filePath string, filename string) *File {
 	// open csvfile
 	csvfile, err := assets.Assets.Open(path.Join(filePath, filename))
 	checkError(filename, err)
@@ -181,9 +181,8 @@ func checkError(filename string, err error) {
 	util.CheckError(fmt.Sprintf("Filename: %s", filename), err)
 }
 
-// MergeRows concatenate all rows from f2 into f1
-// FIXME: Shouldn't this be called AppendRows?
-func MergeRows(f1 *File, f2 File) {
+// AppendRows concatenate all rows from f2 into f1
+func AppendRows(f1 *File, f2 File) {
 	f1.Rows = append(f1.Rows, f2.Rows...)
 }
 

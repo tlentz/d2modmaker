@@ -10,7 +10,7 @@ import (
 
 func scoreFile(s *Scorer, ifi *d2fs.ItemFileInfo) {
 	s.IFI = ifi
-	pgetter := d2items.NewPropGetter(s.d2files, s.opts, ifi, s.PSI, *s.TypeTree)
+	pgetter := d2items.NewPropGetter(s.d2files, ifi, s.PSI, *s.TypeTree)
 	_, items := pgetter.GetProps()
 	fmt.Printf("Scoring %s:%d\n", s.IFI.FI.FileName, len(items))
 	for idx := range items {

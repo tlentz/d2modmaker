@@ -2,6 +2,7 @@ package weightrand
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
@@ -11,8 +12,9 @@ func TestGenerate(t *testing.T) {
 	wr := NewWeights(probs)
 	//fmt.Println(wr)
 	var buckets = make([]int, len(probs))
+	var rng = rand.New(rand.NewSource(0))
 	for i := 0; i < 10000; i++ {
-		buckets[wr.Generate()]++
+		buckets[wr.Generate(rng)]++
 	}
 	for idx, b := range buckets {
 		if b == 0 {

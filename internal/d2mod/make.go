@@ -10,6 +10,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/generator"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
 	"github.com/tlentz/d2modmaker/internal/d2mod/oskills"
+	"github.com/tlentz/d2modmaker/internal/d2mod/perfectprops"
 	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
 	"github.com/tlentz/d2modmaker/internal/d2mod/randomizer"
 	"github.com/tlentz/d2modmaker/internal/d2mod/reqs"
@@ -36,6 +37,8 @@ func Make(defaultOutDir string, cfg config.Data) {
 
 	if cfg.MeleeSplash {
 		splash.Jewels(cfg.OutputDir, d2files)
+	} else {
+		splash.DisableMeleeSplash(d2files)
 	}
 
 	if cfg.IncreaseStackSizes {
@@ -65,8 +68,8 @@ func Make(defaultOutDir string, cfg config.Data) {
 
 	// Calculate scores  before any alterations to items.
 	var s *scorer.Scorer
-	if cfg.RandomOptions.UsePropScores {
-		s = scorer.Run(&d2files, cfg.RandomOptions)
+	if cfg.GeneratorOptions.Generate {
+		s = scorer.Run(&d2files, cfg.GeneratorOptions)
 	}
 
 	if cfg.UniqueItemDropRate > 0 {
@@ -84,16 +87,16 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.RemoveUniqCharmLimit {
 		qol.RemoveUniqCharmLimit(d2files)
 	}
-
-	if cfg.RandomOptions.Randomize {
-		if cfg.RandomOptions.UsePropScores {
-			g := generator.NewGenerator(&d2files, cfg.RandomOptions, s.TypeTree, s.PSI, s.Statistics)
-			g.Run()
-		} else {
+	if cfg.GeneratorOptions.Generate {
+		fmt.Println("*** Running Generator ***")
+		g := generator.NewGenerator(&d2files, cfg.GeneratorOptions, s.TypeTree, s.PSI, s.Statistics)
+		g.Run()
+	} else {
+		fmt.Println("*** Running Randomizer ***")
+		if cfg.RandomOptions.Randomize {
 			randomizer.Run(&cfg, &d2files)
 		}
 	}
-
 	if cfg.RemoveLevelRequirements {
 		reqs.RemoveLevelRequirements(d2files)
 	}
@@ -101,10 +104,12 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.RemoveAttRequirements {
 		reqs.RemoveAttRequirements(d2files)
 	}
-	if cfg.RandomOptions.UseOSkills {
+	if cfg.UseOSkills {
 		oskills.ConvertSkillsToOSkills(&d2files, cfg)
 	}
-
+	if cfg.PerfectProps {
+		perfectprops.Run(&d2files)
+	}
 	d2files.Write()
 	writeSeed(cfg)
 	util.PP(cfg)

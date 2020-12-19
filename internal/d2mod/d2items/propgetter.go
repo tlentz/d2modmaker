@@ -16,7 +16,7 @@ import (
 // PropGetter Bookkeeping structure for reading Items and Props from Item files
 type PropGetter struct {
 	D2files     *d2fs.Files
-	Opts        config.RandomOptions
+	Opts        config.GeneratorOptions
 	IFI         *d2fs.ItemFileInfo
 	typeOffsets []int          // Can be empty (Sets.txt), 1 item (UniqueItems.txt & SetItems.txt) or 6 items (Runes.txt)
 	rwlevels    map[string]int // Calculated based on MiscItems.txt Lvl column for the highest Rune
@@ -25,12 +25,12 @@ type PropGetter struct {
 }
 
 // NewPropGetter Return new PropGetter for a particular file
-func NewPropGetter(d2files *d2fs.Files, opts config.RandomOptions, ifi *d2fs.ItemFileInfo, psi *propscores.Maps, tt TypeTree) *PropGetter {
+func NewPropGetter(d2files *d2fs.Files, ifi *d2fs.ItemFileInfo, psi *propscores.Maps, tt TypeTree) *PropGetter {
 	pg := PropGetter{
 		D2files: d2files,
 		IFI:     ifi,
-		Opts:    opts,
-		psi:     psi,
+		/*Opts:    opts,*/
+		psi: psi,
 	}
 	switch {
 	case pg.IFI.FI.FileNumber == filenumbers.UniqueItems:

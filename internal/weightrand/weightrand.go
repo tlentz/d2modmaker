@@ -111,7 +111,7 @@ func NewWeights(weights []int) *Weights {
 }
 
 // Generate weighted random roll
-func (wr *Weights) Generate() int {
+func (wr *Weights) Generate(rng *rand.Rand) int {
 	//fmt.Printf("WR:")
 	//fmt.Println(wr)
 	if wr == nil {
@@ -123,7 +123,7 @@ func (wr *Weights) Generate() int {
 	if len(wr.prob) == 0 {
 		log.Panic("no entries in prob")
 	}
-	r := rand.Float32()
+	r := rng.Float32()
 	r = r * float32(len(wr.prob))
 	i := int(r)
 	r = r - float32(i)
@@ -137,6 +137,7 @@ func (wr *Weights) Generate() int {
 	//fmt.Printf("Generate:%d\n", val)
 	return val
 }
+
 func push(stack *[]int, item int) {
 	*stack = append(*stack, item)
 }

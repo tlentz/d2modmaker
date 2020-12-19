@@ -20,7 +20,7 @@ func genFile(g *Generator, ifi *d2fs.ItemFileInfo) {
 	}
 
 	f := g.d2files.Get(g.IFI.FI.FileName)
-	pg := d2items.NewPropGetter(g.d2files, g.opts, g.IFI, g.psi, *g.TypeTree)
+	pg := d2items.NewPropGetter(g.d2files, g.IFI, g.psi, *g.TypeTree)
 	if (g.IFI.NumProps == 0) || (g.IFI.FirstProp == 0) {
 		log.Fatalf("genfile: NumProps == %d, FirstProp = %d", g.IFI.NumProps, g.IFI.FirstProp)
 	}

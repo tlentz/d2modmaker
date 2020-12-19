@@ -3,6 +3,7 @@ package randomizer
 import (
 	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
@@ -34,49 +35,59 @@ type Item = d2items.Item
 // Items == d2items.Items
 type Items = d2items.Items
 
-// Run Randomize randomizes all items based on the RandomOptions
-func Run(cfg *config.Data, d2files *d2fs.Files) {
-	opts := cfg.RandomOptions
-	rand.Seed(opts.Seed)
+func newScrambler(cfg *config.Data, d2files *d2fs.Files) (s *scrambler) {
 	psi := propscores.NewPropScoresIndex(d2files)
 	tt := d2items.NewTypeTree(d2files)
-	props, items := getAllProps(opts, d2files, psi, *tt)
+	props, items := getAllProps(d2files, psi, *tt)
 
-	s := scrambler{
-		opts:    opts,
+	snew := scrambler{
+		opts:    cfg.RandomOptions,
 		d2files: d2files,
 		props:   props,
 		items:   items,
 	}
+	if snew.opts.UseSeed {
+		snew.opts.Seed = time.Now().UnixNano()
+	}
+	snew.opts.MinProps = util.MaxInt(1, snew.opts.MinProps)
+	snew.opts.MaxProps = util.MinInt(20, snew.opts.MaxProps)
+	return &snew
+}
 
-	randomizeUniqueProps(s)
-	randomizeSetProps(s)
-	randomizeSetItemsProps(s)
-	randomizeRWProps(s)
+// Run Randomize randomizes all items based on the RandomOptions
+func Run(cfg *config.Data, d2files *d2fs.Files) {
+	s := newScrambler(cfg, d2files)
+
+	s.rng.Seed(s.opts.Seed)
+	randomizeUniqueProps(*s)
+	randomizeSetItemsProps(*s)
+	randomizeRWProps(*s)
+	s.rng.Seed(s.opts.SetsSeed)
+	randomizeSetProps(*s)
 }
 
 // Returns all props bucketized
-func getAllProps(opts config.RandomOptions, d2files *d2fs.Files, psi *propscores.Maps, tt d2items.TypeTree) (Props, Items) {
+func getAllProps(d2files *d2fs.Files, psi *propscores.Maps, tt d2items.TypeTree) (Props, Items) {
 	props := Props{}
 	items := Items{}
 	var p *d2items.PropGetter
 
-	p = d2items.NewPropGetter(d2files, opts, &uniqueItems.IFI, psi, tt)
+	p = d2items.NewPropGetter(d2files, &uniqueItems.IFI, psi, tt)
 	uniqueItemProps, uniqueItems := p.GetProps()
 	props = append(props, uniqueItemProps...)
 	items = append(items, uniqueItems...)
 
-	p = d2items.NewPropGetter(d2files, opts, &sets.IFI, psi, tt)
+	p = d2items.NewPropGetter(d2files, &sets.IFI, psi, tt)
 	setProps, _ := p.GetProps()
 	d2items.AppendProps(props, setProps)
 	//items = append(items, setBonuses...) //These aren't really items
 
-	p = d2items.NewPropGetter(d2files, opts, &setItems.IFI, psi, tt)
+	p = d2items.NewPropGetter(d2files, &setItems.IFI, psi, tt)
 	setItemProps, setItems := p.GetProps()
 	props = append(props, setItemProps...)
 	items = append(items, setItems...)
 
-	p = d2items.NewPropGetter(d2files, opts, &runes.IFI, psi, tt)
+	p = d2items.NewPropGetter(d2files, &runes.IFI, psi, tt)
 	runeWordProps, runewords := p.GetProps()
 	props = append(props, runeWordProps...)
 	items = append(items, runewords...)
@@ -184,14 +195,14 @@ func getAllGemsProps(d2files d2fs.Files) Props {
 	return props
 }
 
-func getBalancedRandomProp(opts config.RandomOptions, lvl int, props Props) Prop {
+func getBalancedRandomProp(s scrambler, lvl int, props Props) Prop {
 	prop := Prop{}
 	numProps := len(props)
 
 	for prop.Name == "" {
-		prop = props[randInt(0, numProps)]
+		prop = props[randInt(s.rng, 0, numProps)]
 		//Check if this prop is balanced if using that feature
-		if opts.IsBalanced && prop.Lvl-lvl > 10 {
+		if s.opts.IsBalanced && prop.Lvl-lvl > 10 {
 			// Blank the prop name and pick again
 			prop.Name = ""
 		}
@@ -236,6 +247,7 @@ type scrambler struct {
 	minMaxProps  minMaxProps
 	itemMaxProps int
 	lvl          int
+	rng          *rand.Rand
 }
 
 type minMaxProps struct {
@@ -334,14 +346,14 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 	}
 
 	//Choose a random number of props between min and max
-	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
+	numProps := randInt(s.rng, s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 
 	//If using balanced prop counts, override the random count
 	if s.opts.BalancedPropCount {
-		item := s.items[randInt(0, len(s.items))]
+		item := s.items[randInt(s.rng, 0, len(s.items))]
 		if s.opts.IsBalanced {
 			for item.Lvl-s.lvl > 10 {
-				item = s.items[randInt(0, len(s.items))]
+				item = s.items[randInt(s.rng, 0, len(s.items))]
 			}
 		}
 		numProps = util.MinInt(len(item.Affixes), s.minMaxProps.maxNumProps)
@@ -354,11 +366,11 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 	for currentNumProps := 0; currentNumProps < s.itemMaxProps; currentNumProps++ {
 		prop := Prop{Name: "", Par: "", Min: "", Max: ""}
 		if currentNumProps < numProps {
-			prop = getBalancedRandomProp(s.opts, level, s.props)
+			prop = getBalancedRandomProp(s, level, s.props)
 
 			propIDString := prop.GetID()
 			for propList[propIDString] {
-				prop = getBalancedRandomProp(s.opts, s.lvl, s.props)
+				prop = getBalancedRandomProp(s, s.lvl, s.props)
 				propIDString = prop.GetID() // FIXME: TODO: This doesn't prevent duplicate props i.e. ac/lvl with diff pars
 			}
 
@@ -378,9 +390,9 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 }
 
 // Beware: min <= randint < max   i.e. never returns max
-func randInt(min int, max int) int {
+func randInt(rng *rand.Rand, min int, max int) int {
 	if min == max {
 		return min
 	}
-	return min + rand.Intn(max-min)
+	return min + rng.Intn(max-min)
 }

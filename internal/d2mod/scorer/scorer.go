@@ -19,10 +19,10 @@ const (
 
 // Scorer Accumulates setup and scoring information for scored files
 type Scorer struct {
-	d2files   *d2fs.Files          //
-	opts      config.RandomOptions //
-	Scorefile *d2fs.File           // PropScores.txt
-	IFI       *d2fs.ItemFileInfo   //
+	d2files   *d2fs.Files             //
+	opts      config.GeneratorOptions //
+	Scorefile *d2fs.File              // PropScores.txt
+	IFI       *d2fs.ItemFileInfo      //
 	//TypeMap          map[string][]string     // Maps from a type to its parents.  From Weapons, Armor & ItemTypes
 	Group        map[d2items.Prop]string  // Maps from Prop to Group
 	SynergyGroup map[d2items.Prop]string  // Maps from a Prop to SynergyGroup
@@ -33,7 +33,7 @@ type Scorer struct {
 	PSI        *propscores.Maps
 }
 
-func newScorer(d2files *d2fs.Files, opts config.RandomOptions) *Scorer {
+func newScorer(d2files *d2fs.Files, opts config.GeneratorOptions) *Scorer {
 	s := Scorer{
 		d2files: d2files,
 		opts:    opts,
@@ -50,7 +50,7 @@ func newScorer(d2files *d2fs.Files, opts config.RandomOptions) *Scorer {
 }
 
 // Run Scores all Items files
-func Run(d2files *d2fs.Files, opts config.RandomOptions) *Scorer {
+func Run(d2files *d2fs.Files, opts config.GeneratorOptions) *Scorer {
 	s := newScorer(d2files, opts)
 	scoreFile(s, &uniqueItems.IFI)
 	scoreFile(s, &setItems.IFI)

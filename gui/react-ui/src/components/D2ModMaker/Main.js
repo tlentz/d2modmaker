@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-9",
+  Version: "v0.5.2-alpha-10",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -37,22 +37,32 @@ const defaultCfg = {
   RemoveLevelRequirements: false,
   RemoveAttRequirements: false,
   RemoveUniqCharmLimit: false,
+  PerfectProps: false,
+  UseOSkills: true,
   EnterToExit: false,
   RandomOptions: {
     Randomize: true,
     UseSeed: false,
     Seed: -1,
+    SetsSeed: -1,
     IsBalanced: true,
     BalancedPropCount: true,
     AllowDupProps: false,
     MinProps: 0,
     MaxProps: 20,
-    PerfectProps: false,
-    UseOSkills: true,
     NumClones: 9,
-    UsePropScores: true,
-    PropScoreMultiplier: 1,
   },
+  GeneratorOptions: {
+    Generate: true,
+    UseSeed: false,
+    Seed: -1,
+    SetsSeed: -1,
+    BalancedPropCount: true,
+    MinProps: 2,
+    MaxProps: 20,
+    NumClones: 9,
+    PropScoreMultiplier: 1,
+  }
 };
 
 export default function D2ModMaker() {

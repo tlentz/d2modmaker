@@ -12,7 +12,7 @@ import (
 
 /*
 func genItemScores(g *Generator, ifi *d2fs.ItemFileInfo) {
-	//itemScoreFile := d2fs.ReadAsset(itemscores.FileName, itemscores.Path)
+	//itemScoreFile := d2fs.ReadAsset(itemscores.Path, itemscores.FileName)
 	itemScoreFile := g.d2files.GetWithPath(itemscores.Path, itemscores.FileName)
 	itemFile := g.d2files.Get(ifi.FI.FileName)
 	pg := d2items.NewPropGetter(g.d2files, g.opts, ifi, g.psi, *g.TypeTree)

@@ -30,12 +30,20 @@ This should be compatible with PlugY and other things such as:
 
 # ModConfig
 
-The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
+The mod config is located in `cfg.json`.  You can change this config to your liking and run to produce a new `data` folder.
 
 ## ModConfig Options
 #### SourceDir `string`
 * Specifies the directory the source text files are read from
 * If this is omitted, or set to "", the built-in 113c data files will be used. 
+#### OutputDir `string`
+* Specifies the data directory to write files to.  
+* If omitted it will default to creating the data file tree directly underneath 
+* the current directory, i.e. 
+#### MeleeSplash `bool`
+* Enables spawning of jewels that have the added property "Melee Splash"
+* If the Generator is enabled it can generate items with this property.
+* The Randomizer does not produce items with Melee Splash, so you'll have to use jewels.
 #### IncreaseStackSizes `bool`
 * Increases book of tp to 100
 * Increases book of id to 100
@@ -44,8 +52,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Increases key stack sizes to 100
 #### IncreaseMonsterDensity `float`
 * Will increase the density of all areas by the given multiplier
-* `MAX: 30.0`
 * `MIN: 0.0`
+* `MAX: 30.0`
 * Set to `-1` to omit
 #### EnableTownSkills `bool`
 * Enables all skills in town
@@ -78,15 +86,23 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Removes attribute requirements from items.
 #### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
+#### PerfectProps `bool`
+* All props will have the max value for min/max values
+#### UseOSkills `bool`
+* Will change class only skills to oskills
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
 ## RandomOptions `RandomOptions`
 #### Randomize `bool`
 * Will randomize if set to true
+#### UseSeed `bool`
+* Will use provided seed if set, generate random seed every run if not set
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
+#### SetsSeed `int`
+* Will use this seed for randomizing the set bonuses.  Changing this seed will cause the set bonuses on existing items to be re-rolled.
 #### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
 #### AllowDuplicateProps `bool`
@@ -102,10 +118,29 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### MaxProps `int`
 * Maximum number of non blank props that spawn on an item
 * Set to `-1` to omit
-#### UseOSkills `bool`
-* Will change class only skills to oskills
-#### PerfectProps `bool`
-* All props will have the max value for min/max values
+## GeneratorOptions `GeneratorOptions`
+#### Generate `bool`
+* Set to turn on the Prop Generator
+#### UseSeed `bool`
+* Will use provided seed if set, generate random seed every run if not set
+#### Seed `int`
+* Will use this seed for randomization
+* Set to `-1` to generate a random seed
+#### BalancedPropCount `bool`
+* Pick prop count on items based on counts from vanilla items
+* Generates up to 4 props more than vanilla if needed to match the vanilla item's score.
+* Enabling this setting will make MinProps and MaxProps unused
+#### MinProps `int`
+* Minimum number of non blank props that spawn on an item
+* Set to `-1` to omit
+#### MaxProps `int`
+* Maximum number of non blank props that spawn on an item
+* Set to `-1` to omit
+#### NumClones `int`
+* Number of clone unique items to create.  Clones will have
+* same name but different generated properties.
+#### PropScoreMultipler `int`
+* The I Win lever.  1 = vanilla.  2 = 2x the score of the vanilla item.
 
 # Screenshots
 ### Nagel
@@ -152,6 +187,10 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-10
+* Separated out Generator from Randomizer options
+* Made OSkills and PerfectProps their own separate entities, capable of running against vanilla, randomized or generated items.
+* Separated out Sets Seed from the other seed.
 ## v0.5.2-alpha-9
 * Fix for ScoreLimit not applying correctly to proppartype s (skill)
 * Made oskill conversion its own module, run after Generator or Randomizer

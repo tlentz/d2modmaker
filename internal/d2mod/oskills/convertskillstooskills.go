@@ -14,13 +14,16 @@ import (
 // ConvertSkillsToOSkills will change all of the skills props to oskills for the 4 main item files
 // UniqueItems, Sets, SetItems and Runes.
 func ConvertSkillsToOSkills(d2files *d2fs.Files, cfg config.Data) {
-	convertFile(d2files, cfg, &uniqueItems.IFI)
-	convertFile(d2files, cfg, &setItems.IFI)
-	convertFile(d2files, cfg, &sets.IFI)
-	convertFile(d2files, cfg, &runes.IFI)
+	if !cfg.UseOSkills {
+		return
+	}
+	convertFile(d2files, &uniqueItems.IFI)
+	convertFile(d2files, &setItems.IFI)
+	convertFile(d2files, &sets.IFI)
+	convertFile(d2files, &runes.IFI)
 
 }
-func convertFile(d2files *d2fs.Files, cfg config.Data, ifi *d2fs.ItemFileInfo) {
+func convertFile(d2files *d2fs.Files, ifi *d2fs.ItemFileInfo) {
 	conversionCounter := 0
 	file := d2files.Get(ifi.FI.FileName)
 	//log.Printf("Converting %s", ifi.FI.FileName)
@@ -29,7 +32,7 @@ func convertFile(d2files *d2fs.Files, cfg config.Data, ifi *d2fs.ItemFileInfo) {
 			continue
 		}
 		for colIdx := ifi.FirstProp; colIdx < (ifi.FirstProp + ((ifi.NumProps - 1) * 4)); colIdx += 4 {
-			if cfg.RandomOptions.UseOSkills && (file.Rows[rowIdx][colIdx] == "skill") {
+			if file.Rows[rowIdx][colIdx] == "skill" {
 				//log.Printf("convertFile: %s", file.Rows[rowIdx][colIdx+1]) // Par is the skill name or number
 				file.Rows[rowIdx][colIdx] = "oskill"
 				conversionCounter++

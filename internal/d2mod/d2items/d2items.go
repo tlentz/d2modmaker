@@ -112,18 +112,6 @@ func NewItem(pg PropGetter, rowIdx int, row []string) *Item {
 		}
 		//prop := prop.NewProp(row[i], row[i+1], row[i+2], row[i+3])
 		aff := NewAffixFromRow(pg, item, row, i)
-		// FIXME:TODO: Need to re-implement perfect props AFTER scoring.
-		// Don't forget to add exclusion for skill-rand
-		/*
-			if pg.Opts.PerfectProps {
-				prop.Min = prop.Max
-			}
-			if pg.Opts.UseOSkills {
-				if prop.Name == "skill" {
-					prop.Name = "oskill"
-				}
-			}
-		*/
 		if aff.Line == nil {
 			panic(1)
 		}

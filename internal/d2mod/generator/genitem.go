@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 
@@ -22,7 +21,7 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	if len(its.NumLines) == 0 {
 		log.Panic("item statistics structure empty")
 	}
-	its.Weights.Generate()
+	its.Weights.Generate(g.rng)
 	targetScore := util.Round32(float32(g.Statistics.ItemScores[oldItem.Name]) * float32(g.opts.PropScoreMultiplier))
 	targetPropCount := 0
 	maxProps := 0
@@ -37,7 +36,7 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 		minProps = util.MaxInt(minProps, 1) // Because everyone wants some props
 		maxProps = util.MinInt(g.opts.MaxProps, g.IFI.NumProps)
 
-		targetPropCount = minProps + rand.Intn(maxProps-minProps+1) // beware how Intn behaves...
+		targetPropCount = minProps + g.rng.Intn(maxProps-minProps+1) // beware how Intn behaves...
 		targetPropCount = util.MinInt(targetPropCount, g.IFI.NumProps)
 	}
 	newi := oldItem.CloneWithoutAffixes()
@@ -61,7 +60,7 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 		affixRollCount := 0
 		for len(newi.Affixes) < maxProps { // len(newi.Affixes) < maxProps {
 
-			minPropScore, targetPropScore, maxPropScore := calcTargetPropScore(len(newi.Affixes), targetPropCount, maxProps, itemScore, targetScore)
+			minPropScore, targetPropScore, maxPropScore := calcTargetPropScore(g.rng, len(newi.Affixes), targetPropCount, maxProps, itemScore, targetScore)
 			if targetPropScore < minPropScore || targetPropScore > maxPropScore {
 				log.Panicf("targetPropScore not between min & max")
 			}
@@ -130,7 +129,7 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 	scorer.WriteItemScore(g.Statistics, g.d2files, g.IFI, newi, false)
 	return newi
 }
-func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount int, itemScore int, targetScore int) (int, int, int) {
+func calcTargetPropScore(rng *rand.Rand, numItemAffixes int, targetPropCount int, maxPropCount int, itemScore int, targetScore int) (int, int, int) {
 	numAffixesLeft := targetPropCount - numItemAffixes
 	if numAffixesLeft <= 1 {
 		delta := util.AbsInt((targetScore * 40) / 100)
@@ -160,7 +159,7 @@ func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount i
 	}
 	minScore := util.Round32(negDev * float32((targetScore - itemScore)))
 	maxScore := util.Round32(posDev * float32((targetScore - itemScore)))
-	targetPropScore := minScore + util.Round32(rand.Float32()*float32(maxScore-minScore))
+	targetPropScore := minScore + util.Round32(rng.Float32()*float32(maxScore-minScore))
 	if targetPropScore > maxScore || targetPropScore < minScore {
 		log.Panicf("targetPropScore out of bounds")
 	}
@@ -171,10 +170,10 @@ func calcTargetPropScore(numItemAffixes int, targetPropCount int, maxPropCount i
 		maxScore = 0
 		targetPropScore = minScore
 	}
-	if itemScore > 3*targetScore && (targetScore > 100) {
-		fmt.Printf("Score Item/Tgt/#p - Min/Tgt/Max: %d/%d/%d - %d/%d/%d\n", itemScore, targetScore, numAffixesLeft, minScore, targetPropScore, maxScore)
-		panic(1)
-	}
+	// if itemScore > 3*targetScore && (targetScore > 100) {
+	// 	log.Panicf("calcTargetPropScore: Score likely unreachable: Score Item/Tgt/#p - Min/Tgt/Max: %d/%d/%d - %d/%d/%d\n", itemScore, targetScore, numAffixesLeft, minScore, targetPropScore, maxScore)
+	// 	panic(1)
+	// }
 	return minScore, targetPropScore, maxScore
 
 }

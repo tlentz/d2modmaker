@@ -13,6 +13,8 @@ Add ScoreCurve feature to enable curving the relationship between Min, Max & Sco
 Add ScoreLimit feature to enable limiting the % of score allowed for a prop (AC can't hog more than 10% of score for example)
 Add separate seed for full set bonus generation.
 
+Add ClusterProp & ClusterChance to allow grouping of props.  Needed at 100% for pois-len,pois-min,pois-max.  Would be nice for dmg% -> min -> max at < 100% or +fireball -> +sorc skills
+
 
 Discussion in dev chat about score balancing, specifically balance of 2h weapons.
 
