@@ -33,5 +33,5 @@ const (
 	SynergyGroup = 21
 	SourceItem   = 22 // Example of item that containsthis prop (not necessarily with same min/max)
 	SourceFile   = 23// File the SourceItem came from
-	ol          = 24
+	Eol          = 24
 )
