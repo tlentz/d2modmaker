@@ -32,24 +32,25 @@ type Generator struct {
 }
 
 // NewGenerator Initialize a Generator from Scorer statistics
-func NewGenerator(d2files *d2fs.Files, opts config.GeneratorOptions, tt *d2items.TypeTree, psi *propscores.Maps, stats *scorerstatistics.ScorerStatistics) *Generator {
+func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2items.TypeTree, psi *propscores.Maps, stats *scorerstatistics.ScorerStatistics) *Generator {
+	opts.MinProps = util.MaxInt(1, opts.MinProps)
+	opts.MaxProps = util.MinInt(20, opts.MaxProps)
+	opts.NumClones = util.MaxInt(0, opts.NumClones)
+	opts.PropScoreMultiplier = util.MinFloat(10, opts.PropScoreMultiplier)
+	if !opts.UseSeed {
+		opts.Seed = time.Now().UnixNano()
+	}
+
 	g := Generator{
 		d2files:    d2files,
-		opts:       opts,
+		opts:       *opts,
 		TypeTree:   tt,
 		psi:        propscores.NewPropScoresIndex(d2files),
 		Statistics: stats,
 	}
 	g.Statistics.SetupProbabilityWeights()
-	g.rng = rand.New(rand.NewSource(opts.Seed))
 
-	if !g.opts.UseSeed {
-		g.opts.Seed = time.Now().UnixNano()
-	}
-	g.opts.MinProps = util.MaxInt(1, g.opts.MinProps)
-	g.opts.MaxProps = util.MinInt(20, g.opts.MaxProps)
-	g.opts.NumClones = util.MaxInt(0, g.opts.NumClones)
-	g.opts.PropScoreMultiplier = util.MinFloat(10, g.opts.PropScoreMultiplier)
+	g.rng = rand.New(rand.NewSource(opts.Seed))
 
 	return &g
 }

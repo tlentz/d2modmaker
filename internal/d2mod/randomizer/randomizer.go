@@ -35,27 +35,32 @@ type Item = d2items.Item
 // Items == d2items.Items
 type Items = d2items.Items
 
-func newScrambler(cfg *config.Data, d2files *d2fs.Files) (s *scrambler) {
+func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler) {
 	psi := propscores.NewPropScoresIndex(d2files)
 	tt := d2items.NewTypeTree(d2files)
 	props, items := getAllProps(d2files, psi, *tt)
 
+	if !cfg.UseSeed {
+		cfg.Seed = time.Now().UnixNano()
+		fmt.Printf("New Seed = %d", cfg.Seed)
+	}
+	if cfg.SetsSeed == -1 {
+		cfg.SetsSeed = time.Now().UnixNano()
+	}
+	cfg.MinProps = util.MaxInt(1, cfg.MinProps)
+	cfg.MaxProps = util.MinInt(20, cfg.MaxProps)
+
 	snew := scrambler{
-		opts:    cfg.RandomOptions,
+		opts:    *cfg,
 		d2files: d2files,
 		props:   props,
 		items:   items,
 	}
-	if snew.opts.UseSeed {
-		snew.opts.Seed = time.Now().UnixNano()
-	}
-	snew.opts.MinProps = util.MaxInt(1, snew.opts.MinProps)
-	snew.opts.MaxProps = util.MinInt(20, snew.opts.MaxProps)
 	return &snew
 }
 
 // Run Randomize randomizes all items based on the RandomOptions
-func Run(cfg *config.Data, d2files *d2fs.Files) {
+func Run(cfg *config.RandomOptions, d2files *d2fs.Files) {
 	s := newScrambler(cfg, d2files)
 
 	s.rng.Seed(s.opts.Seed)

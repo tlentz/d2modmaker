@@ -41,6 +41,8 @@ type Data struct {
 	IncreaseStackSizes      bool             `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity  float64          `json:"IncreaseMonsterDensity"`
 	EnableTownSkills        bool             `json:"EnableTownSkills"`
+	BiggerGoldPiles         bool             `json:"BiggerGoldPiles"`
+	NoFlawGems              bool             `json:"NoFlawGems"`
 	NoDropZero              bool             `json:"NoDropZero"`
 	QuestDrops              bool             `json:"QuestDrops"`
 	UniqueItemDropRate      float64          `json:"UniqueItemDropRate"`
@@ -67,6 +69,8 @@ func DefaultData() Data {
 		IncreaseStackSizes:      true,
 		IncreaseMonsterDensity:  1,
 		EnableTownSkills:        true,
+		BiggerGoldPiles:         true,
+		NoFlawGems:              true,
 		NoDropZero:              true,
 		QuestDrops:              true,
 		UniqueItemDropRate:      1,

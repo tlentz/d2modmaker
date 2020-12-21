@@ -57,6 +57,10 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Set to `-1` to omit
 #### EnableTownSkills `bool`
 * Enables all skills in town
+#### BiggerGoldPiles `bool`
+* Gold piles 10x larger and 10x rarer.
+#### NoFlawGems
+* Flawed are very rare and & perfect gems drop instead of flawless at 1/3 the rate.
 #### NoDropZero `bool`
 * Sets "NoDrop" = 0 (Monsters will always drop items)
 #### QuestDrops `bool`

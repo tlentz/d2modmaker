@@ -52,7 +52,12 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.EnableTownSkills {
 		townskills.Enable(d2files)
 	}
-
+	if cfg.BiggerGoldPiles {
+		treasure.BiggerGoldPiles(d2files)
+	}
+	if cfg.NoFlawGems {
+		treasure.NoFlawGems(d2files)
+	}
 	if cfg.NoDropZero {
 		treasure.SetNoDropZero(d2files)
 	}
@@ -89,12 +94,12 @@ func Make(defaultOutDir string, cfg config.Data) {
 	}
 	if cfg.GeneratorOptions.Generate {
 		fmt.Println("*** Running Generator ***")
-		g := generator.NewGenerator(&d2files, cfg.GeneratorOptions, s.TypeTree, s.PSI, s.Statistics)
+		g := generator.NewGenerator(&d2files, &cfg.GeneratorOptions, s.TypeTree, s.PSI, s.Statistics)
 		g.Run()
 	} else {
 		fmt.Println("*** Running Randomizer ***")
 		if cfg.RandomOptions.Randomize {
-			randomizer.Run(&cfg, &d2files)
+			randomizer.Run(&cfg.RandomOptions, &d2files)
 		}
 	}
 	if cfg.RemoveLevelRequirements {
@@ -105,7 +110,7 @@ func Make(defaultOutDir string, cfg config.Data) {
 		reqs.RemoveAttRequirements(d2files)
 	}
 	if cfg.UseOSkills {
-		oskills.ConvertSkillsToOSkills(&d2files, cfg)
+		oskills.ConvertSkillsToOSkills(&d2files)
 	}
 	if cfg.PerfectProps {
 		perfectprops.Run(&d2files)

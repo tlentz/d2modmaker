@@ -8,15 +8,11 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
-	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 )
 
 // ConvertSkillsToOSkills will change all of the skills props to oskills for the 4 main item files
 // UniqueItems, Sets, SetItems and Runes.
-func ConvertSkillsToOSkills(d2files *d2fs.Files, cfg config.Data) {
-	if !cfg.UseOSkills {
-		return
-	}
+func ConvertSkillsToOSkills(d2files *d2fs.Files) {
 	convertFile(d2files, &uniqueItems.IFI)
 	convertFile(d2files, &setItems.IFI)
 	convertFile(d2files, &sets.IFI)
