@@ -19,6 +19,7 @@
 	"RemoveUniqCharmLimit":    false,
     "EnterToExit": false,
     "PerfectProps": true,
+    "UseOSkills": true,
     "RandomOptions": {
         "Randomize": true,
         "UseSeed": false,
@@ -30,10 +31,7 @@
         "AllowDuplicateProps": false,
         "MinProps": 2,
         "MaxProps": 20,
-        "UseOSkills": true,
-        "NumClones": 9,
-        "UsePropScores": true,
-        "PropScoreMultiplier": 1.0
+        "NumClones": 9
     },
     "GeneratorOptions": {
         "Generate": true,
