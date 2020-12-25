@@ -93,6 +93,11 @@ export default function D2ModMaker() {
     randomOptions[key] = val;
     return { ...oldState, RandomOptions: randomOptions };
   };
+  const updateGeneratorOptions = (oldState, key, val) => {
+    let generatorOptions = oldState.GeneratorOptions;
+    generatorOptions[key] = val;
+    return { ...oldState, GeneratorOptions: generatorOptions };
+  };
 
   const mkRandoCheckbox = ({ key, tooltip }) => {
     return (
@@ -140,6 +145,26 @@ export default function D2ModMaker() {
     );
   };
 
+  const mkGeneratorCheckbox = ({ key, tooltip }) => {
+    return (
+      <React.Fragment>
+        <FormControlLabel
+          control={<Checkbox color="primary" name={key} value={state[key]} />}
+          label={key}
+          checked={state[key]}
+          onChange={(e, checked) => {
+                return setState(updateGeneratorOptions(state, key, checked));
+          }}
+        />
+        <StyledTooltip title={tooltip} placement="bottom" enterDelay={250}>
+          <span className={"help-icon"}>
+            <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+          </span>
+        </StyledTooltip>
+      </React.Fragment>
+    );
+  };
+
   const seed = () => {
     if (state.RandomOptions.Seed >= 1) {
       return state.RandomOptions.Seed;
@@ -152,7 +177,7 @@ export default function D2ModMaker() {
     return Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
   };
 
-  const seedInput = () => {
+  const randSeedInput = () => {
     if (state.RandomOptions.UseSeed) {
       return (
         <React.Fragment>
@@ -164,6 +189,60 @@ export default function D2ModMaker() {
             value={state.RandomOptions.Seed}
             onChange={(value) => {
               return updateRandomOptions(state, "Seed", value);
+            }}
+          />
+        </React.Fragment>
+      );
+    }
+  };
+  const randSetsSeedInput = () => {
+    if (state.RandomOptions.UseSetsSeed) {
+      return (
+        <React.Fragment>
+          <InputNumber
+            aria-label="Seed number input"
+            min={1}
+            max={Number.MAX_SAFE_INTEGER}
+            style={{ width: 100 }}
+            value={state.RandomOptions.SetsSeed}
+            onChange={(value) => {
+              return updateRandomOptions(state, "SetsSeed", value);
+            }}
+          />
+        </React.Fragment>
+      );
+    }
+  };
+  const genSeedInput = () => {
+    if (state.GeneratorOptions.UseSeed) {
+      return (
+        <React.Fragment>
+          <InputNumber
+            aria-label="Seed number input"
+            min={1}
+            max={Number.MAX_SAFE_INTEGER}
+            style={{ width: 100 }}
+            value={state.GeneratorOptions.Seed}
+            onChange={(value) => {
+              return updateGeneratorOptions(state, "Seed", value);
+            }}
+          />
+        </React.Fragment>
+      );
+    }
+  };
+  const genSetsSeedInput = () => {
+    if (state.GeneratorOptions.UseSetsSeed) {
+      return (
+        <React.Fragment>
+          <InputNumber
+            aria-label="Sets Seed number input"
+            min={1}
+            max={Number.MAX_SAFE_INTEGER}
+            style={{ width: 100 }}
+            value={state.GeneratorOptions.SetsSeed}
+            onChange={(value) => {
+              return updateGeneratorOptions(state, "SetsSeed", value);
             }}
           />
         </React.Fragment>
@@ -274,7 +353,7 @@ export default function D2ModMaker() {
           <Grid item xs={6}>
             <StyledTooltip
               title={
-                "The directory that the data folder will be placed. Leave blank to use current directory. This requires a trailing slash. example: /Users/{username}/{folder}/"
+                "The directory that the data folder will be placed in. Leave blank to use current directory (.\data\). This requires a trailing slash. example: /Users/{username}/{folder}/"
               }
               placement="bottom"
               enterDelay={250}
@@ -314,7 +393,7 @@ export default function D2ModMaker() {
           {mkCheckbox({
             key: "MeleeSplash",
             tooltip:
-              "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels.",
+              "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels, or on a unique if using Generator",
           })}
         </Grid>
         <Grid item xs={12} className={"SliderWrapper"}>
@@ -508,27 +587,29 @@ export default function D2ModMaker() {
 
         <Grid container>
           <Grid item xs={4}>
-            {mkRandoCheckbox({
+            {mkGeneratorCheckbox({
               key: "Generate",
               tooltip: "Generate all uniques, sets, and runewords.",
             })}
           </Grid>
-          <Grid item xs={8}>
+        </Grid>
+        <Grid container>
+          <Grid item xs={6}>
             <React.Fragment>
               <FormControlLabel
                 control={
                   <Checkbox
                     color="primary"
                     name={"UseSeed"}
-                    value={state.RandomOptions["UseSeed"]}
+                    value={state.GeneratorOptions["UseSeed"]}
                   />
                 }
                 label={"UseSeed"}
-                checked={state.RandomOptions["UseSeed"]}
+                checked={state.GeneratorOptions["UseSeed"]}
                 onChange={(e, checked) => {
                   return setState(
-                    updateRandomOptions(
-                      updateRandomOptions(state, "UseSeed", checked),
+                    updateGeneratorOptions(
+                      updateGeneratorOptions(state, "UseSeed", checked),
                       "Seed",
                       checked ? seed() : -1
                     )
@@ -547,27 +628,92 @@ export default function D2ModMaker() {
                 </span>
               </StyledTooltip>
             </React.Fragment>
-            {seedInput()}
+            {genSeedInput()}
+          </Grid>
+          <Grid item xs={6}>
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    name={"UseSetsSeed"}
+                    value={state.GeneratorOptions["UseSetsSeed"]}
+                  />
+                }
+                label={"UseSetsSeed"}
+                checked={state.GeneratorOptions["UseSetsSeed"]}
+                onChange={(e, checked) => {
+                  return setState(
+                    updateGeneratorOptions(
+                      updateGeneratorOptions(state, "UseSetsSeed", checked),
+                      "SetsSeed",
+                      checked ? seed() : -1
+                    )
+                  );
+                }}
+              />
+              <StyledTooltip
+                title={
+                  "Provide a specific seed to use for full set bonuses.  Toggling on/off will generate a new seed.  Beware that full set bonuses will change _on existing items_."
+                }
+                placement="bottom"
+                enterDelay={250}
+              >
+                <span className={"help-icon"}>
+                  <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+                </span>
+              </StyledTooltip>
+            </React.Fragment>
+            {genSetsSeedInput()}
           </Grid>
         </Grid>
 
+        <Grid item xs={12} className={"SliderWrapper"}>
+          <Typography
+            id="PropScoreMultiplier"
+            align={"center"}
+            gutterBottom
+            className={"primary"}
+          >
+            PropScoreMultiplier
+            <StyledTooltip
+              title={"Sets target score for generator at multiple of vanilla item's score."}
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={1}
+            getAriaValueText={valuetext}
+            aria-labelledby="PropScoreMultiplier"
+            step={0.2}
+            max={5}
+            marks={[
+              {
+                value: 1,
+                label: "Vanilla",
+              },
+            ]}
 
-        <Grid container>
-          <Grid item xs={4}>
-            {mkRandoCheckbox({
-              key: "IsBalanced",
-              tooltip:
-                "Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization.",
-            })}
-          </Grid>
+            disabled={false}
+            valueLabelDisplay="on"
+            onChange={(e, n) =>
+              setState(updateGeneratorOptions(state, "PropScoreMultiplier", n))
+            }
+          />
         </Grid>
+
 
         <Grid container>
           <Grid item xs={12}>
-            {mkRandoCheckbox({
+            {mkGeneratorCheckbox({
               key: "BalancedPropCount",
               tooltip:
-                "Pick prop count on items based on counts from vanilla items. Picks from items up to 10 levels higher when randomizing.",
+                "Prop count on generated items based on counts from vanilla items.  Will not exceed 4 more props than vanilla.",
             })}
           </Grid>
         </Grid>
@@ -590,16 +736,16 @@ export default function D2ModMaker() {
             </StyledTooltip>
           </Typography>
           <Slider
-            defaultValue={0}
+            defaultValue={2}
             getAriaValueText={valuetext}
             aria-labelledby="MinProps"
             step={1}
             max={20}
             marks={propMarks}
-            disabled={state.RandomOptions.BalancedPropCount}
+            disabled={state.GeneratorOptions.BalancedPropCount}
             valueLabelDisplay="on"
             onChange={(e, n) =>
-              setState(updateRandomOptions(state, "MinProps", n))
+              setState(updateGeneratorOptions(state, "MinProps", n))
             }
           />
         </Grid>
@@ -628,10 +774,10 @@ export default function D2ModMaker() {
             step={1}
             max={20}
             marks={propMarks}
-            disabled={state.RandomOptions.BalancedPropCount}
+            disabled={state.GeneratorOptions.BalancedPropCount}
             valueLabelDisplay="on"
             onChange={(e, n) =>
-              setState(updateRandomOptions(state, "MaxProps", n))
+              setState(updateGeneratorOptions(state, "MaxProps", n))
             }
           />
         </Grid>
@@ -656,10 +802,12 @@ export default function D2ModMaker() {
           <Grid item xs={4}>
             {mkRandoCheckbox({
               key: "Randomize",
-              tooltip: "Randomize all all uniques, sets, and runewords.",
+              tooltip: "Randomize all all uniques, sets, and runewords.  If Generator is enables Randomizer will not run.",
             })}
           </Grid>
-          <Grid item xs={8}>
+        </Grid>
+        <Grid container>
+          <Grid item xs={6}>
             <React.Fragment>
               <FormControlLabel
                 control={
@@ -693,7 +841,43 @@ export default function D2ModMaker() {
                 </span>
               </StyledTooltip>
             </React.Fragment>
-            {seedInput()}
+            {randSeedInput()}
+          </Grid>
+          <Grid item xs={6}>
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    name={"UseSetsSeed"}
+                    value={state.RandomOptions["UseSetsSeed"]}
+                  />
+                }
+                label={"UseSetsSeed"}
+                checked={state.RandomOptions["UseSetsSeed"]}
+                onChange={(e, checked) => {
+                  return setState(
+                    updateRandomOptions(
+                      updateRandomOptions(state, "UseSetsSeed", checked),
+                      "SetsSeed",
+                      checked ? seed() : -1
+                    )
+                  );
+                }}
+              />
+              <StyledTooltip
+                title={
+                  "Provide a specific seed to use for full set bonuses.  Toggling on/off will generate a new seed.  Beware that chaning seed changes full set bonuses _for existing items_."
+                }
+                placement="bottom"
+                enterDelay={250}
+              >
+                <span className={"help-icon"}>
+                  <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+                </span>
+              </StyledTooltip>
+            </React.Fragment>
+            {randSetsSeedInput()}
           </Grid>
         </Grid>
 
@@ -743,7 +927,7 @@ export default function D2ModMaker() {
             </StyledTooltip>
           </Typography>
           <Slider
-            defaultValue={0}
+            defaultValue={2}
             getAriaValueText={valuetext}
             aria-labelledby="MinProps"
             step={1}

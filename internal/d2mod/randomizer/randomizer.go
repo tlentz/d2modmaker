@@ -42,9 +42,9 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 
 	if !cfg.UseSeed {
 		cfg.Seed = time.Now().UnixNano()
-		fmt.Printf("New Seed = %d", cfg.Seed)
+		//fmt.Printf("New Seed = %d", cfg.Seed)
 	}
-	if cfg.SetsSeed == -1 {
+	if !cfg.UseSetsSeed {
 		cfg.SetsSeed = time.Now().UnixNano()
 	}
 	cfg.MinProps = util.MaxInt(1, cfg.MinProps)

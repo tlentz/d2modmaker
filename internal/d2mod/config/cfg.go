@@ -10,6 +10,7 @@ type RandomOptions struct {
 	Randomize         bool  `json:"Randomize"`
 	UseSeed           bool  `json:"UseSeed"`
 	Seed              int64 `json:"Seed"`
+	UseSetsSeed       bool  `json:"UseSetsSeed"`
 	SetsSeed          int64 `json:"SetsSeed"`
 	IsBalanced        bool  `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
 	BalancedPropCount bool  `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
@@ -24,6 +25,7 @@ type GeneratorOptions struct {
 	Generate            bool    `json:"Generate"` // Turn On/Off Generator
 	UseSeed             bool    `json:"UseSeed"`
 	Seed                int64   `json:"Seed"`
+	UseSetsSeed         bool    `json:"UseSetsSeed"`
 	SetsSeed            int64   `json:"SetsSeed"`            // seed forSetItems.txt
 	BalancedPropCount   bool    `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
 	MinProps            int     `json:"MinProps"`            // minimum number of non blank props on an item

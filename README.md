@@ -105,6 +105,11 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
+#### UseSetsSeed `bool`
+* Will use provided seed for full set bonuses if set, generate random seed every run if not set
+#### Seed `int`
+* Will use this seed for randomization
+* Set to `-1` to generate a random seed
 #### SetsSeed `int`
 * Will use this seed for randomizing the set bonuses.  Changing this seed will cause the set bonuses on existing items to be re-rolled.
 #### IsBalanced `bool`

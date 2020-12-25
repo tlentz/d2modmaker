@@ -40,6 +40,9 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 	if !opts.UseSeed {
 		opts.Seed = time.Now().UnixNano()
 	}
+	if !opts.UseSetsSeed {
+		opts.SetsSeed = time.Now().UnixNano()
+	}
 
 	g := Generator{
 		d2files:    d2files,
