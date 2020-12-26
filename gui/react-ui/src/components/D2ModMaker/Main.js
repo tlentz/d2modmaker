@@ -353,7 +353,7 @@ export default function D2ModMaker() {
           <Grid item xs={6}>
             <StyledTooltip
               title={
-                "The directory that the data folder will be placed in. Leave blank to use current directory (.\data\). This requires a trailing slash. example: /Users/{username}/{folder}/"
+                "The directory that the data folder will be placed in. Leave blank to use current directory (./data/). This requires a trailing slash. example: /Users/{username}/{folder}/"
               }
               placement="bottom"
               enterDelay={250}
