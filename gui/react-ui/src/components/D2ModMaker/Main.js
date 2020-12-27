@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-10",
+  Version: "v0.5.2-alpha-11",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -314,6 +314,13 @@ export default function D2ModMaker() {
               key: "RemoveUniqCharmLimit",
               tooltip:
                 "Removes unique charm limit in inventory.",
+            })}
+          </Grid>
+          <Grid item xs={6}>
+            {mkCheckbox({
+              key: "SafeUnsocket",
+              tooltip:
+                "Adds Runeword: 1 quiver + item => Item + gems/runes in item",
             })}
           </Grid>
 

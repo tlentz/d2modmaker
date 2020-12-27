@@ -56,6 +56,7 @@ type Data struct {
 	RemoveUniqCharmLimit    bool             `json:"RemoveUniqCharmLimit"`
 	PerfectProps            bool             `json:"PerfectProps"` // sets min/max to max
 	UseOSkills              bool             `json:"UseOSkills"`   // +3 Fireball (Sorceress Only) -> +3 Fireball
+	SafeUnsocket            bool             `json:"SafeUnsocket"`
 	EnterToExit             bool             `json:"EnterToExit"`
 	RandomOptions           RandomOptions    `json:"RandomOptions"`
 	GeneratorOptions        GeneratorOptions `json:"GeneratorOptions"`
@@ -64,7 +65,7 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-10",
+		Version:                 "v0.5.2-alpha-11",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -84,6 +85,7 @@ func DefaultData() Data {
 		RemoveUniqCharmLimit:    false,
 		PerfectProps:            false,
 		UseOSkills:              true,
+		SafeUnsocket:            true,
 		EnterToExit:             false,
 		RandomOptions: RandomOptions{
 			Randomize:         false,

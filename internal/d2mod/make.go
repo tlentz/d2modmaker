@@ -7,6 +7,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
+	"github.com/tlentz/d2modmaker/internal/d2mod/cuberecipes"
 	"github.com/tlentz/d2modmaker/internal/d2mod/generator"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
 	"github.com/tlentz/d2modmaker/internal/d2mod/oskills"
@@ -70,7 +71,9 @@ func Make(defaultOutDir string, cfg config.Data) {
 		cows.AddTpRecipe(d2files)
 		cows.AllowKingKill(d2files)
 	}
-
+	if cfg.SafeUnsocket {
+		cuberecipes.SafeUnsocket(d2files)
+	}
 	// Calculate scores  before any alterations to items.
 	var s *scorer.Scorer
 	if cfg.GeneratorOptions.Generate {

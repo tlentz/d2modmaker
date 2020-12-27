@@ -196,6 +196,8 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-11
+* Added "SafeUnsocket" runeword recipe
 ## v0.5.2-alpha-10
 * Separated out Generator from Randomizer options
 * Made OSkills and PerfectProps their own separate entities, capable of running against vanilla, randomized or generated items.
