@@ -32,6 +32,7 @@ type GeneratorOptions struct {
 	MaxProps            int     `json:"MaxProps"`            // maximum number of non blank props on an item
 	NumClones           int     `json:"NumClones"`           // # of clones to generate in UniqueItems table
 	PropScoreMultiplier float64 `json:"PropScoreMultiplier"` // Multiplier against the vanilla prop score.  > 1 better item, < 1 worse
+	ElementalSkills     bool    `json:"ElementalSkills"`
 }
 
 // Data is the configuration used to build the mod
@@ -56,6 +57,7 @@ type Data struct {
 	RemoveUniqCharmLimit    bool             `json:"RemoveUniqCharmLimit"`
 	PerfectProps            bool             `json:"PerfectProps"` // sets min/max to max
 	UseOSkills              bool             `json:"UseOSkills"`   // +3 Fireball (Sorceress Only) -> +3 Fireball
+	SafeUnsocket            bool             `json:"SafeUnsocket"`
 	EnterToExit             bool             `json:"EnterToExit"`
 	RandomOptions           RandomOptions    `json:"RandomOptions"`
 	GeneratorOptions        GeneratorOptions `json:"GeneratorOptions"`
@@ -64,7 +66,7 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-10",
+		Version:                 "v0.5.2-alpha-11",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -84,6 +86,7 @@ func DefaultData() Data {
 		RemoveUniqCharmLimit:    false,
 		PerfectProps:            false,
 		UseOSkills:              true,
+		SafeUnsocket:            true,
 		EnterToExit:             false,
 		RandomOptions: RandomOptions{
 			Randomize:         false,
@@ -107,6 +110,7 @@ func DefaultData() Data {
 			MaxProps:            20,
 			NumClones:           9,
 			PropScoreMultiplier: 1, // 1 == Vanilla
+			ElementalSkills:     false,
 		},
 	}
 }

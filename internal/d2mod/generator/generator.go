@@ -51,7 +51,7 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 		psi:        propscores.NewPropScoresIndex(d2files),
 		Statistics: stats,
 	}
-	g.Statistics.SetupProbabilityWeights()
+	g.Statistics.SetupProbabilityWeights(d2files)
 
 	g.rng = rand.New(rand.NewSource(opts.Seed))
 
