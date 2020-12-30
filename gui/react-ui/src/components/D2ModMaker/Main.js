@@ -43,7 +43,7 @@ const defaultCfg = {
   UseOSkills: true,
   EnterToExit: false,
   RandomOptions: {
-    Randomize: true,
+    Randomize: false,
     UseSeed: false,
     Seed: -1,
     UseSetsSeed: false,
