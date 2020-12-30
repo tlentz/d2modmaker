@@ -44,6 +44,7 @@
         "MinProps": 2,
         "MaxProps": 20,
         "NumClones": 9,
-        "PropScoreMultiplier": 1
+        "PropScoreMultiplier": 1,
+        "ElementalSkills": true
     }
 }

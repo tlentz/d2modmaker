@@ -32,6 +32,7 @@ type GeneratorOptions struct {
 	MaxProps            int     `json:"MaxProps"`            // maximum number of non blank props on an item
 	NumClones           int     `json:"NumClones"`           // # of clones to generate in UniqueItems table
 	PropScoreMultiplier float64 `json:"PropScoreMultiplier"` // Multiplier against the vanilla prop score.  > 1 better item, < 1 worse
+	ElementalSkills     bool    `json:"ElementalSkills"`
 }
 
 // Data is the configuration used to build the mod
@@ -109,6 +110,7 @@ func DefaultData() Data {
 			MaxProps:            20,
 			NumClones:           9,
 			PropScoreMultiplier: 1, // 1 == Vanilla
+			ElementalSkills:     false,
 		},
 	}
 }

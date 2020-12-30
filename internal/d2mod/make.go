@@ -8,6 +8,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cuberecipes"
+	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/generator"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
 	"github.com/tlentz/d2modmaker/internal/d2mod/oskills"
@@ -37,10 +38,12 @@ func Make(defaultOutDir string, cfg config.Data) {
 	d2files := d2fs.NewFiles(cfg.SourceDir, cfg.OutputDir)
 
 	if cfg.MeleeSplash {
-		splash.Jewels(cfg.OutputDir, d2files)
+		splash.Run(cfg.OutputDir, d2files)
 	} else {
 		splash.DisableMeleeSplash(d2files)
 	}
+
+	elementalskills.Run(cfg.OutputDir, d2files, cfg.GeneratorOptions.ElementalSkills)
 
 	if cfg.IncreaseStackSizes {
 		stacksizes.Increase(d2files)
@@ -78,6 +81,7 @@ func Make(defaultOutDir string, cfg config.Data) {
 	var s *scorer.Scorer
 	if cfg.GeneratorOptions.Generate {
 		s = scorer.Run(&d2files, cfg.GeneratorOptions)
+		elementalskills.SetProbability(d2files, s.Statistics, cfg.GeneratorOptions.ElementalSkills)
 	}
 
 	if cfg.UniqueItemDropRate > 0 {

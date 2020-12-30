@@ -150,6 +150,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * same name but different generated properties.
 #### PropScoreMultipler `int`
 * The I Win lever.  1 = vanilla.  2 = 2x the score of the vanilla item.
+#### ElementalSkills `bool`
+* Add the ability to spawn + to cold skills, poison skills etc, not just + fire skill.
 
 # Screenshots
 ### Nagel
@@ -198,6 +200,7 @@ Thanks!
 # Change Log
 ## v0.5.2-alpha-11
 * Added "SafeUnsocket" runeword recipe
+* Added "ElementalSkills": ability to Generate items with + cold, poison, lightning, or magic skills.
 ## v0.5.2-alpha-10
 * Separated out Generator from Randomizer options
 * Made OSkills and PerfectProps their own separate entities, capable of running against vanilla, randomized or generated items.
