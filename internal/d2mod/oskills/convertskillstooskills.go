@@ -29,9 +29,15 @@ func convertFile(d2files *d2fs.Files, ifi *d2fs.ItemFileInfo) {
 		}
 		for colIdx := ifi.FirstProp; colIdx < (ifi.FirstProp + ((ifi.NumProps - 1) * 4)); colIdx += 4 {
 			if file.Rows[rowIdx][colIdx] == "skill" {
-				//log.Printf("convertFile: %s", file.Rows[rowIdx][colIdx+1]) // Par is the skill name or number
-				file.Rows[rowIdx][colIdx] = "oskill"
-				conversionCounter++
+				switch file.Rows[rowIdx][colIdx+1] {
+				case
+					"132": // Don't convert Leap
+				default:
+					//log.Printf("convertFile: %s", file.Rows[rowIdx][colIdx+1]) // Par is the skill name or number
+					file.Rows[rowIdx][colIdx] = "oskill"
+					conversionCounter++
+				}
+
 			}
 
 		}

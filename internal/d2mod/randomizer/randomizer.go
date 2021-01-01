@@ -8,6 +8,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
+	"github.com/tlentz/d2modmaker/internal/d2mod/enhancedsets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/runewordlevels"
 
@@ -134,7 +135,7 @@ func randomizeSetProps(s scrambler) {
 	s.propOffset = sets.PCode2a
 	s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
 	s.itemMaxProps = sets.MaxNumProps
-	blankprops(s)
+	enhancedsets.BlankFullSetBonuses(s.d2files)
 
 }
 
@@ -163,8 +164,7 @@ func randomizeSetItemsProps(s scrambler) {
 	// If Add Func == 2, then for each additional piece worn, a pair of props (a & b)
 	// will be added as Green partial set bonuses
 	// If Add Func == "", then all of the props in Prop* and AProp* show up at once.
-	setAddFunc(s, 2)
-
+	enhancedsets.SetAddFunc(s.d2files, 2)
 }
 
 // Randomize RW Props
@@ -298,37 +298,6 @@ func cloneTable(f *d2fs.File, numClones int) {
 		}
 	}
 
-}
-
-// blankprops:
-// 		Blanks all properties pointed to by the scrambler structure.
-func blankprops(s scrambler) {
-	f := s.d2files.Get(s.fileName)
-	for _, row := range f.Rows {
-		for propIndex := 0; propIndex < s.itemMaxProps; propIndex++ {
-			i := s.propOffset + propIndex*4
-			row[i] = ""
-			row[i+1] = ""
-			row[i+2] = ""
-			row[i+3] = ""
-		}
-	}
-}
-
-// Since the Sets.txt regenerating would alter set bonuses on existing items,
-// all of the props must exist in SetItems.txt.  (Sets props have been blanked)
-// AddFunc == "" would then not allow for the set piece to have any set bonuses, so
-// force AddFunc to use mode 2, where the AProp* props are treated as partial set bonuses
-func setAddFunc(s scrambler, newAddFunc int) {
-	if (newAddFunc > 2) || (newAddFunc < 0) {
-		newAddFunc = 2
-	}
-	f := s.d2files.Get(s.fileName)
-	for _, row := range f.Rows {
-		if row[1] != "" {
-			row[setItems.AddFunc] = fmt.Sprintf("%d", newAddFunc)
-		}
-	}
 }
 
 func scramble(s scrambler) {

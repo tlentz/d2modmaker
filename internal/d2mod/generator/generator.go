@@ -13,6 +13,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/enhancedsets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -21,7 +22,7 @@ import (
 type Generator struct {
 	//s   *scorer.Scorer
 	d2files    *d2fs.Files
-	IFI        *d2fs.ItemFileInfo // Initialized inside genFile
+	IFI        *d2fs.ItemFileInfo // Initialized inside genFile, points at the IFI for the file currently being generated
 	opts       config.GeneratorOptions
 	Statistics *scorerstatistics.ScorerStatistics
 	//RowToLine  []propscores.Line // Map from a PropScores.txt row index to a propscore.Line
@@ -69,6 +70,10 @@ func (g *Generator) Run() {
 	oldRng := g.rng
 	g.rng = rand.New(rand.NewSource(g.opts.SetsSeed))
 	genFile(g, &sets.IFI)
+	if g.opts.EnhancedSets {
+		enhancedsets.BlankFullSetBonuses(g.d2files)
+		enhancedsets.SetAddFunc(g.d2files, 2)
+	}
 	g.rng = nil
 	g.rng = oldRng
 	genFile(g, &runes.IFI)
