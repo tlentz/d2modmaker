@@ -39,6 +39,19 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 		targetPropCount = minProps + g.rng.Intn(maxProps-minProps+1) // beware how Intn behaves...
 		targetPropCount = util.MinInt(targetPropCount, g.IFI.NumProps)
 	}
+	if g.opts.EnhancedSets && oldItem.FileNumber == filenumbers.SetItems {
+		uniqueItem, ok := g.SetToUnique[oldItem.Code]
+		if ok {
+			if g.opts.BalancedPropCount {
+				targetPropCount = len(uniqueItem.Affixes)
+				maxProps = util.MinInt(targetPropCount+4, g.IFI.NumProps)
+			}
+			targetScore = util.Round32(float32(g.Statistics.ItemScores[uniqueItem.Name]) * float32(g.opts.PropScoreMultiplier))
+		} else {
+			targetScore = (targetScore * 25) / 10
+			// fmt.Printf("Generator: EnhancedSets: No vanilla item found for %s\n", oldItem.Name)
+		}
+	}
 	newi := oldItem.CloneWithoutAffixes()
 	newi.Affixes = []d2items.Affix{}
 	var rollCount int

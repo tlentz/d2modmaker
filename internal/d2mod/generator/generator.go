@@ -29,6 +29,7 @@ type Generator struct {
 	psi           *propscores.Maps
 	numAffixRolls int
 	rng           *rand.Rand
+	SetToUnique   map[string]d2items.Item
 }
 
 // NewGenerator Initialize a Generator from Scorer statistics
@@ -54,6 +55,7 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 	g.Statistics.SetupProbabilityWeights(d2files)
 
 	g.rng = rand.New(rand.NewSource(opts.Seed))
+	g.SetToUnique = make(map[string]d2items.Item)
 
 	return &g
 }
@@ -62,7 +64,7 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 //  This routine and its children require the statistics gathered by propscorer to function
 // Statistics are in Scorer:scoreLineWeights
 func (g *Generator) Run() {
-	genFile(g, &uniqueItems.IFI)
+	genFile(g, &uniqueItems.IFI) // Beware that the Unique Items must be generated before Set Items due to EnhancedSets
 	genFile(g, &setItems.IFI)
 	oldRng := g.rng
 	g.rng = rand.New(rand.NewSource(g.opts.SetsSeed))

@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-11",
+  Version: "v0.5.2-alpha-12",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -61,6 +61,7 @@ const defaultCfg = {
     Seed: -1,
     UseSetsSeed: false,
     SetsSeed: -1,
+    EnhancedSets: true,
     BalancedPropCount: true,
     MinProps: 2,
     MaxProps: 20,
@@ -714,6 +715,15 @@ export default function D2ModMaker() {
           />
         </Grid>
 
+        <Grid container>
+          <Grid item xs={4}>
+            {mkGeneratorCheckbox({
+              key: "EnhancedSets",
+              tooltip: "Scale # of props & score based on equivalent unique item, not the vanilla set item.",
+            })}
+          </Grid>
+        </Grid>
+
 
         <Grid container>
           <Grid item xs={12}>
@@ -988,6 +998,16 @@ export default function D2ModMaker() {
             }
           />
         </Grid>
+        
+        <Grid container>
+          <Grid item xs={4}>
+            {mkGeneratorCheckbox({
+              key: "ElementalSkills",
+              tooltip: "Add + to (Poison, Cold, or Lightning) skills.",
+            })}
+          </Grid>
+        </Grid>
+
       </React.Fragment>
     );
   };

@@ -6,6 +6,7 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -32,6 +33,9 @@ func genFile(g *Generator, ifi *d2fs.ItemFileInfo) {
 			row := f.Rows[rowIdx]
 			newRow := row
 			item := d2items.NewItem(*pg, rowIdx, row)
+			if ifi.FI.FileNumber == uniqueItems.FI.FileNumber && item != nil {
+				g.SetToUnique[item.Code] = *item
+			}
 			isClone := false
 			if item != nil {
 				if item.Lvl != 0 {

@@ -18,6 +18,7 @@ type RandomOptions struct {
 	MinProps          int   `json:"MinProps"`            // minimum number of non blank props on an item
 	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
 	NumClones         int   `json:"NumClones"`           // # of times to copy all rows in UniqueItems table before randomizing props
+	ElementalSkills   bool  `json:"ElementalSkills"`
 }
 
 // GeneratorOptions control the Scorer/Generator combo
@@ -27,6 +28,7 @@ type GeneratorOptions struct {
 	Seed                int64   `json:"Seed"`
 	UseSetsSeed         bool    `json:"UseSetsSeed"`
 	SetsSeed            int64   `json:"SetsSeed"`            // seed forSetItems.txt
+	EnhancedSets        bool    `json:"EnhancedSets"`        // Propcount & score from Unique Item, not Set Item.
 	BalancedPropCount   bool    `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
 	MinProps            int     `json:"MinProps"`            // minimum number of non blank props on an item
 	MaxProps            int     `json:"MaxProps"`            // maximum number of non blank props on an item
@@ -66,7 +68,7 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-11",
+		Version:                 "v0.5.2-alpha-12",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,

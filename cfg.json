@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.2-alpha-11",
+    "Version": "v0.5.2-alpha-12",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -32,7 +32,8 @@
         "AllowDuplicateProps": false,
         "MinProps": 2,
         "MaxProps": 20,
-        "NumClones": 9
+        "NumClones": 9,
+        "ElementalSkills": true
     },
     "GeneratorOptions": {
         "Generate": true,
@@ -40,6 +41,7 @@
         "Seed": -1,
         "UseSetsSeed": true,
         "SetsSeed":12345,
+        "EnhancedSets": true,
         "BalancedPropCount": true,
         "MinProps": 2,
         "MaxProps": 20,

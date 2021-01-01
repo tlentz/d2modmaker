@@ -7,6 +7,7 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/runewordlevels"
 
@@ -39,6 +40,9 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 	psi := propscores.NewPropScoresIndex(d2files)
 	tt := d2items.NewTypeTree(d2files)
 	props, items := getAllProps(d2files, psi, *tt)
+	if cfg.ElementalSkills {
+		props = append(props, elementalskills.Props()...)
+	}
 
 	if !cfg.UseSeed {
 		cfg.Seed = time.Now().UnixNano()

@@ -97,6 +97,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
+---
 ## RandomOptions `RandomOptions`
 #### Randomize `bool`
 * Will randomize if set to true
@@ -127,6 +128,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### MaxProps `int`
 * Maximum number of non blank props that spawn on an item
 * Set to `-1` to omit
+#### ElementalSkills `bool`
+* Add the ability to spawn + to cold skills, poison skills etc, not just + fire skill.
+---
 ## GeneratorOptions `GeneratorOptions`
 #### Generate `bool`
 * Set to turn on the Prop Generator
@@ -198,6 +202,10 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-12
+* Added ElementalSkills handling in Randomizer
+* Balance adjustment to SynergyGroup and ias (properties swing1-3)
+* Fixed some broken curses (-AC etc.)
 ## v0.5.2-alpha-11
 * Added "SafeUnsocket" runeword recipe
 * Added "ElementalSkills": ability to Generate items with + cold, poison, lightning, or magic skills.

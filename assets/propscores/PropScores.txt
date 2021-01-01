@@ -11,9 +11,9 @@ abs-ltng/lvl	5	0	0	lvl		40														3		RandomizeAdd5		0
 abs-mag	0	3	15	r=	3	15														3		Crescent Moon	Runes	0
 abs-mag/lvl	5	0	0	lvl		40														3		RandomizeAdd6		0
 abs-mag%	0	5	30	r=	10	60														3		RandomizeAdd7		0
-ac	0	-100	-1	c	-5	-1														101	ac	Dimoaks Hew	UniqueItems	0
-ac	0	0	350	r=	0	105	10				weap						aspe			101	ac	Bladebone	UniqueItems	0
-ac	0	0	600	r=	0	90	10				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
+ac	0	-10	-1	c	-2	-1					armo	weap								101	ac	Dimoaks Hew	UniqueItems	0
+ac	0	6	350	r=	2	105	10				weap						aspe			101	ac	Bladebone	UniqueItems	0
+ac	0	6	600	r=	2	90	10				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
 ac	0	600	800	r=	60	80	15	50									weap			101	ac	Enigma	Runes	0
 ac-hth	0	40	200	r=	2	10	5													101		Darkglow	UniqueItems	0
 ac-miss	0	10	400	r=	1	20	5													101		Coif of Glory	UniqueItems	0
@@ -356,7 +356,7 @@ hit-skill	Volcano	23	12	scl		11		65												44	fire	Destruction	Runes	0
 hit-skill	Volcano	5	18	scl		4		67												44	fire	Doomsayer	Runes	0
 hit-skill	Weaken	8	3	scl		8		82												44	ac	Souldrain	UniqueItems	0
 howl	0	33	96	r	0	0														113	ac	Umes Lament	UniqueItems	0
-hp		-100	-5	c	-500	-25														26	ac		SetItems	0
+hp		-32	-5	c	-160	-25														26	ac		SetItems	0
 hp	0	5	50	r=	5	50	20													26	ac		SetItems	0
 hp	0	25	75	r=	25	75	20				amu									26	ac	The Cat's Eye	SetItems	0
 hp	0	5	100	r=	5	100	20	25												26	ac		SetItems	0
@@ -367,7 +367,7 @@ hp%		10	30	r	25	75	30													225	ac	Chromatic Ire	UniqueItems	0
 ignore-ac		1	1	s	60	60														110	dmg	Krintizs Skewer	UniqueItems	0
 ignore-ac	1	1	1	s	60	60														110	dmg	Lightsabre	UniqueItems	0
 indestruct		1	1	s	5	5											rune			39	dmg	Butcher's Pupil	UniqueItems	0
-indestruct		1	1	s	50	50					rune									39	dmg	Butcher's Pupil	UniqueItems	0
+indestruct		1	1	s		50					rune									39	dmg		Runes	0
 kill-skill	Chain Lightning	50	20	scl		30		63												222	ltng	Infinity	Runes	0
 kill-skill	Decrepify	50	6	scl		40		83												222	ac	Executioner's Justice	UniqueItems	0
 kill-skill	enchant	30	21	scl		80		41												222	fire	Obedience	Runes	0
@@ -394,7 +394,7 @@ magicarrow	0	1	20	r	5	50			Y		miss									215		Witherstring	UniqueItems	0
 magicskill		1	3	smm	12	36														125	skills	Leaf	Runes	0
 mana	0	5	50	r=	1	20														24		Aldur's Watchtower	Sets	0
 mana	0	5	200	r=	1	20	20	25												24		Aldur's Watchtower	Sets	0
-mana	0	-50	-5	c	-50	-5														24		Err:502	UniqueItems	0
+mana	0	-32	-5	c	-32	-5														24		Err:502	UniqueItems	0
 mana-kill	0	2	20	r	2	20														121		Deathspade	UniqueItems	0
 mana/lvl	16	0	0	lvl		9														41	mana	Wizardspike	UniqueItems	0
 mana%		5	40	r	3	20														41	mana	Frostburn	UniqueItems	0
@@ -453,19 +453,19 @@ red-dmg%	0	10	35	r=	30	105														238	vit	Natalya's Odium	Sets	0
 red-mag	0	1	20	r	5	100														2		Immortal King	Sets	0
 reduce-ac	0	20	50	r	5	15														239		Razortine	UniqueItems	0
 regen	0	4	25	r	12	74														19		Stormeye	UniqueItems	0
-regen	0	-20	-1	c	-100	-5														19		Malice	Runes	0
+regen	0	-25	-1	c	-125	-5														19		Malice	Runes	0
 regen-mana	0	5	43	r	5	43														240	mana	Mindrend	UniqueItems	0
 regen-stam	0	10	50	r	0	0														108		Steeldriver	UniqueItems	0
 regen-stam/lvl	2	0	0	lvl		0														108		Natalya's Soul	SetItems	0
 rep-dur	25	0	0	lvl		0		5									amu	rin		37		Warlord's Trust	UniqueItems	0
 rep-quant	40	0	0	lvl		10		5		Y	thro									39	dmg	Wraithflight	UniqueItems	0
 res-all	0	5	75	r=	15	225														116		Heaven's Brethren	Sets	0
-res-all	0	-12	-1	c	-72	-6														116		RandomizeAdd12		0
+res-all	0	-20	-1	c	-140	-7														116		RandomizeAdd12		0
 res-all-max	0	5	15	r	30	90		14												241		Darkglow	UniqueItems	0
 res-cold	0	10	80	r=	8	64														117		Fechmars Axe	UniqueItems	0
 res-cold-max	0	5	15	r	10	30		20												242		Hawkmail	UniqueItems	0
 res-fire	0	5	75	r=	5	75														118		Felloak	UniqueItems	0
-res-fire	0	-30	-5	c	-30	-5														118		RandomizeAdd13		0
+res-fire	0	-50	-5	c	-100	-10														118		RandomizeAdd13		0
 res-fire-max	0	5	15	r	10	30		7												243		The Tannr Gorerod	UniqueItems	0
 res-ltng	0	5	75	r=	5	75														119		Maelstromwrath	UniqueItems	0
 res-ltng-max	0	5	15	r	10	30		20												244		Iratha's Finery	Sets	0
@@ -589,7 +589,7 @@ skilltab	18	1	4	smm	10	40		75												427		RandomizerAdd4	Custom	0
 skilltab	19	1	2	smm	10	40		22												428		Natalya's Shadow	SetItems	0
 skilltab	19	1	4	smm	10	40		73												428		Natalya's Shadow	SetItems	0
 skilltab	20	1	4	smm	10	40		50												429		Firelizard's Talons	UniqueItems	0
-slow	0	10	75	r=	1	15														247		The Generals Tan Do Li Ga	UniqueItems	0
+slow	0	10	75	r=	1	25	10													247		The Generals Tan Do Li Ga	UniqueItems	0
 sock	2			s		20		39		Y	shld	tors	helm	weap			thro	rune		122		Mosers Blessed Circle	UniqueItems	0
 sock	3			s		30		43		Y	shld	tors	helm	weap			thro	rune		122		Blade of Ali Baba	UniqueItems	0
 sock	0	1	3	r	3	10		22			helm	shld	weap	tors			thro	rune		122				0
@@ -607,11 +607,15 @@ str	0	2	50	r=	1	5	2													31		Naj's Ancient Set	Sets	0
 str/lvl	6	0	0	lvl		3	1													42		Enigma	Runes	0
 stupidity	0	1	3	r	1	1														249	ac	Deathspade	UniqueItems	0
 stupidity	0	10	33	r	1	6		43												249	ac	RandomizeAdd14		0
-swing1	0	10	30	r=	10	30														6	dmg	Bloodrise	UniqueItems	0
-swing2	0	5	60	r=	5	60														6	dmg	Bladebone	UniqueItems	0
-swing2	0	50	80	r=	50	100					am2	am7	amc	xbow	bow		rxb	8rx	6rx	6	dmg	Buriza	UniqueItems	0
-swing2	0	50	80	r=	50	80					fset									6	dmg	Cleglaw's Brace	Sets	0
-swing3	0	15	50	r=	15	50														6	dmg	Goreshovel	UniqueItems	0
+swing1		10	30	r=	10	29											weap			6	dmg		UniqueItems	0
+swing1		10	30	r=	10	29					weap									6	dmg	Bloodrise	UniqueItems	0
+swing2		-20	-1	c	-140	-7														6	dmg	Bladebone	UniqueItems	0
+swing2		5	45	r=	5	29											weap			6	dmg	Twitchthroe	UniqueItems	0
+swing2		5	60	r=	5	60					weap									6	dmg	Bladebone	UniqueItems	0
+swing2		20	80	r=	20	80					fset									6	dmg			0
+swing2		50	80	r=	50	60					am2	am7	amc	xbow	bow		rxb	8rx	6rx	6	dmg	Buriza	UniqueItems	0
+swing3		15	30	r=	15	30											weap			6	dmg	Sigon’s Gage	SetItems	0
+swing3		15	50	r=	15	43					weap									6	dmg	Goreshovel	UniqueItems	0
 thorns	0	2	77	r	1	7														5		Stoutnail	UniqueItems	0
 thorns/lvl	11	0	0	lvl		3														5		Spike Thorn	UniqueItems	0
 vit	0	2	40	r	12	240														250	vit	Stoutnail	UniqueItems	0

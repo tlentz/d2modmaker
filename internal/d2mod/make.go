@@ -43,7 +43,11 @@ func Make(defaultOutDir string, cfg config.Data) {
 		splash.DisableMeleeSplash(d2files)
 	}
 
-	elementalskills.Run(cfg.OutputDir, d2files, cfg.GeneratorOptions.ElementalSkills)
+	elementalSkillsEnabled := false
+	if (cfg.GeneratorOptions.Generate && cfg.GeneratorOptions.ElementalSkills) || (cfg.RandomOptions.Randomize && cfg.RandomOptions.ElementalSkills) {
+		elementalSkillsEnabled = true
+	}
+	elementalskills.Run(cfg.OutputDir, d2files, elementalSkillsEnabled)
 
 	if cfg.IncreaseStackSizes {
 		stacksizes.Increase(d2files)
