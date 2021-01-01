@@ -40,7 +40,7 @@
         "UseSeed": false,
         "Seed": -1,
         "UseSetsSeed": true,
-        "SetsSeed":1234,
+        "SetsSeed": 1234,
         "EnhancedSets": true,
         "BalancedPropCount": true,
         "MinProps": 2,

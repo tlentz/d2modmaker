@@ -77,7 +77,7 @@ func DefaultData() Data {
 		EnableTownSkills:        true,
 		BiggerGoldPiles:         true,
 		NoFlawGems:              true,
-		NoDropZero:              true,
+		NoDropZero:              false,
 		QuestDrops:              true,
 		UniqueItemDropRate:      1,
 		RuneDropRate:            1,
