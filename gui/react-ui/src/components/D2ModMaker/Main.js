@@ -55,6 +55,7 @@ const defaultCfg = {
     MinProps: 2,
     MaxProps: 20,
     NumClones: 9,
+    ElementalSkills: true,
   },
   GeneratorOptions: {
     Generate: true,
@@ -68,6 +69,7 @@ const defaultCfg = {
     MaxProps: 20,
     NumClones: 9,
     PropScoreMultiplier: 1,
+    ElementalSkills: true,
   }
 };
 
