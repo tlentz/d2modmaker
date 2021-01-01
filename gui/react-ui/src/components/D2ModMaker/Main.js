@@ -100,7 +100,7 @@ export default function D2ModMaker() {
     return { ...oldState, GeneratorOptions: generatorOptions };
   };
 
-  const mkRandoCheckbox = ({ key, tooltip }) => {
+  const mkRandomCheckbox = ({ key, tooltip }) => {
     return (
       <React.Fragment>
         <FormControlLabel
@@ -447,13 +447,13 @@ export default function D2ModMaker() {
         </Grid>
         <Grid container>
           <Grid item xs={4}>
-            {mkRandoCheckbox({
+            {mkCheckbox({
               key: "UseOSkills",
               tooltip: "Change class only skill props to spawn as oskills.",
             })}
           </Grid>
           <Grid item xs={4}>
-            {mkRandoCheckbox({
+            {mkRandomCheckbox({
               key: "PerfectProps",
               tooltip:
                 "All props will have a perfect max value when spawning on an item.",
@@ -826,7 +826,7 @@ export default function D2ModMaker() {
 
         <Grid container>
           <Grid item xs={4}>
-            {mkRandoCheckbox({
+            {mkRandomCheckbox({
               key: "Randomize",
               tooltip: "Randomize all all uniques, sets, and runewords.  If Generator is enables Randomizer will not run.",
             })}
@@ -910,14 +910,14 @@ export default function D2ModMaker() {
 
         <Grid container>
           <Grid item xs={4}>
-            {mkRandoCheckbox({
+            {mkRandomCheckbox({
               key: "AllowDupProps",
               tooltip:
                 "If turned off, prevents the same prop from being placed on an item more than once. e.g. two instances of all resist will not get stacked on the same randomized item.",
             })}
           </Grid>
           <Grid item xs={4}>
-            {mkRandoCheckbox({
+            {mkRandomCheckbox({
               key: "IsBalanced",
               tooltip:
                 "Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization.",
@@ -927,7 +927,7 @@ export default function D2ModMaker() {
 
         <Grid container>
           <Grid item xs={12}>
-            {mkRandoCheckbox({
+            {mkRandomCheckbox({
               key: "BalancedPropCount",
               tooltip:
                 "Pick prop count on items based on counts from vanilla items. Picks from items up to 10 levels higher when randomizing.",
@@ -1001,7 +1001,7 @@ export default function D2ModMaker() {
         
         <Grid container>
           <Grid item xs={4}>
-            {mkGeneratorCheckbox({
+            {mkRandomCheckbox({
               key: "ElementalSkills",
               tooltip: "Add + to (Poison, Cold, or Lightning) skills.",
             })}
