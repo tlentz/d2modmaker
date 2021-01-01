@@ -8,6 +8,8 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -91,4 +93,15 @@ func copyPatchString(outDir string) {
 
 	_, err = io.Copy(to, from)
 	util.Check(err)
+}
+
+// Props Add elemental skill props to a list of props
+func Props() d2items.Props {
+	props := make(d2items.Props, 4)
+	props[0] = prop.NewProp("coldskill", "", "1", "4")
+	props[1] = prop.NewProp("poisonskill", "", "1", "4")
+	props[2] = prop.NewProp("lightningskill", "", "1", "4")
+	props[3] = prop.NewProp("magicskill", "", "1", "4")
+
+	return props
 }

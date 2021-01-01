@@ -4,8 +4,8 @@ import (
 	"log"
 	"math/rand"
 
-	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer"
@@ -39,6 +39,19 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 		targetPropCount = minProps + g.rng.Intn(maxProps-minProps+1) // beware how Intn behaves...
 		targetPropCount = util.MinInt(targetPropCount, g.IFI.NumProps)
 	}
+	if g.opts.EnhancedSets && oldItem.FileNumber == filenumbers.SetItems {
+		uniqueItem, ok := g.SetToUnique[oldItem.Code]
+		if ok {
+			if g.opts.BalancedPropCount {
+				targetPropCount = ((len(uniqueItem.Affixes) - 1) * 3) / 2
+				maxProps = util.MinInt(targetPropCount+4, g.IFI.NumProps)
+			}
+			targetScore = util.Round32(float32(g.Statistics.ItemScores[uniqueItem.Name]) * float32(g.opts.PropScoreMultiplier))
+		} else {
+			targetScore = (targetScore * 25) / 10
+			// fmt.Printf("Generator: EnhancedSets: No vanilla item found for %s\n", oldItem.Name)
+		}
+	}
 	newi := oldItem.CloneWithoutAffixes()
 	newi.Affixes = []d2items.Affix{}
 	var rollCount int
@@ -64,7 +77,7 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 			if targetPropScore < minPropScore || targetPropScore > maxPropScore {
 				log.Panicf("targetPropScore not between min & max")
 			}
-			newColIdx := getNewColIdx(*g.IFI, oldItem, newi)
+			newColIdx := getNewColIdx(g, oldItem, newi, targetPropCount)
 			if newColIdx <= 0 {
 				log.Panicf("%d colidx %+v", newColIdx, newi)
 			}
@@ -188,7 +201,10 @@ func checkDupeGroups(item *d2items.Item) bool {
 	}
 	return false
 }
-func getNewColIdx(ifi d2fs.ItemFileInfo, oldItem *d2items.Item, newItem *d2items.Item) int {
+
+// getNewColIdx Returns column index of next prop to generate.  For SetItems this is a little complicated
+func getNewColIdx(g *Generator, oldItem *d2items.Item, newItem *d2items.Item, targetPropCount int) int {
+	ifi := g.IFI
 	newItemAffixIndex := len(newItem.Affixes)
 	newColIdx := -1
 	switch {
@@ -208,12 +224,24 @@ func getNewColIdx(ifi d2fs.ItemFileInfo, oldItem *d2items.Item, newItem *d2items
 			}
 		}
 	case oldItem.FileNumber == filenumbers.SetItems:
-		if len(newItem.Affixes) < len(oldItem.Affixes) {
-			newColIdx = oldItem.Affixes[newItemAffixIndex].ColIdx
+		if g.opts.EnhancedSets {
+			if len(newItem.Affixes) < (targetPropCount / 2) {
+				newColIdx = setItems.AProp1a + 4*len(newItem.Affixes)
+			} else {
+				newColIdx = setItems.Prop1 + 4*(len(newItem.Affixes)-(targetPropCount/2))
+			}
+			if newColIdx > setItems.AProp5b {
+				newColIdx = findUnusedColIdx(newItem, ifi.FirstProp, (ifi.NumProps-1)*4+ifi.FirstProp)
+			}
+
 		} else {
-			newColIdx = findUnusedColIdx(newItem, ifi.FirstProp, (ifi.NumProps-1)*4+ifi.FirstProp)
-			if newColIdx < 0 {
-				log.Panicf("Logic error or ran out of affixes")
+			if len(newItem.Affixes) < len(oldItem.Affixes) {
+				newColIdx = oldItem.Affixes[newItemAffixIndex].ColIdx
+			} else {
+				newColIdx = findUnusedColIdx(newItem, ifi.FirstProp, (ifi.NumProps-1)*4+ifi.FirstProp)
+				if newColIdx < 0 {
+					log.Panicf("Logic error or ran out of affixes")
+				}
 			}
 		}
 	default:

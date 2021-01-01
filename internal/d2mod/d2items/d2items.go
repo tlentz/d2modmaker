@@ -7,6 +7,7 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/runewordlevels"
@@ -89,6 +90,9 @@ func NewItem(pg PropGetter, rowIdx int, row []string) *Item {
 	}
 	if pg.IFI.FI.FileName == sets.FileName {
 		item.Types = append(item.Types, "fset")
+	}
+	if pg.IFI.FI.FileName == runes.FileName {
+		item.Types = append(item.Types, "rune")
 	}
 	switch {
 	case pg.IFI.FI.FileNumber == filenumbers.Runes:

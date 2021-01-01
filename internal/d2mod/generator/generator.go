@@ -13,6 +13,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/enhancedsets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -21,7 +22,7 @@ import (
 type Generator struct {
 	//s   *scorer.Scorer
 	d2files    *d2fs.Files
-	IFI        *d2fs.ItemFileInfo // Initialized inside genFile
+	IFI        *d2fs.ItemFileInfo // Initialized inside genFile, points at the IFI for the file currently being generated
 	opts       config.GeneratorOptions
 	Statistics *scorerstatistics.ScorerStatistics
 	//RowToLine  []propscores.Line // Map from a PropScores.txt row index to a propscore.Line
@@ -29,6 +30,7 @@ type Generator struct {
 	psi           *propscores.Maps
 	numAffixRolls int
 	rng           *rand.Rand
+	SetToUnique   map[string]d2items.Item
 }
 
 // NewGenerator Initialize a Generator from Scorer statistics
@@ -54,6 +56,7 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 	g.Statistics.SetupProbabilityWeights(d2files)
 
 	g.rng = rand.New(rand.NewSource(opts.Seed))
+	g.SetToUnique = make(map[string]d2items.Item)
 
 	return &g
 }
@@ -62,11 +65,15 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 //  This routine and its children require the statistics gathered by propscorer to function
 // Statistics are in Scorer:scoreLineWeights
 func (g *Generator) Run() {
-	genFile(g, &uniqueItems.IFI)
+	genFile(g, &uniqueItems.IFI) // Beware that the Unique Items must be generated before Set Items due to EnhancedSets
 	genFile(g, &setItems.IFI)
 	oldRng := g.rng
 	g.rng = rand.New(rand.NewSource(g.opts.SetsSeed))
 	genFile(g, &sets.IFI)
+	if g.opts.EnhancedSets {
+		enhancedsets.BlankFullSetBonuses(g.d2files)
+		enhancedsets.SetAddFunc(g.d2files, 2)
+	}
 	g.rng = nil
 	g.rng = oldRng
 	genFile(g, &runes.IFI)
