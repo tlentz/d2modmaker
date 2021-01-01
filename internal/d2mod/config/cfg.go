@@ -101,6 +101,7 @@ func DefaultData() Data {
 			MinProps:          2,
 			MaxProps:          20,
 			NumClones:         9,
+			ElementalSkills:   false,
 		},
 		GeneratorOptions: GeneratorOptions{
 			Generate:            true,
