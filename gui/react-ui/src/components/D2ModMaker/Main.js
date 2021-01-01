@@ -453,7 +453,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
           <Grid item xs={4}>
-            {mkRandomCheckbox({
+            {mkCheckbox({
               key: "PerfectProps",
               tooltip:
                 "All props will have a perfect max value when spawning on an item.",
