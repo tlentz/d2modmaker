@@ -41,6 +41,7 @@ const defaultCfg = {
   RemoveUniqCharmLimit: false,
   PerfectProps: false,
   UseOSkills: true,
+  SafeUnsocket: true,
   EnterToExit: false,
   RandomOptions: {
     Randomize: false,
@@ -324,9 +325,6 @@ export default function D2ModMaker() {
                 "Adds Runeword: 1 quiver + item => Item + gems/runes in item",
             })}
           </Grid>
-
-
-
         </Grid>
       </Grid>
     );
