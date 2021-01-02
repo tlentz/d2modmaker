@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -48,7 +49,9 @@ type ItemFileInfo struct {
 func NewFiles(sourceDir string, outDir string) Files {
 	files := Files{sourceDir: sourceDir, outDir: outDir}
 	files.cache = make(map[string]*File)
-
+	if (sourceDir == outDir) && (sourceDir != "") {
+		log.Fatalf("Error: Source Directory == Output Directory.  Either set the Source Directory to blank (to use 1.13c default files), or set it to vanilla data/ directory.  OutDir is deleted and re-created each run")
+	}
 	//os.RemoveAll(path.Join(files.outDir, "/data/"))	// obc:  This is c4 approach, use sword instead
 	err := os.MkdirAll(path.Join(files.outDir, assets.DataGlobalExcel), 0755)
 	util.Check(err)

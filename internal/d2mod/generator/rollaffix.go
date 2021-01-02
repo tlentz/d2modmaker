@@ -27,15 +27,17 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 	if line.ScoreLimit > 0 {
 		//ScoreLimit specified verify this prop doesn't go over it.
 		vanillaScore := g.Statistics.ItemScores[item.Name]
-		scoreCap := (vanillaScore * line.ScoreLimit) / 100
-		//log.Printf("RollAffix: found limit %s %s Van/Cap/Tgt %d/%d/%d ScoreLimit:%d", item.Name, line.Prop.Name, vanillaScore, scoreCap, targetPropScore, line.ScoreLimit)
-		if targetPropScore > scoreCap {
-			fmt.Printf("Capping %s:%s %d->%d", item.Name, line.Prop.Name, targetPropScore, scoreCap)
-		}
+		if vanillaScore > 0 {
+			scoreCap := (vanillaScore * line.ScoreLimit) / 100
+			//log.Printf("RollAffix: found limit %s %s Van/Cap/Tgt %d/%d/%d ScoreLimit:%d", item.Name, line.Prop.Name, vanillaScore, scoreCap, targetPropScore, line.ScoreLimit)
+			if targetPropScore > scoreCap {
+				fmt.Printf("Capping %s:%s %d->%d\n", item.Name, line.Prop.Name, targetPropScore, scoreCap)
+			}
 
-		targetPropScore = util.MinInt(targetPropScore, scoreCap)
-		if targetPropScore < propScoreMin {
-			log.Panicf("RollAffix: Logic bug: targetPropScore < propScoreMin")
+			targetPropScore = util.MinInt(targetPropScore, scoreCap)
+			if targetPropScore < propScoreMin {
+				log.Panicf("RollAffix: Logic bug: targetPropScore (%d) < propScoreMin(%d) %s", targetPropScore, propScoreMin, line.Prop.Name)
+			}
 		}
 	}
 
@@ -169,6 +171,10 @@ DoneRolling:
 		if checkGroups(line.Group, item) {
 			line = nil
 			continue
+		}
+		if line.ScoreLimit == 0 {
+			//fmt.Printf("ScoreLimit == 0 on %s\n", line.Prop.Name)
+			continue // alpha-13 Special case where we want to generate a score but not ever generate the prop
 		}
 
 		if closestLine == nil {

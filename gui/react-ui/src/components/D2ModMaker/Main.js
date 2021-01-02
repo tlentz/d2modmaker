@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-12",
+  Version: "v0.5.2-alpha-13",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -51,11 +51,11 @@ const defaultCfg = {
     SetsSeed: 1234,
     IsBalanced: true,
     BalancedPropCount: true,
-    AllowDupProps: false,
+    AllowDupeProps: false,
     MinProps: 2,
     MaxProps: 20,
     NumClones: 9,
-    ElementalSkills: true,
+    ElementalSkills: true
   },
   GeneratorOptions: {
     Generate: true,
@@ -69,7 +69,7 @@ const defaultCfg = {
     MaxProps: 20,
     NumClones: 9,
     PropScoreMultiplier: 1,
-    ElementalSkills: true,
+    ElementalSkills: true
   }
 };
 
@@ -286,14 +286,14 @@ export default function D2ModMaker() {
             {mkCheckbox({
               key: "Cowzzz",
               tooltip:
-                "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal4.",
+                "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal.",
             })}
           </Grid>
           <Grid item xs={6}>
             {mkCheckbox({
               key: "IncreaseStackSizes",
               tooltip:
-                "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack sizes to 100.",
+                "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack size to 100.",
             })}
           </Grid>
 
@@ -449,7 +449,7 @@ export default function D2ModMaker() {
           <Grid item xs={4}>
             {mkCheckbox({
               key: "UseOSkills",
-              tooltip: "Change class only skill props to spawn as oskills.",
+              tooltip: "Change class only skill props to not require the class.",
             })}
           </Grid>
           <Grid item xs={4}>
@@ -514,7 +514,7 @@ export default function D2ModMaker() {
             Unique Item Drop Rate
             <StyledTooltip
               title={
-                "Increases the drop rate of unique and set items.  When using this setting, high values prevent some monsters from dropping set items."
+                "Increases the drop rate of unique and set items.  High values may prevent set items from dropping."
               }
               placement="bottom"
               enterDelay={250}
@@ -828,7 +828,7 @@ export default function D2ModMaker() {
           <Grid item xs={4}>
             {mkRandomCheckbox({
               key: "Randomize",
-              tooltip: "Randomize all all uniques, sets, and runewords.  If Generator is enables Randomizer will not run.",
+              tooltip: "Randomize uniques, sets, and runewords.  If Generator is enabled Randomizer will not run.",
             })}
           </Grid>
         </Grid>
@@ -893,7 +893,7 @@ export default function D2ModMaker() {
               />
               <StyledTooltip
                 title={
-                  "Provide a specific seed to use for full set bonuses.  Toggling on/off will generate a new seed.  Beware that chaning seed changes full set bonuses _for existing items_."
+                  "Provide a specific seed to use for full set bonuses.  Toggling on/off will generate a new seed.  Beware that full set bonuses will change _on existing items_."
                 }
                 placement="bottom"
                 enterDelay={250}
@@ -911,7 +911,7 @@ export default function D2ModMaker() {
         <Grid container>
           <Grid item xs={4}>
             {mkRandomCheckbox({
-              key: "AllowDupProps",
+              key: "AllowDupeProps",
               tooltip:
                 "If turned off, prevents the same prop from being placed on an item more than once. e.g. two instances of all resist will not get stacked on the same randomized item.",
             })}

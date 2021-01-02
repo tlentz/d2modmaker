@@ -25,8 +25,8 @@ type pBucketMap map[string]string
 type ScorerStatistics struct {
 	TypeStatistics []ItemTypeStatistics
 
-	pBucket        *pBucketMap    // From Armor[Type] & Weapons[Type], : Maps membership of item into groups for doing weighted probability calc
-	pBucketIndexes map[string]int // Map from type type to pBucket index
+	pBucket        *pBucketMap // From Armor[Type] & Weapons[Type], : Maps membership of item into groups for doing weighted probability calc
+	pBucketIndexes map[string]int
 
 	ItemScores ItemScoreMap // Vanilla item scores, used as target scores
 }
@@ -104,15 +104,15 @@ func (ss *ScorerStatistics) SetupProbabilityWeights() {
 }
 */
 
-// SetupProbabilityWeights Set up weighted proability array for the weighted random roller.
+// SetupProbabilityWeights Set up weighted proability array so for the weighted random roller.
 // Each line in PropScores is counted as  (1 + 5 * # items of that type using this line) in
 // 5 different buckets (armor, weapons, etc)
 // The probability of any 1 line being picked for an item type at the start of the rolling process is then
 // Count for that line / (sum of all counts for that type of item)
-func (ss *ScorerStatistics) SetupProbabilityWeights(d2files *d2fs.Files) {
+func (ss *ScorerStatistics) SetupProbabilityWeights() {
 	// Klunky because indexing an array doesn't increase its size, i.e. just easier to use a map.
 	// weightrand wants an array, so turn NumLines (map) into an array
-	propScoresFile := d2files.Get(propscores.FileName)
+
 	// find max key in NumLines
 	maxidx := 0
 	for ssidx := range ss.TypeStatistics {
@@ -127,12 +127,8 @@ func (ss *ScorerStatistics) SetupProbabilityWeights(d2files *d2fs.Files) {
 		for rowIdx, count := range ss.TypeStatistics[ssidx].NumLines {
 			buckets[rowIdx] += count * 5
 		}
-		for rowIdx := range buckets {
-			if propScoresFile.Rows[rowIdx][propscores.Prop][0] != '*' { // ensure we're not adding weight to props that have been commented out like meleesplash
-				buckets[rowIdx]++
-			} else {
-				log.Printf("Row %s commented out", propScoresFile.Rows[rowIdx][propscores.Prop])
-			}
+		for idx := range buckets {
+			buckets[idx]++
 		}
 		ss.TypeStatistics[ssidx].Weights = weightrand.NewWeights(buckets)
 	}

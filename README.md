@@ -115,7 +115,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Will use this seed for randomizing the set bonuses.  Changing this seed will cause the set bonuses on existing items to be re-rolled.
 #### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
-#### AllowDuplicateProps `bool`
+#### AllowDupeProps `bool`
 * If this value is false, the same prop type will not be placed on an item twice
 * E.g. two instances of all resist will not get stacked on the same randomized item
 #### BalancedPropCount `bool`
@@ -202,6 +202,8 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-13
+* Adding 2hander buff to Generator
 ## v0.5.2-alpha-12
 * Added ElementalSkills handling in Randomizer
 * Balance adjustment to SynergyGroup and ias (properties swing1-3)
