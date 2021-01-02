@@ -339,7 +339,7 @@ export default function D2ModMaker() {
           <Grid item xs={6}>
             <StyledTooltip
               title={
-                "The path to the source directory containing the diablo 2 source files. Leave this blank to use 113c source files. example: C:/d2/data/global/excel/"
+                "The path to the source directory containing the diablo 2 .txt source files. Leave this blank to use 113c source files. example: C:/d2/data/global/excel/"
               }
               placement="bottom"
               enterDelay={250}
@@ -361,7 +361,7 @@ export default function D2ModMaker() {
           <Grid item xs={6}>
             <StyledTooltip
               title={
-                "The directory that the data folder will be placed in. Leave blank to use current directory (./data/). This requires a trailing slash. example: /Users/{username}/{folder}/"
+                "The directory that the data folder will be placed in.  Leave blank to use current directory (./data/). This requires a trailing slash. example: /Users/{username}/{folder}/  Everything in this directory will be DELETED when the program runs, so don't point this at the Source Directory."
               }
               placement="bottom"
               enterDelay={250}
@@ -1029,6 +1029,7 @@ export default function D2ModMaker() {
             let cfg = await loadConfig();
             console.log(cfg);
             setState({ ...cfg });
+            RefreshUI();
           }}
         >
           Load Config
@@ -1077,7 +1078,12 @@ export default function D2ModMaker() {
     </div >
   );
 }
+function RefreshUI() {
 
+  const refreshUI = ()=>{
+      window.location.reload();
+  }
+}
 function valuetext(value) {
   return `${value}`;
 }
