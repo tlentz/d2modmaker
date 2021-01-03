@@ -137,11 +137,19 @@ func GenItem(g *Generator, oldItem *d2items.Item) *d2items.Item {
 		log.Printf("genItem: Missed target: #  Prop Count (tgt/itm/max) %2d/%2d/%d, Scores(Vanilla <min itm max>): %5d <%5d %5d %5d> -- %s", targetPropCount, len(newi.Affixes), maxProps, g.Statistics.ItemScores[oldItem.Name], minItemScore, itemScore, maxItemScore, newi.Name)
 	}
 	if minItemScore == 0 && maxItemScore == 0 {
-		log.Panicf("%+v", newi)
+		log.Panicf("Item score issue (min & max == 0): %+v", newi)
 	}
 	scorer.WriteItemScore(g.Statistics, g.d2files, g.IFI, newi, false)
 	return newi
 }
+
+// calcTargetPropScore returns the Min, Target & Max score to roll a prop for
+// rng 				random # generator to use.
+// numItemAffixes  	len(item.Affixes)
+// targetPropCount 	how many props we want to roll
+// maxPropCount 	how many props allowed to roll max
+// itemScore		current items score
+// targetScore		score we're trying to hit
 func calcTargetPropScore(rng *rand.Rand, numItemAffixes int, targetPropCount int, maxPropCount int, itemScore int, targetScore int) (int, int, int) {
 	numAffixesLeft := targetPropCount - numItemAffixes
 	if numAffixesLeft <= 1 {
@@ -167,11 +175,16 @@ func calcTargetPropScore(rng *rand.Rand, numItemAffixes int, targetPropCount int
 		negDev = -0.3
 		posDev = 0.6
 	}
+	if (targetScore - itemScore) > 1500 { // For high PropScore multipliers and low maxPropCounts, there aren't enough good props to allow rolling junk props
+		negDev = 0.8
+		posDev = 1.05
+	}
 	if targetScore < itemScore {
 		negDev, posDev = posDev, negDev
 	}
 	minScore := util.Round32(negDev * float32((targetScore - itemScore)))
 	maxScore := util.Round32(posDev * float32((targetScore - itemScore)))
+
 	targetPropScore := minScore + util.Round32(rng.Float32()*float32(maxScore-minScore))
 	if targetPropScore > maxScore || targetPropScore < minScore {
 		log.Panicf("targetPropScore out of bounds")

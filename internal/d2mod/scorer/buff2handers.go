@@ -26,7 +26,7 @@ func buff2HanderWeights(s *scorerstatistics.ScorerStatistics, d2files d2fs.Files
 		if f.Rows[rowIdx][propscores.SourceItem] == "2handers" {
 			for tsIdx := range s.TypeStatistics {
 				if s.TypeStatistics[tsIdx].ItemType == "2h" {
-					//s.TypeStatistics[tsIdx].NumLines[rowIdx] += 100
+					s.TypeStatistics[tsIdx].NumLines[rowIdx] += 100
 				}
 
 			}

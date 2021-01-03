@@ -1,7 +1,6 @@
 package generator
 
 import (
-	"fmt"
 	"log"
 	"math/rand"
 	"strconv"
@@ -24,22 +23,22 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 	line := rollPropScoreLine(g, item, colIdx, propScoreMin, targetPropScore, propScoreMax, w)
 	newa := d2items.NewAffixFromLine(line, colIdx, g.IFI.FI.FileNumber)
 
-	if line.ScoreLimit > 0 {
-		//ScoreLimit specified verify this prop doesn't go over it.
-		vanillaScore := g.Statistics.ItemScores[item.Name]
-		if vanillaScore > 0 {
-			scoreCap := (vanillaScore * line.ScoreLimit) / 100
-			//log.Printf("RollAffix: found limit %s %s Van/Cap/Tgt %d/%d/%d ScoreLimit:%d", item.Name, line.Prop.Name, vanillaScore, scoreCap, targetPropScore, line.ScoreLimit)
-			if targetPropScore > scoreCap {
-				fmt.Printf("Capping %s:%s %d->%d\n", item.Name, line.Prop.Name, targetPropScore, scoreCap)
-			}
+	// if line.ScoreLimit > 0 {
+	// 	//ScoreLimit specified verify this prop doesn't go over it.
+	// 	vanillaScore := g.Statistics.ItemScores[item.Name]
+	// 	if vanillaScore > 0 {
+	// 		scoreCap := (vanillaScore * line.ScoreLimit) / 100
+	// 		//log.Printf("RollAffix: found limit %s %s Van/Cap/Tgt %d/%d/%d ScoreLimit:%d", item.Name, line.Prop.Name, vanillaScore, scoreCap, targetPropScore, line.ScoreLimit)
+	// 		if targetPropScore > scoreCap {
+	// 			fmt.Printf("Capping %s:%s %d->%d\n", item.Name, line.Prop.Name, targetPropScore, scoreCap)
+	// 		}
 
-			targetPropScore = util.MinInt(targetPropScore, scoreCap)
-			if targetPropScore < propScoreMin {
-				log.Panicf("RollAffix: Logic bug: targetPropScore (%d) < propScoreMin(%d) %s", targetPropScore, propScoreMin, line.Prop.Name)
-			}
-		}
-	}
+	// 		targetPropScore = util.MinInt(targetPropScore, scoreCap)
+	// 		if targetPropScore < propScoreMin {
+	// 			log.Panicf("RollAffix: Logic bug: targetPropScore (%d) < propScoreMin(%d) %s", targetPropScore, propScoreMin, line.Prop.Name)
+	// 		}
+	// 	}
+	// }
 
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
@@ -152,7 +151,7 @@ func rollPropScoreLine(g *Generator, item *d2items.Item, colIdx int, propScoreMi
 	var closestLine *propscores.Line
 	var closestLineDelta = 999999999 // couldn't get a portable answer for maximum value of int.
 	rollcounter := 0
-	maxRolls := 100
+	maxRolls := 200
 	vanillaScore := g.Statistics.ItemScores[item.Name]
 DoneRolling:
 	for rollcounter = 0; rollcounter < maxRolls; rollcounter++ {
@@ -204,7 +203,7 @@ DoneRolling:
 		if line.ScoreLimit > 0 {
 			//ScoreLimit specified verify this prop doesn't go over it.
 			scoreCap := (vanillaScore * line.ScoreLimit) / 100
-			if (scoreCap < targetPropScore) || (scoreCap < scoreMin) {
+			if scoreCap < scoreMin {
 				//log.Printf("rollPropScoreLine Skipping %s:%s from %d to %d:", item.Name, line.Prop.Name, targetPropScore, scoreCap)
 				continue
 			}
@@ -234,11 +233,10 @@ DoneRolling:
 			break DoneRolling
 		}
 	}
-	// if closestLineDelta != 0 {
-	// 	//log.Println(item.Affixes)
-	// 	log.Printf("rollPropScoreLine: Couldn't hit target: %s: %d %d", item.Name, closestLineDelta, targetPropScore)
-
-	// }
+	if closestLineDelta != 0 {
+		//log.Println(item.Affixes)
+		//log.Printf("rollPropScoreLine: Couldn't hit target: %s: %d %d", item.Name, closestLineDelta, targetPropScore)
+	}
 	// if rollcounter == MaxRolls {
 	// 	if closestLineDelta > 100 {
 	// 		log.Printf("Hit maxrolls trying to roll %d Closest:%d ", targetPropScore, closestLineDelta)
