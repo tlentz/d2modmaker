@@ -12,12 +12,12 @@ type RandomOptions struct {
 	Seed              int64 `json:"Seed"`
 	UseSetsSeed       bool  `json:"UseSetsSeed"`
 	SetsSeed          int64 `json:"SetsSeed"`
-	IsBalanced        bool  `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
-	BalancedPropCount bool  `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
-	AllowDupProps     bool  `json:"AllowDuplicateProps"` // Allow two props of the same type to be placed on an item
-	MinProps          int   `json:"MinProps"`            // minimum number of non blank props on an item
-	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
-	NumClones         int   `json:"NumClones"`           // # of times to copy all rows in UniqueItems table before randomizing props
+	IsBalanced        bool  `json:"IsBalanced"`        // Allows Props only from items up to 10 levels higher
+	BalancedPropCount bool  `json:"BalancedPropCount"` // Picks prop count from a vanilla item up to 10 levels higher
+	AllowDupeProps    bool  `json:"AllowDupeProps"`    // Allow two props of the same type to be placed on an item
+	MinProps          int   `json:"MinProps"`          // minimum number of non blank props on an item
+	MaxProps          int   `json:"MaxProps"`          // maximum number of non blank props on an item
+	NumClones         int   `json:"NumClones"`         // # of times to copy all rows in UniqueItems table before randomizing props
 	ElementalSkills   bool  `json:"ElementalSkills"`
 }
 
@@ -68,7 +68,7 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-12",
+		Version:                 "v0.5.2-alpha-13",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -98,7 +98,7 @@ func DefaultData() Data {
 			SetsSeed:          1234,
 			IsBalanced:        true,
 			BalancedPropCount: true,
-			AllowDupProps:     false,
+			AllowDupeProps:    false,
 			MinProps:          2,
 			MaxProps:          20,
 			NumClones:         9,
@@ -126,6 +126,7 @@ func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
 	data := DefaultData()
 	_ = json.Unmarshal([]byte(file), &data)
+	data.Version = DefaultData().Version // force version # to current version
 	return data
 }
 
@@ -133,5 +134,6 @@ func Read(filePath string) Data {
 func Parse(jsonData []byte) Data {
 	data := DefaultData()
 	_ = json.Unmarshal(jsonData, &data)
+	data.Version = DefaultData().Version // force version # to current version
 	return data
 }

@@ -60,6 +60,7 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 		d2files: d2files,
 		props:   props,
 		items:   items,
+		rng:     rand.New(rand.NewSource(cfg.Seed)),
 	}
 	return &snew
 }
@@ -354,7 +355,7 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 
 			// Add used prop to the prop list if duplicate properties are not allowed
 			// Always add aura to the prop list because multiple auras on an item are broken
-			if !s.opts.AllowDupProps || propIDString == "aura" {
+			if !s.opts.AllowDupeProps || propIDString == "aura" {
 				propList[propIDString] = true
 			}
 		}

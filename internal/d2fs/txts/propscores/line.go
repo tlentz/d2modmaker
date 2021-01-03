@@ -1,6 +1,7 @@
 package propscores
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -50,7 +51,15 @@ func NewLine(Row []string, RowIndex int) *Line {
 	if l.PropParType == propscorespartype.S {
 		l.ScoreMin = l.ScoreMax
 	}
-	l.ScoreLimit, _ = strconv.Atoi(Row[ScoreLim])
+	if Row[ScoreLim] == "" {
+		l.ScoreLimit = 1000
+	} else {
+		scoreLimit, ok := strconv.Atoi(Row[ScoreLim])
+		if ok != nil {
+			log.Fatalf("propscores.NewLine: non-numeric ScoreLim on PropScores.txt line #%d", RowIndex)
+		}
+		l.ScoreLimit = scoreLimit
+	}
 	l.MinLvl, _ = strconv.Atoi(Row[MinLvl])
 	l.LvlScale = (Row[LvlScale] == "Y")
 	l.NoTypeOvr = (Row[NoTypeOver] == "Y")

@@ -13,7 +13,12 @@ abs-mag/lvl	5	0	0	lvl		40														3		RandomizeAdd6		0
 abs-mag%	0	5	30	r=	10	60														3		RandomizeAdd7		0
 ac	0	-10	-1	c	-2	-1					armo	weap								101	ac	Dimoaks Hew	UniqueItems	0
 ac	0	6	350	r=	2	105	10				weap						aspe			101	ac	Bladebone	UniqueItems	0
-ac	0	6	600	r=	2	90	10				aspe	armo	amu	staf	fset					101	ac	Bladebone	UniqueItems	0
+ac	0	6	600	r=	1	30	7				bow	xbow								101	ac	Bows	Hand Edit	0
+ac	0	6	600	r=	1	30	7				pole	staf	aspe	spea	1ax	bax				101	ac	2handers	Hand Edit	0
+ac	0	6	600	r=	1	30	7				btx	gax	gix	91a	9ba	9bt				101	ac	2handers	Hand Edit	0
+ac	0	6	600	r=	1	30	7				9ga	9gi	71a	7ba	7bt	7ga				101	ac	2handers	Hand Edit	0
+ac	0	6	600	r=	1	30	7				7gi	mau	gma	9m9	7m7	7gm				101	ac	2handers	Hand Edit	0
+ac	0	6	600	r=	2	90	10				fset	armo	amu							101	ac	Bladebone	UniqueItems	0
 ac	0	600	800	r=	60	80	15	50									weap			101	ac	Enigma	Runes	0
 ac-hth	0	40	200	r=	2	10	5													101		Darkglow	UniqueItems	0
 ac-miss	0	10	400	r=	1	20	5													101		Coif of Glory	UniqueItems	0
@@ -163,7 +168,8 @@ dmg-cold	150	30	400	r	70	400		16												10	cold	Shadowfang	UniqueItems	0
 dmg-cold	200	32	196	r	74	402		59												10	cold	Buriza-Do Kyanon	UniqueItems	0
 dmg-cold	250	250	500	r	250	500		87												10	cold	Azurewrath	UniqueItems	0
 dmg-dem/lvl	15	0	0	lvl		45														209		Widowmaker	Runes	0
-dmg-demon	0	25	380	r=	12	190														209		Dark Clan Crusher	UniqueItems	0
+dmg-demon	0	25	380	r=	12	190			Y		weap									209		Dark Clan Crusher	UniqueItems	0
+dmg-demon	0	25	380	r=	12	190											weap			209		Dark Clan Crusher	UniqueItems	0
 dmg-elem		55	160	rt	330	960														210	ele	Hellrack	UniqueItems	0
 dmg-elem	33	63	324	rt	378	1944														210	ele	Hellrack	UniqueItems	0
 dmg-elem	100	50	200	rt	300	1200														210	ele	Famine	Runes	0
@@ -187,8 +193,10 @@ dmg-pois	200	102	500	rt	44	217														16	pois	Wormskull	UniqueItems	0
 dmg-pois	250	256	500	rt	125	244		46												16	pois	Guardian Naga	UniqueItems	0
 dmg-to-mana	0	5	50	r=	2	25														107		Howltusk	UniqueItems	0
 dmg-und/lvl	60	0	0	lvl		120														212		The Vile Husk	UniqueItems	0
-dmg-undead	0	25	250	r=	9	77														212		Bladebone	UniqueItems	0
-dmg-undead	0	200	300	r=	67	100		25												212		RandomizeAdd9		0
+dmg-undead	0	25	250	r=	9	77			Y		weap									212		Bladebone	UniqueItems	0
+dmg-undead	0	25	250	r=	9	77											weap			212		Bladebone	UniqueItems	0
+dmg-undead	0	200	300	r=	67	100		25	Y		weap									212		RandomizeAdd9		0
+dmg-undead	0	200	300	r=	67	100		25									weap			212		RandomizeAdd9		0
 dmg/lvl	25	0	0	lvl		234														111	dmg	Headstriker	UniqueItems	0
 dmg%	0	5	30	r=	15	90					armo						shld			105	dmg	War Bonnet	UniqueItems	0
 dmg%	0	5	80	r=	10	160					shld	glov								105	dmg	Alma Negra	UniqueItems	0
@@ -443,8 +451,8 @@ pierce-fire	0	3	60	r	3	90														232	fire	Mang Song's Lesson	UniqueItems	0
 pierce-ltng	0	3	60	r	3	90														233	ltng	Mang Song's Lesson	UniqueItems	0
 pierce-pois	0	3	60	r	3	90														234	pois	Deaths's Web	UniqueItems	0
 pois-len	0	75	150	r	5	10	0													235	pois	Berserker's Garb	Sets	0
-pois-max	0	32	128	r	8	32														236	pois	Rakescar	UniqueItems	0
-pois-min	0	16	128	r	8	64														15	pois	Rakescar	UniqueItems	0
+pois-max	0	32	128	r	8	32	0													236	pois	Rakescar	UniqueItems	0
+pois-min	0	16	128	r	8	64	0													15	pois	Rakescar	UniqueItems	0
 poisonskill		1	3	smm	12	36														125	skills	Leaf	Runes	0
 randclassskill		0	6	smm	0	300					cm2									323	skills	Hellfire Torch	UniqueItems	0
 reanimate	1	10	10	s	0	5														237		Tomb Reaver	UniqueItems	0

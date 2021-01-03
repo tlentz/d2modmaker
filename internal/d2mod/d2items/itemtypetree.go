@@ -99,12 +99,30 @@ func CheckTwoHander(tt *TypeTree, i Item) bool {
 	if len(i.Types) == 0 {
 		return false
 	}
-	twohanders := []string{"pole", "staf", "bow", "xbow", "abow", "aspe", "spea",
+	twohanders := []string{"pole", "staf", "aspe", "spea",
 		// OBC: Friggen 1handed hammers and axes make me do this
 		// TODO instead of all this garbage check 2handed vs 1or2hand columns in Weapons.txt
 		"lax", "bax", "btx", "gax", "gix", "9la", "9ba", "9bt", "9ga", "9gi",
 		"7la", "7ba", "7bt", "7ga", "7gi", "mau", "gma", "9m9", "9gm", "7m7", "7gm",
 	}
+NextItemType:
+	for _, itemtype := range i.Types {
+		for _, thtype := range twohanders {
+			if CheckTypeTree(tt, itemtype, thtype) {
+				continue NextItemType
+			}
+		}
+		return false
+	}
+	return true
+}
+
+// CheckBow Check if an "Item" is a bow/xbow type
+func CheckBow(tt *TypeTree, i Item) bool {
+	if len(i.Types) == 0 {
+		return false
+	}
+	twohanders := []string{"bow", "xbow", "abow"}
 NextItemType:
 	for _, itemtype := range i.Types {
 		for _, thtype := range twohanders {

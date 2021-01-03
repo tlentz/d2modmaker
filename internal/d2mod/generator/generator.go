@@ -52,10 +52,10 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 		TypeTree:   tt,
 		psi:        propscores.NewPropScoresIndex(d2files),
 		Statistics: stats,
+		rng:        rand.New(rand.NewSource(opts.Seed)),
 	}
-	g.Statistics.SetupProbabilityWeights(d2files)
+	g.Statistics.SetupProbabilityWeights()
 
-	g.rng = rand.New(rand.NewSource(opts.Seed))
 	g.SetToUnique = make(map[string]d2items.Item)
 
 	return &g

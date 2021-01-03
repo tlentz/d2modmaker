@@ -19,7 +19,9 @@ func scoreFile(s *Scorer, ifi *d2fs.ItemFileInfo) {
 		if items[idx].Score == 0 && items[idx].Lvl > 50 {
 			log.Panicf("%+v", items[idx])
 		}
+		buff2HanderScore(s.opts, s.Statistics, s.TypeTree, items[idx])
 		WriteItemScore(s.Statistics, s.d2files, s.IFI, &items[idx], true)
 	}
+	buff2HanderWeights(s.Statistics, *s.d2files)
 	return
 }
