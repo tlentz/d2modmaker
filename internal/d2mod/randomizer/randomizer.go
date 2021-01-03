@@ -60,6 +60,7 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 		d2files: d2files,
 		props:   props,
 		items:   items,
+		rng:     rand.New(rand.NewSource(cfg.Seed)),
 	}
 	return &snew
 }
@@ -67,18 +68,11 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 // Run Randomize randomizes all items based on the RandomOptions
 func Run(cfg *config.RandomOptions, d2files *d2fs.Files) {
 	s := newScrambler(cfg, d2files)
-	if s.opts.Seed < 0 {
-		fmt.Printf("Negative seed, initializing\n")
-		s.opts.Seed = time.Now().UnixNano()
-	}
+
 	s.rng.Seed(s.opts.Seed)
 	randomizeUniqueProps(*s)
 	randomizeSetItemsProps(*s)
 	randomizeRWProps(*s)
-	if s.opts.SetsSeed < 0 {
-		fmt.Printf("Negative seed, initializing\n")
-		s.opts.SetsSeed = time.Now().UnixNano()
-	}
 	s.rng.Seed(s.opts.SetsSeed)
 	randomizeSetProps(*s)
 }

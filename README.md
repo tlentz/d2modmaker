@@ -204,6 +204,7 @@ Thanks!
 # Change Log
 ## v0.5.2-alpha-13
 * Adding 2hander buff to Generator
+* Fix Randomizer crash
 ## v0.5.2-alpha-12
 * Added ElementalSkills handling in Randomizer
 * Balance adjustment to SynergyGroup and ias (properties swing1-3)
