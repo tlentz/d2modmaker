@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.2-alpha-13",
+    "Version": "v0.5.2-alpha-14",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -37,16 +37,16 @@
     },
     "GeneratorOptions": {
         "Generate": true,
-        "UseSeed": false,
-        "Seed": -1,
+        "UseSeed": true,
+        "Seed": 1234,
         "UseSetsSeed": true,
         "SetsSeed": 1234,
         "EnhancedSets": true,
-        "BalancedPropCount": true,
+        "BalancedPropCount": false,
         "MinProps": 2,
         "MaxProps": 20,
         "NumClones": 9,
-        "PropScoreMultiplier": 1,
+        "PropScoreMultiplier": 5,
         "ElementalSkills": true
     }
 }
