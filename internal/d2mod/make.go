@@ -108,8 +108,8 @@ func Make(defaultOutDir string, cfg config.Data) {
 		g := generator.NewGenerator(&d2files, &cfg.GeneratorOptions, s.TypeTree, s.PSI, s.Statistics)
 		g.Run()
 	} else {
-		fmt.Println("*** Running Randomizer ***")
 		if cfg.RandomOptions.Randomize {
+			fmt.Println("*** Running Randomizer ***")
 			randomizer.Run(&cfg.RandomOptions, &d2files)
 		}
 	}
