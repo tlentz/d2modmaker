@@ -126,6 +126,7 @@ func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
 	data := DefaultData()
 	_ = json.Unmarshal([]byte(file), &data)
+	data.Version = DefaultData().Version // force version # to current version
 	return data
 }
 
@@ -133,5 +134,6 @@ func Read(filePath string) Data {
 func Parse(jsonData []byte) Data {
 	data := DefaultData()
 	_ = json.Unmarshal(jsonData, &data)
+	data.Version = DefaultData().Version // force version # to current version
 	return data
 }
