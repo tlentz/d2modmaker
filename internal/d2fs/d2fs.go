@@ -89,7 +89,7 @@ func (d2files *Files) Read(filepath string, filename string) *File {
 
 }
 
-// ReadAsset Reads File directly from a csv file (not from vfs)
+// ReadAsset Reads in a tsv file from vfs but doesn't cache it in Files
 func ReadAsset(filePath string, filename string) *File {
 	// open csvfile
 	csvfile, err := assets.Assets.Open(path.Join(filePath, filename))
@@ -187,6 +187,28 @@ func checkError(filename string, err error) {
 // AppendRows concatenate all rows from f2 into f1
 func AppendRows(f1 *File, f2 File) {
 	f1.Rows = append(f1.Rows, f2.Rows...)
+}
+
+// MergeRows Merges f2 into f1
+// f1.Rows[][0] is assumed to be unique
+func MergeRows(f1 *File, f2 File) {
+	keys := make(map[string]int, 0)
+	for rowIdx := range f1.Rows {
+
+		keys[f1.Rows[rowIdx][0]] = rowIdx
+	}
+	//fmt.Printf("%v", keys)
+	for f2RowIdx := range f2.Rows {
+		f1RowIdx, ok := keys[f2.Rows[f2RowIdx][0]]
+		if ok {
+			f1.Rows[f1RowIdx] = f2.Rows[f2RowIdx]
+			//fmt.Printf("Merging...%s\n", f2.Rows[f2RowIdx][0])
+		} else {
+			//fmt.Printf("Len Before:%d\n", len(f1.Rows))
+			f1.Rows = append(f1.Rows, f2.Rows[f2RowIdx])
+			//fmt.Printf("Len After :%d\n", len(f1.Rows))
+		}
+	}
 }
 
 //func printFile() {

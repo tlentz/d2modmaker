@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.2-alpha-14",
+    "Version": "v0.5.2-alpha-15",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -42,11 +42,11 @@
         "UseSetsSeed": true,
         "SetsSeed": 1234,
         "EnhancedSets": true,
-        "BalancedPropCount": false,
+        "BalancedPropCount": true,
         "MinProps": 2,
         "MaxProps": 20,
         "NumClones": 9,
-        "PropScoreMultiplier": 5,
+        "PropScoreMultiplier": 1,
         "ElementalSkills": true
     }
 }

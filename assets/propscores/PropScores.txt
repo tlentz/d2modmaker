@@ -170,17 +170,16 @@ dmg-cold	250	250	500	r	250	500		87												10	cold	Azurewrath	UniqueItems	0
 dmg-dem/lvl	15	0	0	lvl		45														209		Widowmaker	Runes	0
 dmg-demon	0	25	380	r=	12	190			Y		weap									209		Dark Clan Crusher	UniqueItems	0
 dmg-demon	0	25	380	r=	12	190											weap			209		Dark Clan Crusher	UniqueItems	0
-dmg-elem		55	160	rt	330	960														210	ele	Hellrack	UniqueItems	0
-dmg-elem	33	63	324	rt	378	1944														210	ele	Hellrack	UniqueItems	0
-dmg-elem	100	50	200	rt	300	1200														210	ele	Famine	Runes	0
+dmg-elem		5	500	rt	30	3000														210	ele	Hellrack	UniqueItems	0
+dmg-elem	33	50	324	rt	300	1944														210	ele	Hellrack	UniqueItems	0
+dmg-elem	100	100	500	rt	600	3000														210	ele	Famine	Runes	0
 dmg-fire		1	100	r	1	200														12	fire	Brainhew	UniqueItems	0
-dmg-fire		100	500	r	200	500														12	fire	Brainhew	UniqueItems	0
-dmg-ltng	0	1	100	r	1	180														13	ltng	The Chieftan	UniqueItems	0
-dmg-ltng	0	1	333	r	180	300														13	ltng	The Chieftan	UniqueItems	0
+dmg-fire		100	500	r	200	1000														12	fire	Brainhew	UniqueItems	0
+dmg-ltng	0	1	1000	r	1	1800														13	ltng	The Chieftan	UniqueItems	0
 dmg-mag	0	1	50	r	2	100														211	mag	Azurewrath	UniqueItems	0
 dmg-mag	0	50	500	r	100	650		37												211	mag	Ginther's Rift	UniqueItems	0
-dmg-max	0	3	66	r=	6	99														13	dmg	Goreshovel	UniqueItems	0
-dmg-min	0	1	15	r=	2	30														14	dmg	Deathspade	UniqueItems	0
+dmg-max	0	3	125	r=	6	213														13	dmg	Goreshovel	UniqueItems	0
+dmg-min	0	1	60	r=	2	120														14	dmg	Deathspade	UniqueItems	0
 dmg-norm	0	3	100	r	3	200														212	dmg	Rusthandle	UniqueItems	0
 dmg-pois	50	125	255	rt	20	42		43												16	pois	Rainbow Facet	UniqueItems	0
 dmg-pois	70	30	255	rt	6	54														16	pois	Serpent Lord	UniqueItems	0
