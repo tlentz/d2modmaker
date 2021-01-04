@@ -7,6 +7,8 @@ import (
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/itemStatCost"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/properties"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
@@ -23,8 +25,11 @@ const (
 func Run(outDir string, d2files d2fs.Files, enabled bool) {
 
 	copyPatchString(outDir)
-	if enabled {
+	f := d2files.Get(properties.FileName)
+	d2fs.MergeRows(d2files.Get(itemStatCost.FileName), *d2fs.ReadAsset(elementalAssetsDir, itemStatCost.FileName))
+	d2fs.MergeRows(d2files.Get(properties.FileName), *d2fs.ReadAsset(elementalAssetsDir, properties.FileName))
 
+	if enabled {
 	} else {
 		propScoresFile := d2files.GetWithPath(propscores.Path, propscores.FileName)
 		for rowIdx := range propScoresFile.Rows {

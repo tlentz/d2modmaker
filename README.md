@@ -202,6 +202,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-15
+* Fixed ElementalSkills
+* Increased ranges of some damage props to allow higher values/scores
 ## v0.5.2-alpha-13
 * Adding 2hander buff to Generator
 * Fix Randomizer crash
