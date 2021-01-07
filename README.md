@@ -202,6 +202,8 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-16
+* Bugfix: Randomizer:IsBalanced was broken
 ## v0.5.2-alpha-15
 * Fixed ElementalSkills
 * Increased ranges of some damage props to allow higher values/scores

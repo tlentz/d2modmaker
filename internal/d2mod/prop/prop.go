@@ -23,7 +23,7 @@ type Val struct {
 type Props = []Prop
 
 // NewProp Create a new Prop
-func NewProp(name string, par string, min string, max string) Prop {
+func NewProp(name string, par string, min string, max string, lvl int) Prop {
 	/*
 		if name == "sock" {
 			fmt.Printf("NewProp: [%s][%s][%s][%s]", name, par, min, max)
@@ -38,6 +38,7 @@ func NewProp(name string, par string, min string, max string) Prop {
 	prop.Val.Par, _ = strconv.Atoi(prop.Par)
 	prop.Val.Min, _ = strconv.Atoi(prop.Min)
 	prop.Val.Max, _ = strconv.Atoi(prop.Max)
+	prop.Lvl = lvl
 	return prop
 }
 

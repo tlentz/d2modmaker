@@ -168,8 +168,12 @@ func (item *Item) ToRow(pg PropGetter, row []string) []string {
 
 // NewAffixFromRow Create an Affix from an Item Row
 func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix {
+	lvl := pg.IFI.Lvl
+	if pg.IFI.Lvl == -1 {
+		lvl = runewordlevels.GetRunewordLevel(row, pg.rwlevels)
+	}
 	aff := Affix{
-		P: prop.NewProp(row[colIdx], row[colIdx+1], row[colIdx+2], row[colIdx+3]),
+		P: prop.NewProp(row[colIdx], row[colIdx+1], row[colIdx+2], row[colIdx+3], lvl),
 	}
 	aff.SetBonusMultiplier = CalcSetBonusMultiplier(pg.IFI.FI.FileNumber, colIdx)
 	aff.ColIdx = colIdx

@@ -44,7 +44,7 @@ type Maps struct {
 func NewLine(Row []string, RowIndex int) *Line {
 	var l Line
 	l.RowIndex = RowIndex
-	l.Prop = prop.NewProp(Row[Prop], Row[Par], Row[Min], Row[Max])
+	l.Prop = prop.NewProp(Row[Prop], Row[Par], Row[Min], Row[Max], 0)
 	l.PropParType = propscorespartype.Types[Row[PropParType]]
 	l.ScoreMin, _ = strconv.Atoi(Row[ScoreMin])
 	l.ScoreMax, _ = strconv.Atoi(Row[ScoreMax])
