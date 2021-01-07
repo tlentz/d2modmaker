@@ -212,6 +212,7 @@ func getBalancedRandomProp(s scrambler, lvl int, props Props) Prop {
 	for prop.Name == "" {
 		prop = props[randInt(s.rng, 0, numProps)]
 		//Check if this prop is balanced if using that feature
+		fmt.Printf("%s: %d|", prop.Name, prop.Lvl)
 		if s.opts.IsBalanced && prop.Lvl-lvl > 10 {
 			// Blank the prop name and pick again
 			prop.Name = ""

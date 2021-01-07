@@ -102,10 +102,10 @@ func copyPatchString(outDir string) {
 // Props Add elemental skill props to a list of props
 func Props() d2items.Props {
 	props := make(d2items.Props, 4)
-	props[0] = prop.NewProp("coldskill", "", "1", "4")
-	props[1] = prop.NewProp("poisonskill", "", "1", "4")
-	props[2] = prop.NewProp("lightningskill", "", "1", "4")
-	props[3] = prop.NewProp("magicskill", "", "1", "4")
+	props[0] = prop.NewProp("coldskill", "", "1", "4", 0)
+	props[1] = prop.NewProp("poisonskill", "", "1", "4", 0)
+	props[2] = prop.NewProp("lightningskill", "", "1", "4", 0)
+	props[3] = prop.NewProp("magicskill", "", "1", "4", 0)
 
 	return props
 }
