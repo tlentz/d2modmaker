@@ -1,4 +1,4 @@
-module Types exposing (BasicOption(..), ColorTheme(..), Model, Msg(..), Mode(..), initAdvancedOptions, ItemGenerationMode(..), Route(..), Screen, View(..), emptyModel)
+module Types exposing (AdvancedOptions, BasicOption(..), ColorTheme(..), CheckboxMsg(..), Model, Msg(..), Mode(..), initAdvancedOptions, ItemGenerationMode(..), Route(..), Screen, View(..), emptyModel)
 
 import Browser.Dom as Dom
 import Http
@@ -27,11 +27,29 @@ type Msg
     | FocusResult (Result Dom.Error ())
     | SetViewportCb
     | GetResponse (Result Http.Error String)
-    | CheckRandomize Bool
+    | SetCheckedState CheckboxMsg
     | SetSelectedMode Mode
     | SetSelectedBasicOption BasicOption
     | GenerateBasic
-    
+
+type CheckboxMsg
+    = SetRandomize AdvancedOptions Bool
+    | SetUseSeed AdvancedOptions Bool
+    | SetUseOSkills AdvancedOptions Bool
+    | SetPerfectProps AdvancedOptions Bool
+    | SetAllowDupProps AdvancedOptions Bool
+    | SetIsBalanced AdvancedOptions Bool
+    | SetBalancedPropCount AdvancedOptions Bool
+    | SetMeleeSplash AdvancedOptions Bool
+    | SetEnableTownSkills AdvancedOptions Bool
+    | SetStartWithCube AdvancedOptions Bool
+    | SetCowzzz AdvancedOptions Bool
+    | SetIncreaseStackSizes AdvancedOptions Bool
+    | SetRemoveLevelRequirements AdvancedOptions Bool
+    | SetRemoveAttRequirements AdvancedOptions Bool
+    | SetRemoveUniqueCharmLimit AdvancedOptions Bool
+    | SetNoDropZero AdvancedOptions Bool
+    | SetQuestDrops AdvancedOptions Bool
 
 type alias Screen =
     { width : Int
@@ -65,7 +83,7 @@ type alias AdvancedOptions =
     , useSeed : Bool
     , useOSkills : Bool
     , perfectProps : Bool
-    , allowDupProducts : Bool
+    , allowDupProps : Bool
     , isBalanced : Bool
     , balancedPropCount : Bool
     , minProps : Int
@@ -93,7 +111,7 @@ initAdvancedOptions =
     , useSeed = False
     , useOSkills = False
     , perfectProps = False
-    , allowDupProducts = False
+    , allowDupProps = False
     , isBalanced = False
     , balancedPropCount = False
     , minProps = 0

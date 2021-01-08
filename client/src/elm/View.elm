@@ -1,6 +1,6 @@
 module View exposing (view)
 
-import Element exposing (Element, column, el, fill, height, row, padding, spacing, width, text, centerX, centerY)
+import Element exposing (Element, column, el, fill, height, row, padding, spacing, width, text, centerX, centerY, alignTop)
 import Element.Background as Background exposing (color)
 import Element.Border as Border exposing (solid, rounded)
 import Element.Input as Input
@@ -12,6 +12,7 @@ import Types
     exposing
         ( BasicOption(..)
         , ColorTheme(..)
+        , CheckboxMsg(..)
         , initAdvancedOptions
         , Model
         , Mode(..)
@@ -91,15 +92,67 @@ view model =
                                 ]
                         
                         Advanced o ->
-                            row [ centerX ] <|
-                                [ Input.checkbox []
-                                    { onChange = CheckRandomize
-                                    , icon = Input.defaultCheckbox
-                                    , checked = o.randomize
-                                    , label =
-                                        Input.labelRight []
-                                            (text "Randomize")
-                                    }
+                            row [ centerX, spacing 75 ] <|
+                                [ column [ spacing 15 ] <|
+                                    [ Input.checkbox []
+                                        { onChange = SetCheckedState << SetRandomize o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.randomize
+                                        , label =
+                                            Input.labelRight []
+                                                (text "Randomize")
+                                        }
+                                    , Input.checkbox []
+                                        { onChange = SetCheckedState << SetUseOSkills o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.useOSkills
+                                        , label =
+                                            Input.labelRight []
+                                                (text "UseOSkills")
+                                        }
+                                    , Input.checkbox []
+                                        { onChange = SetCheckedState << SetAllowDupProps o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.allowDupProps
+                                        , label =
+                                            Input.labelRight []
+                                                (text "AllowDupProps")
+                                        }
+                                    , Input.checkbox []
+                                        { onChange = SetCheckedState << SetBalancedPropCount o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.balancedPropCount
+                                        , label =
+                                            Input.labelRight []
+                                                (text "BalancedPropCount")
+                                        }
+                                    ]
+                                , column [ spacing 15, alignTop ] <|
+                                    [ Input.checkbox []
+                                        { onChange = SetCheckedState << SetUseSeed o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.useSeed
+                                        , label =
+                                            Input.labelRight []
+                                                (text "UseSeed")
+                                        }
+                                    , Input.checkbox []
+                                        { onChange = SetCheckedState << SetPerfectProps o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.perfectProps
+                                        , label =
+                                            Input.labelRight []
+                                                (text "PerfectProps")
+                                        }
+                                    , Input.checkbox []
+                                        { onChange = SetCheckedState << SetIsBalanced o
+                                        , icon = Input.defaultCheckbox
+                                        , checked = o.isBalanced
+                                        , label =
+                                            Input.labelRight []
+                                                (text "IsBalanced")  
+                                        }                               
+                                    ]
                                 ]
                 
                 Nothing ->
@@ -112,7 +165,7 @@ view model =
             , Background.color Style.backgroundTheme
             ]
             [ el
-                [ padding 50
+                [ padding 25
                 , width fill
                 ]
                 <| header

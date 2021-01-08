@@ -6,7 +6,9 @@ import Http exposing (Error(..))
 import Task
 import Types
     exposing
-        ( ColorTheme(..)
+        ( AdvancedOptions
+        , CheckboxMsg(..)
+        , ColorTheme(..)
         , Model
         , Mode(..)
         , Msg(..)
@@ -36,35 +38,9 @@ update msg model =
         GetResponse _ ->
             ( model, Cmd.none )
 
-        CheckRandomize isChecked ->
-            let
-                mode = model.mode
-
-                updatedMode =
-                    case mode of
-                        Just m ->
-                            let
-                                newMode =
-                                    case m of
-                                        Basic _ ->
-                                            m
-                                        Advanced options ->
-                                            let
-                                                newOptions =
-                                                    { options | randomize = isChecked }
-                                            in
-                                            Advanced newOptions
-                            in
-                            Just newMode
-
-                        Nothing ->
-                            mode
-                
-                updatedModel =
-                    { model | mode = updatedMode }
-
-            in
-            ( updatedModel, Cmd.none )
+        SetCheckedState checkboxMsg ->
+            updateCheckboxState checkboxMsg
+                |> setUpdatedOptionsOnModel model
         
         SetSelectedMode mode ->
             ( { model | mode = Just mode}, Cmd.none )
@@ -98,3 +74,170 @@ update msg model =
 
         GenerateBasic ->
             ( model, Cmd.none )
+
+
+updateCheckboxState : CheckboxMsg -> AdvancedOptions
+updateCheckboxState checkboxMsg =
+    case checkboxMsg of
+        SetRandomize advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | randomize = isChecked }
+
+            in
+            updatedMode
+        
+        SetUseSeed advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | useSeed = isChecked }
+
+            in
+            updatedMode
+
+        SetUseOSkills advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | useOSkills = isChecked }
+
+            in
+            updatedMode
+
+        SetPerfectProps advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | perfectProps = isChecked }
+
+            in
+            updatedMode
+
+        SetAllowDupProps advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | allowDupProps = isChecked }
+
+            in
+            updatedMode
+
+        SetIsBalanced advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | isBalanced = isChecked }
+
+            in
+            updatedMode
+
+        SetBalancedPropCount advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | balancedPropCount = isChecked }
+
+            in
+            updatedMode
+
+        SetMeleeSplash advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | meleeSplash = isChecked }
+
+            in
+            updatedMode
+
+        SetEnableTownSkills advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | enableTownSkills = isChecked }
+
+            in
+            updatedMode
+
+        SetStartWithCube advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | startWithCube = isChecked }
+
+            in
+            updatedMode
+
+        SetCowzzz advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | cowzzz = isChecked }
+
+            in
+            updatedMode
+
+        SetIncreaseStackSizes advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | increaseStackSizes = isChecked }
+
+            in
+            updatedMode
+
+        SetRemoveLevelRequirements advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | removeLevelRequirements = isChecked }
+
+            in
+            updatedMode
+
+        SetRemoveAttRequirements advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | removeAttRequirements = isChecked }
+
+            in
+            updatedMode
+
+        SetRemoveUniqueCharmLimit advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | removeUniqueCharmLimit = isChecked }
+
+            in
+            updatedMode
+
+        SetNoDropZero advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | noDropZero = isChecked }
+
+            in
+            updatedMode
+
+        SetQuestDrops advancedOptions isChecked ->
+            let
+                updatedMode = 
+                    { advancedOptions | questDrops = isChecked }
+
+            in
+            updatedMode
+
+setUpdatedOptionsOnModel : Model -> AdvancedOptions -> (Model, Cmd Msg)
+setUpdatedOptionsOnModel model advancedOptions =
+    let
+        mode = model.mode
+
+        updatedMode =
+            case mode of
+                Just m ->
+                    let
+                        newMode =
+                            case m of
+                                Basic _ ->
+                                   m
+                                Advanced options ->
+                                    Advanced advancedOptions
+                    in
+                    Just newMode
+
+                Nothing ->
+                    mode
+        
+        updatedModel =
+            { model | mode = updatedMode }
+
+    in
+    (updatedModel, Cmd.none)
