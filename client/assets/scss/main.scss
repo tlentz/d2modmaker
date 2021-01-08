@@ -1,0 +1,40 @@
+* {
+    user-select: none;
+}
+
+body,
+#main {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+
+    .segmented-control {
+        display: flex;
+        cursor: pointer;
+
+        .segmented-control-item {
+            border: 2px solid black;
+            border-right: 0;
+            padding: 5px;
+
+            &:hover {
+                background-color: lightblue;
+                color: white;
+            }
+
+            &.selected {
+                background-color: lightseagreen;
+                color: white;
+            }
+        }
+
+        .segmented-control-item:first-child {
+            border-radius: 3px 0 0 3px;
+        }
+
+        .segmented-control-item:last-child {
+            border-radius: 0 3px 3px 0;
+            border-right: 2px solid black;
+        }
+    }
+}
