@@ -202,6 +202,12 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-17
+* Added debug cube recipes: axe + 1 health potion = axe with 1 each light,cold,fire,poison, magic skills.  Not added to UI, this allows
+* testing of new props to verify that they are working correctly.
+* Changed elementalkills allow curses (-lightning skills, -cold skills, etc)  Beware this may shift existing items + elemental skills down by 2, possibly going negative.
+* Added PropScores.txt ScoreMax column and capped max score to itemlevel * (1.2 + 0.1 * (PropScoreMultiplier-1)) but only when PropScoreMult < 4
+* This prevents low level items from spawning with very high values for props that have low ScoreMax.
 ## v0.5.2-alpha-16
 * Bugfix: Randomizer:IsBalanced was broken
 ## v0.5.2-alpha-15

@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.2-alpha-16",
+    "Version": "v0.5.2-alpha-17",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -20,6 +20,7 @@
     "PerfectProps": false,
     "UseOSkills": true,
     "SafeUnsocket": true,
+    "PropDebug": true,
     "EnterToExit": false,
     "RandomOptions": {
         "Randomize": false,

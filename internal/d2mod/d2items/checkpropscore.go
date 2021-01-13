@@ -19,6 +19,10 @@ func checkPropScore(tt *TypeTree, p prop.Prop, item Item, line *propscores.Line)
 	if item.Lvl < line.MinLvl {
 		return false
 	}
+	if (item.Lvl > line.MaxLvl) && (line.MaxLvl > 0) {
+		return false
+	}
+
 	switch line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.C, propscorespartype.Req:
 		// LMin < Avg(Min,Max) < LMax

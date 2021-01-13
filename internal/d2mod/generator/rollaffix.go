@@ -46,6 +46,12 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 		newa.P.Val.Min, newa.P.Val.Max = rollRange(g.rng, newa.P.Val.Min, newa.P.Val.Max, newa.Line.ScoreMin, newa.Line.ScoreMax, item.Lvl, targetPropScore, true)
 		newa.P.Min = strconv.Itoa(newa.P.Val.Min)
 		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
+		if newa.P.Val.Min < newa.Line.Prop.Val.Min {
+			log.Panicf("Min Out of range %s => %d < %d ", newa.Line.Prop.Name, newa.P.Val.Min, newa.Line.Prop.Val.Min)
+		}
+		if newa.P.Val.Max > newa.Line.Prop.Val.Max {
+			log.Panicf("Min Out of range %s => %d < %d ", newa.Line.Prop.Name, newa.P.Val.Max, newa.Line.Prop.Val.Max)
+		}
 		//fmt.Printf("%s-%s\n", newa.P.Min, newa.P.Max)
 	case propscorespartype.Req:
 		newa.P.Val.Min, newa.P.Val.Max = rollRange(g.rng, newa.P.Val.Min, newa.P.Val.Max, newa.Line.ScoreMin, newa.Line.ScoreMax, item.Lvl, targetPropScore, false)
@@ -90,13 +96,15 @@ func rollRange(rng *rand.Rand, min int, max int, scoreMin int, scoreMax int, ite
 	}
 	newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
 	//newMin := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
+	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
+
 	deviation := 0
 	if applyDeviation {
-		deviation = util.AbsInt(util.Round64(rng.NormFloat64() * 0.4 * float64(targetPropScore)))
+		deviation = util.AbsInt(util.Round64(rng.NormFloat64() * 0.15 * float64(newAvg)))
 	}
 	newMin := newAvg - deviation
 	newMax := newAvg + deviation
-	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
+
 	roundTo := 1
 	largest := util.MaxInt(util.AbsInt(newMin), util.AbsInt(newMax))
 	if largest >= 15 {
@@ -160,19 +168,15 @@ DoneRolling:
 		line := g.psi.RowLines[scoreFileRowIndex]
 		//log.Printf("rollPropScoreLine: %s: ScoreMax=%d T:%d Score Min/Tgt/Max:%d/%d/%d %t\n", line.Prop.Name, line.ScoreMax, line.PropParType, propScoreMin, targetPropScore, propScoreMax, line.LvlScale)
 		if !d2items.CheckIETypes(g.TypeTree, item.Types, line.Itypes, line.Etypes) {
-			//log.Print("<Reroll T>")
 			continue
 		}
 		if item.Lvl < line.MinLvl {
-			//log.Print("<Reroll L>")
 			continue
 		}
 		if checkGroups(line.Group, item) {
-			line = nil
 			continue
 		}
 		if line.ScoreLimit == 0 {
-			//fmt.Printf("ScoreLimit == 0 on %s\n", line.Prop.Name)
 			continue // alpha-13 Special case where we want to generate a score but not ever generate the prop
 		}
 
@@ -211,6 +215,21 @@ DoneRolling:
 			//log.Printf("rollPropScoreLine Limiting %s:%s Min/Tgt/Max %d/%d/%d to Min/Max/Cap (%d/%d/%d)", item.Name, line.Prop.Name, propScoreMin, targetPropScore, propScoreMax, scoreMin, scoreMax, scoreCap)
 			//}
 			scoreMax = util.MinInt(scoreMax, scoreCap)
+		}
+
+		if g.opts.PropScoreMultiplier < 4 { // alpha-17, add level based prop scaling
+			lMax := line.MaxLvl
+			if lMax == 0 {
+				lMax = util.MaxInt(70, line.MinLvl)
+			}
+			// Scale item level up to
+			scaledItemLevel := util.MinInt(util.Round64(float64(item.Lvl)*(1.2+0.1*(g.opts.PropScoreMultiplier-1))), lMax)
+			scoreCap := util.Interpolate(scaledItemLevel, scaledItemLevel, line.MinLvl, lMax, scoreMin, scoreMax)
+			if scoreCap > scoreMax {
+				log.Panicf("scoreCap %d > scoreMax %d", scoreCap, scoreMax) // assertion
+			}
+			scoreMax = util.MinInt(scoreMax, scoreCap)
+
 		}
 
 		switch {
