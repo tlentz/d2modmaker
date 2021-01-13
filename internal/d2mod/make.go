@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tlentz/d2modmaker/internal/d2mod/propdebug"
+
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
@@ -125,6 +127,9 @@ func Make(defaultOutDir string, cfg config.Data) {
 	}
 	if cfg.PerfectProps {
 		perfectprops.Run(&d2files)
+	}
+	if cfg.PropDebug {
+		propdebug.Run(d2files)
 	}
 	d2files.Write()
 	writeSeed(cfg)

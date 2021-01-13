@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-16",
+  Version: "v0.5.2-alpha-17",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -42,6 +42,7 @@ const defaultCfg = {
   PerfectProps: false,
   UseOSkills: true,
   SafeUnsocket: true,
+  PropDebug: false,
   EnterToExit: false,
   RandomOptions: {
     Randomize: false,

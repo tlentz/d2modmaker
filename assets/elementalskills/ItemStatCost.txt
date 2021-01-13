@@ -1,7 +1,7 @@
 Stat	ID	Send Other	Signed	Send Bits	Send Param Bits	UpdateAnimRate	Saved	CSvSigned	CSvBits	CSvParam	fCallback	fMin	MinAccr	Encode	Add	Multiply	Divide	ValShift	1.09-Save Bits	1.09-Save Add	Save Bits	Save Add	Save Param Bits	keepzero	op	op param	op base	op stat1	op stat2	op stat3	direct	maxstat	itemspecific	damagerelated	itemevent1	itemeventfunc1	itemevent2	itemeventfunc2	descpriority	descfunc	descval	descstrpos	descstrneg	descstr2	dgrp	dgrpfunc	dgrpval	dgrpstrpos	dgrpstrneg	dgrpstr2	stuff	*eol
-item_elemskill	126		1	3	3						1				76	1024	1024		4	0	3	0	3																													0
-text_coldskill	360		1	3	3						1				76	1024	1024		4	0	3	0	3																157	1	1	ModStr3iCold	ModStr3iCold									0
-text_fireskill	361		1	3	3						1				76	1024	1024		4	0	3	0	3																157	1	1	ModStr3iFire	ModStr3iFire									0
-text_lightningskill	362		1	3	3						1				76	1024	1024		4	0	3	0	3																157	1	1	ModStr3iLightning	ModStr3iLightning									0
-text_magicskill	363		1	3	3						1				76	1024	1024		4	0	3	0	3																157	1	1	ModStr3iMagic	ModStr3iMagic									0
-text_poisonskill	364		1	3	3						1				76	1024	1024		4	0	3	0	3																157	1	1	ModStr3iPoison	ModStr3iPoison									0
+item_elemskill	126		1	3	3						1				76	1024	1024		4	0	3	2	3																													0
+text_coldskill	360		1	3	3						1				76	1024	1024		4	0	3	2	3																157	1	1	ModStr3iCold	ModStr3iCold									0
+text_fireskill	361		1	3	3						1				76	1024	1024		4	0	3	2	3																157	1	1	ModStr3i	ModStr3i									0
+text_lightningskill	362		1	3	3						1				76	1024	1024		4	0	3	2	3																157	1	1	ModStr3iLightning	ModStr3iLightning									0
+text_magicskill	363		1	3	3						1				76	1024	1024		4	0	3	2	3																157	1	1	ModStr3iMagic	ModStr3iMagic									0
+text_poisonskill	364		1	3	3						1				76	1024	1024		4	0	3	2	3																157	1	1	ModStr3iPoison	ModStr3iPoison									0

@@ -19,6 +19,7 @@ type Line struct {
 	ScoreMax     int      // Score for Prop.Max, Prop.Par, or Prop.Min * Prop.Max:  type dependent
 	ScoreLimit   int      // Specifies a % limit which generated item cannot exceed for this prop
 	MinLvl       int      // Minimum level of item this prop can appear on
+	MaxLvl       int      // Maximum level of item this prop can appear on
 	LvlScale     bool     // scale this item for 1/1 at level 50
 	NoTypeOvr    bool     // Don't allow type overriding for this prop
 	Itypes       []string // Include Types  If non-empty item must be one of these types or a child
@@ -61,6 +62,7 @@ func NewLine(Row []string, RowIndex int) *Line {
 		l.ScoreLimit = scoreLimit
 	}
 	l.MinLvl, _ = strconv.Atoi(Row[MinLvl])
+	l.MaxLvl, _ = strconv.Atoi(Row[MaxLvl])
 	l.LvlScale = (Row[LvlScale] == "Y")
 	l.NoTypeOvr = (Row[NoTypeOver] == "Y")
 	for colIdx := Itype1; colIdx < Itype6; colIdx++ {
