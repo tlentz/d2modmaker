@@ -1,14 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
     user-select: none;
     box-sizing: border-box;
     overflow-y: 0;
 }
 
-html,
-body {
+body,
+.content-container {
     margin: 0;
     padding: 0;
-
+    height: 100vh;
+    width: 100vw;
 
     .segmented-control {
         display: flex;

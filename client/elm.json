@@ -7,6 +7,7 @@
     "dependencies": {
         "direct": {
             "PaackEng/elm-ui-dialog": "1.0.0",
+            "afidegnum/elm-tailwind": "1.0.0",
             "avh4/elm-color": "1.0.0",
             "bartavelle/json-helpers": "2.0.2",
             "elm/browser": "1.0.2",

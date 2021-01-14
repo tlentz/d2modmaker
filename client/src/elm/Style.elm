@@ -10,9 +10,9 @@ style k v =
         |> Element.htmlAttribute
 
 
-backgroundTheme : Color
+backgroundTheme : String
 backgroundTheme =
-    Element.rgb255 247 247 248
+    "rgb(247, 247, 248)"
 
 
 borderTheme : Color
