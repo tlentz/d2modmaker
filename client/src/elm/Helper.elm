@@ -1,4 +1,4 @@
-module Helper exposing (colorThemeToString, ifThenElse, isMobile, mkCmd, mouseDownPreventDefault, onRightClick, return, style, when, whenAttr, whenJust)
+module Helper exposing (ifThenElse, isMobile, mkCmd, mouseDownPreventDefault, onRightClick, return, style, when, whenAttr, whenJust)
 
 import Element exposing (Attribute, Element)
 import Html
@@ -9,8 +9,7 @@ import Maybe.Extra
 import Task
 import Types
     exposing
-        ( ColorTheme(..)
-        , Msg(..)
+        ( Msg(..)
         , Screen
         )
 
@@ -72,16 +71,6 @@ ifThenElse bool a b =
 isMobile : Screen -> Bool
 isMobile { width } =
     width < 450
-
-
-colorThemeToString : ColorTheme -> String
-colorThemeToString colorTheme =
-    case colorTheme of
-        Light ->
-            "Light"
-
-        Dark ->
-            "Dark"
 
 
 mouseDownPreventDefault : Msg -> Html.Attribute Msg

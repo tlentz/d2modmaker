@@ -1,7 +1,7 @@
 module Rest exposing (postApiUpdateCanRank)
 
 import Http
-import Types exposing (ColorTheme(..), Msg(..))
+import Types exposing (Msg(..))
 
 
 postApiUpdateCanRank : Cmd Msg

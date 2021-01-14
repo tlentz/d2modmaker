@@ -1,12 +1,12 @@
 {
-  "name": "elm-skeleton",
-  "description": "Skeleton Elm project with all basic necessities for any Elm project",
+  "name": "elm-d2mm",
+  "description": "Allows a user to configure their Diablo 2 game client.",
   "version": "1.0.0",
   "license": "BSD3",
   "author": "Mark Loevenstein",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Markloev/Halo-Tier-List"
+    "url": "https://github.com/tlentz/d2modmaker"
   },
   "scripts": {
     "build": "set NODE_ENV=production && webpack",

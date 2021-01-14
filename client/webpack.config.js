@@ -83,13 +83,13 @@ module.exports = {
       { from: 'assets/images', to: 'images' }
     ]),
     new HtmlWebpackPlugin({
-      inject: true | 'body',
+      inject: 'body',
       filename: 'index.html',
       template: require('html-webpack-template'),
       appMountId: 'main',
       mobile: true,
       lang: 'en-US',
-      title: 'Elm-Skeleton',
+      title: 'Elm-D2MM',
       links: [],
       xhtml: true,
       hash: false,

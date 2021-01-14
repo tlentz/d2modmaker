@@ -1,4 +1,4 @@
-# Elm-Skeleton
+# Elm-D2MM
 
 ## Setup
 
