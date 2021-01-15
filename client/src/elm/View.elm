@@ -1,17 +1,20 @@
 module View exposing (view)
 
 import Color
-import Html exposing (Html, div, text, input)
-import Html.Attributes as Attrs exposing (checked, class, classList, title, type_, style)
-import Html.Events exposing (onClick, onCheck)
+import Dict
+import Html exposing (Html, div, text, input, label)
+import Html.Attributes as Attrs exposing (checked, class, classList, title, type_, style, value)
+import Html.Events exposing (onClick, onCheck, onInput)
 import List
 import Material.Icons exposing (help)
 import Material.Icons.Types exposing (Coloring(..))
 import Tailwind exposing (tailwind, withClasses)
-import Tailwind.Classes exposing (content_center, justify_center, flex, flex_col, m_5, m_10, mb_10, m_24, p_5, text_left)
+import Tailwind.Classes exposing (content_center, justify_center, items_center, flex, flex_col, m_5, m_10, m_1, mb_10, m_24, p_5, text_left)
 import Types
     exposing
-        ( AdvancedCheckboxOptions
+        ( AdvancedCheckboxOption
+        , AdvancedNumberOption
+        , AdvancedCheckboxOptions
         , AdvancedIntMsg(..)
         , BasicOption(..)
         , CheckboxMsg(..)
@@ -209,17 +212,42 @@ other : AdvancedCheckboxOptions -> List (Html Msg)
 other advancedOptions =
     [ div [ tailwind [ text_left ] ] [ text "Other Awesome Options" ]
     , div [ tailwind [ m_10, p_5, flex_col ] ] 
-        [ div [ tailwind [ m_5 ] ]
-            [ 
-                -- input [ type_ "checkbox", onClick <| SetCheckedState << SetMeleeSplash advancedOptions, checked advancedOptions.meleeSplash.isChecked ] []
-                -- Input.checkbox []
-                -- { onChange = SetCheckedState << SetMeleeSplash advancedOptions
-                -- , icon = Input.defaultCheckbox
-                -- , checked = advancedOptions.meleeSplash.isChecked
-                -- , label = inputLabel "MeleeSplash" advancedOptions.meleeSplash.tooltip
-                -- }
+        [ 
+            -- div [ tailwind [ m_5 ] ]
+            -- [ div [ tailwind [ flex, items_center ] ] 
+            --     <| checkboxInput "MeleeSplash" advancedOptions.meleeSplash (SetMeleeSplash advancedOptions)
+            -- ]
+        div [ tailwind [ m_5 ] ]
+            [ div [ tailwind [ flex, items_center ] ] 
+                (List.map
+                    (\checkboxes ->
+                        let
+                            value =
+                                Dict.get checkboxes advancedOptions.test
+                            
+                            ( checkboxValue, checkboxTooltip ) =
+                                case value of
+                                    Just v ->
+                                        ( v.isChecked, v.tooltip )
+
+                                    Nothing ->
+                                        ( False, "" )
+                        in
+                        label [ class "checkbox" ]
+                            [ input
+                                [ type_ "checkbox"
+                                , checked checkboxValue
+                                , onClick <| (SetCheckedState <| ToggleCheckbox advancedOptions checkboxes)
+                                ]
+                                []
+                            , text checkboxes
+                            ]
+                    )
+                    (Dict.keys
+                        advancedOptions.test
+                    )
+                )
             ]
-    --     , column [ spacing 15 ] <|
     --         [ Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "1", htmlAttribute <| Attrs.max "30" ]
     --             { onChange = SetAdvancedInt << SetMonsterDensity advancedOptions << Maybe.withDefault 0 << String.toInt
     --             , text = String.fromFloat advancedOptions.monsterDensity.value
@@ -342,13 +370,28 @@ other advancedOptions =
 --     ]
 
 
--- inputLabel : String -> String -> Input.Label Msg
--- inputLabel label tooltip =
---     Input.labelRight [ centerY ] <|
---         column [ onRight
---             (Element.html <| div [ title tooltip, style "margin-left" "5px", style "cursor" "pointer" ] [ help 20 Inherit ]
---             ) ] <| [ text label ]
+checkboxInput : String -> AdvancedCheckboxOption -> CheckboxMsg -> List (Html Msg)
+checkboxInput textLabel option msg =
+    [ input [ type_ "checkbox", onClick <| SetCheckedState <| msg, checked option.isChecked ] []
+    , label [ tailwind [ m_1 ] ] [ text textLabel ]
+    , label [ title option.tooltip, style "cursor" "pointer" ] [ help 20 Inherit ]
+    ]
 
+
+-- Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "1", htmlAttribute <| Attrs.max "30" ]
+    --             { onChange = SetAdvancedInt << SetMonsterDensity advancedOptions << Maybe.withDefault 0 << String.toInt
+    --             , text = String.fromFloat advancedOptions.monsterDensity.value
+    --             , placeholder = Just <| Input.placeholder [] <| text "0"
+    --             , label = inputLabel "MonsterDensity" advancedOptions.monsterDensity.tooltip
+    --             }
+textboxInput : String -> String -> String -> AdvancedNumberOption -> AdvancedIntMsg -> List (Html Msg)
+textboxInput textLabel minValue maxValue option msg =
+    [ 
+        -- input [ type_ "number", onInput <| SetAdvancedInt << (msg << Maybe.withDefault 0 << String.toInt), value <| String.fromFloat option.value, Attrs.min minValue, Attrs.max maxValue ] []
+    label [ tailwind [ m_1 ] ] [ text textLabel ]
+    , label [ title option.tooltip, style "cursor" "pointer" ] [ help 20 Inherit ]
+    ]
+-- onInput <| SetAdvancedInt << SetMonsterDensity advancedOptions << Maybe.withDefault 0 << String.toInt
 
 segmentedItem : String -> Maybe a -> a -> Msg -> Html Msg
 segmentedItem textLabel original new msg =

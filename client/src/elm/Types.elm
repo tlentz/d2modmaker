@@ -1,6 +1,7 @@
-module Types exposing (AdvancedIntMsg(..), AdvancedCheckboxOptions, BasicOption(..), initMinProps, CheckboxMsg(..), Model, Msg(..), Mode(..), initAdvancedCheckboxOptions, ItemGenerationMode(..), Route(..), Screen, View(..), emptyModel)
+module Types exposing (AdvancedIntMsg(..), AdvancedCheckboxOption, AdvancedCheckboxOptions, AdvancedNumberOption, BasicOption(..), initMinProps, CheckboxMsg(..), CheckboxName, Model, Msg(..), Mode(..), initAdvancedCheckboxOptions, ItemGenerationMode(..), Route(..), Screen, View(..), emptyModel)
 
 import Browser.Dom as Dom
+import Dict
 import Http
 
 
@@ -36,24 +37,25 @@ type Msg
     | SaveConfig
 
 type CheckboxMsg
-    = SetRandomize AdvancedCheckboxOptions Bool
-    | SetUseSeed AdvancedCheckboxOptions Bool
+    = ToggleCheckbox AdvancedCheckboxOptions CheckboxName
+    | SetRandomize AdvancedCheckboxOptions
+    | SetUseSeed AdvancedCheckboxOptions
     | SetSeed AdvancedCheckboxOptions Int
-    | SetUseOSkills AdvancedCheckboxOptions Bool
-    | SetPerfectProps AdvancedCheckboxOptions Bool
-    | SetAllowDupProps AdvancedCheckboxOptions Bool
-    | SetIsBalanced AdvancedCheckboxOptions Bool
-    | SetBalancedPropCount AdvancedCheckboxOptions Bool
-    | SetMeleeSplash AdvancedCheckboxOptions Bool
-    | SetEnableTownSkills AdvancedCheckboxOptions Bool
-    | SetStartWithCube AdvancedCheckboxOptions Bool
-    | SetCowzzz AdvancedCheckboxOptions Bool
-    | SetIncreaseStackSizes AdvancedCheckboxOptions Bool
-    | SetRemoveLevelRequirements AdvancedCheckboxOptions Bool
-    | SetRemoveAttRequirements AdvancedCheckboxOptions Bool
-    | SetRemoveUniqueCharmLimit AdvancedCheckboxOptions Bool
-    | SetNoDropZero AdvancedCheckboxOptions Bool
-    | SetQuestDrops AdvancedCheckboxOptions Bool
+    | SetUseOSkills AdvancedCheckboxOptions
+    | SetPerfectProps AdvancedCheckboxOptions
+    | SetAllowDupProps AdvancedCheckboxOptions
+    | SetIsBalanced AdvancedCheckboxOptions
+    | SetBalancedPropCount AdvancedCheckboxOptions
+    | SetMeleeSplash AdvancedCheckboxOptions
+    | SetEnableTownSkills AdvancedCheckboxOptions
+    | SetStartWithCube AdvancedCheckboxOptions
+    | SetCowzzz AdvancedCheckboxOptions
+    | SetIncreaseStackSizes AdvancedCheckboxOptions
+    | SetRemoveLevelRequirements AdvancedCheckboxOptions
+    | SetRemoveAttRequirements AdvancedCheckboxOptions
+    | SetRemoveUniqueCharmLimit AdvancedCheckboxOptions
+    | SetNoDropZero AdvancedCheckboxOptions
+    | SetQuestDrops AdvancedCheckboxOptions
 
 type AdvancedIntMsg
     = SetMinProps AdvancedCheckboxOptions Int
@@ -95,8 +97,13 @@ type BasicOption
     | Zomg
 
 
+type alias CheckboxName =
+    String
+
+
 type alias AdvancedCheckboxOptions =
-    { randomize : AdvancedCheckboxOption
+    { test : Dict.Dict CheckboxName AdvancedCheckboxOption
+    , randomize : AdvancedCheckboxOption
     , useSeed : AdvancedCheckboxOption
     , seed : Int
     , useOSkills : AdvancedCheckboxOption
@@ -142,7 +149,9 @@ type alias AdvancedNumberOption =
 
 initAdvancedCheckboxOptions : AdvancedCheckboxOptions
 initAdvancedCheckboxOptions =
-    { randomize = initRandomize
+    { test = Dict.fromList
+        [ ( "Test", initRandomize ) ]
+    , randomize = initRandomize
     , useSeed = initUseSeed
     , seed = 1
     , useOSkills = initUseOSkills
