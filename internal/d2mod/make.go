@@ -107,6 +107,9 @@ func Make(defaultOutDir string, cfg config.Data) {
 	}
 	if cfg.GeneratorOptions.Generate {
 		fmt.Println("*** Running Generator ***")
+		if cfg.RandomOptions.Randomize {
+			fmt.Println("Warning: Randomizer is enabled but ignored since Generator is on.")
+		}
 		g := generator.NewGenerator(&d2files, &cfg.GeneratorOptions, s.TypeTree, s.PSI, s.Statistics)
 		g.Run()
 	} else {
@@ -116,7 +119,7 @@ func Make(defaultOutDir string, cfg config.Data) {
 		}
 	}
 	if cfg.RemoveLevelRequirements {
-		reqs.RemoveLevelRequirements(d2files)
+		reqs.RemoveLevelRequirements(d2files) // Must be done after Scorer/Generator due to alteration of Lvl
 	}
 
 	if cfg.RemoveAttRequirements {
