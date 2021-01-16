@@ -9,7 +9,7 @@ import List
 import Material.Icons exposing (help)
 import Material.Icons.Types exposing (Coloring(..))
 import Tailwind exposing (tailwind, withClasses)
-import Tailwind.Classes exposing (content_center, justify_center, items_center, flex, flex_col, m_5, m_10, m_1, mb_10, m_24, p_5, text_left)
+import Tailwind.Classes exposing (content_center, justify_center, justify_start, items_center, mb_2, mt_2, pl_1, pr_1, p_3, pl_2, pr_2, pb_1, pt_1, border, border_black, rounded, w_16, w_48, text_center, w_1over4, text_justify, font_bold, text_2xl, flex, inline_flex, flex_col, flex_row, m_5, m_10, m_2, m_1, mb_10, m_24, p_1, p_2, p_2, text_left)
 import Types
     exposing
         ( AdvancedCheckboxOption
@@ -32,18 +32,6 @@ import Style as Style
 view : Model -> Html Msg
 view model =
     let
-        errorTxt =
-            case model.errorMessage of
-                Just txt ->
-                    [ text txt ]
-                        |> div []
-
-                Nothing ->
-                    div [] []
-        
-        mode =
-            model.mode
-        
         getCurrentMode newMode =
             case newMode of
                 Just m ->
@@ -64,13 +52,13 @@ view model =
                     ]
 
         header =
-            [ getCurrentMode mode
+            [ getCurrentMode model.mode
                 |> div [ tailwind <| withClasses [ "segmented-control" ] <| [ mb_10 ] ]
             ]
                 |> div [ tailwind [ flex, justify_center ] ]
 
         body =
-            case mode of
+            case model.mode of
                 Just m ->
                     case m of
                         Basic o ->
@@ -91,12 +79,11 @@ view model =
                                 ]
                         
                         Advanced o ->
-                            [ 
-                            --     randomization o
-                            other o
-                            -- , qualityOfLife o
-                            -- , dropRates o
-                            , [ div [ tailwind [ flex, justify_center ] ] <|
+                            [ randomization o
+                            , other o
+                            , qualityOfLife o
+                            , dropRates o
+                            , [ div [ tailwind [ flex, justify_center, mt_2 ] ] <|
                                     [ submitButton "Save Config" False SaveConfig
                                     ]
                                 ]
@@ -108,290 +95,183 @@ view model =
                 Nothing ->
                     div [] []
     in
-    div
-        [ style "height" "100%"
-        , style "width" "100%"
-        , style "padding" "25px"
-        , style "background-color" Style.backgroundTheme
-        , class "content-container"
-        ]
+    div [ class "content-container" ]
         [ header
         , body
         ]
 
 
--- randomization : AdvancedCheckboxOptions -> List (Element Msg)
--- randomization advancedOptions =
---     let
---         seed =
---             if advancedOptions.useSeed.isChecked then
---                 column [] <| 
---                     [ text <| String.fromInt advancedOptions.seed ]
---             else
---                 Element.none
---     in
---     [ row [ heading 1, alignLeft ] <| [ h2 [] <| text "Randomization" ]
---     , row [ spacing 75, paddingXY 15 0 ] 
---         [ column [ spacing 15 ] <|
---             [ 
---         --         Input.checkbox []
---         --         { onChange = SetCheckedState << SetRandomize advancedOptions
---         --         , icon = Input.defaultCheckbox
---         --         , checked = advancedOptions.randomize.isChecked
---         --         , label = inputLabel "Randomize" advancedOptions.randomize.tooltip
---         --         }
---         --     , Input.checkbox []
---         --         { onChange = SetCheckedState << SetAllowDupProps advancedOptions
---         --         , icon = Input.defaultCheckbox
---         --         , checked = advancedOptions.allowDupProps.isChecked
---         --         , label = inputLabel "AllowDupProps" advancedOptions.allowDupProps.tooltip
---         --         }
---         --     , Input.checkbox []
---         --         { onChange = SetCheckedState << SetBalancedPropCount advancedOptions
---         --         , icon = Input.defaultCheckbox
---         --         , checked = advancedOptions.balancedPropCount.isChecked
---         --         , label = inputLabel "BalancedPropCount" advancedOptions.balancedPropCount.tooltip
---         --         }
---         --     ]
---         -- , column [ spacing 15, alignTop ] <|
---         --     [ Input.checkbox []
---         --         { onChange = SetCheckedState << SetUseOSkills advancedOptions
---         --         , icon = Input.defaultCheckbox
---         --         , checked = advancedOptions.useOSkills.isChecked
---         --         , label = inputLabel "UseOSkills" advancedOptions.useOSkills.tooltip
---         --         }
---         --     , Input.checkbox []
---         --         { onChange = SetCheckedState << SetPerfectProps advancedOptions
---         --         , icon = Input.defaultCheckbox
---         --         , checked = advancedOptions.perfectProps.isChecked
---         --         , label = inputLabel "PerfectProps" advancedOptions.perfectProps.tooltip
---         --         }                    
---         --     ]
---         -- , column [ spacing 15, alignTop ] <|
---         --     [ row [ spacing 25 ] 
---         --         [ column [] 
---         --             [ Input.checkbox []
---         --                 { onChange = SetCheckedState << SetUseSeed advancedOptions
---         --                 , icon = Input.defaultCheckbox
---         --                 , checked = advancedOptions.useSeed.isChecked
---         --                 , label = inputLabel "UseSeed" advancedOptions.useSeed.tooltip
---         --                 }
---         --             ]
---         --         , seed
---         --         ]
---         --     , Input.checkbox []
---         --         { onChange = SetCheckedState << SetIsBalanced advancedOptions
---         --         , icon = Input.defaultCheckbox
---         --         , checked = advancedOptions.isBalanced.isChecked
---         --         , label = inputLabel "IsBalanced" advancedOptions.useOSkills.tooltip
---         --         }                       
---         --     ]
---         ]
---     , row [ spacing 75, paddingXY 15 0 ]
---         [ column [ spacing 15 ] <|
---             [ Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "0", htmlAttribute <| Attrs.max "20" ]
---                 { onChange = SetAdvancedInt << SetMinProps advancedOptions << Maybe.withDefault 0 << String.toInt
---                 , text = String.fromFloat advancedOptions.minProps.value
---                 , placeholder = Just <| Input.placeholder [] <| text "0"
---                 , label = inputLabel "MinProps" advancedOptions.minProps.tooltip
---                 }
---             ]
---         , column [ spacing 15 ] <|
---             [ Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "0", htmlAttribute <| Attrs.max "20" ]
---                 { onChange = SetAdvancedInt << SetMaxProps advancedOptions << Maybe.withDefault 0 << String.toInt
---                 , text = String.fromFloat advancedOptions.maxProps.value
---                 , placeholder = Just <| Input.placeholder [] <| text "0"
---                 , label = inputLabel "MaxProps" advancedOptions.maxProps.tooltip
---                 }
---             ]
---         ]
---     ]
+randomization : AdvancedCheckboxOptions -> List (Html Msg)
+randomization advancedOptions =
+    let
+        value =
+            Dict.get "UseSeed" advancedOptions.checkboxes
+        
+        seed =
+            case value of
+                Just v ->
+                    if v.isChecked then
+                        div [ tailwind [ flex, items_center, p_1 ] ] [ text <| "Seed: " ++ String.fromInt advancedOptions.seed ]
+                    
+                    else
+                        div [] []
+
+                Nothing ->
+                    div [] []
+    in
+    [ div [ tailwind [ flex, justify_center ] ]
+        [ div [ tailwind [ flex_col ], style "min-width" "600px" ]
+            [ div [ tailwind [ text_left, font_bold, text_2xl ] ] [ text "Randomization" ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ] 
+                [ div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "Randomize" advancedOptions
+                    , checkboxInput "AllowDupProps" advancedOptions
+                    , checkboxInput "UseSeed" advancedOptions
+                    ]
+                , div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "UseOSkills" advancedOptions
+                    , checkboxInput "PerfectProps" advancedOptions
+                    , seed
+                    ]
+                , div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "BalancedPropCount" advancedOptions
+                    , checkboxInput "IsBalanced" advancedOptions
+                    ]
+                ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ]
+                [ numberInput "MinProps" advancedOptions
+                , numberInput "MaxProps" advancedOptions
+                ]
+            ]
+        ]
+    ]
 
 
 other : AdvancedCheckboxOptions -> List (Html Msg)
 other advancedOptions =
-    [ div [ tailwind [ text_left ] ] [ text "Other Awesome Options" ]
-    , div [ tailwind [ m_10, p_5, flex_col ] ] 
-        [ 
-            -- div [ tailwind [ m_5 ] ]
-            -- [ div [ tailwind [ flex, items_center ] ] 
-            --     <| checkboxInput "MeleeSplash" advancedOptions.meleeSplash (SetMeleeSplash advancedOptions)
-            -- ]
-        div [ tailwind [ m_5 ] ]
-            [ div [ tailwind [ flex, items_center ] ] 
-                (List.map
-                    (\checkboxes ->
-                        let
-                            value =
-                                Dict.get checkboxes advancedOptions.test
-                            
-                            ( checkboxValue, checkboxTooltip ) =
-                                case value of
-                                    Just v ->
-                                        ( v.isChecked, v.tooltip )
-
-                                    Nothing ->
-                                        ( False, "" )
-                        in
-                        label [ class "checkbox" ]
-                            [ input
-                                [ type_ "checkbox"
-                                , checked checkboxValue
-                                , onClick <| (SetCheckedState <| ToggleCheckbox advancedOptions checkboxes)
-                                ]
-                                []
-                            , text checkboxes
-                            ]
-                    )
-                    (Dict.keys
-                        advancedOptions.test
-                    )
-                )
+    [ div [ tailwind [ flex, justify_center ] ]
+        [ div [ tailwind [ flex_col ], style "min-width" "600px" ]
+            [ div [ tailwind [ text_left, font_bold, text_2xl ] ] [ text "Other Awesome Options" ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ] 
+                [ checkboxInput "MeleeSplash" advancedOptions
+                ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ]
+                [ numberInput "MonsterDensity" advancedOptions
+                ]
+            , div [ tailwind <| withClasses [ "segmented-control"] <| [ p_3, flex, mb_2 ] ] <|
+                [ segmentedItem "None" (Just None) advancedOptions.itemGenerationMode (SetItemGenerationMode None)
+                , segmentedItem "Randomize" (Just Randomize) advancedOptions.itemGenerationMode (SetItemGenerationMode Randomize)
+                , segmentedItem "Generate" (Just Generate) advancedOptions.itemGenerationMode (SetItemGenerationMode Generate)
+                ]
             ]
-    --         [ Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "1", htmlAttribute <| Attrs.max "30" ]
-    --             { onChange = SetAdvancedInt << SetMonsterDensity advancedOptions << Maybe.withDefault 0 << String.toInt
-    --             , text = String.fromFloat advancedOptions.monsterDensity.value
-    --             , placeholder = Just <| Input.placeholder [] <| text "0"
-    --             , label = inputLabel "MonsterDensity" advancedOptions.monsterDensity.tooltip
-    --             }
-    --         ]
         ]
-    -- , row [ spacing 75, paddingXY 15 0 ]
-    --     [ column [ spacing 15 ] <|
-    --         [ row [] 
-    --             [ Element.html <|
-    --                 div [ class "segmented-control", style "margin-right" "5px" ] <|
-    --                     [ segmentedItem "None" (Just None) advancedOptions.itemGenerationMode (SetItemGenerationMode None)
-    --                     , segmentedItem "Randomize" (Just Randomize) advancedOptions.itemGenerationMode (SetItemGenerationMode Randomize)
-    --                     , segmentedItem "Generate" (Just Generate) advancedOptions.itemGenerationMode (SetItemGenerationMode Generate)
-    --                     ]
-    --             , el [] <| text "ItemGenerationMode"
-    --             ]
-    --         ]
-    --     ]
     ]
 
 
--- qualityOfLife : AdvancedCheckboxOptions -> List (Element Msg)
--- qualityOfLife advancedOptions =
---     [ row [ heading 1, alignLeft ] <| [ h2 [] <| text "Quality of Life" ]
---     , row [ spacing 75, paddingXY 15 0 ] 
---         [ column [ spacing 15 ] <|
---             [ Input.checkbox []
---                 { onChange = SetCheckedState << SetEnableTownSkills advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.enableTownSkills.isChecked
---                 , label = inputLabel "EnableTownSkills" advancedOptions.enableTownSkills.tooltip
---                 }
---             , Input.checkbox []
---                 { onChange = SetCheckedState << SetIncreaseStackSizes advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.increaseStackSizes.isChecked
---                 , label = inputLabel "IncreaseStackSizes" advancedOptions.increaseStackSizes.tooltip
---                 }
---             , Input.checkbox []
---                 { onChange = SetCheckedState << SetRemoveUniqueCharmLimit advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.removeUniqueCharmLimit.isChecked
---                 , label = inputLabel "RemoveUniqueCharmLimit" advancedOptions.removeUniqueCharmLimit.tooltip
---                 }
---             ]
---         , column [ spacing 15, alignTop ] <|
---             [ Input.checkbox []
---                 { onChange = SetCheckedState << SetStartWithCube advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.startWithCube.isChecked
---                 , label = inputLabel "StartWithCube" advancedOptions.startWithCube.tooltip
---                 }
---             , Input.checkbox []
---                 { onChange = SetCheckedState << SetRemoveAttRequirements advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.removeAttRequirements.isChecked
---                 , label = inputLabel "RemoveAttRequirements" advancedOptions.removeAttRequirements.tooltip
---                 }                               
---             ]
---         , column [ spacing 15, alignTop ] <|
---             [ Input.checkbox []
---                 { onChange = SetCheckedState << SetCowzzz advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.cowzzz.isChecked
---                 , label = inputLabel "Cowzzz" advancedOptions.cowzzz.tooltip
---                 }
---             , Input.checkbox []
---                 { onChange = SetCheckedState << SetRemoveLevelRequirements advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.removeLevelRequirements.isChecked
---                 , label = inputLabel "RemoveLevelRequirements" advancedOptions.removeLevelRequirements.tooltip
---                 }                         
---             ]
---         ]
---     ]
-
-
--- dropRates : AdvancedCheckboxOptions -> List (Element Msg)
--- dropRates advancedOptions =
---     [ row [ heading 1, alignLeft ] <| [ h2 [] <| text "Drop Rates" ]
---     , row [ spacing 75, paddingXY 15 0 ] 
---         [ column [ spacing 15 ] <|
---             [ Input.checkbox []
---                 { onChange = SetCheckedState << SetNoDropZero advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.noDropZero.isChecked
---                 , label = inputLabel "NoDropZero" advancedOptions.noDropZero.tooltip
---                 }
---             ]
---         , column [ spacing 15, alignTop ] <|
---             [ Input.checkbox []
---                 { onChange = SetCheckedState << SetQuestDrops advancedOptions
---                 , icon = Input.defaultCheckbox
---                 , checked = advancedOptions.questDrops.isChecked
---                 , label = inputLabel "QuestDrops" advancedOptions.questDrops.tooltip
---                 }                            
---             ]
---         ]
---     , row [ spacing 75, paddingXY 15 0 ]
---         [ column [ spacing 15 ] <|
---             [ Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "1", htmlAttribute <| Attrs.max "100" ]
---                 { onChange = SetAdvancedInt << SetUniqueItemDropRate advancedOptions << Maybe.withDefault 0 << String.toInt
---                 , text = String.fromFloat advancedOptions.uniqueItemDropRate.value
---                 , placeholder = Just <| Input.placeholder [] <| text "0"
---                 , label = inputLabel "UniqueItemDropRate" advancedOptions.uniqueItemDropRate.tooltip
---                 }
---             ]
---         , column [ spacing 15 ] <|
---             [ Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "1", htmlAttribute <| Attrs.max "100" ]
---                 { onChange = SetAdvancedInt << SetRuneDropRate advancedOptions << Maybe.withDefault 0 << String.toInt
---                 , text = String.fromFloat advancedOptions.runeDropRate.value
---                 , placeholder = Just <| Input.placeholder [] <| text "0"
---                 , label = inputLabel "RuneDropRate" advancedOptions.runeDropRate.tooltip
---                 }
---             ]
---         ]
---     ]
-
-
-checkboxInput : String -> AdvancedCheckboxOption -> CheckboxMsg -> List (Html Msg)
-checkboxInput textLabel option msg =
-    [ input [ type_ "checkbox", onClick <| SetCheckedState <| msg, checked option.isChecked ] []
-    , label [ tailwind [ m_1 ] ] [ text textLabel ]
-    , label [ title option.tooltip, style "cursor" "pointer" ] [ help 20 Inherit ]
+qualityOfLife : AdvancedCheckboxOptions -> List (Html Msg)
+qualityOfLife advancedOptions =
+    [ div [ tailwind [ flex, justify_center ] ]
+        [ div [ tailwind [ flex_col ], style "min-width" "600px" ]
+            [ div [ tailwind [ text_left, font_bold, text_2xl ] ] [ text "Quality of Life" ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ] 
+                [ div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "EnableTownSkills" advancedOptions
+                    , checkboxInput "IncreaseStackSizes" advancedOptions
+                    , checkboxInput "RemoveUniqueCharmLimit" advancedOptions
+                    , checkboxInput "RemoveLevelRequirements" advancedOptions
+                    ]
+                , div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "StartWithCube" advancedOptions
+                    , checkboxInput "RemoveAttRequirements" advancedOptions
+                    , checkboxInput "Cowzzz" advancedOptions
+                    ]
+                ]
+            ]
+        ]
     ]
 
 
--- Input.text [ padding 3, width <| minimum 60 fill, htmlAttribute <| type_ "number", htmlAttribute <| Attrs.min "1", htmlAttribute <| Attrs.max "30" ]
-    --             { onChange = SetAdvancedInt << SetMonsterDensity advancedOptions << Maybe.withDefault 0 << String.toInt
-    --             , text = String.fromFloat advancedOptions.monsterDensity.value
-    --             , placeholder = Just <| Input.placeholder [] <| text "0"
-    --             , label = inputLabel "MonsterDensity" advancedOptions.monsterDensity.tooltip
-    --             }
-textboxInput : String -> String -> String -> AdvancedNumberOption -> AdvancedIntMsg -> List (Html Msg)
-textboxInput textLabel minValue maxValue option msg =
-    [ 
-        -- input [ type_ "number", onInput <| SetAdvancedInt << (msg << Maybe.withDefault 0 << String.toInt), value <| String.fromFloat option.value, Attrs.min minValue, Attrs.max maxValue ] []
-    label [ tailwind [ m_1 ] ] [ text textLabel ]
-    , label [ title option.tooltip, style "cursor" "pointer" ] [ help 20 Inherit ]
+dropRates : AdvancedCheckboxOptions -> List (Html Msg)
+dropRates advancedOptions =
+    [ div [ tailwind [ flex, justify_center ] ]
+        [ div [ tailwind [ flex_col ], style "min-width" "600px" ]
+            [ div [ tailwind [ text_left, font_bold, text_2xl ] ] [ text "Drop Rates" ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ] 
+                [ div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "NoDropZero" advancedOptions
+                    ]
+                , div [ tailwind [ flex_col ] ] 
+                    [ checkboxInput "QuestDrops" advancedOptions
+                    ]
+                ]
+            , div [ tailwind [ pl_2, pr_2, pt_1, pb_1, flex, flex_row ] ] 
+                [ numberInput "UniqueItemDropRate" advancedOptions
+                , numberInput "RuneDropRate" advancedOptions
+                ]
+            ]
+        ]
     ]
--- onInput <| SetAdvancedInt << SetMonsterDensity advancedOptions << Maybe.withDefault 0 << String.toInt
+
+
+checkboxInput : String -> AdvancedCheckboxOptions -> Html Msg
+checkboxInput key advancedOptions =
+    let
+        value =
+            Dict.get key advancedOptions.checkboxes
+        
+        ( checkboxValue, checkboxTooltip ) =
+            case value of
+                Just v ->
+                    ( v.isChecked, v.tooltip )
+
+                Nothing ->
+                    ( False, "" )
+    in
+    div [ tailwind [ flex, items_center, p_1 ] ]
+        [ label [ tailwind [ flex ], style "cursor" "pointer" ]
+            [ input
+                [ type_ "checkbox"
+                , checked checkboxValue
+                , onClick <| (SetCheckedState <| ToggleCheckbox advancedOptions key)
+                , tailwind [ m_1 ]
+                , style "width" "1em"
+                , style "height" "1em"
+                ]
+                []
+            , text key
+            ]
+        , label [ title checkboxTooltip ] [ help 20 Inherit ]
+        ]
+
+
+numberInput : String -> AdvancedCheckboxOptions -> Html Msg
+numberInput key advancedOptions =
+    let
+        dictValue =
+            Dict.get key advancedOptions.numberInputs
+        
+        ( numValue, numberTooltip ) =
+            case dictValue of
+                Just v ->
+                    ( v.value, v.tooltip )
+
+                Nothing ->
+                    ( 0, "" )
+    in
+    div [ tailwind [ flex, items_center, p_1 ] ]
+            [ label []
+                [ input
+                    [ type_ "number"
+                    , value <| String.fromFloat numValue
+                    , onInput <| (SetAdvancedInt << SetInputValue advancedOptions key << Maybe.withDefault 0 << String.toFloat)
+                    , tailwind [ m_1, w_16, border, border_black, rounded, pl_1, pr_1 ]
+                    ]
+                    []
+                , text key
+                ]
+            , label [ title numberTooltip ] [ help 20 Inherit ]
+            ]
+
 
 segmentedItem : String -> Maybe a -> a -> Msg -> Html Msg
 segmentedItem textLabel original new msg =

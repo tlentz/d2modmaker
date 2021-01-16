@@ -34,6 +34,7 @@
     "sass-loader": "^6.0.3",
     "source-map-loader": "^2.0.0",
     "style-loader": "^0.16.0",
+    "ts-node-dev": "github:mmvsk/ts-node-dev#d7e9cfbad414bcc5fc9ddb5cf75a74496a9e4549",
     "url-loader": "^0.5.8",
     "webpack-dev-server": "^3.1.2",
     "webpack-md5-hash": "0.0.6",

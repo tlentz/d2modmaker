@@ -11,8 +11,9 @@ import Types
         ( AdvancedIntMsg(..)
         , AdvancedCheckboxOption
         , AdvancedCheckboxOptions
+        , AdvancedNumberOption
         , CheckboxMsg(..)
-        , CheckboxName
+        , InputName
         , Model
         , Mode(..)
         , Msg(..)
@@ -118,6 +119,34 @@ update msg model =
             ( model, Cmd.none )
 
 
+updateCheckboxState : CheckboxMsg -> (AdvancedCheckboxOptions, Cmd CheckboxMsg)
+updateCheckboxState checkboxMsg =
+    case checkboxMsg of
+        ToggleCheckbox advancedOptions checkboxName ->
+            let
+                newAdvancedOptions =
+                    { advancedOptions | checkboxes = toggle checkboxName advancedOptions.checkboxes }
+
+                cmd =
+                    if checkboxName == "UseSeed" then
+                        Random.generate (SetSeed newAdvancedOptions) (Random.int 1 Random.maxInt)
+
+                    else
+                        Cmd.none
+            in
+            ( newAdvancedOptions, cmd )
+
+        SetSeed advancedOptions newSeed ->
+            ({ advancedOptions | seed = newSeed }, Cmd.none)
+
+
+updateAdvancedInt : AdvancedIntMsg -> AdvancedCheckboxOptions
+updateAdvancedInt advancedIntMsg =
+    case advancedIntMsg of
+        SetInputValue advancedOptions inputName value ->
+            { advancedOptions | numberInputs = setInputValue value inputName advancedOptions.numberInputs }
+
+
 toggle : comparable -> Dict.Dict comparable AdvancedCheckboxOption -> Dict.Dict comparable AdvancedCheckboxOption
 toggle key dict =
     Dict.update key
@@ -131,257 +160,17 @@ toggle key dict =
         dict
 
 
-updateCheckboxState : CheckboxMsg -> (AdvancedCheckboxOptions, Cmd CheckboxMsg)
-updateCheckboxState checkboxMsg =
-    case checkboxMsg of
-        ToggleCheckbox advancedOptions checkboxName ->
-            ( { advancedOptions | test = toggle checkboxName advancedOptions.test }, Cmd.none )
-
-        SetRandomize advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.randomize
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked}
-
-            in
-            ({ advancedOptions | randomize = updatedOption }, Cmd.none)
-        
-        SetUseSeed advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.useSeed
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-                
-                newAdvancedOptions =
-                    { advancedOptions | useSeed = updatedOption }
-            in
-            (newAdvancedOptions, Random.generate (SetSeed newAdvancedOptions) (Random.int 1 Random.maxInt))
-
-        SetSeed advancedOptions newSeed ->
-            ({ advancedOptions | seed = newSeed }, Cmd.none)
-
-        SetUseOSkills advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.useOSkills
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | useOSkills = updatedOption }, Cmd.none)
-
-        SetPerfectProps advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.perfectProps
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | perfectProps = updatedOption }, Cmd.none)
-
-        SetAllowDupProps advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.allowDupProps
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | allowDupProps = updatedOption }, Cmd.none)
-
-        SetIsBalanced advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.isBalanced
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | isBalanced = updatedOption }, Cmd.none)
-
-        SetBalancedPropCount advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.balancedPropCount
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | balancedPropCount = updatedOption }, Cmd.none)
-
-        SetMeleeSplash advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.meleeSplash
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | meleeSplash = updatedOption }, Cmd.none)
-
-        SetEnableTownSkills advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.enableTownSkills
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | enableTownSkills = updatedOption }, Cmd.none)
-
-        SetStartWithCube advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.startWithCube
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | startWithCube = updatedOption }, Cmd.none)
-
-        SetCowzzz advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.cowzzz
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | cowzzz = updatedOption }, Cmd.none)
-
-        SetIncreaseStackSizes advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.increaseStackSizes
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | increaseStackSizes = updatedOption }, Cmd.none)
-
-        SetRemoveLevelRequirements advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.removeLevelRequirements
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | removeLevelRequirements = updatedOption }, Cmd.none)
-
-        SetRemoveAttRequirements advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.removeAttRequirements
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | removeAttRequirements = updatedOption }, Cmd.none)
-
-        SetRemoveUniqueCharmLimit advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.removeUniqueCharmLimit
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | removeUniqueCharmLimit = updatedOption }, Cmd.none)
-
-        SetNoDropZero advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.noDropZero
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | noDropZero = updatedOption }, Cmd.none)
-
-        SetQuestDrops advancedOptions ->
-            let
-                advancedOption =
-                    advancedOptions.questDrops
-
-                updatedOption = 
-                    { advancedOption | isChecked = not advancedOption.isChecked }
-
-            in
-            ({ advancedOptions | questDrops = updatedOption }, Cmd.none)
-
-
-updateAdvancedInt : AdvancedIntMsg -> AdvancedCheckboxOptions
-updateAdvancedInt advancedIntMsg =
-    case advancedIntMsg of
-        SetMinProps advancedOptions value ->
-            let
-                advancedOption =
-                   advancedOptions.minProps
-
-                updatedOption = 
-                    { advancedOption | value = toFloat(max 0 (min 20 value)) }
-            in
-            { advancedOptions | minProps = updatedOption }
-        
-        SetMaxProps advancedOptions value ->
-            let
-                advancedOption =
-                    advancedOptions.maxProps
-
-                updatedOption = 
-                    { advancedOption | value = toFloat(max 0 (min 20 value)) }
-            in
-            { advancedOptions | maxProps = updatedOption }
-        
-        SetMonsterDensity advancedOptions value ->
-            let
-                advancedOption =
-                    advancedOptions.monsterDensity
-
-                updatedOption = 
-                    { advancedOption | value = toFloat(max 1 (min 30 value)) }
-            in
-            { advancedOptions | monsterDensity = updatedOption }
-        
-        SetUniqueItemDropRate advancedOptions value ->
-            let
-                advancedOption =
-                    advancedOptions.uniqueItemDropRate
-
-                updatedOption = 
-                    { advancedOption | value = toFloat(max 1 (min 100 value)) }
-            in
-            { advancedOptions | uniqueItemDropRate = updatedOption }
-        
-        SetRuneDropRate advancedOptions value ->
-            let
-                advancedOption =
-                    advancedOptions.runeDropRate
-
-                updatedOption = 
-                    { advancedOption | value = toFloat(max 1 (min 100 value)) }
-            in
-            { advancedOptions | runeDropRate = updatedOption }
+setInputValue : Float -> comparable -> Dict.Dict comparable AdvancedNumberOption -> Dict.Dict comparable AdvancedNumberOption
+setInputValue newValue key dict =
+    Dict.update key
+        (\oldOption ->
+            case oldOption of
+                Just o ->
+                    Just <| { o | value = max o.min (min o.max newValue) }
+                Nothing ->
+                    Nothing
+        )
+        dict
 
 
 setUpdatedOptionsOnModel : Model -> (AdvancedCheckboxOptions, Cmd CheckboxMsg) -> (Model, Cmd Msg)

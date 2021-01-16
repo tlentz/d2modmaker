@@ -1,4 +1,4 @@
-module Style exposing (style, backgroundTheme, borderTheme)
+module Style exposing (style, borderTheme)
 
 import Element exposing (Attribute, Color)
 import Html.Attributes
@@ -8,11 +8,6 @@ style : String -> String -> Attribute msg
 style k v =
     Html.Attributes.style k v
         |> Element.htmlAttribute
-
-
-backgroundTheme : String
-backgroundTheme =
-    "rgb(247, 247, 248)"
 
 
 borderTheme : Color
