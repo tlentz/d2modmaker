@@ -202,6 +202,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-18
+* More prop balance by iksargodzilla
+* Fixed issue score cap from a17 was not working.
 ## v0.5.2-alpha-17
 * Added debug cube recipes: axe + 1 health potion = axe with 1 each light,cold,fire,poison, magic skills.  Not added to UI, this allows
 * testing of new props to verify that they are working correctly.

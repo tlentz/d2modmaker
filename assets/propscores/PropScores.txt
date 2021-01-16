@@ -35,10 +35,10 @@ ama		1	3	r	35	210												ama			125	skills	M'avina's Battle Hymn	Sets	0
 ama		1	3	r	30	150						ama									125	skills	M'avina's Battle Hymn	Sets	0
 ass		1	3	r	35	210												ass			125	skills	Natalya's Odium	Sets	0
 ass		1	3	r	30	150						ass									125	skills	Natalya's Odium	Sets	0
-att	0	10	450	r=	2	10	5														110		Griswold's Legacy	Sets	0
-att	0	450	632	r=	10	14	5					8rx									110		RandomizeAdd8		0
-att-dem/lvl	5	0	0	lvl		1	3														123		Guardian Angel	UniqueItems	0
-att-demon	0	100	300	r=	1	3	3														123		Dark Clan Crusher	UniqueItems	0
+att	0	10	450	r=	1	45	5														110		Griswold's Legacy	Sets	0
+att	0	450	632	r=	45	63	5					8rx									110		RandomizeAdd8		0
+att-dem/lvl	5	0	0	lvl		4	3														123		Guardian Angel	UniqueItems	0
+att-demon	0	100	300	r=	5	15	3														123		Dark Clan Crusher	UniqueItems	0
 att-skill	47	10	0	s		25															44		Hellslayer	UniqueItems	0
 att-skill	47	10	6	scl		5															44		Todesfaelle Flamme	UniqueItems	0
 att-skill	53	5	0	scl		13															44		Lightsabre	UniqueItems	0
@@ -46,7 +46,7 @@ att-skill	Charged Bolt	20	20	scl		50		65													44		Last Wish	Runes	0
 att-skill	Frozen Orb	16	21	scl		100		53													44		Rift	Runes	0
 att-skill	Glacial Spike	25	18	scl		50		55													44		Death	Runes	0
 att-skill	Nova	15	22	scl		50		65													44		Destruction	Runes	0
-att-und/lvl	20	0	0	lvl		1	15														142		The Vile Husk	UniqueItems	0
+att-und/lvl	20	0	0	lvl		2	15														142		The Vile Husk	UniqueItems	0
 att-undead	0	40	350	r=	1	2	15														142		Bladebone	UniqueItems	0
 att/lvl	24	0	0	lvl		12	15														111		Angelic Halo	SetItems	0
 att%	0	10	300	r=	10	120	15														111		Aldur's Watchtower	Sets	0
@@ -155,8 +155,8 @@ death-skill	Meteor	100	48	scl		0															207		Hand of Justice	Runes	0
 death-skill	Nova	100	44	scl		0															207		Medusa's Gaze	UniqueItems	0
 death-skill	Poison Nova	100	51	scl		0															207		Rainbow Facet	UniqueItems	0
 demon-heal	0	5	20	r=	2	10															208		Dark Clan Crusher	UniqueItems	0
-dex	0	2	35	r=	1	10	2														16		Gravenspine	UniqueItems	0
-dex/lvl	4	0	0	lvl		15	2														42		Blackoak Shield	UniqueItems	0
+dex	0	2	35	r=	2	35	5														16		Gravenspine	UniqueItems	0
+dex/lvl	4	0	0	lvl		15	5														42		Blackoak Shield	UniqueItems	0
 dmg	0	10	120	r	20	240															14	dmg	Stone Crusher	UniqueItems	0
 dmg	0	340	400	r	680	800		59													14	dmg	Grief runeword (Widowmaker)		0
 dmg-ac	0	-100	-50	r=	4	2															4	dmg	Woestave	UniqueItems	0
@@ -198,8 +198,8 @@ dmg-undead	0	25	250	r=	9	77												weap			212		Bladebone	UniqueItems	0
 dmg-undead	0	200	300	r=	67	100		25		Y		weap									212		RandomizeAdd9		0
 dmg-undead	0	200	300	r=	67	100		25										weap			212		RandomizeAdd9		0
 dmg/lvl	25	0	0	lvl		234															111	dmg	Headstriker	UniqueItems	0
-dmg%	0	5	30	r=	15	90						armo						shld			105	dmg	War Bonnet	UniqueItems	0
-dmg%	0	5	80	r=	10	160						shld	glov								105	dmg	Alma Negra	UniqueItems	0
+dmg%	0	5	30	r=	5	30						armo						shld			105	dmg	War Bonnet	UniqueItems	0
+dmg%	0	5	80	r=	5	80						shld	glov								105	dmg	Alma Negra	UniqueItems	0
 dmg%	0	5	30	r=	3	15				Y		weap									105	dmg	The Gnasher	UniqueItems	0
 dmg%	0	30	250	r=	15	125				Y		weap									105	dmg	The Gnasher	UniqueItems	0
 dmg%	0	250	430	r=	125	215		29		Y		weap	fset								105	dmg	RandomizeAdd10		0
@@ -616,8 +616,8 @@ stamdrain	0	10	50	r=	0	0															248		The Centurion	UniqueItems	0
 stamdrain		-25	-15	c	-25	-15															248		Duress	Runes	0
 state	fullsetgeneric	1	1	s	0	0		21				fset									252		Aldur's Watchtower	Sets	0
 state	monsterset	1	1	s	0	0		32				fset									252		Trang-Oul's Avatar	Sets	0
-str	0	2	50	r=	1	5	2														31		Naj's Ancient Set	Sets	0
-str/lvl	6	0	0	lvl		3	1														42		Enigma	Runes	0
+str	0	2	50	r=	2	50	5														31		Naj's Ancient Set	Sets	0
+str/lvl	6	0	0	lvl		15	3														42		Enigma	Runes	0
 stupidity	0	1	3	r	1	1															249	ac	Deathspade	UniqueItems	0
 stupidity	0	10	33	r	1	6		43													249	ac	RandomizeAdd14		0
 swing1		10	30	r=	10	29												weap			6	dmg		UniqueItems	0
@@ -632,4 +632,4 @@ swing3		15	50	r=	15	43						weap									6	dmg	Goreshovel	UniqueItems	0
 thorns	0	2	77	r	1	7															5		Stoutnail	UniqueItems	0
 thorns/lvl	11	0	0	lvl		3															5		Spike Thorn	UniqueItems	0
 vit	0	2	40	r	12	240															250	vit	Stoutnail	UniqueItems	0
-vit/lvl	4	0	0	lvl		10															251	vit	Warlord's Trust	UniqueItems	0
+vit/lvl	4	0	0	lvl		15															251	vit	Warlord's Trust	UniqueItems	0

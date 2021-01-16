@@ -43,7 +43,7 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 	switch newa.Line.PropParType {
 	case propscorespartype.R, propscorespartype.Rp, propscorespartype.Rt, propscorespartype.Smm, propscorespartype.C:
 		//fmt.Printf("RollAffix: %d %d-%d -> ", targetPropScore, newa.P.Val.Min, newa.P.Val.Max)
-		newa.P.Val.Min, newa.P.Val.Max = rollRange(g.rng, newa.P.Val.Min, newa.P.Val.Max, newa.Line.ScoreMin, newa.Line.ScoreMax, item.Lvl, targetPropScore, true)
+		newa.P.Val.Min, newa.P.Val.Max = rollRange(g, newa.Line, item.Lvl, targetPropScore, true)
 		newa.P.Min = strconv.Itoa(newa.P.Val.Min)
 		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
 		if newa.P.Val.Min < newa.Line.Prop.Val.Min {
@@ -54,7 +54,7 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 		}
 		//fmt.Printf("%s-%s\n", newa.P.Min, newa.P.Max)
 	case propscorespartype.Req:
-		newa.P.Val.Min, newa.P.Val.Max = rollRange(g.rng, newa.P.Val.Min, newa.P.Val.Max, newa.Line.ScoreMin, newa.Line.ScoreMax, item.Lvl, targetPropScore, false)
+		newa.P.Val.Min, newa.P.Val.Max = rollRange(g, newa.Line, item.Lvl, targetPropScore, false)
 		newa.P.Min = strconv.Itoa(newa.P.Val.Min)
 		newa.P.Max = strconv.Itoa(newa.P.Val.Max)
 
@@ -89,18 +89,25 @@ func RollAffix(g *Generator, item *d2items.Item, colIdx int, propScoreMin int, t
 	return newa
 }
 
-// rollRange:  Calculate a min & max value +/- PropVariance centered around targetPropScore.
-func rollRange(rng *rand.Rand, min int, max int, scoreMin int, scoreMax int, itemLvl int, targetPropScore int, applyDeviation bool) (int, int) {
-	if min > max {
-		log.Fatalf("rollRange: min > max: (%d %d)", min, max)
+// rollRange:  Calculate a range for a given targetScore and Line.  If applyDeviation a
+func rollRange(g *Generator, line *propscores.Line /*min int, max int, scoreMin int, scoreMax int, */, itemLvl int, targetPropScore int, applyDeviation bool) (int, int) {
+	scoreCap := calcScoreCap(g, line, itemLvl)
+	if line.ScoreMin < 0 {
+		if targetPropScore < scoreCap {
+			targetPropScore = scoreCap
+		}
+	} else {
+		if targetPropScore > scoreCap {
+			targetPropScore = scoreCap
+		}
 	}
-	newAvg := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
+	newAvg := util.Interpolate(targetPropScore, targetPropScore, line.ScoreMin, line.ScoreMax, line.Prop.Val.Min, line.Prop.Val.Max)
 	//newMin := util.Interpolate(targetPropScore, targetPropScore, scoreMin, scoreMax, min, max)
 	//fmt.Printf("rollRange: %d %d-%d -> %d %d\n", targetPropScore, line.ScoreMin, line.ScoreMax, min, max)
 
 	deviation := 0
 	if applyDeviation {
-		deviation = util.AbsInt(util.Round64(rng.NormFloat64() * 0.15 * float64(newAvg)))
+		deviation = util.AbsInt(util.Round64((g.rng.NormFloat64()*0.10 + .05) * float64(newAvg)))
 	}
 	newMin := newAvg - deviation
 	newMax := newAvg + deviation
@@ -116,10 +123,10 @@ func rollRange(rng *rand.Rand, min int, max int, scoreMin int, scoreMax int, ite
 	newMin = util.Round32(float32(newMin)/float32(roundTo)) * roundTo
 	newMax = util.Round32(float32(newMax)/float32(roundTo)) * roundTo
 
-	newMin = util.MaxInt(newMin, min)
-	newMin = util.MinInt(newMin, max)
-	newMax = util.MinInt(newMax, max)
-	newMax = util.MaxInt(newMax, min)
+	newMin = util.MaxInt(newMin, line.Prop.Val.Min)
+	newMin = util.MinInt(newMin, line.Prop.Val.Max)
+	newMax = util.MinInt(newMax, line.Prop.Val.Max)
+	newMax = util.MaxInt(newMax, line.Prop.Val.Min)
 
 	return newMin, newMax
 }
@@ -208,28 +215,17 @@ DoneRolling:
 			//ScoreLimit specified verify this prop doesn't go over it.
 			scoreCap := (vanillaScore * line.ScoreLimit) / 100
 			if scoreCap < scoreMin {
-				//log.Printf("rollPropScoreLine Skipping %s:%s from %d to %d:", item.Name, line.Prop.Name, targetPropScore, scoreCap)
+				//log.Printf("rollPropScoreLine Skipping %s:%s Tgt/Cap/Min %d/%d/%d Line Score Min/Max (%d/%d)", item.Name, line.Prop.Name, targetPropScore, scoreCap, scoreMin, line.ScoreMin, line.ScoreMax)
 				continue
 			}
-			//if line.Prop.Name == "meleesplash" {
-			//log.Printf("rollPropScoreLine Limiting %s:%s Min/Tgt/Max %d/%d/%d to Min/Max/Cap (%d/%d/%d)", item.Name, line.Prop.Name, propScoreMin, targetPropScore, propScoreMax, scoreMin, scoreMax, scoreCap)
-			//}
+			// if line.Prop.Name == "str" {
+			// 	log.Printf("rollPropScoreLine Limiting %s:%s Min/Tgt/Max %d/%d/%d to Min/Max/Cap (%d/%d/%d)", item.Name, line.Prop.Name, propScoreMin, targetPropScore, propScoreMax, scoreMin, scoreMax, scoreCap)
+			// }
 			scoreMax = util.MinInt(scoreMax, scoreCap)
 		}
-
-		if g.opts.PropScoreMultiplier < 4 { // alpha-17, add level based prop scaling
-			lMax := line.MaxLvl
-			if lMax == 0 {
-				lMax = util.MaxInt(70, line.MinLvl)
-			}
-			// Scale item level up to
-			scaledItemLevel := util.MinInt(util.Round64(float64(item.Lvl)*(1.2+0.1*(g.opts.PropScoreMultiplier-1))), lMax)
-			scoreCap := util.Interpolate(scaledItemLevel, scaledItemLevel, line.MinLvl, lMax, scoreMin, scoreMax)
-			if scoreCap > scoreMax {
-				log.Panicf("scoreCap %d > scoreMax %d", scoreCap, scoreMax) // assertion
-			}
-			scoreMax = util.MinInt(scoreMax, scoreCap)
-
+		scoreCap := calcScoreCap(g, line, item.Lvl)
+		if scoreCap < scoreMax {
+			scoreMax = scoreCap
 		}
 
 		switch {
@@ -266,6 +262,47 @@ DoneRolling:
 	//}
 	g.numAffixRolls += rollcounter
 	return closestLine
+}
+
+// calcScoreCap Returns the highest (or lowest if negative) score allowed by the line for an item.
+func calcScoreCap(g *Generator, line *propscores.Line, itemLvl int) int {
+	// level based limit is always from absolute valued smallest to absolute valued largest
+	scoreMin := line.ScoreMin
+	scoreMax := line.ScoreMax
+	if line.ScoreMax < line.ScoreMin {
+		scoreMax = line.ScoreMin
+		scoreMin = line.ScoreMax
+	}
+	if (line.ScoreMax < 0) || (line.ScoreMin < 0) {
+		scoreMax, scoreMin = scoreMin, scoreMax
+	}
+	scoreCap := scoreMax
+
+	if g.opts.PropScoreMultiplier < 4 {
+		// alpha-17, add level based prop scaling
+		lMax := line.MaxLvl
+		if lMax == 0 {
+			lMax = util.MaxInt(70, line.MinLvl)
+		}
+		// Scale item level up based on PropScaleMultiplier
+		scaledItemLevel := util.MinInt(util.Round64(float64(itemLvl)*(1.2+0.1*(g.opts.PropScoreMultiplier-1))), lMax)
+		if scaledItemLevel < line.MinLvl || scaledItemLevel > lMax {
+			log.Panicf("calcScoreCap: scaledItemLevel not within limits %+v", line)
+		}
+		scoreCap = util.Interpolate(scaledItemLevel, scaledItemLevel, line.MinLvl, lMax, scoreMin, scoreMax)
+		if scoreCap > scoreMax && (scoreMax > 0) {
+			log.Panicf("scoreCap %d > scoreMax %d", scoreCap, scoreMax) // assertion
+		}
+		// if scoreMin < 0 && (scaledItemLevel < 70) {
+		// 	log.Printf("calcScoreCap: %d (%d %d %d)", item.Lvl, scoreMin, scoreCap, scoreMax)
+		// }
+		// if (line.Prop.Name == "att") && (item.Lvl < 20) {
+		// 	log.Printf("calcScoreCap Limiting %s:%s Min/Tgt/Max %d/%d/%d to Min/Max/Cap (%d/%d/%d)", item.Name, line.Prop.Name, propScoreMin, targetPropScore, propScoreMax, scoreMin, scoreMax, scoreCap)
+		// }
+
+	}
+	return scoreCap
+
 }
 
 // checkGroups Returns true if any Affix on item is a member of the same group
