@@ -1,10 +1,10 @@
 {
-    "Version": "v0.5.2-alpha-18",
+    "Version": "v0.5.2-alpha-19",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 3,
+    "IncreaseMonsterDensity": 8,
     "EnableTownSkills": true,
     "BiggerGoldPiles": true,
     "NoFlawGems": true,

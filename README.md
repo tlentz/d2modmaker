@@ -202,6 +202,12 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-19
+* Set PropScoreMultiplier to 1 if user had set it to 0  (thx Speculator)
+* Fix Seeds.txt code to write correct seed, and in addition write SetsSeed.
+* Balance adjustment in PropScores.txt, some due to the new level limit based code from a17
+* Fix for broken Monster Density code that was squaring uniques monster density in nm, and no increase in hell
+* Increased Monster Density to Max and split density between Monstats.txt and Levels.txt.  Ty Necrolis (Issue #81)
 ## v0.5.2-alpha-18
 * More prop balance by iksargodzilla
 * Fixed issue score cap from a17 was not working.
