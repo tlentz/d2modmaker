@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-18",
+  Version: "v0.5.2-alpha-19",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -431,7 +431,7 @@ export default function D2ModMaker() {
             aria-labelledby="IncreaseMonsterDensity"
             step={0.5}
             min={1}
-            max={30}
+            max={45}
             marks={[
               {
                 value: 1,

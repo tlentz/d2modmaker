@@ -38,6 +38,12 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 	opts.MinProps = util.MaxInt(1, opts.MinProps)
 	opts.MaxProps = util.MinInt(20, opts.MaxProps)
 	opts.NumClones = util.MaxInt(0, opts.NumClones)
+	if opts.PropScoreMultiplier == 0 {
+		opts.PropScoreMultiplier = 1
+	}
+	if opts.PropScoreMultiplier < 0 {
+		opts.PropScoreMultiplier = 1
+	}
 	opts.PropScoreMultiplier = util.MinFloat(10, opts.PropScoreMultiplier)
 	if !opts.UseSeed {
 		opts.Seed = time.Now().UnixNano()
