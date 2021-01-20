@@ -4,7 +4,7 @@
     "OutputDir": "",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
-    "IncreaseMonsterDensity": 45,
+    "IncreaseMonsterDensity": 8,
     "EnableTownSkills": true,
     "NoDropZero": true,
     "QuestDrops": true,
