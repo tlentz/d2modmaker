@@ -1,5 +1,7 @@
 // pull in desired CSS/SASS files
-require('../assets/scss/main.scss');
+
+// import "./scss/tailwind.css";
+require('./scss/main.scss');
 
 // inject bundled Elm app into div#main
 const { Elm } = require('./elm/Main.elm');

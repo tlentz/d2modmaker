@@ -22,6 +22,7 @@
             "elm-community/maybe-extra": "5.2.0",
             "elm-community/random-extra": "3.0.0",
             "elm-community/result-extra": "2.4.0",
+            "elm-explorations/test": "1.2.2",
             "fredcy/elm-parseint": "2.0.1",
             "icidasset/elm-material-icons": "3.1.0",
             "jschomay/elm-paginate": "3.1.1",
