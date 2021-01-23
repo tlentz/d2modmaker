@@ -4,6 +4,7 @@
   "name": "d2mm-client",
   "version": "1.0.0",
   "description": "D2MM client",
+  "license": "GPL",
   "main": "index.js",
   "scripts": {
     "analyse": "elm-analyse -s -p 3001 -o",
