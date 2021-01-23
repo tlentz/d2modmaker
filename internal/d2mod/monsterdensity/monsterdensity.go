@@ -89,22 +89,21 @@ func Scale(d2files d2fs.Files, scaleFactor float64) {
 			if f.Rows[rowIdx][monstats.Align] != "" {
 				continue
 			}
-			{
-				colIdx := monstats.MinGrp
-				oldVal, err := strconv.Atoi(f.Rows[rowIdx][colIdx])
-				if err == nil {
-					newVal := util.MinInt(maxGrp, increaseNumByMult(oldVal, grpMult))
-					f.Rows[rowIdx][colIdx] = strconv.Itoa(newVal)
-				}
+
+			colIdx := monstats.MinGrp
+			oldVal, err := strconv.Atoi(f.Rows[rowIdx][colIdx])
+			if err == nil {
+				newVal := util.MinInt(maxGrp, increaseNumByMult(oldVal, grpMult))
+				f.Rows[rowIdx][colIdx] = strconv.Itoa(newVal)
 			}
-			{
-				colIdx := monstats.MaxGrp
-				oldVal, err := strconv.Atoi(f.Rows[rowIdx][colIdx])
-				if err == nil {
-					newVal := util.MinInt(maxGrp, increaseNumByMult(oldVal, grpMult))
-					f.Rows[rowIdx][colIdx] = strconv.Itoa(newVal)
-				}
+
+			colIdx = monstats.MaxGrp
+			oldVal, err = strconv.Atoi(f.Rows[rowIdx][colIdx])
+			if err == nil {
+				newVal := util.MinInt(maxGrp, increaseNumByMult(oldVal, grpMult))
+				f.Rows[rowIdx][colIdx] = strconv.Itoa(newVal)
 			}
+
 		}
 	}
 }
