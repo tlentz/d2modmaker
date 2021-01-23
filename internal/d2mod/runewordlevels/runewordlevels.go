@@ -2,6 +2,7 @@ package runewordlevels
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
@@ -13,8 +14,7 @@ var miscItemLevelsCache map[string]int // OBC: yeah ok it's static variable, thr
 
 func GetRunewordLevel(row []string, miscItemLevels map[string]int) int {
 	if len(miscItemLevels) == 0 {
-		fmt.Printf("runewordlevels was not initialized before calling GetRunewordLevel\n")
-		panic(1)
+		log.Panicf("runewordlevels was not initialized before calling GetRunewordLevel\n")
 	}
 	rl := 0
 	for j := 0; j < 6; j++ {
@@ -46,9 +46,9 @@ func GetMiscItemLevels(d2files *d2fs.Files) map[string]int {
 			fmt.Printf("%s\n", row)
 			if row[misc.Code][0] == 'r' {
 				fmt.Printf("GetMiscItemLevels Row:%s\n", row[misc.Code])
-				d2fs.DebugDumpFiles(*d2files, misc.FileName)
+				d2fs.DebugDumpVFSFileNames(*d2files, misc.FileName)
 
-				panic(3)
+				log.Panicf("MicItems.txt Level column is not numeric")
 			}
 		}
 	}

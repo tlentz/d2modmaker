@@ -10,7 +10,6 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/itemStatCost"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/properties"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
-	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -45,7 +44,7 @@ func Run(outDir string, d2files d2fs.Files, enabled bool) {
 	}
 }
 
-// SetProbability Increase probability of getting the other elementalskills to match fireskills
+// SetProbability Increase probability of getting the other elementalskills to match fireskills in the Generator
 func SetProbability(d2files d2fs.Files, ss *scorerstatistics.ScorerStatistics, enabled bool) {
 	if enabled {
 		fireSkillsRows := make(map[int]bool, 0)
@@ -99,9 +98,9 @@ func copyPatchString(outDir string) {
 	util.Check(err)
 }
 
-// Props Add elemental skill props to a list of props
-func Props() d2items.Props {
-	props := make(d2items.Props, 4)
+// Props Add elemental skill props to a list of props.  (Randomizer)
+func Props() prop.Props {
+	props := make(prop.Props, 4)
 	props[0] = prop.NewProp("coldskill", "", "1", "4", 0)
 	props[1] = prop.NewProp("poisonskill", "", "1", "4", 0)
 	props[2] = prop.NewProp("lightningskill", "", "1", "4", 0)
