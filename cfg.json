@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.2-alpha-19",
+    "Version": "v0.5.2-alpha-20",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -37,7 +37,7 @@
         "ElementalSkills": true
     },
     "GeneratorOptions": {
-        "Generate": true,
+        "Generate": false,
         "UseSeed": true,
         "Seed": 1234,
         "UseSetsSeed": true,

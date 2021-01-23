@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-19",
+  Version: "v0.5.2-alpha-20",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -39,8 +39,8 @@ const defaultCfg = {
   RemoveLevelRequirements: false,
   RemoveAttRequirements: false,
   RemoveUniqCharmLimit: false,
-  PerfectProps: false,
   UseOSkills: true,
+  PerfectProps: false,
   SafeUnsocket: true,
   PropDebug: false,
   EnterToExit: false,
@@ -59,7 +59,7 @@ const defaultCfg = {
     ElementalSkills: true
   },
   GeneratorOptions: {
-    Generate: true,
+    Generate: false,
     UseSeed: false,
     Seed: -1,
     UseSetsSeed: true,

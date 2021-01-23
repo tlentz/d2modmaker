@@ -52,7 +52,7 @@ func NewFiles(sourceDir string, outDir string) Files {
 	if (sourceDir == outDir) && (sourceDir != "") {
 		log.Fatalf("Error: Source Directory == Output Directory.  Either set the Source Directory to blank (to use 1.13c default files), or set it to vanilla data/ directory.  OutDir is deleted and re-created each run")
 	}
-	//os.RemoveAll(path.Join(files.outDir, "/data/"))	// obc:  This is c4 approach, use sword instead
+	//os.RemoveAll(path.Join(files.outDir, "/data/"))	// obc:  This is the old c4 approach, use sword instead
 	err := os.MkdirAll(path.Join(files.outDir, assets.DataGlobalExcel), 0755)
 	util.Check(err)
 
@@ -74,10 +74,8 @@ func NewFiles(sourceDir string, outDir string) Files {
 // ReadD2File reads a given d2 file
 func (d2files *Files) Read(filepath string, filename string) *File {
 	if d2files.sourceDir == "" {
-		// open csvfile
-		//fmt.Printf("Opening %s  %s\n", filepath, filename)
+		// open tsvfile
 		csvfile, err := assets.Assets.Open(path.Join(filepath, filename))
-		//TODO: figure out how to move this out of if/else
 		checkError(filename, err)
 		defer csvfile.Close()
 		return importCsv(csvfile, filename)
@@ -91,7 +89,7 @@ func (d2files *Files) Read(filepath string, filename string) *File {
 
 // ReadAsset Reads in a tsv file from vfs but doesn't cache it in Files
 func ReadAsset(filePath string, filename string) *File {
-	// open csvfile
+	// open tsvfile
 	csvfile, err := assets.Assets.Open(path.Join(filePath, filename))
 	checkError(filename, err)
 	defer csvfile.Close()
@@ -99,6 +97,7 @@ func ReadAsset(filePath string, filename string) *File {
 	return importCsv(csvfile, filename)
 }
 
+// importCsv This is actually tab separated value, i.e. tsv
 func importCsv(csvfile io.Reader, filename string) *File {
 	// create new D2File pointer with fname
 	d2file := &File{FileName: filename}
@@ -197,21 +196,20 @@ func MergeRows(f1 *File, f2 File) {
 
 		keys[f1.Rows[rowIdx][0]] = rowIdx
 	}
-	//fmt.Printf("%v", keys)
 	for f2RowIdx := range f2.Rows {
 		f1RowIdx, ok := keys[f2.Rows[f2RowIdx][0]]
 		if ok {
 			f1.Rows[f1RowIdx] = f2.Rows[f2RowIdx]
 			//fmt.Printf("Merging...%s\n", f2.Rows[f2RowIdx][0])
 		} else {
-			//fmt.Printf("Len Before:%d\n", len(f1.Rows))
 			f1.Rows = append(f1.Rows, f2.Rows[f2RowIdx])
-			//fmt.Printf("Len After :%d\n", len(f1.Rows))
 		}
 	}
 }
 
-//func printFile() {
+// This function will generate a list of constants from a header.
+// Useful when creating a new internal\txt\blah\blah.go file
+//func printFileHeader() {
 //	d2files := d2file.D2Files{}
 //	f := d2file.GetOrCreateFile(d2files, magicSuffix.FileName)
 //	for i := range f.Headers {
@@ -220,7 +218,7 @@ func MergeRows(f1 *File, f2 File) {
 //	panic("")
 //}
 
-// DebugDumpFiles Dump all of Files to console
-func DebugDumpFiles(f Files, filename string) {
+// DebugDumpVFSFileNames Dump all of Files to console
+func DebugDumpVFSFileNames(f Files, filename string) {
 	fmt.Printf("%s\n", f.cache[filename])
 }

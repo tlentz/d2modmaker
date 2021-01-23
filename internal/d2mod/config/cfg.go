@@ -57,8 +57,8 @@ type Data struct {
 	RemoveLevelRequirements bool             `json:"RemoveLevelRequirements"`
 	RemoveAttRequirements   bool             `json:"RemoveAttRequirements"`
 	RemoveUniqCharmLimit    bool             `json:"RemoveUniqCharmLimit"`
-	PerfectProps            bool             `json:"PerfectProps"` // sets min/max to max
 	UseOSkills              bool             `json:"UseOSkills"`   // +3 Fireball (Sorceress Only) -> +3 Fireball
+	PerfectProps            bool             `json:"PerfectProps"` // sets min/max to max
 	SafeUnsocket            bool             `json:"SafeUnsocket"`
 	PropDebug               bool             `json:"PropDebug"`
 	EnterToExit             bool             `json:"EnterToExit"`
@@ -69,7 +69,7 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-19",
+		Version:                 "v0.5.2-alpha-20",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -87,8 +87,8 @@ func DefaultData() Data {
 		RemoveLevelRequirements: false,
 		RemoveAttRequirements:   false,
 		RemoveUniqCharmLimit:    false,
-		PerfectProps:            false,
 		UseOSkills:              true,
+		PerfectProps:            false,
 		SafeUnsocket:            true,
 		PropDebug:               false,
 		EnterToExit:             false,
@@ -107,7 +107,7 @@ func DefaultData() Data {
 			ElementalSkills:   true,
 		},
 		GeneratorOptions: GeneratorOptions{
-			Generate:            true,
+			Generate:            false,
 			UseSeed:             false,
 			Seed:                -1,
 			UseSetsSeed:         true,

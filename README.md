@@ -90,10 +90,10 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Removes attribute requirements from items.
 #### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
-#### PerfectProps `bool`
-* All props will have the max value for min/max values
 #### UseOSkills `bool`
 * Will change class only skills to oskills
+#### PerfectProps `bool`
+* All props will have the max value for min/max values
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
@@ -202,6 +202,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-20
+* Set Generator default to false to work around the ui bug.
+* Fix for PerfectProps doing "r=" proptypes
 ## v0.5.2-alpha-19
 * Set PropScoreMultiplier to 1 if user had set it to 0  (thx Speculator)
 * Fix Seeds.txt code to write correct seed, and in addition write SetsSeed.
@@ -330,3 +333,8 @@ Thanks!
     
 # Credits
 * [Dead Weight Design](https://www.instagram.com/deadweightdesign/) - Thanks for creating the logo!
+* tlentz, Deadlock39, OldBeardedCoder/EMPY -- Teh Devs
+* Amek for being the true moderating god he is and for his awesome tutorials and cat herding.
+* iksargodzilla - Thank-you so much for doing 90% of the grunt work for the scoring engine
+* macohan, Negative Inspiration, for helping with design and being a huge help with the newbies.
+* The many others that reported bugs, proposed enhancements and gave moral support & encouragement.

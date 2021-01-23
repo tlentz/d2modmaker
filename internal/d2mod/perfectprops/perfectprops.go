@@ -35,7 +35,7 @@ func convertFile(d2files *d2fs.Files, pmap propName2PropParType, ifi *d2fs.ItemF
 			propName := file.Rows[rowIdx][colIdx]
 			parType := pmap[propName]
 			switch {
-			case (parType == "r") || (parType == "rp") || (parType == "rt") || (parType == "smm"):
+			case (parType == "r") || (parType == "rp") || (parType == "rt") || (parType == "smm") || (parType == "r="):
 				if file.Rows[rowIdx][colIdx+2] == file.Rows[rowIdx][colIdx+3] {
 					conversionCounter++
 				}
