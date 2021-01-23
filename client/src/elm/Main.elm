@@ -1,13 +1,13 @@
 module Main exposing (init, main)
 
 import Browser
-import Model exposing (Model)
+import Model exposing (Model, initModel)
 import Msg exposing (Msg(..))
 import Update exposing (update)
 import View exposing (view)
 
 
-main : Program Int Model Msg
+main : Program () Model Msg
 main =
     Browser.document
         { init = init
@@ -21,6 +21,6 @@ main =
         }
 
 
-init : Int -> ( Model, Cmd Msg )
-init flags =
-    ( { serverMessage = "" }, Cmd.none )
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( initModel, Cmd.none )

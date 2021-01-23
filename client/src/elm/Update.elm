@@ -27,3 +27,6 @@ update message model =
 
                 Err err ->
                     ( { model | serverMessage = "Error: " ++ httpErrorToString err }, Cmd.none )
+
+        ChangePage page ->
+            ( { model | page = page }, Cmd.none )
