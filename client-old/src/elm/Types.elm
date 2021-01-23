@@ -1,33 +1,23 @@
 module Types exposing (..)
 
-import Browser.Dom as Dom
 import Dict
-import Http
 
 
 type alias Model =
-    { screen : Screen
-    , errorMessage : Maybe String
+    { errorMessage : Maybe String
     , mode : Maybe Mode
     }
 
 
 emptyModel : Model
 emptyModel =
-    { screen = { width = 0, height = 0 }
-    , errorMessage = Nothing
+    { errorMessage = Nothing
     , mode = Nothing
     }
 
 
 type Msg
-    = DoNothing
-    | Resize Screen
-    | FocusOn String
-    | FocusResult (Result Dom.Error ())
-    | SetViewportCb
-    | GetResponse (Result Http.Error String)
-    | SetCheckedState CheckboxMsg
+    = SetCheckedState CheckboxMsg
     | SetAdvancedInt AdvancedIntMsg
     | SetSelectedMode Mode
     | SetSelectedBasicOption BasicOption

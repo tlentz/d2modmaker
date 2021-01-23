@@ -17,32 +17,12 @@ import Types
         , Mode(..)
         , Model
         , Msg(..)
-        , Route(..)
-        , View(..)
         )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        DoNothing ->
-            return model []
-
-        Resize screen ->
-            ( { model | screen = screen }, Cmd.none )
-
-        SetViewportCb ->
-            ( model, Cmd.none )
-
-        FocusOn id ->
-            ( model, Dom.focus id |> Task.attempt FocusResult )
-
-        FocusResult _ ->
-            ( model, Cmd.none )
-
-        GetResponse _ ->
-            ( model, Cmd.none )
-
         SetCheckedState checkboxMsg ->
             updateCheckboxState checkboxMsg
                 |> setUpdatedOptionsOnModel model

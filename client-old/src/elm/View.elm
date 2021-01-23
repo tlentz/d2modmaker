@@ -278,9 +278,9 @@ submitButton buttonText isDisabled msg =
     let
         onClickMsg =
             if isDisabled then
-                DoNothing
+                class ""
 
             else
-                msg
+                onClick msg
     in
-    div [ onClick onClickMsg, classList [ ( "submit-button", True ), ( "disabled", isDisabled ) ] ] [ text buttonText ]
+    div [ onClickMsg, classList [ ( "submit-button", True ), ( "disabled", isDisabled ) ] ] [ text buttonText ]
