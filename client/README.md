@@ -1,4 +1,4 @@
-# Elm 0.19.1 with Webpack 4, Hot Reloading & Babel 7
+# Elm 0.19.1 + Tailwind, with Webpack 5
 
 [![CircleCI](https://circleci.com/gh/simonh1000/elm-webpack-starter.svg?style=svg)](https://circleci.com/gh/simonh1000/elm-webpack-starter)
 
@@ -21,9 +21,9 @@ $ npm install
 
 Start with Elm debug tool with either
 ```sh
-$ npm start
-or
-$ npm start --nodebug
+$ npm start  (== npm run dev)
+# or for development with the Elm debugger
+$ npm run nodebug
 ```
 
 the `--nodebug` removes the Elm debug tool. This can become valuable when your model becomes very large.
@@ -82,6 +82,8 @@ This starter includes [Babel](https://babeljs.io/) so you can directly use ES6 c
 
 ## Changelog
 
+ - 4.0.0 - Rewrite for Webpack 5
+ - 3.11.0 - Webpack 5, elm-webpack-loader 7
  - 3.10.4 - Use better webpack defaults in dev mode
  - 3.10.0 - Css minify
  - 3.9.3 - Update deps
