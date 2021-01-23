@@ -7,6 +7,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
+	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
 	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
 	"github.com/tlentz/d2modmaker/internal/d2mod/randomizer"
@@ -30,8 +31,15 @@ func Make(defaultOutDir string, cfg config.Data) {
 	d2files := d2fs.NewFiles(cfg.SourceDir, cfg.OutputDir)
 
 	if cfg.MeleeSplash {
-		splash.Jewels(cfg.OutputDir, d2files)
+		splash.Run(cfg.OutputDir, d2files)
+
 	}
+
+	elementalSkillsEnabled := false
+	if cfg.RandomOptions.Randomize && cfg.RandomOptions.ElementalSkills {
+		elementalSkillsEnabled = true
+	}
+	elementalskills.Run(cfg.OutputDir, d2files, elementalSkillsEnabled)
 
 	if cfg.IncreaseStackSizes {
 		stacksizes.Increase(d2files)

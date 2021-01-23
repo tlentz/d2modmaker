@@ -15,8 +15,9 @@ type RandomOptions struct {
 	AllowDupProps     bool  `json:"AllowDuplicateProps"` // Allow two props of the same type to be placed on an item
 	MinProps          int   `json:"MinProps"`            // minimum number of non blank props on an item
 	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
-	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
 	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
+	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
+	ElementalSkills   bool  `json:"ElementalSkills"`
 }
 
 // data is the configuration used to build the mod
@@ -69,8 +70,8 @@ func DefaultData() Data {
 			AllowDupProps:     false,
 			MinProps:          0,
 			MaxProps:          20,
-			PerfectProps:      false,
 			UseOSkills:        true,
+			PerfectProps:      false,
 		},
 	}
 }

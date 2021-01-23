@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
+	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
+	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/gems"
@@ -18,17 +20,11 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
-// Prop represents an item affix
-type Prop struct {
-	Name string
-	Par  string
-	Min  string
-	Max  string
-	Lvl  int
-}
+// Prop == d2items.Prop
+type Prop = prop.Prop
 
-// Props is a slice of Prop
-type Props = []Prop
+// Props == d2items.Prop
+type Props = prop.Props
 
 // Item represents an item
 type Item struct {
@@ -46,6 +42,9 @@ func Run(cfg *config.Data, d2files d2fs.Files) {
 	rand.Seed(opts.Seed)
 
 	props, items := getAllProps(opts, d2files)
+	if cfg.RandomOptions.ElementalSkills {
+		props = append(props, elementalskills.Props()...)
+	}
 
 	s := scrambler{
 		opts:    opts,
@@ -394,10 +393,10 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 		if currentNumProps < numProps {
 			prop = getBalancedRandomProp(s.opts, level, s.props)
 
-			propIdString := prop.getId()
+			propIdString := prop.GetID()
 			for propList[propIdString] {
 				prop = getBalancedRandomProp(s.opts, s.lvl, s.props)
-				propIdString = prop.getId()
+				propIdString = prop.GetID()
 			}
 
 			// Add used prop to the prop list if duplicate properties are not allowed
@@ -411,16 +410,7 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 		f.Rows[idx][i+1] = prop.Par
 		f.Rows[idx][i+2] = prop.Min
 		f.Rows[idx][i+3] = prop.Max
-	}
-}
 
-func (p *Prop) getId() string {
-	if p.Name == "aura" {
-		// Two auras do not work even if they are different types
-		return p.Name
-	} else {
-		// Otherwise include both the prop type and sub-type
-		return p.Name + p.Par
 	}
 }
 
