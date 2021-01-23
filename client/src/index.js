@@ -1,7 +1,7 @@
 'use strict';
 
-import "./tailwind.css";
-require("./styles.scss");
+import "./styles/tailwind.css";
+require("./styles/styles.scss");
 
 const { Elm } = require('./elm/Main');
 var app = Elm.Main.init({ flags: "" });
