@@ -1,8 +1,9 @@
 {
-  "author": "Simon Hampton",
-  "name": "elm-webpack-starter",
-  "version": "4.0.0",
-  "description": "Elm 0.19 starter with Webpack 5 & Tailwind",
+  "author": "Tyler Lentz",
+  "contributors": ["Mark Loevenstein"],
+  "name": "d2mm-client",
+  "version": "1.0.0",
+  "description": "D2MM client",
   "main": "index.js",
   "scripts": {
     "analyse": "elm-analyse -s -p 3001 -o",
