@@ -1,8 +1,16 @@
-// pull in desired CSS/SASS files
-require('../assets/scss/main.scss');
+'use strict';
 
-// inject bundled Elm app into div#main
-const { Elm } = require('./elm/Main.elm');
-const app = Elm.Main.init({
-  node: document.getElementById('main')
-});
+import "./styles/tailwind.css";
+require("./styles/styles.scss");
+
+const { Elm } = require('./elm/Main');
+var app = Elm.Main.init({ flags: "" });
+
+app.ports.toJs.subscribe(data => {
+    console.log(data);
+})
+// Use ES2015 syntax and let Babel compile it for you
+var testFn = (inp) => {
+    let a = inp + 1;
+    return a;
+}

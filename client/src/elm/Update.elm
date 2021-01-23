@@ -1,229 +1,32 @@
-module Update exposing (update)
+module Update exposing (..)
 
-import Browser.Dom as Dom
-import Dict
-import Helper exposing (return, mkCmd)
-import Http exposing (Error(..))
-import Random
-import Task
-import Types
-    exposing
-        ( AdvancedIntMsg(..)
-        , AdvancedCheckboxOption
-        , AdvancedCheckboxOptions
-        , AdvancedNumberOption
-        , CheckboxMsg(..)
-        , InputName
-        , Model
-        , Mode(..)
-        , Msg(..)
-        , Route(..)
-        , View(..)
-        )
+import Http
+import Json.Decode as Decode
+import Model exposing (Model)
+import Msg exposing (Msg(..))
+import Ports
+import Util exposing (httpErrorToString)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        DoNothing ->
-            return model []
-
-        Resize screen ->
-            ( { model | screen = screen }, Cmd.none )
-
-        SetViewportCb ->
-            ( model, Cmd.none )
-
-        FocusOn id ->
-            ( model, Dom.focus id |> Task.attempt FocusResult )
-
-        FocusResult _ ->
-            ( model, Cmd.none )
-        
-        GetResponse _ ->
-            ( model, Cmd.none )
-        
-        SetCheckedState checkboxMsg ->
-            updateCheckboxState checkboxMsg
-                |> setUpdatedOptionsOnModel model
-        
-        SetAdvancedInt advancedIntMsg ->
-            updateAdvancedInt advancedIntMsg
-                |> setUpdatedIntOptionsOnModel model
-
-        SetSelectedMode mode ->
-            ( { model | mode = Just mode}, Cmd.none )
-        
-        SetSelectedBasicOption basicOption ->
+update message model =
+    case message of
+        TestServer ->
             let
-                mode = model.mode
-
-                updatedMode =
-                    case mode of
-                        Just m ->
-                            let
-                                newMode =
-                                    case m of
-                                        Basic _ ->
-                                            Just basicOption
-                                                |> Basic
-                                        Advanced options ->
-                                            m
-                            in
-                            Just newMode
-
-                        Nothing ->
-                            mode
-                
-                updatedModel =
-                    { model | mode = updatedMode }
-
+                expect =
+                    Http.expectJson OnServerResponse (Decode.field "result" Decode.string)
             in
-            ( updatedModel, Cmd.none )
-        
-        SetItemGenerationMode itemGenerationMode ->
-            let
-                mode = model.mode
+            ( model
+            , Http.get { url = "/test", expect = expect }
+            )
 
-                updatedMode =
-                    case mode of
-                        Just m ->
-                            let
-                                newMode =
-                                    case m of
-                                        Basic _ ->
-                                            m
+        OnServerResponse res ->
+            case res of
+                Ok r ->
+                    ( { model | serverMessage = r }, Cmd.none )
 
-                                        Advanced options ->
-                                            let
-                                                updatedOptions =
-                                                    { options | itemGenerationMode = itemGenerationMode }
-                                            in
-                                            Advanced updatedOptions
-                            in
-                            Just newMode
+                Err err ->
+                    ( { model | serverMessage = "Error: " ++ httpErrorToString err }, Cmd.none )
 
-                        Nothing ->
-                            mode
-                
-                updatedModel =
-                    { model | mode = updatedMode }
-
-            in
-            ( updatedModel, Cmd.none )
-
-        GenerateBasic ->
-            ( model, Cmd.none )
-        
-        SaveConfig ->
-            ( model, Cmd.none )
-
-
-updateCheckboxState : CheckboxMsg -> (AdvancedCheckboxOptions, Cmd CheckboxMsg)
-updateCheckboxState checkboxMsg =
-    case checkboxMsg of
-        ToggleCheckbox advancedOptions checkboxName ->
-            let
-                newAdvancedOptions =
-                    { advancedOptions | checkboxes = toggle checkboxName advancedOptions.checkboxes }
-
-                cmd =
-                    if checkboxName == "UseSeed" then
-                        Random.generate (SetSeed newAdvancedOptions) (Random.int 1 Random.maxInt)
-
-                    else
-                        Cmd.none
-            in
-            ( newAdvancedOptions, cmd )
-
-        SetSeed advancedOptions newSeed ->
-            ({ advancedOptions | seed = newSeed }, Cmd.none)
-
-
-updateAdvancedInt : AdvancedIntMsg -> AdvancedCheckboxOptions
-updateAdvancedInt advancedIntMsg =
-    case advancedIntMsg of
-        SetInputValue advancedOptions inputName value ->
-            { advancedOptions | numberInputs = setInputValue value inputName advancedOptions.numberInputs }
-
-
-toggle : comparable -> Dict.Dict comparable AdvancedCheckboxOption -> Dict.Dict comparable AdvancedCheckboxOption
-toggle key dict =
-    Dict.update key
-        (\oldValue ->
-            case oldValue of
-                Just value ->
-                    Just <| { value | isChecked = not value.isChecked }
-                Nothing ->
-                    Nothing
-        )
-        dict
-
-
-setInputValue : Float -> comparable -> Dict.Dict comparable AdvancedNumberOption -> Dict.Dict comparable AdvancedNumberOption
-setInputValue newValue key dict =
-    Dict.update key
-        (\oldOption ->
-            case oldOption of
-                Just o ->
-                    Just <| { o | value = max o.min (min o.max newValue) }
-                Nothing ->
-                    Nothing
-        )
-        dict
-
-
-setUpdatedOptionsOnModel : Model -> (AdvancedCheckboxOptions, Cmd CheckboxMsg) -> (Model, Cmd Msg)
-setUpdatedOptionsOnModel model advancedOptions =
-    let
-        mode = model.mode
-
-        updatedMode =
-            case mode of
-                Just m ->
-                    let
-                        newMode =
-                            case m of
-                                Basic _ ->
-                                   m
-                                Advanced options ->
-                                    Advanced <| Tuple.first advancedOptions
-                    in
-                    Just newMode
-
-                Nothing ->
-                    mode
-        
-        updatedModel =
-            { model | mode = updatedMode }
-
-    in
-    (updatedModel, Cmd.map SetCheckedState (Tuple.second advancedOptions))
-
-
-setUpdatedIntOptionsOnModel : Model -> AdvancedCheckboxOptions -> (Model, Cmd Msg)
-setUpdatedIntOptionsOnModel model advancedOptions =
-    let
-        mode = model.mode
-
-        updatedMode =
-            case mode of
-                Just m ->
-                    let
-                        newMode =
-                            case m of
-                                Basic _ ->
-                                   m
-                                Advanced options ->
-                                    Advanced <| advancedOptions
-                    in
-                    Just newMode
-
-                Nothing ->
-                    mode
-        
-        updatedModel =
-            { model | mode = updatedMode }
-
-    in
-    (updatedModel, Cmd.none)
+        ChangePage page ->
+            ( { model | page = page }, Cmd.none )

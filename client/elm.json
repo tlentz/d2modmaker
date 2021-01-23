@@ -6,40 +6,30 @@
     "elm-version": "0.19.1",
     "dependencies": {
         "direct": {
-            "PaackEng/elm-ui-dialog": "1.0.0",
             "afidegnum/elm-tailwind": "1.0.0",
-            "avh4/elm-color": "1.0.0",
-            "bartavelle/json-helpers": "2.0.2",
             "elm/browser": "1.0.2",
             "elm/core": "1.0.4",
             "elm/html": "1.0.0",
             "elm/http": "2.0.0",
             "elm/json": "1.1.3",
-            "elm/random": "1.0.0",
-            "elm/time": "1.0.0",
-            "elm/url": "1.0.0",
-            "elm-community/list-extra": "8.0.0",
-            "elm-community/maybe-extra": "5.2.0",
-            "elm-community/random-extra": "3.0.0",
-            "elm-community/result-extra": "2.4.0",
-            "fredcy/elm-parseint": "2.0.1",
-            "icidasset/elm-material-icons": "3.1.0",
-            "jschomay/elm-paginate": "3.1.1",
-            "lucamug/style-framework": "1.1.0",
-            "mdgriffith/elm-ui": "1.1.5"
+            "icidasset/elm-material-icons": "5.0.0"
         },
         "indirect": {
+            "avh4/elm-color": "1.0.0",
             "elm/bytes": "1.0.8",
             "elm/file": "1.0.5",
-            "elm/regex": "1.0.0",
             "elm/svg": "1.0.1",
-            "elm/virtual-dom": "1.0.2",
-            "jschomay/elm-bounded-number": "2.1.1",
-            "noahzgordon/elm-color-extra": "1.0.2"
+            "elm/time": "1.0.0",
+            "elm/url": "1.0.0",
+            "elm/virtual-dom": "1.0.2"
         }
     },
     "test-dependencies": {
-        "direct": {},
-        "indirect": {}
+        "direct": {
+            "elm-explorations/test": "1.2.2"
+        },
+        "indirect": {
+            "elm/random": "1.0.0"
+        }
     }
 }

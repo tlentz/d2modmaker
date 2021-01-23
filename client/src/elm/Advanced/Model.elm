@@ -1,122 +1,26 @@
-module Types exposing (AdvancedIntMsg(..), AdvancedCheckboxOption, AdvancedCheckboxOptions, AdvancedNumberOption, BasicOption(..), initMinProps, CheckboxMsg(..), InputName, Model, Msg(..), Mode(..), initAdvancedCheckboxOptions, ItemGenerationMode(..), Route(..), Screen, View(..), emptyModel)
+module Advanced.Model exposing (..)
 
-import Browser.Dom as Dom
-import Dict
-import Http
+import Common.Checkbox exposing (Checkbox)
+import Common.NumberInput exposing (NumberInput)
+import Dict exposing (Dict)
 
 
 type alias Model =
-    { screen : Screen
-    , view : View
-    , errorMessage : Maybe String
-    , mode : Maybe Mode
+    { checkboxes : Dict String Checkbox
+    , numberInputs : Dict String NumberInput
+    , seed : Maybe Int
     }
 
 
-emptyModel : Model
-emptyModel =
-    { screen = { width = 0, height = 0 }
-    , view = ViewHome
-    , errorMessage = Nothing
-    , mode = Nothing
-    }
-
-type Msg
-    = DoNothing
-    | Resize Screen
-    | FocusOn String
-    | FocusResult (Result Dom.Error ())
-    | SetViewportCb
-    | GetResponse (Result Http.Error String)
-    | SetCheckedState CheckboxMsg
-    | SetAdvancedInt AdvancedIntMsg
-    | SetSelectedMode Mode
-    | SetSelectedBasicOption BasicOption
-    | SetItemGenerationMode ItemGenerationMode
-    | GenerateBasic
-    | SaveConfig
-
-type CheckboxMsg
-    = ToggleCheckbox AdvancedCheckboxOptions InputName
-    | SetSeed AdvancedCheckboxOptions Int
-
-type AdvancedIntMsg
-    = SetInputValue AdvancedCheckboxOptions InputName Float
-
-type alias Screen =
-    { width : Int
-    , height : Int
-    }
-
-
-type View
-    = ViewHome
-    | ViewAbout
-
-
-type Route
-    = RouteHome
-    | RouteAbout
-    | RouteNotFound
-
-
-type Mode
-    = Basic (Maybe BasicOption)
-    | Advanced AdvancedCheckboxOptions
-
-
-type BasicOption
-    = MinorQolEnhancement
-    | QolOnly
-    | Vanilla
-    | Better
-    | Good
-    | Great
-    | Fantastic
-    | Zomg
-
-
-type alias InputName =
-    String
-
-
-type alias AdvancedCheckboxOptions =
-    { checkboxes : Dict.Dict InputName AdvancedCheckboxOption
-    , numberInputs : Dict.Dict InputName AdvancedNumberOption
-    , seed : Int
-    , itemGenerationMode : ItemGenerationMode
-    }
-    
-
-type ItemGenerationMode
-    = None
-    | Randomize
-    | Generate
-
-
-type alias AdvancedCheckboxOption =
-    { isChecked : Bool
-    , tooltip : String
-    }
-
-
-type alias AdvancedNumberOption =
-    { value : Float
-    , min : Float
-    , max : Float
-    , tooltip : String
-    }
-
-initAdvancedCheckboxOptions : AdvancedCheckboxOptions
-initAdvancedCheckboxOptions =
+initModel : Model
+initModel =
     { checkboxes = initCheckboxes
     , numberInputs = initNumberInputs
-    , seed = 1
-    , itemGenerationMode = None
+    , seed = Nothing
     }
 
 
-initCheckboxes: Dict.Dict InputName AdvancedCheckboxOption
+initCheckboxes : Dict String Checkbox
 initCheckboxes =
     Dict.fromList
         [ ( "Randomize", initRandomize )
@@ -139,7 +43,7 @@ initCheckboxes =
         ]
 
 
-initNumberInputs : Dict.Dict InputName AdvancedNumberOption
+initNumberInputs : Dict.Dict String NumberInput
 initNumberInputs =
     Dict.fromList
         [ ( "MinProps", initMinProps )
@@ -150,110 +54,126 @@ initNumberInputs =
         ]
 
 
-initRandomize: AdvancedCheckboxOption
+initRandomize : Checkbox
 initRandomize =
     { isChecked = True
     , tooltip = "Randomize all all uniques, sets, and runewords."
     }
 
-initUseSeed: AdvancedCheckboxOption
+
+initUseSeed : Checkbox
 initUseSeed =
     { isChecked = False
     , tooltip = "Provide a specific seed to use.  Toggling on/off will generate a new seed."
     }
 
-initUseOSkills: AdvancedCheckboxOption
+
+initUseOSkills : Checkbox
 initUseOSkills =
     { isChecked = True
     , tooltip = "Change class only skill props to spawn as oskills."
     }
 
-initPerfectProps: AdvancedCheckboxOption
+
+initPerfectProps : Checkbox
 initPerfectProps =
     { isChecked = False
     , tooltip = "All props will have a perfect max value when spawning on an item."
     }
 
-initAllowDupProps: AdvancedCheckboxOption
+
+initAllowDupProps : Checkbox
 initAllowDupProps =
     { isChecked = False
     , tooltip = "If turned off, prevents the same prop from being placed on an item more than once. e.g. two instances of all resist will not get stacked on the same randomized item."
     }
 
-initIsBalanced: AdvancedCheckboxOption
+
+initIsBalanced : Checkbox
 initIsBalanced =
     { isChecked = True
     , tooltip = "Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization."
     }
 
-initBalancedPropCount: AdvancedCheckboxOption
+
+initBalancedPropCount : Checkbox
 initBalancedPropCount =
     { isChecked = True
     , tooltip = "Pick prop count on items based on counts from vanilla items. Picks from items up to 10 levels higher when randomizing."
     }
 
-initMeleeSplash: AdvancedCheckboxOption
+
+initMeleeSplash : Checkbox
 initMeleeSplash =
     { isChecked = True
     , tooltip = "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels."
     }
 
-initEnableTownSkills: AdvancedCheckboxOption
+
+initEnableTownSkills : Checkbox
 initEnableTownSkills =
     { isChecked = True
     , tooltip = "Enable the ability to use all skills in town."
     }
 
-initStartWithCube: AdvancedCheckboxOption
+
+initStartWithCube : Checkbox
 initStartWithCube =
     { isChecked = True
     , tooltip = "Newly created characters will start with a cube."
     }
 
-initCowzzz: AdvancedCheckboxOption
+
+initCowzzz : Checkbox
 initCowzzz =
     { isChecked = True
     , tooltip = "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal4."
     }
 
-initIncreaseStackSizes: AdvancedCheckboxOption
+
+initIncreaseStackSizes : Checkbox
 initIncreaseStackSizes =
     { isChecked = True
     , tooltip = "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack sizes to 100."
     }
 
-initRemoveLevelRequirements: AdvancedCheckboxOption
+
+initRemoveLevelRequirements : Checkbox
 initRemoveLevelRequirements =
     { isChecked = False
     , tooltip = "Removes level requirements from items."
     }
 
-initRemoveAttRequirements: AdvancedCheckboxOption
+
+initRemoveAttRequirements : Checkbox
 initRemoveAttRequirements =
     { isChecked = False
     , tooltip = "Removes stat requirements from items."
     }
 
-initRemoveUniqueCharmLimit: AdvancedCheckboxOption
+
+initRemoveUniqueCharmLimit : Checkbox
 initRemoveUniqueCharmLimit =
     { isChecked = False
     , tooltip = "Removes unique charm limit in inventory."
     }
 
-initNoDropZero: AdvancedCheckboxOption
+
+initNoDropZero : Checkbox
 initNoDropZero =
     { isChecked = True
     , tooltip = "Guarantees that a monster drops something upon death."
     }
 
-initQuestDrops: AdvancedCheckboxOption
+
+initQuestDrops : Checkbox
 initQuestDrops =
     { isChecked = True
     , tooltip = "Act bosses will always drop quest drops."
     }
 
 
-initMinProps: AdvancedNumberOption
+initMinProps : NumberInput
 initMinProps =
     { value = 0
     , min = 0
@@ -262,7 +182,7 @@ initMinProps =
     }
 
 
-initMaxProps: AdvancedNumberOption
+initMaxProps : NumberInput
 initMaxProps =
     { value = 20
     , min = 0
@@ -270,7 +190,8 @@ initMaxProps =
     , tooltip = "Maximum number of props an item can have."
     }
 
-initMonsterDensity: AdvancedNumberOption
+
+initMonsterDensity : NumberInput
 initMonsterDensity =
     { value = 1
     , min = 1
@@ -278,7 +199,8 @@ initMonsterDensity =
     , tooltip = "Increases monster density throughout the map by the given factor."
     }
 
-initUniqueItemDropRate: AdvancedNumberOption
+
+initUniqueItemDropRate : NumberInput
 initUniqueItemDropRate =
     { value = 1
     , min = 1
@@ -286,7 +208,8 @@ initUniqueItemDropRate =
     , tooltip = "Increases the drop rate of unique and set items.  When using this setting, high values prevent some monsters from dropping set items."
     }
 
-initRuneDropRate: AdvancedNumberOption
+
+initRuneDropRate : NumberInput
 initRuneDropRate =
     { value = 1
     , min = 1
