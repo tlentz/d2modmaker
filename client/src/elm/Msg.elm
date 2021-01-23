@@ -4,6 +4,5 @@ import Http
 
 
 type Msg
-    = Inc
-    | TestServer
+    = TestServer
     | OnServerResponse (Result Http.Error String)

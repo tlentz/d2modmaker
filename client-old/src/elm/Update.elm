@@ -2,20 +2,20 @@ module Update exposing (update)
 
 import Browser.Dom as Dom
 import Dict
-import Helper exposing (return, mkCmd)
+import Helper exposing (return)
 import Http exposing (Error(..))
 import Random
 import Task
 import Types
     exposing
-        ( AdvancedIntMsg(..)
-        , AdvancedCheckboxOption
+        ( AdvancedCheckboxOption
         , AdvancedCheckboxOptions
+        , AdvancedIntMsg(..)
         , AdvancedNumberOption
         , CheckboxMsg(..)
         , InputName
-        , Model
         , Mode(..)
+        , Model
         , Msg(..)
         , Route(..)
         , View(..)
@@ -39,24 +39,25 @@ update msg model =
 
         FocusResult _ ->
             ( model, Cmd.none )
-        
+
         GetResponse _ ->
             ( model, Cmd.none )
-        
+
         SetCheckedState checkboxMsg ->
             updateCheckboxState checkboxMsg
                 |> setUpdatedOptionsOnModel model
-        
+
         SetAdvancedInt advancedIntMsg ->
             updateAdvancedInt advancedIntMsg
                 |> setUpdatedIntOptionsOnModel model
 
         SetSelectedMode mode ->
-            ( { model | mode = Just mode}, Cmd.none )
-        
+            ( { model | mode = Just mode }, Cmd.none )
+
         SetSelectedBasicOption basicOption ->
             let
-                mode = model.mode
+                mode =
+                    model.mode
 
                 updatedMode =
                     case mode of
@@ -67,6 +68,7 @@ update msg model =
                                         Basic _ ->
                                             Just basicOption
                                                 |> Basic
+
                                         Advanced options ->
                                             m
                             in
@@ -74,16 +76,16 @@ update msg model =
 
                         Nothing ->
                             mode
-                
+
                 updatedModel =
                     { model | mode = updatedMode }
-
             in
             ( updatedModel, Cmd.none )
-        
+
         SetItemGenerationMode itemGenerationMode ->
             let
-                mode = model.mode
+                mode =
+                    model.mode
 
                 updatedMode =
                     case mode of
@@ -105,21 +107,20 @@ update msg model =
 
                         Nothing ->
                             mode
-                
+
                 updatedModel =
                     { model | mode = updatedMode }
-
             in
             ( updatedModel, Cmd.none )
 
         GenerateBasic ->
             ( model, Cmd.none )
-        
+
         SaveConfig ->
             ( model, Cmd.none )
 
 
-updateCheckboxState : CheckboxMsg -> (AdvancedCheckboxOptions, Cmd CheckboxMsg)
+updateCheckboxState : CheckboxMsg -> ( AdvancedCheckboxOptions, Cmd CheckboxMsg )
 updateCheckboxState checkboxMsg =
     case checkboxMsg of
         ToggleCheckbox advancedOptions checkboxName ->
@@ -137,7 +138,7 @@ updateCheckboxState checkboxMsg =
             ( newAdvancedOptions, cmd )
 
         SetSeed advancedOptions newSeed ->
-            ({ advancedOptions | seed = newSeed }, Cmd.none)
+            ( { advancedOptions | seed = newSeed }, Cmd.none )
 
 
 updateAdvancedInt : AdvancedIntMsg -> AdvancedCheckboxOptions
@@ -154,6 +155,7 @@ toggle key dict =
             case oldValue of
                 Just value ->
                     Just <| { value | isChecked = not value.isChecked }
+
                 Nothing ->
                     Nothing
         )
@@ -167,16 +169,18 @@ setInputValue newValue key dict =
             case oldOption of
                 Just o ->
                     Just <| { o | value = max o.min (min o.max newValue) }
+
                 Nothing ->
                     Nothing
         )
         dict
 
 
-setUpdatedOptionsOnModel : Model -> (AdvancedCheckboxOptions, Cmd CheckboxMsg) -> (Model, Cmd Msg)
+setUpdatedOptionsOnModel : Model -> ( AdvancedCheckboxOptions, Cmd CheckboxMsg ) -> ( Model, Cmd Msg )
 setUpdatedOptionsOnModel model advancedOptions =
     let
-        mode = model.mode
+        mode =
+            model.mode
 
         updatedMode =
             case mode of
@@ -185,7 +189,8 @@ setUpdatedOptionsOnModel model advancedOptions =
                         newMode =
                             case m of
                                 Basic _ ->
-                                   m
+                                    m
+
                                 Advanced options ->
                                     Advanced <| Tuple.first advancedOptions
                     in
@@ -193,18 +198,18 @@ setUpdatedOptionsOnModel model advancedOptions =
 
                 Nothing ->
                     mode
-        
+
         updatedModel =
             { model | mode = updatedMode }
-
     in
-    (updatedModel, Cmd.map SetCheckedState (Tuple.second advancedOptions))
+    ( updatedModel, Cmd.map SetCheckedState (Tuple.second advancedOptions) )
 
 
-setUpdatedIntOptionsOnModel : Model -> AdvancedCheckboxOptions -> (Model, Cmd Msg)
+setUpdatedIntOptionsOnModel : Model -> AdvancedCheckboxOptions -> ( Model, Cmd Msg )
 setUpdatedIntOptionsOnModel model advancedOptions =
     let
-        mode = model.mode
+        mode =
+            model.mode
 
         updatedMode =
             case mode of
@@ -213,7 +218,8 @@ setUpdatedIntOptionsOnModel model advancedOptions =
                         newMode =
                             case m of
                                 Basic _ ->
-                                   m
+                                    m
+
                                 Advanced options ->
                                     Advanced <| advancedOptions
                     in
@@ -221,9 +227,8 @@ setUpdatedIntOptionsOnModel model advancedOptions =
 
                 Nothing ->
                     mode
-        
+
         updatedModel =
             { model | mode = updatedMode }
-
     in
-    (updatedModel, Cmd.none)
+    ( updatedModel, Cmd.none )

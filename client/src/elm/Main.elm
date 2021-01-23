@@ -1,21 +1,10 @@
-port module Main exposing (init, main)
+module Main exposing (init, main)
 
 import Browser
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Update exposing (update)
 import View exposing (view)
-
-
-init : Int -> ( Model, Cmd Msg )
-init flags =
-    ( { counter = flags, serverMessage = "" }, Cmd.none )
-
-
-
--- ---------------------------
--- MAIN
--- ---------------------------
 
 
 main : Program Int Model Msg
@@ -30,3 +19,8 @@ main =
                 }
         , subscriptions = \_ -> Sub.none
         }
+
+
+init : Int -> ( Model, Cmd Msg )
+init flags =
+    ( { serverMessage = "" }, Cmd.none )

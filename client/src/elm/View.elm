@@ -20,10 +20,8 @@ view model =
             [ div [ class "flex flex-row items-center" ]
                 [ button
                     [ class "border border-green-500 bg-green-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline"
-                    , onClick Inc
                     ]
-                    [ text "+ 1" ]
-                , text <| String.fromInt model.counter
+                    [ text "+ 3" ]
                 ]
             , div [ class "flex flex-row items-center" ]
                 [ button
