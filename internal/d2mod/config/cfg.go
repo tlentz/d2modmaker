@@ -69,7 +69,7 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-20",
+		Version:                 "v0.5.2-alpha-21",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,

@@ -202,6 +202,8 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-21
+* Merged in cleanup from obc/mobdensity branch
 ## v0.5.2-alpha-20
 * Set Generator default to false to work around the ui bug.
 * Fix for PerfectProps doing "r=" proptypes
