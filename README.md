@@ -154,7 +154,8 @@ Thanks!
 
 # Change Log
 
-
+## Upcoming Release
+* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
 ## v0.5.1
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
 * Adds new feature `RemoveLevelRequirements`
