@@ -80,7 +80,7 @@ func (d2files *Files) Read(filepath string, filename string) *File {
 		defer csvfile.Close()
 		return importCsv(csvfile, filename)
 	}
-	csvfile, err := os.Open(path.Join(d2files.sourceDir, filename))
+	csvfile, err := os.Open(path.Join(d2files.sourceDir, filepath, filename))
 	checkError(filename, err)
 	defer csvfile.Close()
 	return importCsv(csvfile, filename)
