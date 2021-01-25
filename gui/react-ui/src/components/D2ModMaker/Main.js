@@ -47,8 +47,8 @@ const defaultCfg = {
     AllowDupProps: false,
     MinProps: 0,
     MaxProps: 20,
-    PerfectProps: false,
     UseOSkills: true,
+    PerfectProps: false,
   },
 };
 
