@@ -47,8 +47,8 @@ const defaultCfg = {
     AllowDupProps: false,
     MinProps: 0,
     MaxProps: 20,
-    PerfectProps: false,
     UseOSkills: true,
+    PerfectProps: false,
   },
 };
 
@@ -326,7 +326,7 @@ export default function D2ModMaker() {
             aria-labelledby="IncreaseMonsterDensity"
             step={0.5}
             min={1}
-            max={30}
+            max={45}
             marks={[
               {
                 value: 1,

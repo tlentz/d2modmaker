@@ -1,0 +1,6 @@
+code	*done	set1	val1	func1	stat1	set2	val2	func2	stat2	set3	val3	func3	stat3	set4	val4	func4	stat4	set5	val5	func5	stat5	set6	val6	func6	stat6	set7	val7	func7	stat7	*desc	*param	*min	*max	*notes	*eol
+fireskill	1		1	21	item_elemskill			3	text_fireskill																									none	0
+lightningskill	1		2	21	item_elemskill			3	text_lightningskill																									none	0
+magicskill	1		3	21	item_elemskill			3	text_magicskill																									none	0
+coldskill	1		4	21	item_elemskill			3	text_coldskill																									none	0
+poisonskill	1		5	21	item_elemskill			3	text_poisonskill																									none	0

@@ -1,5 +1,6 @@
 [![Github All Releases](https://img.shields.io/github/downloads/tlentz/d2modmaker/total.svg)]()
 ![release](https://img.shields.io/github/v/release/tlentz/d2modmaker)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftlentz%2Fd2modmaker&count_bg=%23E7AA5D&title_bg=%23555555&icon=&icon_color=%23BA4141&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 <p align="center">
   <img width="400" height="400" src="/images/D2_Mod_Logo_V3.png">
@@ -153,6 +154,10 @@ Thanks!
 
 # Change Log
 
+## Upcoming Release
+* [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
+* Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.
+* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
 
 ## v0.5.1
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
@@ -226,3 +231,4 @@ Thanks!
     
 # Credits
 * [Dead Weight Design](https://www.instagram.com/deadweightdesign/) - Thanks for creating the logo!
+
