@@ -72,10 +72,11 @@ type TKey
     | RemoveUniqCharmLimit
     | RandomOptions
     | Randomize
+    | UseSeed
     | Seed
     | IsBalanced
     | BalancedPropCount
-    | AllowDuplicateProps
+    | AllowDupProps
     | MinProps
     | MaxProps
     | UseOSkills
@@ -158,8 +159,8 @@ tKeyToString t =
         BalancedPropCount ->
             "BalancedPropCount"
 
-        AllowDuplicateProps ->
-            "AllowDuplicateProps"
+        AllowDupProps ->
+            "AllowDupProps"
 
         MinProps ->
             "MinProps"
@@ -172,6 +173,9 @@ tKeyToString t =
 
         PerfectProps ->
             "PerfectProps"
+
+        UseSeed ->
+            "UseSeed"
 
 
 tKeyFromString : String -> Result String TKey
@@ -240,8 +244,8 @@ tKeyFromString s =
         "BalancedPropCount" ->
             Ok BalancedPropCount
 
-        "AllowDuplicateProps" ->
-            Ok AllowDuplicateProps
+        "AllowDupProps" ->
+            Ok AllowDupProps
 
         "MinProps" ->
             Ok MinProps
@@ -254,6 +258,9 @@ tKeyFromString s =
 
         "PerfectProps" ->
             Ok PerfectProps
+
+        "UseSeed" ->
+            Ok UseSeed
 
         _ ->
             Err <| "[TKey.fromStr] unknown key : " ++ s
