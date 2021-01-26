@@ -2,56 +2,54 @@ module Advanced.Model exposing (..)
 
 import Common.Checkbox exposing (Checkbox)
 import Common.NumberInput exposing (NumberInput)
-import Dict exposing (Dict)
+import D2MM.TVal exposing (TKey, TVal)
+import GenericDict exposing (Dict)
 
 
 type alias Model =
-    { checkboxes : Dict String Checkbox
-    , numberInputs : Dict String NumberInput
-    , seed : Maybe Int
+    { formFields : Dict TKey TVal
     }
 
 
-initModel : Model
-initModel =
-    { checkboxes = initCheckboxes
-    , numberInputs = initNumberInputs
-    , seed = Nothing
-    }
 
-
-initCheckboxes : Dict String Checkbox
-initCheckboxes =
-    Dict.fromList
-        [ ( "Randomize", initRandomize )
-        , ( "UseSeed", initUseSeed )
-        , ( "UseOSkills", initUseOSkills )
-        , ( "PerfectProps", initPerfectProps )
-        , ( "AllowDupProps", initAllowDupProps )
-        , ( "IsBalanced", initIsBalanced )
-        , ( "BalancedPropCount", initBalancedPropCount )
-        , ( "MeleeSplash", initMeleeSplash )
-        , ( "EnableTownSkills", initEnableTownSkills )
-        , ( "StartWithCube", initStartWithCube )
-        , ( "Cowzzz", initCowzzz )
-        , ( "IncreaseStackSizes", initIncreaseStackSizes )
-        , ( "RemoveLevelRequirements", initRemoveLevelRequirements )
-        , ( "RemoveAttRequirements", initRemoveAttRequirements )
-        , ( "RemoveUniqueCharmLimit", initRemoveUniqueCharmLimit )
-        , ( "NoDropZero", initNoDropZero )
-        , ( "QuestDrops", initQuestDrops )
-        ]
-
-
-initNumberInputs : Dict.Dict String NumberInput
-initNumberInputs =
-    Dict.fromList
-        [ ( "MinProps", initMinProps )
-        , ( "MaxProps", initMaxProps )
-        , ( "MonsterDensity", initMonsterDensity )
-        , ( "UniqueItemDropRate", initUniqueItemDropRate )
-        , ( "RuneDropRate", initRuneDropRate )
-        ]
+--initModel : Model
+--initModel =
+--    { checkboxes = initCheckboxes
+--    , numberInputs = initNumberInputs
+--    , seed = Nothing
+--    }
+--initCheckboxes : Dict String Checkbox
+--initCheckboxes =
+--    Dict.fromList
+--        [ ( "Randomize", initRandomize )
+--        , ( "UseSeed", initUseSeed )
+--        , ( "UseOSkills", initUseOSkills )
+--        , ( "PerfectProps", initPerfectProps )
+--        , ( "AllowDupProps", initAllowDupProps )
+--        , ( "IsBalanced", initIsBalanced )
+--        , ( "BalancedPropCount", initBalancedPropCount )
+--        , ( "MeleeSplash", initMeleeSplash )
+--        , ( "EnableTownSkills", initEnableTownSkills )
+--        , ( "StartWithCube", initStartWithCube )
+--        , ( "Cowzzz", initCowzzz )
+--        , ( "IncreaseStackSizes", initIncreaseStackSizes )
+--        , ( "RemoveLevelRequirements", initRemoveLevelRequirements )
+--        , ( "RemoveAttRequirements", initRemoveAttRequirements )
+--        , ( "RemoveUniqueCharmLimit", initRemoveUniqueCharmLimit )
+--        , ( "NoDropZero", initNoDropZero )
+--        , ( "QuestDrops", initQuestDrops )
+--        ]
+--
+--
+--initNumberInputs : Dict.Dict String NumberInput
+--initNumberInputs =
+--    Dict.fromList
+--        [ ( "MinProps", initMinProps )
+--        , ( "MaxProps", initMaxProps )
+--        , ( "MonsterDensity", initMonsterDensity )
+--        , ( "UniqueItemDropRate", initUniqueItemDropRate )
+--        , ( "RuneDropRate", initRuneDropRate )
+--        ]
 
 
 initRandomize : Checkbox

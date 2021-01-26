@@ -26,6 +26,28 @@ type alias Config =
     }
 
 
+blankConfig : Config
+blankConfig =
+    { version = ""
+    , sourceDir = ""
+    , outputDir = ""
+    , meleeSplash = False
+    , increasedStackSizes = False
+    , increaseMonsterDensity = 1
+    , enableTownSkills = False
+    , noDropZero = False
+    , questDrops = False
+    , uniqueItemDropRate = 1.0
+    , runeDropRate = 1.0
+    , startWithCube = False
+    , cowzzz = False
+    , removeLevelRequirements = False
+    , removeAttRequirements = False
+    , removeUniqCharmLimit = False
+    , randomOptions = blankRandomOptions
+    }
+
+
 encodeConfig : Config -> Encode.Value
 encodeConfig t =
     [ ( "Version", Encode.string t.version )
@@ -81,6 +103,20 @@ type alias RandomOptions =
     , maxProps : Int
     , useOSkills : Bool
     , perfectProps : Bool
+    }
+
+
+blankRandomOptions : RandomOptions
+blankRandomOptions =
+    { randomize = False
+    , seed = 0
+    , isBalanced = False
+    , balancedPropCount = False
+    , allowDuplicateProps = False
+    , minProps = -1
+    , maxProps = -1
+    , useOSkills = False
+    , perfectProps = False
     }
 
 
