@@ -7,7 +7,7 @@
     "IncreaseMonsterDensity": 8,
     "EnableTownSkills": true,
     "BiggerGoldPiles": true,
-    "NoFlawGems": false,
+    "NoFlawGems": true,
     "NoDropZero": false,
     "QuestDrops": true,
     "UniqueItemDropRate": 70,

@@ -1,0 +1,11 @@
+{
+    "Name": "Minor QOL",
+    "Description": "Minor Quality Of Life changes",
+    "Author": "EMPY",
+    "IncreaseStackSizes": true,
+    "EnableTownSkills": true,
+    "BiggerGoldPiles": true,
+    "NoFlawGems": true,
+    "StartWithCube": true,
+    "Cowzzz": true
+}
