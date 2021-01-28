@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/tlentz/d2modmaker/internal/d2mod"
+	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 )
 
 var (
-	dataDir string
 	outDir  string
 	cfgPath string
 	mode    string
@@ -15,6 +15,8 @@ var (
 )
 
 func main() {
+
+	config.Version = version
 
 	if mode == "production" {
 		outDir = "./"
