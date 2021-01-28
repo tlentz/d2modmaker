@@ -5,11 +5,6 @@ import (
 	"io/ioutil"
 )
 
-var (
-	// Version # stuffed in from main.go:version, from build environment variable.
-	Version string
-)
-
 // RandomOptions are the options for the randomizer
 type RandomOptions struct {
 	Randomize         bool  `json:"Randomize"`
@@ -49,6 +44,7 @@ type Data struct {
 
 func DefaultData() Data {
 	return Data{
+		Version:                 "v0.5.1",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -80,20 +76,16 @@ func DefaultData() Data {
 	}
 }
 
-// Read reads a ModConfig from the given json file
+// ReadCfg reads a ModConfig from the given json file
 func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
 	data := DefaultData()
 	_ = json.Unmarshal([]byte(file), &data)
-	data.Version = Version
-
 	return data
 }
 
-// Parse a configuration from jsdon data into a configuration structure
 func Parse(jsonData []byte) Data {
 	data := DefaultData()
 	_ = json.Unmarshal(jsonData, &data)
-	data.Version = Version
 	return data
 }

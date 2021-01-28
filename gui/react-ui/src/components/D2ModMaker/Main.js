@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.3",
+  Version: "v0.5.1",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,

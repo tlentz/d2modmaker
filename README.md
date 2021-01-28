@@ -157,9 +157,6 @@ Thanks!
 ## Upcoming Release
 * Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
 
-## V0.5.3
-* Version # fix (previous 0.5.2 release said 0.5.1 in some places.)
-
 ## v0.5.2
 * [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
 * Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.
