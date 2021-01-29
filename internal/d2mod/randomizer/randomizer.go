@@ -370,6 +370,16 @@ func scramble(s scrambler) {
 }
 
 func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
+
+	if f.Rows[idx][1] == "" {
+		// Don't run scrambler on row dividers
+		return
+	}
+	if level == 0 {
+		// Don't run scrambler on Quest items.  It may raise level requirements
+		return
+	}
+
 	//Choose a random number of props between min and max
 	numProps := randInt(s.minMaxProps.minNumProps, s.minMaxProps.maxNumProps+1)
 
