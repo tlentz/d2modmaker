@@ -1,5 +1,5 @@
 {
-    "Version": "v0.5.3",
+    "Version": "v0.5.4",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
@@ -17,7 +17,7 @@
 	"RemoveUniqCharmLimit":    false,
     "EnterToExit": true,
     "RandomOptions": {
-        "Randomize": true,
+        "Randomize": false,
         "Seed": -1,
         "IsBalanced": true,
         "BalancedPropCount": true,

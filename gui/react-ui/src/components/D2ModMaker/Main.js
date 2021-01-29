@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.3",
+  Version: "v0.5.4",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
@@ -39,7 +39,7 @@ const defaultCfg = {
   RemoveUniqCharmLimit: false,
   EnterToExit: false,
   RandomOptions: {
-    Randomize: true,
+    Randomize: false,
     UseSeed: false,
     Seed: -1,
     IsBalanced: true,
