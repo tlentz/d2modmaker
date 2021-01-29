@@ -15,5 +15,5 @@
 	"RemoveUniqCharmLimit":    true,
     "PerfectProps": true,
     "UseOSkills": true,
-    "SafeUnsocket": true,
+    "SafeUnsocket": true
 }

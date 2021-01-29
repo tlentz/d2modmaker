@@ -1,5 +1,5 @@
 {
-    "Name": "Random, 10x",
+    "Name": "Random, 10x mobs",
     "Description": "Randomizer 10x density",
     "Author": "EMPY",
     "SourceDir": "",
@@ -33,6 +33,5 @@
         "MaxProps": 20,
         "NumClones": 9,
         "ElementalSkills": true
-    },
-
+    }
 }

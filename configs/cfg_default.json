@@ -1,7 +1,7 @@
 {
-    "Name": "Template",
-    "Description": "Basic Config Template with all default options",
-    "Author": "EMPY",
+    "Name": "Default",
+    "Description": "Default settings",
+    "Author": "",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": false,

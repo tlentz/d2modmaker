@@ -204,6 +204,7 @@ Thanks!
 
 # Change Log
 ## v0.5.2-alpha-21
+* Expanded level and item availability of auras for the Generator
 * Merged in cleanup from obc/mobdensity branch
 ## v0.5.2-alpha-20
 * Set Generator default to false to work around the ui bug.

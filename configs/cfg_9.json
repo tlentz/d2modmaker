@@ -1,6 +1,6 @@
 {
     "Name": "Gen2x/30x",
-    "Description": "Generator=2x, 20x mobs",
+    "Description": "Generator=1.5x, 20x mobs",
     "Author": "EMPY",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
@@ -28,7 +28,7 @@
         "MinProps": 3,
         "MaxProps": 10,
         "NumClones": 9,
-        "PropScoreMultiplier": 2,
+        "PropScoreMultiplier": 1.5,
         "ElementalSkills": true
     }
 }
