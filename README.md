@@ -31,7 +31,7 @@ This should be compatible with PlugY and other things such as:
 
 # ModConfig
 
-The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
+The mod config is located in `cfg.json`.  You can change this config to your liking and run to produce a new `data` folder.
 
 ## ModConfig Options
 #### SourceDir `string`
@@ -45,8 +45,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Increases key stack sizes to 100
 #### IncreaseMonsterDensity `float`
 * Will increase the density of all areas by the given multiplier
-* `MAX: 30.0`
 * `MIN: 0.0`
+* `MAX: 30.0`
 * Set to `-1` to omit
 #### EnableTownSkills `bool`
 * Enables all skills in town
@@ -156,8 +156,13 @@ Thanks!
 
 ## Upcoming Release
 * Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
+
+## v0.5.4
+* [bugfix] Fix for the randomizer affecting quest items like Khalim's flail
+
 ## v0.5.3
 * Fixed version #
+
 ## v0.5.2
 * [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
 * Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.

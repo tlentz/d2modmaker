@@ -44,7 +44,7 @@ type Data struct {
 
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.3",
+		Version:                 "v0.5.4",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
@@ -62,7 +62,7 @@ func DefaultData() Data {
 		RemoveUniqCharmLimit:    false,
 		EnterToExit:             false,
 		RandomOptions: RandomOptions{
-			Randomize:         true,
+			Randomize:         false,
 			UseSeed:           false,
 			Seed:              -1,
 			IsBalanced:        true,
