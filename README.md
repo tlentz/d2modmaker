@@ -206,6 +206,8 @@ Thanks!
 ## v0.5.2-alpha-21
 * Expanded level and item availability of auras for the Generator
 * Merged in cleanup from obc/mobdensity branch
+* [bugfix] Path fixes to get the srcdir option working again.
+
 ## v0.5.2-alpha-20
 * Set Generator default to false to work around the ui bug.
 * Fix for PerfectProps doing "r=" proptypes
