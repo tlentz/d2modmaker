@@ -203,6 +203,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-22
+* [bugfix] PropScores lines weren't allowing Faith or Exiles Path
+
 ## v0.5.2-alpha-21
 * Expanded level and item availability of auras for the Generator
 * Merged in cleanup from obc/mobdensity branch

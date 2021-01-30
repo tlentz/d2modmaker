@@ -50,8 +50,9 @@ att/lvl	24	0	0	lvl		12	15														111		Angelic Halo	SetItems	0
 att%	0	10	300	r=	10	120	15														111		Aldur's Watchtower	Sets	0
 aura	Concentration	1	30	smm	90	900		18				weap	armo								254		Pride	Runes	0
 aura	Conviction	1	30	smm	135	900		30				weap	armo								254		Infinity	Runes	0
-aura	Defiance	1	30	smm	44	228	5	6				weap	armo								254		Exile's Path	Runes	0
-aura	Fanaticism	1	30	smm	75	900		30				weap	armo								254	dmg	The Beast	Runes	0
+aura	Defiance	1	30	smm	44	228	5	6				weap	armo	pala							254		Exile's Path	Runes	0
+aura	Fanaticism	1	30	smm	75	900		30				weap	armo	miss							254	dmg	The Beast	Runes	0
+aura	fanaticism	1	30	smm	75	900		30				weap	armo	miss							254	dmg	The Beast	Runes	0
 aura	Holy Fire	1	30	smm	16	125		6				weap  	armo								254		Hand of Justice	Runes	0
 aura	Holy Freeze	1	30	smm	15	250		18				weap	armo								254		Ice	Runes	0
 aura	Holy Shock	1	30	smm	41	500		24				weap	armo								254		Dream	Runes	0
