@@ -3,7 +3,7 @@ package pbucketlist
 // File Location
 const (
 	FileName = "PBucketList.txt"
-	Path     = "../propscores/" // Placing in assets/propscores/
+	Path     = "propscores/" // Placing in assets/propscores/
 )
 
 // Column Headers

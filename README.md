@@ -1,5 +1,6 @@
 [![Github All Releases](https://img.shields.io/github/downloads/tlentz/d2modmaker/total.svg)]()
 ![release](https://img.shields.io/github/v/release/tlentz/d2modmaker)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Ftlentz%2Fd2modmaker&count_bg=%23E7AA5D&title_bg=%23555555&icon=&icon_color=%23BA4141&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 <p align="center">
   <img width="400" height="400" src="/images/D2_Mod_Logo_V3.png">
@@ -202,6 +203,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-21
+* Expanded level and item availability of auras for the Generator
+* Merged in cleanup from obc/mobdensity branch
 ## v0.5.2-alpha-20
 * Set Generator default to false to work around the ui bug.
 * Fix for PerfectProps doing "r=" proptypes

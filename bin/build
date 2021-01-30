@@ -49,3 +49,4 @@ fi
 # cp cfg.json ./dist/cfg.json
 # cp -r assets/113c-data/ ./dist/113c-data/
 cp README.md ./dist/README.md
+cp LICENSE ./dist/LICENSE

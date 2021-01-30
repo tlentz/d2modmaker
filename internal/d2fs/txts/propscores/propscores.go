@@ -3,7 +3,7 @@ package propscores
 // File Constants
 const (
 	FileName   = "PropScores.txt"
-	Path       = "../propscores/" // Placing propscores in assets/propscores/
+	Path       = "propscores/" // Placing propscores in assets/propscores/
 	NumColumns = 25
 )
 

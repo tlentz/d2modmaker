@@ -8,7 +8,7 @@ import (
 // ItemScores.txt file constants
 const (
 	FileName    = "ItemScores.txt"
-	Path        = "../propscores/" // Placing in assets/propscores/
+	Path        = "propscores/" // Placing in assets/propscores/
 	MaxNumProps = 19
 )
 

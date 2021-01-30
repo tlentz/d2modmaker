@@ -48,20 +48,19 @@ att-und/lvl	20	0	0	lvl		2	15														142		The Vile Husk	UniqueItems	0
 att-undead	0	40	350	r=	1	2	15														142		Bladebone	UniqueItems	0
 att/lvl	24	0	0	lvl		12	15														111		Angelic Halo	SetItems	0
 att%	0	10	300	r=	10	120	15														111		Aldur's Watchtower	Sets	0
-aura	Concentration	16	20	smm	400	500		67				pole									254		Pride	Runes	0
-aura	Conviction	12	12	smm	1100	1100		63				pole									254		Infinity	Runes	0
-aura	Defiance	13	16	smm	38	44		57													254		Exile's Path	Runes	0
-aura	Fanaticism	9	9	smm	675	675		63				axe	scep	hamm							254	dmg	The Beast	Runes	0
-aura	fanaticism	12	15	smm	700	750		65				miss									254	dmg	Faith	Runes	0
-aura	Holy Fire	12	16	smm	90	120		61				weap  	tors	shield							254		Hand of Justice	Runes	0
-aura	Holy Freeze	12	18	smm	160	260		65				miss	axe	pole	hamm						254		Ice	Runes	0
-aura	Holy Shock	15	15	smm	260	260		65				helm	shld								254		Dream	Runes	0
-aura	Meditation	12	17	smm	80	100		27				pole	staf								254		Insight	Runes	0
-aura	Might	17	17	smm	200	200		65				swor	hamm	axe							254		Last Wish	Runes	0
-aura	Redemption	10	15	smm	35	45		65				weap	shdl								254		Phoenix	Runes	0
-aura	Sanctuary	10	18	smm	60	100		43				swor	hamm	scep							254		Lawbringer	Runes	0
-aura	Thorns	15	21	smm	40	50		25				tors	miss								254		Bramble	Runes	0
-aura	Vigor	10	15	smm	36	50		39				miss									254		Harmony	Runes	0
+aura	Concentration	1	30	smm	90	900		18				weap	armo								254		Pride	Runes	0
+aura	Conviction	1	30	smm	135	900		30				weap	armo								254		Infinity	Runes	0
+aura	Defiance	1	30	smm	44	228	5	6				weap	armo								254		Exile's Path	Runes	0
+aura	Fanaticism	1	30	smm	75	900		30				weap	armo								254	dmg	The Beast	Runes	0
+aura	Holy Fire	1	30	smm	16	125		6				weap  	armo								254		Hand of Justice	Runes	0
+aura	Holy Freeze	1	30	smm	15	250		18				weap	armo								254		Ice	Runes	0
+aura	Holy Shock	1	30	smm	41	500		24				weap	armo								254		Dream	Runes	0
+aura	Meditation	1	30	smm	150	400		24				weap	armo								254		Insight	Runes	0
+aura	Might	1	30	smm	40	330						weap	armo								254		Last Wish	Runes	0
+aura	Redemption	1	30	smm	20	75		30				weap	armo								254		Phoenix	Runes	0
+aura	Sanctuary	1	30	smm	12	160		24				weap	armo								254		Lawbringer	Runes	0
+aura	Thorns	1	30	smm	25	141		6				weap	armo								254		Bramble	Runes	0
+aura	Vigor	1	30	smm	13	48		18				weap	armo								254		Harmony	Runes	0
 balance1		10	10	r=	4	4															17	block	Cathan’s Visage	SetItems	0
 balance2	0	10	55	r=	4	22															17	block	Culwens Point	UniqueItems	0
 balance3	0	10	55	r=	4	22															17	block	Aldur's Stony Gaze	SetItems	0
