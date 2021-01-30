@@ -36,7 +36,7 @@
         "ElementalSkills": true
     },
     "GeneratorOptions": {
-        "Generate": false,
+        "Generate": true,
         "UseSeed": true,
         "Seed": 1234,
         "UseSetsSeed": true,
