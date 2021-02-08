@@ -341,7 +341,7 @@ export default function D2ModMaker() {
           <Grid item xs={6}>
           <StyledTooltip
               title={
-                "The name of the Mod: if not 113c or easternsun300r6d, the Source Directory must be specified and assets\modsupport\ModName\ directory must exist."
+                "The name of the Mod: if not 113c or easternsun300r6d, the Source Directory must be specified and assets\\modsupport\\ModName\\ directory must exist."
               }
               placement="bottom"
               enterDelay={250}
