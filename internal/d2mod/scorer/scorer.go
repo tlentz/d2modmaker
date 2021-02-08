@@ -2,13 +2,13 @@ package scorer
 
 import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/uniqueItems"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 )
 
@@ -19,18 +19,16 @@ const (
 
 // Scorer Accumulates setup and scoring information for scored files
 type Scorer struct {
-	d2files   *d2fs.Files             //
-	opts      config.GeneratorOptions //
-	Scorefile *d2fs.File              // PropScores.txt
-	IFI       *d2fs.ItemFileInfo      //
-	//TypeMap          map[string][]string     // Maps from a type to its parents.  From Weapons, Armor & ItemTypes
+	d2files      *d2fs.Files              //
+	opts         config.GeneratorOptions  //
+	Scorefile    *d2fs.File               // PropScores.txt
+	IFI          *d2fs.ItemFileInfo       //
 	Group        map[d2items.Prop]string  // Maps from Prop to Group
 	SynergyGroup map[d2items.Prop]string  // Maps from a Prop to SynergyGroup
 	items        map[string]*d2items.Item //
-	//ScoreLineWeights []weights               // Keeps track of probabilities & counts for each type of item
-	Statistics *scorerstatistics.ScorerStatistics
-	TypeTree   *d2items.TypeTree
-	PSI        *propscores.Maps
+	Statistics   *scorerstatistics.ScorerStatistics
+	TypeTree     *d2items.TypeTree
+	PSI          *propscores.Maps
 }
 
 func newScorer(d2files *d2fs.Files, opts config.GeneratorOptions) *Scorer {
@@ -59,7 +57,6 @@ func Run(d2files *d2fs.Files, opts config.GeneratorOptions) *Scorer {
 	debugshow(s)
 	return s
 }
-
 func debugshow(s *Scorer) {
 	//fmt.Printf("==========Debugging============\n")
 	/*

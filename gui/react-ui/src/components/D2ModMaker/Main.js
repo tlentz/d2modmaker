@@ -21,7 +21,8 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-22",
+  Version: "v0.5.2-alpha-23",
+  ModName: "113c",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: false,
@@ -333,10 +334,32 @@ export default function D2ModMaker() {
     );
   };
 
-  const dirOptions = () => {
+  const modOptions = () => {
     return (
       <Grid container>
         <Grid container spacing={5}>
+          <Grid item xs={6}>
+          <StyledTooltip
+              title={
+                "The name of the Mod: if not 113c or easternsun300r6d, the Source Directory must be specified and assets\modsupport\ModName\ directory must exist."
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+            <TextField
+              id="ModName"
+              label="Mod Name"
+              value={state.ModName}
+              onChange={(e) =>
+                setState({ ...state, ModName: e.target.value })
+              }
+              fullWidth
+            />
+          </Grid>
           <Grid item xs={6}>
             <StyledTooltip
               title={
@@ -1072,7 +1095,7 @@ export default function D2ModMaker() {
         {divider()}
         <Grid container>{dropRateOptions()}</Grid>
         {divider()}
-        <Grid container>{dirOptions()}</Grid>
+        <Grid container>{modOptions()}</Grid>
         {divider()}
         {/*<pre id={"state"}>{JSON.stringify(state, null, 2)}</pre>*/}
       </div>

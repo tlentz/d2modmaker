@@ -10,11 +10,11 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/enhancedsets"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/runewordlevels"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/gems"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"

@@ -1,0 +1,12 @@
+Body Location	Code	*EOL
+None		0
+Head	head	0
+Neck	neck	0
+Torso	tors	0
+Right Arm	rarm	0
+Left Arm	larm	0
+Right Ring	rrin	0
+Left Ring	lrin	0
+Belt	belt	0
+Feet	feet	0
+Gloves	glov	0

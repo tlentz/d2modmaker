@@ -3,10 +3,10 @@ package scorer
 import (
 	"log"
 
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores/propscorespartype"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt/propscorespartype"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )

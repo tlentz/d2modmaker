@@ -3,9 +3,9 @@ package d2items
 import (
 	"log"
 
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores/propscorespartype"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt/propscorespartype"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 )
 
 // checkPropScore Determine if a given prop matches a given line from PropScores.txt
@@ -58,12 +58,22 @@ func checkPropScore(tt *TypeTree, p prop.Prop, item Item, line *propscores.Line)
 			return false
 		}
 
-	case propscorespartype.Scl, propscorespartype.Sch:
+	case propscorespartype.Scl:
 		// Par = LPar
 		if p.Par != line.Prop.Par {
 			return false
 		}
-
+		if p.Val.Min > line.Prop.Val.Min || (p.Val.Max > line.Prop.Val.Max) {
+			return false
+		}
+	case propscorespartype.Sch:
+		if p.Par != line.Prop.Par {
+			return false
+		}
+		// Cannot exceed level, don't care about # charges
+		if p.Val.Max > line.Prop.Val.Max {
+			return false
+		}
 	case propscorespartype.Smm:
 		// Par = LPar, LMin < Avg(Min,Max) < LMax
 		if p.Par != line.Prop.Par {

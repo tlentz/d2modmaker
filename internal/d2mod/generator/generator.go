@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
@@ -14,6 +13,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/enhancedsets"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )

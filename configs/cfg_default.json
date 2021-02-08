@@ -2,6 +2,7 @@
     "Name": "Default",
     "Description": "Default settings",
     "Author": "",
+    "ModName" : "113c",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": false,

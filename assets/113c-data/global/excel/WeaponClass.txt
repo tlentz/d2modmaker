@@ -1,0 +1,16 @@
+Weapon Class	Code	*EOL
+None		0
+Hand To Hand	hth	0
+Bow	bow	0
+1 Hand Swing	1hs	0
+1 Hand Thrust	1ht	0
+Staff	stf	0
+2 Hand Swing	2hs	0
+2 Hand Thrust	2ht	0
+Crossbow	xbw	0
+Left Jab Right Swing	1js	0
+Left Jab Right Thrust	1jt	0
+Left Swing Right Swing	1ss	0
+Left Swing Right Thrust	1st	0
+One Hand-to-Hand	ht1	0
+Two Hand-to-Hand	ht2	0

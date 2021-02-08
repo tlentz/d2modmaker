@@ -1,0 +1,132 @@
+Prop	Par	Min	Max	PropParType	ScoreMin	ScoreMax	ScoreLim	MinLvl	MaxLvl	LvlScale	NoTypeOvr	itype1	itype2	itype3	itype4	itype5	itype6	etype1	etype2	etype3	Group	SynergyGroup	SourceItem	SourceFile	eol
+ac		0	20	r	0	1						au9											[ES] The Mahim-Oak Curio (Code au9)		0
+att		450	632	r=	45	63	5	50				xbow									110		RandomizeAdd8		0
+att-skill	Fire Ball	20	10	scl		20		30															[ES] Todesfaelle Flamme		0
+att%/lvl	32	0	0	lvl	4	28															111	ac	[ES]Merlin's Legacy full set	Sets	0
+block1	0	10	65	r=	1	7	15														255	block	[ES]Dragon's Breach	UniqueItems	0
+charged	Amplify Damage	3	8	sch		10		50															[ES] The Gavel of Pain		0
+charged	Cloak of Shadows	30	7	sch		2		40															[ES] Darksight Helm		0
+charged	Decrepify	30	5	sch	3	10																	[ES] Spellsteel		0
+charged	Fire Wall	20	10	sch		1		50															[ES] Todesfaelle Flamme		0
+charged	Firestorm	60	12	sch	1	4																	[ES] Spellsteel		0
+charged	Frozen Orb	50	10	sch		3		40															[ES] Sureshrill Frost		0
+charged	Holy Bolt	200	20	sch	0	2																	[ES] Spellsteel		0
+charged	Howl	30	13	sch	30	15																	[ES] Blackhand Key		0
+charged	Meteor	60	11	sch		100																	[ES] Moonfall		0
+charged	Nova	80	15	sch		3		50															[ES] Baezil’s Vortex		0
+charged	Poison Explosion	40	10	sch		2		50															[ES] Radimant’s Sphere		0
+charged	Teleport	20	1	sch	1	5		40															[ES] Spellsteel		0
+crush/lvl	12	0	0	lvl		150															205	dmg	[ES]The Butcher's Cleaver	UniqueItems	0
+dmg-cold/lvl	24	0	0	lvl		64															204	cold	[ES]Poseidon's Trident	UniqueItems	0
+dmg-elem-max		0	150	r		225	0																[ES]Claws of the Dragon	SetItems	0
+dmg-elem-min		1	100	r		150	0																[ES]Claws of the Dragon	SetItems	0
+dmg-fire/lvl	24	0	0	lvl		64															221	fire	[ES]Burning Sands	UniqueItems	0
+dmg-ltng/lvl	24	0	0	lvl		64															227	ltng	[ES]Supercharged Rod	UniqueItems	0
+dmg-mag/lvl	24	0	0	lvl		64															211	mag	[ES]Excalibur	UniqueItems	0
+dmg-pois/lvl	24	0	0	lvl		120															236	pois	[ES]Throatslitter	UniqueItems	0
+enr/lvl	4	0	0	lvl		30																	[ES]Phenom's Rule	UniqueItems	0
+extra-mag2	0	3	50	r	3	125																	[ES]Lunar Charm	UniqueItems	0
+fear				s		100																	[ES]Song of the Damned	UniqueItems	0
+gethit-skill	Bone Prison	30	3	scl	1	30																	[ES] King Leoric		0
+gethit-skill	Bone Spirit	5	10	scl	1	5																	[ES] King Leoric		0
+gethit-skill	Charged Bolt	25	10	scl		20																	[ES] Stormrider		0
+gethit-skill	ctcBlizzard	10	10	scl		100		40															[ES] Stormchaser		0
+gethit-skill	ctcHydra	10	7	scl		40		44															[ES] Tiamat’s Rebuke		0
+gethit-skill	Dim Vision	10	5	scl		2		40															[ES] Darksight Helm		0
+gethit-skill	Frost Nova	20	10	scl	0	100																	[ES] Coldkill		0
+gethit-skill	Holy Bolt	50	0	scl	1	5																	[ES] Boneslayer		0
+gethit-skill	Iron Maiden	6	2	scl		1		50															[ES] The Gavel of Pain		0
+gethit-skill	Nova	10	10	scl		40		46															[ES] Tiamat’s Rebuke		0
+gethit-skill	Poison Nova	10	10	scl		20		40				weap	miss					orb					[ES] Pus Spiter		0
+gethit-skill	Poison Nova	10	5	scl		5		50															[ES] Radimant’s Sphere		0
+gethit-skill	Tornado	10	10	scl		40		40															[ES] Stormchaser		0
+hit-skill	Amplify Damage	6	5	scl		20		40															[ES] The Gavel of Pain		0
+hit-skill	Charged Bolt	10	1	scl	10	20																	[ES] Stormrider		0
+hit-skill	Confuse	20	10	scl	1	20		40															[ES] The Fetid Sprinkler		0
+hit-skill	ctcBlizzard	10	10	scl	10	150		40															[ES] Zakarum’s Hand		0
+hit-skill	ctcFist of the Heavens	10	10	scl	5	30		50															[ES] Hand of Blessed Light		0
+hit-skill	ctcFrozen Orb	10	10	scl		20		40															[ES] Bing Sz Wang		0
+hit-skill	ctcMeteor	10	10	scl		100		50															[ES] Moonfall		0
+hit-skill	ctcMeteor	10	10	scl		50		30															[ES] Skystrike		0
+hit-skill	Eruption	10	10	scl		30		50															[ES] Earthshaker		0
+hit-skill	Lower Resist	5	4	scl		70		40															[ES] Pus Spiter		0
+hit-skill	Nova	5	8	scl		2		50															[ES] Baezil’s Vortex		0
+hit-skill	Poison Nova	10	10	scl	10	50																	[ES] Guardian Naga		0
+hit-skill	Volcano	10	10	scl	10	120																	[ES] Pompe’s Wrath		0
+hit-skill	Weaken	1	7	smm	0	1		30															[ES] Blackleach Blade		0
+manasteal		2	150	r	10	50						p56									28	dmg	[ES] Serpent Lord (type p56 not lst)		0
+move1		5	40	r		60															35		[ES]Armor of the Dragon Mage	UniqueItems	0
+res-cold/lvl	8	0	0	lvl		50															43		[ES]Acero Frio	UniqueItems	0
+res-fire/lvl	8	0	0	lvl		50															43		[ES]Hellforge's Finest	UniqueItems	0
+res-mag	0	5	75	r=	5	75																	[ES]Hellrust	UniqueItems	0
+res-pois/lvl	8	0	0	lvl		50															43		[ES]Cottonmouth Jacket	UniqueItems	0
+skill	Amplify Damage	1	3	smm	100	130		19															[ES] Maelstromwrath		0
+skill	Blaze	1	7	smm	2	30		30															[ES] The Iron Jang Bong		0
+skill	Chain Lightning	1	10	smm	50	200																	[ES] Lazarus Spire		0
+skill	Cold Mastery	1	3	smm	3	9		40															[ES] Chromatic Ire		0
+skill	Corpse Explosion	1	3	smm	150	180		19															[ES] Maelstromwrath		0
+skill	Decrepify	1	7	smm	150	200		19															[ES] Maelstromwrath		0
+skill	Energy Shield	1	7	smm	0	1		45															[ES] Warpspear		0
+skill	Exploding Arrow	1	7	smm	5	20		30															[ES] Blastbark		0
+skill	Find Item	1	7	smm	2	7		40															[ES] Heart Carver		0
+skill	Find Potion	1	7	smm	0	1		10															[ES] Heart Carver		0
+skill	Fire Ball	1	7	smm	25	60		28															[ES] The Salamander		0
+skill	Fire Bolt	1	7	smm	10	70		7	30														[ES] Bane Ash		0
+skill	Fire Mastery	1	3	smm	3	9		40															[ES] Chromatic Ire		0
+skill	Fire Wall	1	7	smm	20	50		20															[ES] The Salamander		0
+skill	Fist of the Heavens	1	7	smm	20	50		30															[ES] Stormeye		0
+skill	Frost Nova	1	7	smm	25	40		30															[ES] The Iron Jang Bong		0
+skill	Fury	1	5	smm	15	50																	[ES] Islestrike		0
+skill	Guided Arrow	1	6	smm	10	30		45				miss											[ES] Magewrath		0
+skill	Holy Bolt	1	7	smm	2	10																	[ES] Hand of Blessed Light		0
+skill	Holy Fire	1	7	smm	20	50		30															[ES] Kinemils Awl		0
+skill	Holy Freeze	1	5	smm	20	30																	[ES] Zakarum’s Hand		0
+skill	Holy Shock	1	7	smm	20	50		30															[ES] Stormeye		0
+skill	Howl	1	10	smm	1	3		40															[ES] Heart Carver		0
+skill	Immolation Arrow	1	7	smm		10		40				miss											[ES] Kuko Shakaku		0
+skill	Impale	1	7	smm	0	1		30															[ES] The Impaler		0
+skill	Iron Maiden	1	3	smm	10	30																	[ES] Maelstromwrath		0
+skill	Leap	1	7	smm	1	1																	[ES] Gorefoot (Leap not skill#132)		0
+skill	Lightning	1	10	smm	10	90																	[ES] Lazarus Spire		0
+skill	Lightning Mastery	1	3	smm	3	9		40															[ES] Chromatic Ire		0
+skill	Maul	1	5	smm	10	30																	[ES] Islestrike		0
+skill	Nova	1	7	smm	20	50		30															[ES] The Iron Jang Bong		0
+skill	Poison Dagger	1	7	smm	2	8		40															[ES] Blackbog’s Sharp		0
+skill	Poison Explosion	1	7	smm	0	2		40															[ES] Blackbog’s Sharp		0
+skill	Poison Nova	1	7	smm	0	2		40															[ES] Blackbog’s Sharp		0
+skill	Power Strike	1	3	smm	0	1		30															[ES] The Impaler		0
+skill	Rabies	1	5	smm	1	2		45															[ES] Plague Bearer		0
+skill	Raise Skeletal Mage	1	4	smm	20	30																	[ES] King Leoric		0
+skill	Raise Skeleton	1	6	smm	5	30																	[ES] King Leoric		0
+skill	Resist Lightning	1	7	smm	20	50		30															[ES] Stormeye		0
+skill	Sacrifice	1	7	smm	20	50		20															[ES] Bloodrise		0
+skill	Skeleton Mastery	1	7	smm	10	70		35															[ES] Undead Crown		0
+skill	Static Field	1	7	smm	20	40		20															[ES] Lazarus Spire		0
+skill	Strafe	2	7	smm	5	20		40				miss											[ES] Endlesshail		0
+skill	Sword Mastery	1	6	smm	2	20		20															[ES] Bloodtree Stump		0
+skill	Telekinesis	1	3	smm	0	0		40															[ES] Warpspear		0
+skill	Teleport	1	3	smm	100	110		40															[ES] Warpspear		0
+skill	Terror	1	3	smm	40	60		19															[ES] Maelstromwrath		0
+skill	Thorns	1	7	smm	30	60		20															[ES] Rusthandle		0
+skill	Vengeance	1	7	smm	30	150		20															[ES] Rusthandle		0
+skill	Vigor	1	7	smm	1	1																	[ES] Tearhaunch (vigor not skill#115)		0
+skill	Warmth	2	7	smm	20	80																	[ES] Bane Ash		0
+skill	Whirlwind	1	5	smm	2	5		30															[ES] Bloodletter		0
+sock	0	1	5	r	3	30		1				helm	tors	weap				thro	rune		122		[ES] – Lvl req too high		0
+wounds/lvl	12	0	0	lvl		150															229	dmg	[ES] Mercenary's Pike	SetItems	0
+hit-skill	Enchant	4	15	scl		100		40															[ES] Lavagout		0
+hit-skill	Firestorm	7	15	scl		50		40															[ES] Hellmouth		0
+gethit-skill	Blaze	7	12	scl		10		20															[ES] Infernostride		0
+skill	Chilling Armor	1	8	smm		40		40															[ES] Snowclash		0
+skill	Glacial Spike	1	3	smm		10		40															[ES] Snowclash		0
+skill	Blizzard	1	5	smm		10		40															[ES] Infernostride		0
+gethit-skill	ctcFist of the Heavens	5	12	scl		100																	[ES] Thudergod’s Vigor		0
+skill	Lightning Fury	1	5	smm	20	100												xamaz					[ES] Thudergod’s Vigor		0
+skill	Lightning Strike	1	5	smm		20		30										xamaz					[ES] Thudergod’s Vigor		0
+gethit-skill	Weaken	5	5	scl		10																	[ES] Blackoak Shield		0
+hit-skill	Static Field	20	10	scl		25																	[ES] Schaefer’s Hammer_lod		
+att-skill	Chain Lightning	10	5	scl		10																	[ES] Lightsabre		
+res-all		50	100	r=	150	300																	[ES] Constricting Ring		
+regen		-30	-25	c	-150	-125																	[ES] Constricting Ring		
+gethit-skill	Chain Lightning	10	10	scl		200																	[ES] Stormspire		
+move2		11	30	r=	10	30						amu	jave	rune	tors	miss	misc				35		The Cat's Eye	Sets	0

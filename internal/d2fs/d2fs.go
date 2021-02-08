@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
@@ -47,11 +48,17 @@ type ItemFileInfo struct {
 
 // NewFiles Create a new Files from configured directories
 func NewFiles(sourceDir string, outDir string) Files {
+
+	if (sourceDir == outDir) && (sourceDir != "") {
+		log.Fatalf("Error: Source Directory == Output Directory.  Either set the Source Directory to blank (to use the assets/ dir), or set it to a mods data/ directory.  OutDir is deleted and re-created each run")
+	}
+	// If the Source Directory is not specified, point at the assets\113c-data\ directory
+	if sourceDir == "" {
+		sourceDir = path.Join(assets.AssetDir, assets.DataDir)
+	}
+
 	files := Files{sourceDir: sourceDir, outDir: outDir}
 	files.cache = make(map[string]*File)
-	if (sourceDir == outDir) && (sourceDir != "") {
-		log.Fatalf("Error: Source Directory == Output Directory.  Either set the Source Directory to blank (to use 1.13c default files), or set it to vanilla data/ directory.  OutDir is deleted and re-created each run")
-	}
 	//os.RemoveAll(path.Join(files.outDir, "/data/"))	// obc:  This is the old c4 approach, use sword instead
 	err := os.MkdirAll(path.Join(files.outDir, assets.DataGlobalExcel), 0755)
 	util.Check(err)
@@ -71,30 +78,39 @@ func NewFiles(sourceDir string, outDir string) Files {
 	return files
 }
 
-// ReadD2File reads a given d2 file
+// Read reads a given d2 file from the specified Directory
 func (d2files *Files) Read(filepath string, filename string) *File {
-	if d2files.sourceDir == "" {
-		// open tsvfile
-		csvfile, err := assets.Assets.Open(path.Join(filepath, filename))
-		checkError(filename, err)
-		defer csvfile.Close()
-		return importCsv(csvfile, filename)
-	}
-	csvfile, err := os.Open(path.Join(d2files.sourceDir, filepath, filename))
+	filePathName := path.Join(filepath, filename)
+	csvfile, err := os.Open(filePathName)
 	checkError(filename, err)
 	defer csvfile.Close()
 	return importCsv(csvfile, filename)
-
 }
 
-// ReadAsset Reads in a tsv file from vfs but doesn't cache it in Files
+// ReadAsset Reads in a tsv file from the assets/ directory but doesn't cache it in Files
 func ReadAsset(filePath string, filename string) *File {
-	// open tsvfile
-	csvfile, err := assets.Assets.Open(path.Join(filePath, filename))
-	checkError(filename, err)
+	filePathName := path.Join(assets.AssetDir, filePath, filename)
+	csvfile, err := os.Open(filePathName)
+	checkError(filePathName, err)
 	defer csvfile.Close()
-
 	return importCsv(csvfile, filename)
+}
+
+// List list all filenames in a directory
+func (d2files *Files) List(filePath string) []os.FileInfo {
+	//filenames := make([]string, 0)
+	// []os.FileInfo
+	var err error
+	absDir, err := filepath.Abs(filePath)
+	util.CheckError(filePath, err)
+
+	//fmt.Printf("d2fs.List: Listing files in %s\n", absDir)
+	dir, err := os.Open(filePath)
+	util.CheckError(filePath, err)
+	finfo, err := dir.Readdir(-1)
+	util.CheckError(filePath, err)
+	fmt.Printf("Found %d files in %s\n", len(finfo), absDir)
+	return finfo
 }
 
 // importCsv This is actually tab separated value, i.e. tsv
@@ -156,22 +172,26 @@ func (d2files *Files) Get(filename string) *File {
 	if val, ok := d2files.cache[filename]; ok {
 		return val
 	}
-
-	file := d2files.Read(assets.DataDir, filename)
+	dataDir := path.Join(d2files.sourceDir, assets.GlobalExcelDir)
+	if d2files.sourceDir == "" {
+		dataDir = path.Join(assets.AssetDir, assets.DataDir, assets.GlobalExcelDir)
+	}
+	file := d2files.Read(dataDir, filename)
 
 	d2files.cache[filename] = file
 
 	return file
 }
 
-// GetWithPath read a tab delimited text file from pathname & filename
-// The Get routines add the filename to the cache, which gets
+// GetAsset read a tab delimited text file from assets/pathname & filename
+// pathname is assumed to be relative to the assets/ dir.
+// The Get routines add the filename to the cache, which is
 // written out by Write.
-func (d2files *Files) GetWithPath(pathname string, filename string) *File {
+func (d2files *Files) GetAsset(pathname string, filename string) *File {
 	if val, ok := d2files.cache[filename]; ok {
 		return val
 	}
-	file := d2files.Read(pathname, filename)
+	file := d2files.Read(path.Join(assets.AssetDir, pathname), filename)
 
 	d2files.cache[filename] = file
 
@@ -194,16 +214,24 @@ func MergeRows(f1 *File, f2 File) {
 	keys := make(map[string]int, 0)
 	for rowIdx := range f1.Rows {
 
-		keys[f1.Rows[rowIdx][0]] = rowIdx
+		keys[genUniqueKey(*f1, rowIdx)] = rowIdx
 	}
 	for f2RowIdx := range f2.Rows {
-		f1RowIdx, ok := keys[f2.Rows[f2RowIdx][0]]
+		f1RowIdx, ok := keys[genUniqueKey(f2, f2RowIdx)]
 		if ok {
 			f1.Rows[f1RowIdx] = f2.Rows[f2RowIdx]
 			//fmt.Printf("Merging...%s\n", f2.Rows[f2RowIdx][0])
 		} else {
 			f1.Rows = append(f1.Rows, f2.Rows[f2RowIdx])
 		}
+	}
+}
+func genUniqueKey(f File, rowIndex int) string {
+	switch {
+	case f.FileName == "PropScores.txt":
+		return f.Rows[rowIndex][propscorestxt.Prop] + "/" + f.Rows[rowIndex][propscorestxt.Par] + "/" + f.Rows[rowIndex][propscorestxt.Min] + "/" + f.Rows[rowIndex][propscorestxt.Max]
+	default:
+		return f.Rows[rowIndex][0] // Default to first column is ID
 	}
 }
 

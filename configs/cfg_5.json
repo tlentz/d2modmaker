@@ -2,8 +2,6 @@
     "Name": "Random, 10x mobs",
     "Description": "Randomizer 10x density",
     "Author": "EMPY",
-    "SourceDir": "",
-    "OutputDir": "",
     "MeleeSplash": false,
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 10,

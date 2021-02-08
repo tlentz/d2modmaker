@@ -2,8 +2,6 @@
     "Name": "Random, 30x",
     "Description": "Randomizer 30x density",
     "Author": "EMPY",
-    "SourceDir": "",
-    "OutputDir": "",
     "MeleeSplash": false,
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 30,

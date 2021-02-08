@@ -7,6 +7,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/armor"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/itemTypes"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/misc"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/weapons"
 )
 
@@ -33,6 +34,10 @@ func NewTypeTree(d2files *d2fs.Files) *TypeTree {
 		tt.addTypeParent(r[weapons.Normcode], r[weapons.Type])
 		tt.addTypeParent(r[weapons.Ubercode], r[weapons.Type])
 		tt.addTypeParent(r[weapons.Ultracode], r[weapons.Type])
+	}
+	misctxt := d2files.Get(misc.FileName)
+	for _, r := range misctxt.Rows {
+		tt.addTypeParent(r[misc.Type_], r[misc.Code])
 	}
 
 	// Add Type Maps from ItemTypes.txt

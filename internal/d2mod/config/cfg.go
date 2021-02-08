@@ -40,6 +40,7 @@ type GeneratorOptions struct {
 // Data is the configuration used to build the mod
 type Data struct {
 	Version                 string           `json:"Version"`
+	ModName                 string           `json:"ModName"`
 	SourceDir               string           `json:"SourceDir"`
 	OutputDir               string           `json:"OutputDir"`
 	MeleeSplash             bool             `json:"MeleeSplash"`
@@ -69,7 +70,8 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-22",
+		Version:                 "v0.5.2-alpha-23",
+		ModName:                 "113c",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             false,

@@ -203,6 +203,10 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.5.2-alpha-23
+* Adjustments to Aura availability. Ty iksargodzilla.
+* Preliminary support for different mods.  Manual edit of cfg.json only for now.
+
 ## v0.5.2-alpha-22
 * [bugfix] PropScores lines weren't allowing Faith or Exiles Path
 

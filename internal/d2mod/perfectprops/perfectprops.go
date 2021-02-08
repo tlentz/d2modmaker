@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
@@ -51,10 +51,10 @@ func convertFile(d2files *d2fs.Files, pmap propName2PropParType, ifi *d2fs.ItemF
 }
 
 func (pmap *propName2PropParType) load(d2files *d2fs.Files) {
-	propScoresFile := d2files.GetWithPath(propscores.Path, propscores.FileName)
+	propScoresFile := d2files.GetAsset(propscorestxt.Path, propscorestxt.FileName)
 	for rowIdx := range propScoresFile.Rows {
-		propName := propScoresFile.Rows[rowIdx][propscores.Prop]
-		propParType := propScoresFile.Rows[rowIdx][propscores.PropParType]
+		propName := propScoresFile.Rows[rowIdx][propscorestxt.Prop]
+		propParType := propScoresFile.Rows[rowIdx][propscorestxt.PropParType]
 		(*pmap)[propName] = propParType
 	}
 

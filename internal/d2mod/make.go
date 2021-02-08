@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tlentz/d2modmaker/internal/d2mod/modsupport"
 	"github.com/tlentz/d2modmaker/internal/d2mod/propdebug"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
@@ -38,6 +39,8 @@ func Make(defaultOutDir string, cfg config.Data) {
 		cfg.OutputDir = defaultOutDir
 	}
 	d2files := d2fs.NewFiles(cfg.SourceDir, cfg.OutputDir)
+
+	modsupport.Run(&cfg, d2files)
 
 	if cfg.MeleeSplash {
 		splash.Run(cfg.OutputDir, d2files)
