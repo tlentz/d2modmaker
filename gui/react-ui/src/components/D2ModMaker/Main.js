@@ -1103,10 +1103,6 @@ export default function D2ModMaker() {
   );
 }
 function RefreshUI() {
-
-  const refreshUI = ()=>{
-      window.location.reload();
-  }
   window.location.reload();
 }
 function valuetext(value) {
