@@ -7,6 +7,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
+	"github.com/tlentz/d2modmaker/internal/d2mod/cuberecipes"
 	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
 	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
@@ -52,7 +53,12 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.EnableTownSkills {
 		townskills.Enable(d2files)
 	}
-
+	if cfg.BiggerGoldPiles {
+		treasure.BiggerGoldPiles(d2files)
+	}
+	if cfg.NoFlawGems {
+		treasure.NoFlawGems(d2files)
+	}
 	if cfg.NoDropZero {
 		treasure.SetNoDropZero(d2files)
 	}
@@ -64,6 +70,9 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.Cowzzz {
 		cows.AddTpRecipe(d2files)
 		cows.AllowKingKill(d2files)
+	}
+	if cfg.SafeUnsocket {
+		cuberecipes.SafeUnsocket(d2files)
 	}
 
 	if cfg.RemoveLevelRequirements {

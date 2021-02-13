@@ -21,13 +21,15 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.3",
+  Version: "v0.5.4",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: true,
   IncreaseStackSizes: true,
   IncreaseMonsterDensity: 1,
   EnableTownSkills: true,
+  BiggerGoldPiles: false,
+  NoFlawGems: false,
   NoDropZero: true,
   QuestDrops: true,
   UniqueItemDropRate: 1,
@@ -37,6 +39,7 @@ const defaultCfg = {
   RemoveLevelRequirements: false,
   RemoveAttRequirements: false,
   RemoveUniqCharmLimit: false,
+  SafeUnsocket: false,
   EnterToExit: false,
   RandomOptions: {
     Randomize: true,
@@ -186,14 +189,14 @@ export default function D2ModMaker() {
             {mkCheckbox({
               key: "Cowzzz",
               tooltip:
-                "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal4.",
+                "Enables the ability to recreate a cow portal after killing the cow king.  Adds cube recipe to cube a single tp scroll to create the cow portal.",
             })}
           </Grid>
           <Grid item xs={6}>
             {mkCheckbox({
               key: "IncreaseStackSizes",
               tooltip:
-                "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack sizes to 100.",
+                "Increases tome sizes to 100.  Increases arrows/bolts stack sizes to 511.  Increases key stack size to 100.",
             })}
           </Grid>
 
@@ -220,9 +223,13 @@ export default function D2ModMaker() {
                 "Removes unique charm limit in inventory.",
             })}
           </Grid>
-
-
-
+          <Grid item xs={6}>
+            {mkCheckbox({
+              key: "SafeUnsocket",
+              tooltip:
+                "Adds Runeword: 1 quiver + item => Item + gems/runes in item",
+            })}
+          </Grid>
         </Grid>
       </Grid>
     );
@@ -257,7 +264,7 @@ export default function D2ModMaker() {
           <Grid item xs={6}>
             <StyledTooltip
               title={
-                "The directory that the data folder will be placed. Leave blank to use current directory. This requires a trailing slash. example: /Users/{username}/{folder}/"
+                "The directory that the data folder will be placed in.  Leave blank to use current directory (./data/). This requires a trailing slash. example: /Users/{username}/{folder}/  Everything in this directory will be DELETED when the program runs, so don't point this at the Source Directory."
               }
               placement="bottom"
               enterDelay={250}
@@ -370,6 +377,20 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
+        <Grid container>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "BiggerGoldPiles",
+              tooltip: "10x larger, fewer piles of gold.",
+            })}
+          </Grid>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "NoFlawGems",
+              tooltip: "Disables Flawed & Flawless gems in Nightmare & Hell.",
+            })}
+          </Grid>
+        </Grid>
         <Grid item xs={12} className={"SliderWrapper"}>
           <Typography
             id="UniqueItemDropRate"
@@ -380,7 +401,7 @@ export default function D2ModMaker() {
             Unique Item Drop Rate
             <StyledTooltip
               title={
-                "Increases the drop rate of unique and set items.  When using this setting, high values prevent some monsters from dropping set items."
+                "Increases the drop rate of unique and set items.  High values may prevent set items from dropping."
               }
               placement="bottom"
               enterDelay={250}
@@ -565,7 +586,7 @@ export default function D2ModMaker() {
             </StyledTooltip>
           </Typography>
           <Slider
-            defaultValue={0}
+            defaultValue={2}
             getAriaValueText={valuetext}
             aria-labelledby="MinProps"
             step={1}

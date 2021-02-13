@@ -50,6 +50,10 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Set to `-1` to omit
 #### EnableTownSkills `bool`
 * Enables all skills in town
+#### BiggerGoldPiles `bool`
+* 10x bigger, fewer gold piles
+#### NoFlawGems `bool`
+* (Mostly) Disables Flawed & Flawless gems from dropping on higher difficulties.
 #### NoDropZero `bool`
 * Sets "NoDrop" = 0 (Monsters will always drop items)
 #### QuestDrops `bool`
@@ -79,12 +83,14 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Removes attribute requirements from items.
 #### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
+#### SafeUnsocket `bool`
+* Adds recipe (item + quiver) to unsocket an item, returning both the item and everything from its sockets.
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
 ## RandomOptions `RandomOptions`
 #### Randomize `bool`
-* Will randomize if set to true
+* Will randomize propertiesif set to true
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
@@ -156,8 +162,13 @@ Thanks!
 
 ## Upcoming Release
 * Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
+
+## v0.5.4
+* Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.
+
 ## v0.5.3
 * Fixed version #
+
 ## v0.5.2
 * [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
 * Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.

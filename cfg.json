@@ -1,11 +1,13 @@
 {
-    "Version": "v0.5.3",
+    "Version": "v0.5.4",
     "SourceDir": "",
     "OutputDir": "",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 1,
     "EnableTownSkills": true,
+    "BiggerGoldPiles": true,
+    "NoFlawGems": false,
     "NoDropZero": true,
     "QuestDrops": true,
     "UniqueItemDropRate": 1,
@@ -15,6 +17,7 @@
     "RemoveLevelRequirements": false,
 	"RemoveAttRequirements":   false,
 	"RemoveUniqCharmLimit":    false,
+    "SafeUnsocket": true,
     "EnterToExit": true,
     "RandomOptions": {
         "Randomize": true,
