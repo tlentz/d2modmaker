@@ -19,6 +19,9 @@ func BiggerGoldPiles(d2files d2fs.Files) {
 				// Don't mess with the first row, this is for player dropped gold
 				continue
 			}
+			if len(itm) < 3 {
+				continue
+			}
 			if itm[0:3] == "gld" {
 				if len(itm) > 4 {
 					goldMult, _ := strconv.Atoi(itm[8:])
