@@ -15,9 +15,6 @@ func BiggerGoldPiles(d2files d2fs.Files) {
 	for idx := range f.Rows {
 		for colIdx := treasureClassEx.Item1; colIdx < treasureClassEx.Item10; colIdx += 2 {
 			itm := f.Rows[idx][colIdx]
-			if len(itm) < 3 {
-				continue
-			}
 			if f.Rows[idx][treasureClassEx.TreasureClass] == "Gold" {
 				// Don't mess with the first row, this is for player dropped gold
 				continue

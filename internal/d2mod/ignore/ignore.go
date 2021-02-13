@@ -22,7 +22,7 @@ func IsIgnored( /*d2files *d2fs.Files,*/ fileNumber int, typeToCheck string, nam
 		return ignoreMap[strconv.Itoa(fileNumber)+"/"+typeToCheck+"/"+nameToCheck]
 	default:
 		log.Panicf("unknown typeToCheck argument: contact developer")
-		return false // compiler bug... should say unreachable
+		return false
 	}
 }
 
