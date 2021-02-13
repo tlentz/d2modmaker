@@ -29,6 +29,8 @@ type Data struct {
 	IncreaseStackSizes      bool          `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity  float64       `json:"IncreaseMonsterDensity"`
 	EnableTownSkills        bool          `json:"EnableTownSkills"`
+	BiggerGoldPiles         bool             `json:"BiggerGoldPiles"`
+	NoFlawGems              bool             `json:"NoFlawGems"`
 	NoDropZero              bool          `json:"NoDropZero"`
 	QuestDrops              bool          `json:"QuestDrops"`
 	UniqueItemDropRate      float64       `json:"UniqueItemDropRate"`
@@ -38,19 +40,22 @@ type Data struct {
 	RemoveLevelRequirements bool          `json:"RemoveLevelRequirements"`
 	RemoveAttRequirements   bool          `json:"RemoveAttRequirements"`
 	RemoveUniqCharmLimit    bool          `json:"RemoveUniqCharmLimit"`
+	SafeUnsocket            bool             `json:"SafeUnsocket"`
 	EnterToExit             bool          `json:"EnterToExit"`
 	RandomOptions           RandomOptions `json:"RandomOptions"`
 }
 
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.3",
+		Version:                 "v0.5.4",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             true,
 		IncreaseStackSizes:      true,
 		IncreaseMonsterDensity:  1,
 		EnableTownSkills:        true,
+		BiggerGoldPiles:         false,
+		NoFlawGems:              false,
 		NoDropZero:              true,
 		QuestDrops:              true,
 		UniqueItemDropRate:      1,
@@ -60,6 +65,7 @@ func DefaultData() Data {
 		RemoveLevelRequirements: false,
 		RemoveAttRequirements:   false,
 		RemoveUniqCharmLimit:    false,
+		SafeUnsocket:            false,
 		EnterToExit:             false,
 		RandomOptions: RandomOptions{
 			Randomize:         true,
