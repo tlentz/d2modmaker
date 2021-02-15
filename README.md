@@ -164,7 +164,8 @@ Thanks!
 * Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
 
 ## v0.5.4
-* Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.
+* Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
+* Patch to elementalskills always being turned on.  This is causing problems with +fireskills coming up negative, and not showing +fireskills text.
 
 ## v0.5.3
 * Fixed version #
