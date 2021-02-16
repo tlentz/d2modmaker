@@ -168,6 +168,7 @@ Thanks!
 * Patch to elementalskills always being turned on.  This is causing problems with +fireskills coming up negative, and not showing +fireskills text.
 * Added elementalskills option in UI in Randomizer section
 * Changed AllowDupProps & AllowDuplicateProps to AllowDupeProps
+* Fix version # being loaded from cfg.json
 
 ## v0.5.3
 * Fixed version #

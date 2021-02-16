@@ -82,16 +82,19 @@ func DefaultData() Data {
 	}
 }
 
-// ReadCfg reads a ModConfig from the given json file
+// Read configuration from the given json file
 func Read(filePath string) Data {
 	file, _ := ioutil.ReadFile(filePath)
 	data := DefaultData()
 	_ = json.Unmarshal([]byte(file), &data)
+	data.Version = DefaultData().Version // force version # to current version
 	return data
 }
 
+// Parse configuration from given json data
 func Parse(jsonData []byte) Data {
 	data := DefaultData()
 	_ = json.Unmarshal(jsonData, &data)
+	data.Version = DefaultData().Version // force version # to current version
 	return data
 }
