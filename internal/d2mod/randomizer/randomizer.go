@@ -401,7 +401,7 @@ func scrambleRow(s scrambler, f *d2fs.File, idx int, level int) {
 
 			// Add used prop to the prop list if duplicate properties are not allowed
 			// Always add aura to the prop list because multiple auras on an item are broken
-			if !s.opts.AllowDupProps || propIdString == "aura" {
+			if !s.opts.AllowDupeProps || propIdString == "aura" {
 				propList[propIdString] = true
 			}
 		}

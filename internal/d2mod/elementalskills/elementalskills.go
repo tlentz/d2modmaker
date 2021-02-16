@@ -22,9 +22,10 @@ const (
 func Run(outDir string, d2files d2fs.Files, enabled bool) {
 
 	copyPatchString(outDir)
-	d2fs.MergeRows(d2files.Get(itemStatCost.FileName), *d2fs.ReadAsset(elementalAssetsDir, itemStatCost.FileName))
-	d2fs.MergeRows(d2files.Get(properties.FileName), *d2fs.ReadAsset(elementalAssetsDir, properties.FileName))
-
+	if enabled {
+		d2fs.MergeRows(d2files.Get(itemStatCost.FileName), *d2fs.ReadAsset(elementalAssetsDir, itemStatCost.FileName))
+		d2fs.MergeRows(d2files.Get(properties.FileName), *d2fs.ReadAsset(elementalAssetsDir, properties.FileName))
+	}
 }
 
 func copyPatchString(outDir string) {
