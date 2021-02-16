@@ -29,8 +29,8 @@ type Data struct {
 	IncreaseStackSizes      bool          `json:"IncreaseStackSizes"`
 	IncreaseMonsterDensity  float64       `json:"IncreaseMonsterDensity"`
 	EnableTownSkills        bool          `json:"EnableTownSkills"`
-	BiggerGoldPiles         bool             `json:"BiggerGoldPiles"`
-	NoFlawGems              bool             `json:"NoFlawGems"`
+	BiggerGoldPiles         bool          `json:"BiggerGoldPiles"`
+	NoFlawGems              bool          `json:"NoFlawGems"`
 	NoDropZero              bool          `json:"NoDropZero"`
 	QuestDrops              bool          `json:"QuestDrops"`
 	UniqueItemDropRate      float64       `json:"UniqueItemDropRate"`
@@ -40,7 +40,7 @@ type Data struct {
 	RemoveLevelRequirements bool          `json:"RemoveLevelRequirements"`
 	RemoveAttRequirements   bool          `json:"RemoveAttRequirements"`
 	RemoveUniqCharmLimit    bool          `json:"RemoveUniqCharmLimit"`
-	SafeUnsocket            bool             `json:"SafeUnsocket"`
+	SafeUnsocket            bool          `json:"SafeUnsocket"`
 	EnterToExit             bool          `json:"EnterToExit"`
 	RandomOptions           RandomOptions `json:"RandomOptions"`
 }
@@ -50,33 +50,33 @@ func DefaultData() Data {
 		Version:                 "v0.5.4",
 		SourceDir:               "",
 		OutputDir:               "",
-		MeleeSplash:             true,
-		IncreaseStackSizes:      true,
+		MeleeSplash:             false,
+		IncreaseStackSizes:      false,
 		IncreaseMonsterDensity:  1,
-		EnableTownSkills:        true,
+		EnableTownSkills:        false,
 		BiggerGoldPiles:         false,
 		NoFlawGems:              false,
-		NoDropZero:              true,
-		QuestDrops:              true,
+		NoDropZero:              false,
+		QuestDrops:              false,
 		UniqueItemDropRate:      1,
 		RuneDropRate:            1,
 		StartWithCube:           true,
-		Cowzzz:                  true,
+		Cowzzz:                  false,
 		RemoveLevelRequirements: false,
 		RemoveAttRequirements:   false,
 		RemoveUniqCharmLimit:    false,
 		SafeUnsocket:            false,
-		EnterToExit:             false,
+		EnterToExit:             true,
 		RandomOptions: RandomOptions{
-			Randomize:         true,
+			Randomize:         false,
 			UseSeed:           false,
 			Seed:              -1,
 			IsBalanced:        true,
 			BalancedPropCount: true,
 			AllowDupProps:     false,
-			MinProps:          0,
-			MaxProps:          20,
-			UseOSkills:        true,
+			MinProps:          3,
+			MaxProps:          8,
+			UseOSkills:        false,
 			PerfectProps:      false,
 		},
 	}
