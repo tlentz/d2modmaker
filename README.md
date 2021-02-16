@@ -96,7 +96,7 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Set to `-1` to generate a random seed
 #### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
-#### AllowDuplicateProps `bool`
+#### AllowDupeProps `bool`
 * If this value is false, the same prop type will not be placed on an item twice
 * E.g. two instances of all resist will not get stacked on the same randomized item
 #### BalancedPropCount `bool`
@@ -166,6 +166,8 @@ Thanks!
 ## v0.5.4
 * Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
 * Patch to elementalskills always being turned on.  This is causing problems with +fireskills coming up negative, and not showing +fireskills text.
+* Added elementalskills option in UI in Randomizer section
+* Changed AllowDupProps & AllowDuplicateProps to AllowDupeProps
 
 ## v0.5.3
 * Fixed version #
@@ -197,7 +199,7 @@ Thanks!
    * This option enables picking the prop count for items from the counts on vanilla items
    * The count is pulled from items up to 10 levels above the item being randomized
    * The MinProps and MaxProps settings will be ignored if this is enabled
-* Adds a new randomization option: AllowDuplicateProps
+* Adds a new randomization option: AllowDupeProps
    * If this property is false (default), the same property type will not be added to an item twice (e.g. two instances of resist all)
 * Prevents two auras from being placed on the same item. This is bugged in the game, and one aura would not work.
 * Adds an option to specify the directory to read source Diablo 2 text files from instead of using the built-in 1.13c data.

@@ -10,13 +10,13 @@ type RandomOptions struct {
 	Randomize         bool  `json:"Randomize"`
 	UseSeed           bool  `json:"UseSeed"`
 	Seed              int64 `json:"Seed"`
-	IsBalanced        bool  `json:"IsBalanced"`          // Allows Props only from items up to 10 levels higher
-	BalancedPropCount bool  `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
-	AllowDupProps     bool  `json:"AllowDuplicateProps"` // Allow two props of the same type to be placed on an item
-	MinProps          int   `json:"MinProps"`            // minimum number of non blank props on an item
-	MaxProps          int   `json:"MaxProps"`            // maximum number of non blank props on an item
-	UseOSkills        bool  `json:"UseOSkills"`          // +3 Fireball (Sorceress Only) -> +3 Fireball
-	PerfectProps      bool  `json:"PerfectProps"`        // sets min/max to max
+	IsBalanced        bool  `json:"IsBalanced"`        // Allows Props only from items up to 10 levels higher
+	BalancedPropCount bool  `json:"BalancedPropCount"` // Picks prop count from a vanilla item up to 10 levels higher
+	AllowDupeProps    bool  `json:"AllowDupeProps"`    // Allow two props of the same type to be placed on an item
+	MinProps          int   `json:"MinProps"`          // minimum number of non blank props on an item
+	MaxProps          int   `json:"MaxProps"`          // maximum number of non blank props on an item
+	UseOSkills        bool  `json:"UseOSkills"`        // +3 Fireball (Sorceress Only) -> +3 Fireball
+	PerfectProps      bool  `json:"PerfectProps"`      // sets min/max to max
 	ElementalSkills   bool  `json:"ElementalSkills"`
 }
 
@@ -73,7 +73,7 @@ func DefaultData() Data {
 			Seed:              -1,
 			IsBalanced:        true,
 			BalancedPropCount: true,
-			AllowDupProps:     false,
+			AllowDupeProps:    false,
 			MinProps:          3,
 			MaxProps:          8,
 			UseOSkills:        false,
