@@ -161,7 +161,7 @@ Thanks!
 # Change Log
 
 ## Upcoming Release
-* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
+* N/A
 
 ## v0.5.4
 * Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
@@ -169,6 +169,7 @@ Thanks!
 * Added elementalskills option in UI in Randomizer section
 * Changed AllowDupProps & AllowDuplicateProps to AllowDupeProps
 * Fix version # being loaded from cfg.json
+* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
 
 ## v0.5.3
 * Fixed version #
