@@ -29,11 +29,11 @@ This should be compatible with PlugY and other things such as:
 * [PlugY](http://plugy.free.fr/en/index.html) by Yohann Nicolas.
 * [MultiRes / BH](https://www.reddit.com/r/slashdiablo/comments/7z5uy1/hd_mod_and_maphack_new_release/) by SlashDiablo.
 
-# ModConfig
+# Options
 
 The mod config is located in `cfg.json`.  You can change this config to your liking and run to produce a new `data` folder.
 
-## ModConfig Options
+## General Options
 #### SourceDir `string`
 * Specifies the directory the source text files are read from
 * If this is omitted, or set to "", the built-in 113c data files will be used. 
@@ -59,9 +59,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### EnableTownSkills `bool`
 * Enables all skills in town
 #### BiggerGoldPiles `bool`
-* Gold piles 10x larger and 10x rarer.
-#### NoFlawGems
-* Flawed are very rare and & perfect gems drop instead of flawless at 1/3 the rate.
+* 10x bigger, fewer gold piles
+#### NoFlawGems `bool`
+* (Mostly) Disables Flawed & Flawless gems from dropping on higher difficulties.
 #### NoDropZero `bool`
 * Sets "NoDrop" = 0 (Monsters will always drop items)
 #### QuestDrops `bool`
@@ -95,6 +95,12 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Will change class only skills to oskills
 #### PerfectProps `bool`
 * All props will have the max value for min/max values
+#### SafeUnsocket `bool`
+* Adds recipe (item + quiver) to unsocket an item, returning both the item and everything from its sockets.
+#### PropDebug `bool`
+* Adds recipe health potion + socketable weapon => debugging weapon.  General idea is to hand-edit the cubemain.txt file to add
+* the property you are trying to debug, create and test it.
+
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
@@ -107,13 +113,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
-#### UseSetsSeed `bool`
-* Will use provided seed for full set bonuses if set, generate random seed every run if not set
-#### Seed `int`
-* Will use this seed for randomization
-* Set to `-1` to generate a random seed
-#### SetsSeed `int`
-* Will use this seed for randomizing the set bonuses.  Changing this seed will cause the set bonuses on existing items to be re-rolled.
+#### EnhancedSets `bool`
+* Removes all full set bonuses because they change on existing items every time d2mm is run
 #### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
 #### AllowDupeProps `bool`
@@ -140,6 +141,9 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
+#### EnhancedSets `bool`
+* Removes all full set bonuses because they change every time d2mm is run
+* Configures all sets to have more partial set bonuses
 #### BalancedPropCount `bool`
 * Pick prop count on items based on counts from vanilla items
 * Generates up to 4 props more than vanilla if needed to match the vanilla item's score.
@@ -203,9 +207,11 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
-## v0.5.2-alpha-23
+
+## v0.6.0-alpha-23
 * Adjustments to Aura availability. Ty iksargodzilla.
 * Preliminary support for different mods.  Manual edit of cfg.json only for now.
+* Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.
 
 ## v0.5.2-alpha-22
 * [bugfix] PropScores lines weren't allowing Faith or Exiles Path

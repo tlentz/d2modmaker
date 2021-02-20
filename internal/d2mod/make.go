@@ -154,10 +154,8 @@ func writeSeed(cfg config.Data) {
 	util.Check(err)
 	defer f.Close()
 	seed := cfg.RandomOptions.Seed
-	setsSeed := cfg.RandomOptions.SetsSeed
 	if cfg.GeneratorOptions.Generate {
 		seed = cfg.GeneratorOptions.Seed
-		setsSeed = cfg.GeneratorOptions.SetsSeed
 	}
-	f.WriteString(fmt.Sprintf("%d\n%d\n", seed, setsSeed))
+	f.WriteString(fmt.Sprintf("%d\n", seed))
 }

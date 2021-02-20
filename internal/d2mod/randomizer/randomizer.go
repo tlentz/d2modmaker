@@ -49,9 +49,6 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 		cfg.Seed = time.Now().UnixNano()
 		//fmt.Printf("New Seed = %d", cfg.Seed)
 	}
-	if !cfg.UseSetsSeed {
-		cfg.SetsSeed = time.Now().UnixNano()
-	}
 	cfg.MinProps = util.MaxInt(1, cfg.MinProps)
 	cfg.MaxProps = util.MinInt(20, cfg.MaxProps)
 
@@ -73,7 +70,6 @@ func Run(cfg *config.RandomOptions, d2files *d2fs.Files) {
 	randomizeUniqueProps(*s)
 	randomizeSetItemsProps(*s)
 	randomizeRWProps(*s)
-	s.rng.Seed(s.opts.SetsSeed)
 	randomizeSetProps(*s)
 }
 
@@ -126,17 +122,16 @@ func randomizeUniqueProps(s scrambler) {
 
 // Randomize Set Props
 func randomizeSetProps(s scrambler) {
-	s.fileName = sets.FileName
-	// Old code that randomized full set bonuses
-	//s.propOffset = sets.PCode2a
-	//s.itemMaxProps = sets.MaxNumProps
-	//s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
-	//s.lvl = sets.Level
-	//scramble(s)
-	s.propOffset = sets.PCode2a
-	s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
-	s.itemMaxProps = sets.MaxNumProps
-	enhancedsets.BlankFullSetBonuses(s.d2files)
+	if s.opts.EnhancedSets {
+		s.fileName = sets.FileName
+		s.propOffset = sets.PCode2a
+		s.itemMaxProps = sets.MaxNumProps
+		s.minMaxProps = getMinMaxProps(s.opts, sets.MaxNumProps)
+		s.lvl = sets.Level
+		scramble(s)
+	} else {
+		enhancedsets.BlankFullSetBonuses(s.d2files)
+	}
 
 }
 
@@ -161,11 +156,13 @@ func randomizeSetItemsProps(s scrambler) {
 	s.minMaxProps = getMinMaxProps(s.opts, 10) // (AProp1-AProp5) * 2 (a & b)
 	scramble(s)                                // OBC:  It would be nice if this call to scramble would always generate 10 props even if balancedpropcount is on.
 
-	// Add Func (f.Rows[][16]) controls how the AProp* columns show up
-	// If Add Func == 2, then for each additional piece worn, a pair of props (a & b)
-	// will be added as Green partial set bonuses
-	// If Add Func == "", then all of the props in Prop* and AProp* show up at once.
-	enhancedsets.SetAddFunc(s.d2files, 2)
+	if s.opts.EnhancedSets {
+		// Add Func (f.Rows[][16]) controls how the AProp* columns show up
+		// If Add Func == 2, then for each additional piece worn, a pair of props (a & b)
+		// will be added as Green partial set bonuses
+		// If Add Func == "", then all of the props in Prop* and AProp* show up at once.
+		enhancedsets.SetAddFunc(s.d2files, 2)
+	}
 }
 
 // Randomize RW Props
