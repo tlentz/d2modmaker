@@ -57,6 +57,7 @@ func Run(cfg *config.Data, d2files d2fs.Files) {
 	randomizeSetProps(s)
 	randomizeSetItemsProps(s)
 	randomizeRWProps(s)
+	randomizeGemAndRuneProps(s)
 }
 
 func getRandomOptions(cfg *config.Data) config.RandomOptions {
@@ -77,6 +78,8 @@ func getRandomOptions(cfg *config.Data) config.RandomOptions {
 	}
 	defaultCfg.PerfectProps = cfg.RandomOptions.PerfectProps
 	defaultCfg.UseOSkills = cfg.RandomOptions.UseOSkills
+	// TODO: add configuration for Gems and Runes
+	//defaultCfg.RandomizeRunes = cfg.RandomOptions.RandomizeRunes
 
 	cfg.RandomOptions.Seed = defaultCfg.Seed
 
@@ -111,9 +114,10 @@ func getAllProps(opts config.RandomOptions, d2files d2fs.Files) (Props, Items) {
 	props = append(props, runeWordProps...)
 	items = append(items, runewords...)
 
-	//	gemProps, gems = getAllGemsProps(d2files);
-	//	props = append(props, gemProps...)
-	//	items = append(items, gems...)
+	// do not add gem & rune properties to global shuffle
+	// gemProps, gems := getAllGemsAndRunes(p)
+	// props = append(props, gemProps...)
+	// items = append(items, gems...)
 
 	return props, items
 }
@@ -265,6 +269,107 @@ func getRunewordLevel(row []string, miscLevels map[string]int) int {
 		runeLevels = append(runeLevels, miscLevels[row[runes.Rune1+j]])
 	}
 	return getMaxInt(runeLevels)
+}
+
+func getAllGemsAndRunes(p propGetter) (Props, Items) {
+	p.fileName = gems.FileName
+	p.propOffset = gems.WeaponMod1Code
+	p.levelOffset = -1
+	p.nameOffset = gems.Name
+	return getProps(p)
+}
+
+func randomizeGemAndRuneProps(s scrambler) {
+	s.fileName = gems.FileName
+	s.propOffset = gems.NumMods
+
+	// do gem shuffle by category/color
+	//shuffleGemsByColor(s)
+	shuffleGemsByTier(s)
+
+	// shuffle rune properties
+	shuffleRuneProperties(s)
+}
+
+func shuffleGemsByColor(s scrambler) {
+	f := s.d2files.Get(s.fileName)
+	origRows := make([][]string, len(f.Rows))
+	for i := range origRows {
+		origRows[i] = make([]string, len(f.Rows[i]))
+		copy(origRows[i], f.Rows[i])
+	}
+
+	// 5 rows = 1 color
+	// 7 colors total
+	order := makeRange(0, 6)
+	rand.Shuffle(len(order), func(i, j int) { order[i], order[j] = order[j], order[i] })
+
+	for i, o := range order {
+		for j := 0; j < 5; j++ {
+			swapGemPropertiesFromCache(s, f, origRows, (i*5)+j, (o*5)+j)
+		}
+	}
+}
+
+func shuffleGemsByTier(s scrambler) {
+	f := s.d2files.Get(s.fileName)
+	origRows := make([][]string, len(f.Rows))
+	for i := range origRows {
+		origRows[i] = make([]string, len(f.Rows[i]))
+		copy(origRows[i], f.Rows[i])
+	}
+
+	// 5 rows = 1 color
+	// 7 colors total
+	order := [][]int{makeRange(0, 6), makeRange(0, 6), makeRange(0, 6), makeRange(0, 6), makeRange(0, 6)}
+
+	// each tier has their own order
+	for tier := 0; tier < len(order); tier++ {
+		rand.Shuffle(len(order[tier]), func(i, j int) { order[tier][i], order[tier][j] = order[tier][j], order[tier][i] })
+	}
+
+	// progresses sequentially through 7 chips, then 7 flawed, etc.
+	for i, o := range order {
+		for j := 0; j < 7; j++ {
+			swapGemPropertiesFromCache(s, f, origRows, (j*5)+i, (o[j]*5)+i)
+		}
+	}
+}
+
+func shuffleRuneProperties(s scrambler) {
+	f := s.d2files.Get(s.fileName)
+	origRows := make([][]string, len(f.Rows))
+	for i := range origRows {
+		origRows[i] = make([]string, len(f.Rows[i]))
+		copy(origRows[i], f.Rows[i])
+	}
+
+	const firstRuneRow = 36
+	const lastRuneRow = 68
+	order := makeRange(firstRuneRow, lastRuneRow)
+	rand.Shuffle(len(order), func(i, j int) { order[i], order[j] = order[j], order[i] })
+
+	for i := firstRuneRow; i <= lastRuneRow; i++ {
+		swapGemPropertiesFromCache(s, f, origRows, i, order[i-firstRuneRow])
+	}
+}
+
+func swapGemPropertiesFromCache(s scrambler, f *d2fs.File, origRows [][]string, destRow int, sourceRow int) {
+	//fmt.Printf("Swapping\n%+v\nWith\n%+v\n", f.Rows[destRow], origRows[sourceRow])
+	for i := range f.Rows[destRow] {
+		if i < s.propOffset {
+			continue
+		}
+		f.Rows[destRow][i] = origRows[sourceRow][i]
+	}
+}
+
+func makeRange(min, max int) []int {
+	a := make([]int, max-min+1)
+	for i := range a {
+		a[i] = min + i
+	}
+	return a
 }
 
 // Get Gem Props
