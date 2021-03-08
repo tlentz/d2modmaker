@@ -77,8 +77,9 @@ export default function D2ModMaker() {
 
   async function loadConfig() {
     const result = await axios("http://localhost:8148/api/cfg")
-    var data = _.merge(defaultCfg, result.data);
-    data = result.data;
+    var data = defaultCfg
+    data = _.merge(data, result.data);  // merge mutates the first argument
+    //data = result.data;
     data.Version = defaultCfg.Version;
     return data;
   }

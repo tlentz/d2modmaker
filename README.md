@@ -207,11 +207,24 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
-
 ## v0.6.0-alpha-23
 * Adjustments to Aura availability. Ty iksargodzilla.
 * Preliminary support for different mods.  Manual edit of cfg.json only for now.
 * Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.
+## v0.5.4
+* Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
+* Patch to elementalskills always being turned on.  This is causing problems with +fireskills coming up negative, and not showing +fireskills text.
+* Added elementalskills option in UI in Randomizer section
+* Changed AllowDupProps & AllowDuplicateProps to AllowDupeProps
+* Fix version # being loaded from cfg.json
+* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
+
+## v0.5.3
+* Fixed version #
+
+## v0.5.2
+* [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
+* Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.
 
 ## v0.5.2-alpha-22
 * [bugfix] PropScores lines weren't allowing Faith or Exiles Path
@@ -303,7 +316,7 @@ Thanks!
    * This option enables picking the prop count for items from the counts on vanilla items
    * The count is pulled from items up to 10 levels above the item being randomized
    * The MinProps and MaxProps settings will be ignored if this is enabled
-* Adds a new randomization option: AllowDuplicateProps
+* Adds a new randomization option: AllowDupeProps
    * If this property is false (default), the same property type will not be added to an item twice (e.g. two instances of resist all)
 * Prevents two auras from being placed on the same item. This is bugged in the game, and one aura would not work.
 * Adds an option to specify the directory to read source Diablo 2 text files from instead of using the built-in 1.13c data.
