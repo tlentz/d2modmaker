@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/setItems"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
@@ -14,6 +13,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/enhancedsets"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
@@ -48,9 +48,6 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 	if !opts.UseSeed {
 		opts.Seed = time.Now().UnixNano()
 	}
-	if !opts.UseSetsSeed {
-		opts.SetsSeed = time.Now().UnixNano()
-	}
 
 	g := Generator{
 		d2files:    d2files,
@@ -73,15 +70,11 @@ func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2item
 func (g *Generator) Run() {
 	genFile(g, &uniqueItems.IFI) // Beware that the Unique Items must be generated before Set Items due to EnhancedSets
 	genFile(g, &setItems.IFI)
-	oldRng := g.rng
-	g.rng = rand.New(rand.NewSource(g.opts.SetsSeed))
 	genFile(g, &sets.IFI)
 	if g.opts.EnhancedSets {
 		enhancedsets.BlankFullSetBonuses(g.d2files)
 		enhancedsets.SetAddFunc(g.d2files, 2)
 	}
-	g.rng = nil
-	g.rng = oldRng
 	genFile(g, &runes.IFI)
 	fmt.Printf("%d affixes rolled\n", g.numAffixRolls)
 }

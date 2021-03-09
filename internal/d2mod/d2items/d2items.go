@@ -6,10 +6,12 @@ import (
 	"strconv"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs/filenumbers"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/ignoretxt"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/runes"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/sets"
+	"github.com/tlentz/d2modmaker/internal/d2mod/ignore"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/runewordlevels"
 )
 
@@ -30,6 +32,7 @@ type Affix struct {
 	SetBonusMultiplier float32
 	SynergyMultiplier  float32
 	AdjustedScore      int
+	Ignored            bool // This affix exists in Ignore.txt.  It therefore won't have a valid Line
 }
 
 // ItemAffixes list of Affixes (containing props) on an Item
@@ -67,22 +70,26 @@ func NewItem(pg PropGetter, rowIdx int, row []string) *Item {
 		lvl = runewordlevels.GetRunewordLevel(row, pg.rwlevels)
 		//lvl = -1 // Temporary for testing
 	}
-	item := Item{}
-	item.Name = row[pg.IFI.ItemName]
-	item.Lvl = lvl
-	item.Enabled = true
-	item.Affixes = []Affix{}
 	if pg.IFI.HasEnabledColumn {
 		// Third Column (row[2]) in Runes and in Unique Items must be 1 for an item to exist
 		//fmt.Printf("row[2] %s - %s\n", row[0], row[2])
 		if row[2] != "1" {
 			//fmt.Printf("NewItem: Not Enabled: %s\n", row[0])
 			// fmt.Println(row)
-			item.Enabled = false
 			//log.Fatalf(row[0] + row[1] + row[2])
 			return nil
 		}
 	}
+	if ignore.IsIgnored(pg.IFI.FI.FileNumber, ignoretxt.IgnoreTypeItem, row[0]) {
+		// Item is ignored
+		return nil
+	}
+
+	item := Item{}
+	item.Name = row[pg.IFI.ItemName]
+	item.Lvl = lvl
+	item.Enabled = true
+	item.Affixes = []Affix{}
 	// Sets has hard-coded type "fset", UniqueItems & SetItems have 1 type, Runewords have multiple types
 	for _, t := range pg.typeOffsets {
 		//fmt.Printf("NewItem: Type = %s", row[t])
@@ -116,8 +123,8 @@ func NewItem(pg PropGetter, rowIdx int, row []string) *Item {
 		}
 		//prop := prop.NewProp(row[i], row[i+1], row[i+2], row[i+3])
 		aff := NewAffixFromRow(pg, item, row, i)
-		if aff.Line == nil {
-			panic(1)
+		if aff.Line == nil && !(aff.Ignored) {
+			log.Panicf("Item %s column#%d no Affix created? (contact developer)\n", row[0], i)
 		}
 		//item.SetBonus = append(item.SetBonus, sbn)
 		item.Affixes = append(item.Affixes, *aff)
@@ -175,6 +182,13 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 	aff := Affix{
 		P: prop.NewProp(row[colIdx], row[colIdx+1], row[colIdx+2], row[colIdx+3], lvl),
 	}
+	if ignore.IsIgnored(item.FileNumber, ignoretxt.IgnoreTypeProp, aff.P.Name) {
+		// It's in ignore.txt
+		aff.Ignored = true
+		aff.SetBonusMultiplier = 1
+		aff.SynergyMultiplier = 1
+		return &aff
+	}
 	aff.SetBonusMultiplier = CalcSetBonusMultiplier(pg.IFI.FI.FileNumber, colIdx)
 	aff.ColIdx = colIdx
 	for _, line := range pg.psi.PropLines[aff.P.Name] {
@@ -189,6 +203,23 @@ func NewAffixFromRow(pg PropGetter, item Item, row []string, colIdx int) *Affix 
 	}
 
 	if (item.Lvl > 0) && ((pg.IFI.HasEnabledColumn && row[2] == "1") || (!pg.IFI.HasEnabledColumn)) {
+		log.Printf("Item Type: %v\n", item.Types)
+		for _, line := range pg.psi.PropLines[aff.P.Name] {
+			//tmatch := "  "
+			if CheckIETypes(&pg.tt, item.Types, line.Itypes, line.Etypes) {
+				//tmatch = "->"
+			}
+			//log.Printf("%s %s %v|%v\n", line.Prop.Name, tmatch, line.Itypes, line.Etypes)
+		}
+
+		// for x, y := range pg.tt.parentItemType {
+		// 	fmt.Printf("%s", x)
+		// 	for _, foo := range y {
+		// 		fmt.Printf("\t%s", foo)
+		// 	}
+		// 	fmt.Println()
+		// }
+
 		log.Fatalf("NewAffixFromRow: Couldn't find line in PropScores.txt for %s[%d] %s|%s|%s|%s", item.Name, item.Lvl, aff.P.Name, aff.P.Par, aff.P.Min, aff.P.Max)
 	}
 	return &aff

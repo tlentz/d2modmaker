@@ -1,0 +1,16 @@
+TypeCode	PBucket
+aq2	arrows
+cq2	arrows
+aq0	arrows
+cq0	arrows
+misl	token
+gb3	token
+gb4	token
+gb5	token
+gb6	token
+gb7	token
+gb8	token
+gd3	token
+gd4	token
+gd5	token
+gd6	token

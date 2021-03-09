@@ -21,7 +21,8 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.2-alpha-22",
+  Version: "v0.6.0-alpha-23",
+  ModName: "113c",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: false,
@@ -48,8 +49,7 @@ const defaultCfg = {
     Randomize: false,
     UseSeed: false,
     Seed: -1,
-    UseSetsSeed: true,
-    SetsSeed: 1234,
+    EnhancedSets: true,
     IsBalanced: true,
     BalancedPropCount: true,
     AllowDupeProps: false,
@@ -62,8 +62,6 @@ const defaultCfg = {
     Generate: false,
     UseSeed: false,
     Seed: -1,
-    UseSetsSeed: true,
-    SetsSeed: 1234,
     EnhancedSets: true,
     BalancedPropCount: true,
     MinProps: 3,
@@ -79,8 +77,9 @@ export default function D2ModMaker() {
 
   async function loadConfig() {
     const result = await axios("http://localhost:8148/api/cfg")
-    var data = _.merge(defaultCfg, result.data);
-    data = result.data;
+    var data = defaultCfg
+    data = _.merge(data, result.data);  // merge mutates the first argument
+    //data = result.data;
     data.Version = defaultCfg.Version;
     return data;
   }
@@ -177,7 +176,15 @@ export default function D2ModMaker() {
       return newSeed();
     }
   };
-
+  
+  const genseed = () => {
+    if (state.GeneratorOptions.Seed >= 1) {
+      return state.GeneratorOptions.Seed;
+    } else {
+      return newSeed();
+    }
+  };
+  
   const newSeed = () => {
     return Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
   };
@@ -200,24 +207,6 @@ export default function D2ModMaker() {
       );
     }
   };
-  const randSetsSeedInput = () => {
-    if (state.RandomOptions.UseSetsSeed) {
-      return (
-        <React.Fragment>
-          <InputNumber
-            aria-label="Seed number input"
-            min={1}
-            max={Number.MAX_SAFE_INTEGER}
-            style={{ width: 100 }}
-            value={state.RandomOptions.SetsSeed}
-            onChange={(value) => {
-              return updateRandomOptions(state, "SetsSeed", value);
-            }}
-          />
-        </React.Fragment>
-      );
-    }
-  };
   const genSeedInput = () => {
     if (state.GeneratorOptions.UseSeed) {
       return (
@@ -230,24 +219,6 @@ export default function D2ModMaker() {
             value={state.GeneratorOptions.Seed}
             onChange={(value) => {
               return updateGeneratorOptions(state, "Seed", value);
-            }}
-          />
-        </React.Fragment>
-      );
-    }
-  };
-  const genSetsSeedInput = () => {
-    if (state.GeneratorOptions.UseSetsSeed) {
-      return (
-        <React.Fragment>
-          <InputNumber
-            aria-label="Sets Seed number input"
-            min={1}
-            max={Number.MAX_SAFE_INTEGER}
-            style={{ width: 100 }}
-            value={state.GeneratorOptions.SetsSeed}
-            onChange={(value) => {
-              return updateGeneratorOptions(state, "SetsSeed", value);
             }}
           />
         </React.Fragment>
@@ -333,10 +304,32 @@ export default function D2ModMaker() {
     );
   };
 
-  const dirOptions = () => {
+  const modOptions = () => {
     return (
       <Grid container>
         <Grid container spacing={5}>
+          <Grid item xs={6}>
+          <StyledTooltip
+              title={
+                "The name of the Mod: if not 113c or easternsun300r6d, the Source Directory must be specified and assets\\modsupport\\ModName\\ directory must exist."
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+            <TextField
+              id="ModName"
+              label="Mod Name"
+              value={state.ModName}
+              onChange={(e) =>
+                setState({ ...state, ModName: e.target.value })
+              }
+              fullWidth
+            />
+          </Grid>
           <Grid item xs={6}>
             <StyledTooltip
               title={
@@ -620,7 +613,7 @@ export default function D2ModMaker() {
                     updateGeneratorOptions(
                       updateGeneratorOptions(state, "UseSeed", checked),
                       "Seed",
-                      checked ? seed() : -1
+                      checked ? genseed() : -1
                     )
                   );
                 }}
@@ -638,42 +631,6 @@ export default function D2ModMaker() {
               </StyledTooltip>
             </React.Fragment>
             {genSeedInput()}
-          </Grid>
-          <Grid item xs={6}>
-            <React.Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    color="primary"
-                    name={"UseSetsSeed"}
-                    value={state.GeneratorOptions["UseSetsSeed"]}
-                  />
-                }
-                label={"UseSetsSeed"}
-                checked={state.GeneratorOptions["UseSetsSeed"]}
-                onChange={(e, checked) => {
-                  return setState(
-                    updateGeneratorOptions(
-                      updateGeneratorOptions(state, "UseSetsSeed", checked),
-                      "SetsSeed",
-                      checked ? seed() : -1
-                    )
-                  );
-                }}
-              />
-              <StyledTooltip
-                title={
-                  "Provide a specific seed to use for full set bonuses.  Toggling on/off will generate a new seed.  Beware that full set bonuses will change _on existing items_."
-                }
-                placement="bottom"
-                enterDelay={250}
-              >
-                <span className={"help-icon"}>
-                  <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
-                </span>
-              </StyledTooltip>
-            </React.Fragment>
-            {genSetsSeedInput()}
           </Grid>
         </Grid>
 
@@ -870,42 +827,6 @@ export default function D2ModMaker() {
             </React.Fragment>
             {randSeedInput()}
           </Grid>
-          <Grid item xs={6}>
-            <React.Fragment>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    color="primary"
-                    name={"UseSetsSeed"}
-                    value={state.RandomOptions["UseSetsSeed"]}
-                  />
-                }
-                label={"UseSetsSeed"}
-                checked={state.RandomOptions["UseSetsSeed"]}
-                onChange={(e, checked) => {
-                  return setState(
-                    updateRandomOptions(
-                      updateRandomOptions(state, "UseSetsSeed", checked),
-                      "SetsSeed",
-                      checked ? seed() : -1
-                    )
-                  );
-                }}
-              />
-              <StyledTooltip
-                title={
-                  "Provide a specific seed to use for full set bonuses.  Toggling on/off will generate a new seed.  Beware that full set bonuses will change _on existing items_."
-                }
-                placement="bottom"
-                enterDelay={250}
-              >
-                <span className={"help-icon"}>
-                  <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
-                </span>
-              </StyledTooltip>
-            </React.Fragment>
-            {randSetsSeedInput()}
-          </Grid>
         </Grid>
 
 
@@ -935,7 +856,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-        <Grid item xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>s
           <Typography
             id="MinProps"
             align={"center"}
@@ -1072,7 +993,7 @@ export default function D2ModMaker() {
         {divider()}
         <Grid container>{dropRateOptions()}</Grid>
         {divider()}
-        <Grid container>{dirOptions()}</Grid>
+        <Grid container>{modOptions()}</Grid>
         {divider()}
         {/*<pre id={"state"}>{JSON.stringify(state, null, 2)}</pre>*/}
       </div>
@@ -1080,10 +1001,7 @@ export default function D2ModMaker() {
   );
 }
 function RefreshUI() {
-
-  const refreshUI = ()=>{
-      window.location.reload();
-  }
+  window.location.reload();
 }
 function valuetext(value) {
   return `${value}`;

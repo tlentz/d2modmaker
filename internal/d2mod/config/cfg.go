@@ -10,8 +10,7 @@ type RandomOptions struct {
 	Randomize         bool  `json:"Randomize"`
 	UseSeed           bool  `json:"UseSeed"`
 	Seed              int64 `json:"Seed"`
-	UseSetsSeed       bool  `json:"UseSetsSeed"`
-	SetsSeed          int64 `json:"SetsSeed"`
+	EnhancedSets      bool  `json:"EnhancedSets"`      // Propcount & score from Unique Item, not Set Item.
 	IsBalanced        bool  `json:"IsBalanced"`        // Allows Props only from items up to 10 levels higher
 	BalancedPropCount bool  `json:"BalancedPropCount"` // Picks prop count from a vanilla item up to 10 levels higher
 	AllowDupeProps    bool  `json:"AllowDupeProps"`    // Allow two props of the same type to be placed on an item
@@ -26,8 +25,6 @@ type GeneratorOptions struct {
 	Generate            bool    `json:"Generate"` // Turn On/Off Generator
 	UseSeed             bool    `json:"UseSeed"`
 	Seed                int64   `json:"Seed"`
-	UseSetsSeed         bool    `json:"UseSetsSeed"`
-	SetsSeed            int64   `json:"SetsSeed"`            // seed forSetItems.txt
 	EnhancedSets        bool    `json:"EnhancedSets"`        // Propcount & score from Unique Item, not Set Item.
 	BalancedPropCount   bool    `json:"BalancedPropCount"`   // Picks prop count from a vanilla item up to 10 levels higher
 	MinProps            int     `json:"MinProps"`            // minimum number of non blank props on an item
@@ -40,6 +37,7 @@ type GeneratorOptions struct {
 // Data is the configuration used to build the mod
 type Data struct {
 	Version                 string           `json:"Version"`
+	ModName                 string           `json:"ModName"`
 	SourceDir               string           `json:"SourceDir"`
 	OutputDir               string           `json:"OutputDir"`
 	MeleeSplash             bool             `json:"MeleeSplash"`
@@ -69,7 +67,8 @@ type Data struct {
 // DefaultData Default configuration should the cfg.json not read/be missing anything.
 func DefaultData() Data {
 	return Data{
-		Version:                 "v0.5.2-alpha-22",
+		Version:                 "v0.6.0-alpha-23",
+		ModName:                 "113c",
 		SourceDir:               "",
 		OutputDir:               "",
 		MeleeSplash:             false,
@@ -96,8 +95,7 @@ func DefaultData() Data {
 			Randomize:         false,
 			UseSeed:           false,
 			Seed:              -1,
-			UseSetsSeed:       true,
-			SetsSeed:          1234,
+			EnhancedSets:      true,
 			IsBalanced:        true,
 			BalancedPropCount: true,
 			AllowDupeProps:    false,
@@ -110,8 +108,6 @@ func DefaultData() Data {
 			Generate:            false,
 			UseSeed:             false,
 			Seed:                -1,
-			UseSetsSeed:         true,
-			SetsSeed:            1234,
 			EnhancedSets:        true,
 			BalancedPropCount:   true,
 			MinProps:            3,

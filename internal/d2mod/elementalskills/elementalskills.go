@@ -9,7 +9,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/assets"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/itemStatCost"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/properties"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt"
 	"github.com/tlentz/d2modmaker/internal/d2mod/prop"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
@@ -24,20 +24,20 @@ const (
 func Run(outDir string, d2files d2fs.Files, enabled bool) {
 
 	copyPatchString(outDir)
-	d2fs.MergeRows(d2files.Get(itemStatCost.FileName), *d2fs.ReadAsset(elementalAssetsDir, itemStatCost.FileName))
-	d2fs.MergeRows(d2files.Get(properties.FileName), *d2fs.ReadAsset(elementalAssetsDir, properties.FileName))
 
 	if enabled {
+		d2fs.MergeRows(d2files.Get(itemStatCost.FileName), *d2fs.ReadAsset(elementalAssetsDir, itemStatCost.FileName))
+		d2fs.MergeRows(d2files.Get(properties.FileName), *d2fs.ReadAsset(elementalAssetsDir, properties.FileName))
 	} else {
-		propScoresFile := d2files.GetWithPath(propscores.Path, propscores.FileName)
+		propScoresFile := d2files.GetAsset(propscorestxt.Path, propscorestxt.FileName)
 		for rowIdx := range propScoresFile.Rows {
-			switch propScoresFile.Rows[rowIdx][propscores.Prop] {
+			switch propScoresFile.Rows[rowIdx][propscorestxt.Prop] {
 			case
 				"lightningskill",
 				"magicskill",
 				"coldskill",
 				"poisonskill":
-				propScoresFile.Rows[rowIdx][propscores.Prop] = "*" + propScoresFile.Rows[rowIdx][propscores.Prop]
+				propScoresFile.Rows[rowIdx][propscorestxt.Prop] = "*" + propScoresFile.Rows[rowIdx][propscorestxt.Prop]
 			}
 		}
 
@@ -49,9 +49,9 @@ func SetProbability(d2files d2fs.Files, ss *scorerstatistics.ScorerStatistics, e
 	if enabled {
 		fireSkillsRows := make(map[int]bool, 0)
 		elemSkillsRows := make(map[int]bool, 0)
-		psf := d2files.Get(propscores.FileName)
+		psf := d2files.Get(propscorestxt.FileName)
 		for rowIdx := range psf.Rows {
-			switch psf.Rows[rowIdx][propscores.Prop] {
+			switch psf.Rows[rowIdx][propscorestxt.Prop] {
 			case "fireskill":
 				fireSkillsRows[rowIdx] = true
 			case
@@ -82,7 +82,8 @@ func SetProbability(d2files d2fs.Files, ss *scorerstatistics.ScorerStatistics, e
 }
 
 func copyPatchString(outDir string) {
-	from, err := assets.Assets.Open(elementalAssetsDir + patchstring)
+	filePathName := path.Join(assets.AssetDir, elementalAssetsDir, patchstring)
+	from, err := os.Open(filePathName)
 	util.Check(err)
 	defer from.Close()
 

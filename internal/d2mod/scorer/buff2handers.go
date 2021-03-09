@@ -2,7 +2,7 @@ package scorer
 
 import (
 	"github.com/tlentz/d2modmaker/internal/d2fs"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
@@ -21,9 +21,9 @@ func buff2HanderScore(opts config.GeneratorOptions, s *scorerstatistics.ScorerSt
 
 }
 func buff2HanderWeights(s *scorerstatistics.ScorerStatistics, d2files d2fs.Files) {
-	f := d2files.Get(propscores.FileName)
+	f := d2files.Get(propscorestxt.FileName)
 	for rowIdx := range f.Rows {
-		if f.Rows[rowIdx][propscores.SourceItem] == "2handers" {
+		if f.Rows[rowIdx][propscorestxt.SourceItem] == "2handers" {
 			for tsIdx := range s.TypeStatistics {
 				if s.TypeStatistics[tsIdx].ItemType == "2h" {
 					s.TypeStatistics[tsIdx].NumLines[rowIdx] += 100

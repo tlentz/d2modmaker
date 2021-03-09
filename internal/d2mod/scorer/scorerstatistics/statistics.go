@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/tlentz/d2modmaker/internal/d2fs"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/weightrand"
 )
 
@@ -29,15 +29,17 @@ type ScorerStatistics struct {
 	pBucketIndexes map[string]int
 
 	ItemScores ItemScoreMap // Vanilla item scores, used as target scores
+
 }
 
 // NewScorerStatistics .
 func NewScorerStatistics(d2files *d2fs.Files) *ScorerStatistics {
-	ss := ScorerStatistics{}
-	ss.ItemScores = ItemScoreMap{}
+	ss := ScorerStatistics{
+		pBucket:        newpBucketMap(d2files),
+		pBucketIndexes: make(map[string]int),
+		ItemScores:     ItemScoreMap{},
+	}
 
-	ss.pBucket = newpBucketMap(d2files)
-	ss.pBucketIndexes = make(map[string]int)
 	nextBucketIndex := 1
 	for _, p := range *ss.pBucket {
 		if ss.pBucketIndexes[p] == 0 {

@@ -1,16 +1,20 @@
 package scorer
 
 import (
-	"fmt"
 	"log"
 
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/ignoretxt"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/ignore"
 	"github.com/tlentz/d2modmaker/internal/d2mod/scorer/scorerstatistics"
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
 // ScoreItem .
 func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* scorelines *propscores.ScoreMap,*/, item *d2items.Item) int {
+	if ignore.IsIgnored(item.FileNumber, ignoretxt.IgnoreTypeItem, item.Name) {
+		return 0
+	}
 
 	//var sgroups []string = make([]string, len(item.Affixes))
 	if len(item.Affixes) == 0 {
@@ -18,9 +22,13 @@ func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* sc
 	}
 	sgroups := make([]string, len(item.Affixes)) //  synergy groups to apply syn.  individually
 	for idx := range item.Affixes {
-		//sbm := CalcSetBonusMultiplier(item.FileNumber, item, pidx)
 
-		//pscore, synergygroup := scoreProp(ss, tt, scorelines, item, item.Affixes[pidx])
+		if ignore.IsIgnored(item.FileNumber, ignoretxt.IgnoreTypeProp, item.Affixes[idx].P.Name) {
+			//ss.IgnorePropNames[strconv.Itoa(item.FileNumber)+"/"+item.Affixes[idx].P.Name] {
+			item.Affixes[idx].SynergyMultiplier = 1
+			item.Affixes[idx].SetBonusMultiplier = 1
+			continue
+		}
 		if item.Affixes[idx].Line == nil {
 			log.Fatalf("ScoreItem: Affix with no line encountered %s", item.Name)
 		}
@@ -51,25 +59,10 @@ func ScoreItem(ss *scorerstatistics.ScorerStatistics, tt *d2items.TypeTree /* sc
 			}
 		}
 	}
-	// Check if is a 2hander, and apply 2hander nerf if it is
-	// pole staf bow xbow abow aspe spea
-	//fmt.Printf("2h check: %s\n", item.Name)
-	// Disabling 2hander math
-	// if d2items.CheckTwoHander(tt, *item) {
-	// 	//fmt.Printf("2hander: %s\n", item.Name)
-	// 	//score = int(math.Round(float64(score) * twoHandNerf))
-	// 	for idx := range item.Affixes {
-	// 		item.Affixes[idx].ScoreMult = item.Affixes[idx].ScoreMult * twoHandNerf
-	// 	}
-	// }
 
 	//log.Printf("Scores: %v", scores)
 	score := 0
 	for idx := range item.Affixes {
-		if item.Affixes[idx].SetBonusMultiplier == 0 || item.Affixes[idx].SynergyMultiplier == 0 {
-			fmt.Printf("%v\n", item)
-			log.Panicf("ScoreItem: a score multiplier is not set")
-		}
 		item.Affixes[idx].AdjustedScore = util.Round32(float32(item.Affixes[idx].RawScore) * item.Affixes[idx].SetBonusMultiplier * item.Affixes[idx].SynergyMultiplier)
 		score += item.Affixes[idx].AdjustedScore
 	}

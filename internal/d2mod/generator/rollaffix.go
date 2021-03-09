@@ -5,9 +5,9 @@ import (
 	"math/rand"
 	"strconv"
 
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores/propscorespartype"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt/propscorespartype"
 	"github.com/tlentz/d2modmaker/internal/d2mod/d2items"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propscores"
 	"github.com/tlentz/d2modmaker/internal/util"
 	"github.com/tlentz/d2modmaker/internal/weightrand"
 )

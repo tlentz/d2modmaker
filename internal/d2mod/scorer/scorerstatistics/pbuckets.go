@@ -68,7 +68,7 @@ func newpBucketMap(d2files *d2fs.Files) *pBucketMap {
 	pb := make(pBucketMap)
 
 	// Instead of the above generation code, just read it in.
-	pBucketFile := d2files.GetWithPath(pbucketlist.Path, pbucketlist.FileName)
+	pBucketFile := d2files.GetAsset(pbucketlist.Path, pbucketlist.FileName)
 	for _, row := range pBucketFile.Rows {
 		typeCodes[row[pbucketlist.TypeCode]] = row[pbucketlist.PBucket]
 	}
@@ -117,7 +117,7 @@ func newpBucketMap(d2files *d2fs.Files) *pBucketMap {
 			case typeCodes[wtype] != "":
 				pb[wcode] = typeCodes[wtype]
 			default:
-				log.Fatalf("Bucketlist missing type %s or code %s\n", wtype, wcode)
+				log.Panicf("PBucketlist.txt missing type %s or code %s\n", wtype, wcode)
 			}
 		}
 	}
@@ -136,7 +136,7 @@ func newpBucketMap(d2files *d2fs.Files) *pBucketMap {
 			case typeCodes[atype] != "":
 				pb[acode] = typeCodes[atype]
 			default:
-				log.Fatalf("Bucketlist missing type %s or code %s", atype, acode)
+				log.Panicf("PBucketlist.txt missing type %s or code %s", atype, acode)
 			}
 		}
 	}

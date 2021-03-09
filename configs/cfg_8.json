@@ -2,8 +2,6 @@
     "Name": "Balanced, new items",
     "Description": "Generator=1x, 8x mobs",
     "Author": "EMPY",
-    "SourceDir": "",
-    "OutputDir": "",
     "MeleeSplash": true,
     "IncreaseStackSizes": true,
     "IncreaseMonsterDensity": 8,

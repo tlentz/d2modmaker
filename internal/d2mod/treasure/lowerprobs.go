@@ -10,6 +10,7 @@ import (
 // lowerProbs Lowers the probability of scaleColIdx being rolled by lowerByFactor for row rowIndex in file f
 // Does this by increasing the Prob(n) columns of every row except ScaleColIdx and increasing
 // the NoDrop column additionally by (lowerByFactor-1)
+// Used by biggergoldpiles to make fewer gold piles.
 func lowerProbs(f *d2fs.File, rowIndex int, scaleColIdx int, lowerByFactor int) {
 	sumWeights := 0
 	for colIdx := treasureClassEx.Prob1; colIdx < treasureClassEx.Prob10; colIdx += 2 {

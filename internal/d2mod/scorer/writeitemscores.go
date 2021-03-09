@@ -13,7 +13,7 @@ import (
 /*
 func genItemScores(g *Generator, ifi *d2fs.ItemFileInfo) {
 	//itemScoreFile := d2fs.ReadAsset(itemscores.Path, itemscores.FileName)
-	itemScoreFile := g.d2files.GetWithPath(itemscores.Path, itemscores.FileName)
+	itemScoreFile := g.d2files.GetAsset(itemscores.Path, itemscores.FileName)
 	itemFile := g.d2files.Get(ifi.FI.FileName)
 	pg := d2items.NewPropGetter(g.d2files, g.opts, ifi, g.psi, *g.TypeTree)
 	for rowIdx, row := range itemFile.Rows {
@@ -44,7 +44,7 @@ func genItemScores(g *Generator, ifi *d2fs.ItemFileInfo) {
 
 // WriteItemScore write Item out to ItemScores.txt
 func WriteItemScore(ss *scorerstatistics.ScorerStatistics, d2files *d2fs.Files, ifi *d2fs.ItemFileInfo, item *d2items.Item, VanillaFlag bool) {
-	itemScoreFile := d2files.GetWithPath(itemscores.Path, itemscores.FileName)
+	itemScoreFile := d2files.GetAsset(itemscores.Path, itemscores.FileName)
 	if item == nil {
 		return
 	}

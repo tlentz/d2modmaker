@@ -6,7 +6,7 @@ import (
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/magicSuffix"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/missiles"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/properties"
-	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscores"
+	"github.com/tlentz/d2modmaker/internal/d2fs/txts/propscorestxt"
 	"github.com/tlentz/d2modmaker/internal/d2fs/txts/skills"
 )
 
@@ -53,10 +53,10 @@ func mergeSplashFile(fileName string, d2files d2fs.Files) {
 
 // DisableMeleeSplash comment out meleesplash in PropScores.txt
 func DisableMeleeSplash(d2files d2fs.Files) {
-	propScoresFile := d2files.GetWithPath(propscores.Path, propscores.FileName)
+	propScoresFile := d2fs.ReadAsset(propscorestxt.Path, propscorestxt.FileName)
 	for rowIdx := range propScoresFile.Rows {
-		if propScoresFile.Rows[rowIdx][propscores.Prop] == "meleesplash" {
-			propScoresFile.Rows[rowIdx][propscores.Prop] = "*meleesplash"
+		if propScoresFile.Rows[rowIdx][propscorestxt.Prop] == "meleesplash" {
+			propScoresFile.Rows[rowIdx][propscorestxt.Prop] = "*meleesplash"
 		}
 	}
 }
