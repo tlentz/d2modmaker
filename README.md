@@ -207,10 +207,14 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.6.0 
+* Merged with mainline
+
 ## v0.6.0-alpha-23
 * Adjustments to Aura availability. Ty iksargodzilla.
 * Preliminary support for different mods.  Manual edit of cfg.json only for now.
 * Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.
+
 ## v0.5.4
 * Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
 * Patch to elementalskills always being turned on.  This is causing problems with +fireskills coming up negative, and not showing +fireskills text.
