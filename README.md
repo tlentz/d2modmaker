@@ -29,14 +29,22 @@ This should be compatible with PlugY and other things such as:
 * [PlugY](http://plugy.free.fr/en/index.html) by Yohann Nicolas.
 * [MultiRes / BH](https://www.reddit.com/r/slashdiablo/comments/7z5uy1/hd_mod_and_maphack_new_release/) by SlashDiablo.
 
-# ModConfig
+# Options
 
-The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
+The mod config is located in `cfg.json`.  You can change this config to your liking and run to produce a new `data` folder.
 
-## ModConfig Options
+## General Options
 #### SourceDir `string`
 * Specifies the directory the source text files are read from
 * If this is omitted, or set to "", the built-in 113c data files will be used. 
+#### OutputDir `string`
+* Specifies the data directory to write files to.  
+* If omitted it will default to creating the data file tree directly underneath 
+* the current directory, i.e. 
+#### MeleeSplash `bool`
+* Enables spawning of jewels that have the added property "Melee Splash"
+* If the Generator is enabled it can generate items with this property.
+* The Randomizer does not produce items with Melee Splash, so you'll have to use jewels.
 #### IncreaseStackSizes `bool`
 * Increases book of tp to 100
 * Increases book of id to 100
@@ -45,8 +53,8 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Increases key stack sizes to 100
 #### IncreaseMonsterDensity `float`
 * Will increase the density of all areas by the given multiplier
-* `MAX: 30.0`
 * `MIN: 0.0`
+* `MAX: 30.0`
 * Set to `-1` to omit
 #### EnableTownSkills `bool`
 * Enables all skills in town
@@ -83,17 +91,30 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Removes attribute requirements from items.
 #### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
+#### UseOSkills `bool`
+* Will change class only skills to oskills
+#### PerfectProps `bool`
+* All props will have the max value for min/max values
 #### SafeUnsocket `bool`
 * Adds recipe (item + quiver) to unsocket an item, returning both the item and everything from its sockets.
+#### PropDebug `bool`
+* Adds recipe health potion + socketable weapon => debugging weapon.  General idea is to hand-edit the cubemain.txt file to add
+* the property you are trying to debug, create and test it.
+
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
+---
 ## RandomOptions `RandomOptions`
 #### Randomize `bool`
-* Will randomize propertiesif set to true
+* Will randomize if set to true
+#### UseSeed `bool`
+* Will use provided seed if set, generate random seed every run if not set
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
+#### EnhancedSets `bool`
+* Removes all full set bonuses because they change on existing items every time d2mm is run
 #### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
 #### AllowDupeProps `bool`
@@ -109,10 +130,37 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### MaxProps `int`
 * Maximum number of non blank props that spawn on an item
 * Set to `-1` to omit
-#### UseOSkills `bool`
-* Will change class only skills to oskills
-#### PerfectProps `bool`
-* All props will have the max value for min/max values
+#### ElementalSkills `bool`
+* Add the ability to spawn + to cold skills, poison skills etc, not just + fire skill.
+---
+## GeneratorOptions `GeneratorOptions`
+#### Generate `bool`
+* Set to turn on the Prop Generator
+#### UseSeed `bool`
+* Will use provided seed if set, generate random seed every run if not set
+#### Seed `int`
+* Will use this seed for randomization
+* Set to `-1` to generate a random seed
+#### EnhancedSets `bool`
+* Removes all full set bonuses because they change every time d2mm is run
+* Configures all sets to have more partial set bonuses
+#### BalancedPropCount `bool`
+* Pick prop count on items based on counts from vanilla items
+* Generates up to 4 props more than vanilla if needed to match the vanilla item's score.
+* Enabling this setting will make MinProps and MaxProps unused
+#### MinProps `int`
+* Minimum number of non blank props that spawn on an item
+* Set to `-1` to omit
+#### MaxProps `int`
+* Maximum number of non blank props that spawn on an item
+* Set to `-1` to omit
+#### NumClones `int`
+* Number of clone unique items to create.  Clones will have
+* same name but different generated properties.
+#### PropScoreMultipler `int`
+* The I Win lever.  1 = vanilla.  2 = 2x the score of the vanilla item.
+#### ElementalSkills `bool`
+* Add the ability to spawn + to cold skills, poison skills etc, not just + fire skill.
 
 # Screenshots
 ### Nagel
@@ -159,9 +207,13 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.6.0 
+* Merged with mainline
 
-## Upcoming Release
-* N/A
+## v0.6.0-alpha-23
+* Adjustments to Aura availability. Ty iksargodzilla.
+* Preliminary support for different mods.  Manual edit of cfg.json only for now.
+* Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.
 
 ## v0.5.4
 * Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
@@ -178,6 +230,73 @@ Thanks!
 * [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
 * Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.
 
+## v0.5.2-alpha-22
+* [bugfix] PropScores lines weren't allowing Faith or Exiles Path
+
+## v0.5.2-alpha-21
+* Expanded level and item availability of auras for the Generator
+* Merged in cleanup from obc/mobdensity branch
+* [bugfix] Path fixes to get the srcdir option working again.
+
+## v0.5.2-alpha-20
+* Set Generator default to false to work around the ui bug.
+* Fix for PerfectProps doing "r=" proptypes
+## v0.5.2-alpha-19
+* Set PropScoreMultiplier to 1 if user had set it to 0  (thx Speculator)
+* Fix Seeds.txt code to write correct seed, and in addition write SetsSeed.
+* Balance adjustment in PropScores.txt, some due to the new level limit based code from a17
+* Fix for broken Monster Density code that was squaring uniques monster density in nm, and no increase in hell
+* Increased Monster Density to Max and split density between Monstats.txt and Levels.txt.  Ty Necrolis (Issue #81)
+## v0.5.2-alpha-18
+* More prop balance by iksargodzilla
+* Fixed issue score cap from a17 was not working.
+## v0.5.2-alpha-17
+* Added debug cube recipes: axe + 1 health potion = axe with 1 each light,cold,fire,poison, magic skills.  Not added to UI, this allows
+* testing of new props to verify that they are working correctly.
+* Changed elementalkills allow curses (-lightning skills, -cold skills, etc)  Beware this may shift existing items + elemental skills down by 2, possibly going negative.
+* Added PropScores.txt ScoreMax column and capped max score to itemlevel * (1.2 + 0.1 * (PropScoreMultiplier-1)) but only when PropScoreMult < 4
+* This prevents low level items from spawning with very high values for props that have low ScoreMax.
+## v0.5.2-alpha-16
+* Bugfix: Randomizer:IsBalanced was broken
+## v0.5.2-alpha-15
+* Fixed ElementalSkills
+* Increased ranges of some damage props to allow higher values/scores
+## v0.5.2-alpha-13
+* Adding 2hander buff to Generator
+* Fix Randomizer crash
+## v0.5.2-alpha-12
+* Added ElementalSkills handling in Randomizer
+* Balance adjustment to SynergyGroup and ias (properties swing1-3)
+* Fixed some broken curses (-AC etc.)
+## v0.5.2-alpha-11
+* Added "SafeUnsocket" runeword recipe
+* Added "ElementalSkills": ability to Generate items with + cold, poison, lightning, or magic skills.
+## v0.5.2-alpha-10
+* Separated out Generator from Randomizer options
+* Made OSkills and PerfectProps their own separate entities, capable of running against vanilla, randomized or generated items.
+* Separated out Sets Seed from the other seed.
+## v0.5.2-alpha-9
+* Fix for ScoreLimit not applying correctly to proppartype s (skill)
+* Made oskill conversion its own module, run after Generator or Randomizer
+## v0.5.2-alpha-8
+* Added PropScores.txt:ScoreLimit -- Limits the max score rolled for a new affix to % of vanilla item score.
+## v0.5.2-alpha-7
+* Many bugfixes.
+* Widened out the allowable range of props rolled in the beginning.
+* Added per-slot-ish probability buckets based on item code and type
+## v0.5.2-alpha-6
+* Fixes to +skills to prevent +5 all & +3 class showing up on same item
+* Made +class skill cheaper on class specific
+## v0.5.2-alpha-5
+* Fix to stamdrain prop
+## v0.5.2-alpha-4
+* Fixes to Scorer for MinProps support
+* Added r= PropParType to allow generation of props in multiples of 5 or 10
+* Balancing, and more balancing in PropScores.txt mainly to do with damage, but also restricted 1-100% mana steal to staves, 15% max for everything else.
+## v0.5.2-alpha-3
+* Added Scorer & Generator modules.
+   * Scorer reads in Unique, Sets, Setitems & Runes and calculates scores for each item.
+   * Generator uses the scores from the Scorer to generate new weighted random properties with are then filtered according to score.  It will keep generating props until it reaches # props on vanilla item + 4 (if BalancedPropCount) or MaxProps.  It also scales the min & max values based on the target score.
 ## v0.5.1
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
 * Adds new feature `RemoveLevelRequirements`
@@ -250,4 +369,8 @@ Thanks!
     
 # Credits
 * [Dead Weight Design](https://www.instagram.com/deadweightdesign/) - Thanks for creating the logo!
-
+* tlentz, Deadlock39, OldBeardedCoder/EMPY -- Teh Devs
+* Amek for being the true moderating god he is and for his awesome tutorials and cat herding.
+* iksargodzilla - Thank-you so much for doing 90% of the grunt work for the scoring engine
+* macohan, Negative Inspiration, for helping with design and being a huge help with the newbies.
+* The many others that reported bugs, proposed enhancements and gave moral support & encouragement.

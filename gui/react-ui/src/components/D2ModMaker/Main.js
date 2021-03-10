@@ -21,7 +21,8 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.5.4",
+  Version: "v0.6.0",
+  ModName: "113c",
   SourceDir: "",
   OutputDir: "",
   MeleeSplash: false,
@@ -39,20 +40,36 @@ const defaultCfg = {
   RemoveLevelRequirements: false,
   RemoveAttRequirements: false,
   RemoveUniqCharmLimit: false,
+  UseOSkills: false,
+  PerfectProps: false,
   SafeUnsocket: false,
+  PropDebug: false,
   EnterToExit: true,
   RandomOptions: {
     Randomize: false,
     UseSeed: false,
     Seed: -1,
+    EnhancedSets: true,
     IsBalanced: true,
     BalancedPropCount: true,
     AllowDupeProps: false,
     MinProps: 3,
-    MaxProps: 8,
-    UseOSkills: false,
-    PerfectProps: false,
+    MaxProps: 10,
+    NumClones: 9,
+    ElementalSkills: true
   },
+  GeneratorOptions: {
+    Generate: false,
+    UseSeed: false,
+    Seed: -1,
+    EnhancedSets: true,
+    BalancedPropCount: true,
+    MinProps: 3,
+    MaxProps: 10,
+    NumClones: 9,
+    PropScoreMultiplier: 1,
+    ElementalSkills: true
+  }
 };
 
 export default function D2ModMaker() {
@@ -79,6 +96,11 @@ export default function D2ModMaker() {
     let randomOptions = oldState.RandomOptions;
     randomOptions[key] = val;
     return { ...oldState, RandomOptions: randomOptions };
+  };
+  const updateGeneratorOptions = (oldState, key, val) => {
+    let generatorOptions = oldState.GeneratorOptions;
+    generatorOptions[key] = val;
+    return { ...oldState, GeneratorOptions: generatorOptions };
   };
 
   const mkRandomCheckbox = ({ key, tooltip }) => {
@@ -127,6 +149,26 @@ export default function D2ModMaker() {
     );
   };
 
+  const mkGeneratorCheckbox = ({ key, tooltip }) => {
+    return (
+      <React.Fragment>
+        <FormControlLabel
+          control={<Checkbox color="primary" name={key} value={state[key]} />}
+          label={key}
+          checked={state[key]}
+          onChange={(e, checked) => {
+                return setState(updateGeneratorOptions(state, key, checked));
+          }}
+        />
+        <StyledTooltip title={tooltip} placement="bottom" enterDelay={250}>
+          <span className={"help-icon"}>
+            <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+          </span>
+        </StyledTooltip>
+      </React.Fragment>
+    );
+  };
+
   const seed = () => {
     if (state.RandomOptions.Seed >= 1) {
       return state.RandomOptions.Seed;
@@ -134,12 +176,20 @@ export default function D2ModMaker() {
       return newSeed();
     }
   };
-
+  
+  const genseed = () => {
+    if (state.GeneratorOptions.Seed >= 1) {
+      return state.GeneratorOptions.Seed;
+    } else {
+      return newSeed();
+    }
+  };
+  
   const newSeed = () => {
     return Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
   };
 
-  const seedInput = () => {
+  const randSeedInput = () => {
     if (state.RandomOptions.UseSeed) {
       return (
         <React.Fragment>
@@ -151,6 +201,24 @@ export default function D2ModMaker() {
             value={state.RandomOptions.Seed}
             onChange={(value) => {
               return updateRandomOptions(state, "Seed", value);
+            }}
+          />
+        </React.Fragment>
+      );
+    }
+  };
+  const genSeedInput = () => {
+    if (state.GeneratorOptions.UseSeed) {
+      return (
+        <React.Fragment>
+          <InputNumber
+            aria-label="Seed number input"
+            min={1}
+            max={Number.MAX_SAFE_INTEGER}
+            style={{ width: 100 }}
+            value={state.GeneratorOptions.Seed}
+            onChange={(value) => {
+              return updateGeneratorOptions(state, "Seed", value);
             }}
           />
         </React.Fragment>
@@ -236,14 +304,36 @@ export default function D2ModMaker() {
     );
   };
 
-  const dirOptions = () => {
+  const modOptions = () => {
     return (
       <Grid container>
         <Grid container spacing={5}>
           <Grid item xs={6}>
+          <StyledTooltip
+              title={
+                "The name of the Mod: if not 113c or easternsun300r6d, the Source Directory must be specified and assets\\modsupport\\ModName\\ directory must exist."
+              }
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+            <TextField
+              id="ModName"
+              label="Mod Name"
+              value={state.ModName}
+              onChange={(e) =>
+                setState({ ...state, ModName: e.target.value })
+              }
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6}>
             <StyledTooltip
               title={
-                "The path to the source directory containing the diablo 2 source files. Leave this blank to use 113c source files. example: C:/d2/data/global/excel/"
+                "The path to the source directory containing the diablo 2 .txt source files. Leave this blank to use 113c source files. example: C:/d2/data/global/excel/"
               }
               placement="bottom"
               enterDelay={250}
@@ -305,7 +395,7 @@ export default function D2ModMaker() {
           {mkCheckbox({
             key: "MeleeSplash",
             tooltip:
-              "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels.",
+              "Enables Splash Damage.  Can spawn as an affix on magic and rare jewels, or on a unique if using Generator",
           })}
         </Grid>
         <Grid item xs={12} className={"SliderWrapper"}>
@@ -349,6 +439,22 @@ export default function D2ModMaker() {
             onChange={(e, n) => setState({ ...state, IncreaseMonsterDensity: n })}
           />
         </Grid>
+        <Grid container>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "UseOSkills",
+              tooltip: "Change class only skill props to not require the class.",
+            })}
+          </Grid>
+          <Grid item xs={4}>
+            {mkCheckbox({
+              key: "PerfectProps",
+              tooltip:
+                "All props will have a perfect max value when spawning on an item.",
+            })}
+          </Grid>
+        </Grid>
+
       </React.Fragment>
     );
   };
@@ -468,6 +574,201 @@ export default function D2ModMaker() {
     );
   };
 
+  const generatorOptions = () => {
+    return (
+      <React.Fragment>
+        <Typography
+          variant="h4"
+          align={"center"}
+          className={"HeaderText2"}
+          gutterBottom
+          xs={12}
+        >
+          Generator
+        </Typography>
+
+        <Grid container>
+          <Grid item xs={4}>
+            {mkGeneratorCheckbox({
+              key: "Generate",
+              tooltip: "Generate all uniques, sets, and runewords.",
+            })}
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={6}>
+            <React.Fragment>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    name={"UseSeed"}
+                    value={state.GeneratorOptions["UseSeed"]}
+                  />
+                }
+                label={"UseSeed"}
+                checked={state.GeneratorOptions["UseSeed"]}
+                onChange={(e, checked) => {
+                  return setState(
+                    updateGeneratorOptions(
+                      updateGeneratorOptions(state, "UseSeed", checked),
+                      "Seed",
+                      checked ? genseed() : -1
+                    )
+                  );
+                }}
+              />
+              <StyledTooltip
+                title={
+                  "Provide a specific seed to use.  Toggling on/off will generate a new seed."
+                }
+                placement="bottom"
+                enterDelay={250}
+              >
+                <span className={"help-icon"}>
+                  <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+                </span>
+              </StyledTooltip>
+            </React.Fragment>
+            {genSeedInput()}
+          </Grid>
+        </Grid>
+
+        <Grid item xs={12} className={"SliderWrapper"}>
+          <Typography
+            id="PropScoreMultiplier"
+            align={"center"}
+            gutterBottom
+            className={"primary"}
+          >
+            PropScoreMultiplier
+            <StyledTooltip
+              title={"Sets target score for generator at multiple of vanilla item's score."}
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={1}
+            getAriaValueText={valuetext}
+            aria-labelledby="PropScoreMultiplier"
+            step={0.2}
+            max={5}
+            marks={[
+              {
+                value: 1,
+                label: "Vanilla",
+              },
+            ]}
+
+            disabled={false}
+            valueLabelDisplay="on"
+            onChange={(e, n) =>
+              setState(updateGeneratorOptions(state, "PropScoreMultiplier", n))
+            }
+          />
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={4}>
+            {mkGeneratorCheckbox({
+              key: "EnhancedSets",
+              tooltip: "Scale # of props & score based on equivalent unique item, not the vanilla set item.",
+            })}
+          </Grid>
+        </Grid>
+
+
+        <Grid container>
+          <Grid item xs={12}>
+            {mkGeneratorCheckbox({
+              key: "BalancedPropCount",
+              tooltip:
+                "Prop count on generated items based on counts from vanilla items.  Will not exceed 4 more props than vanilla.",
+            })}
+          </Grid>
+        </Grid>
+        <Grid item xs={12} className={"SliderWrapper"}>
+          <Typography
+            id="MinProps"
+            align={"center"}
+            gutterBottom
+            className={"primary"}
+          >
+            MinProps
+            <StyledTooltip
+              title={"Minimum number of props an item can have."}
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={2}
+            getAriaValueText={valuetext}
+            aria-labelledby="MinProps"
+            step={1}
+            max={20}
+            marks={propMarks}
+            disabled={state.GeneratorOptions.BalancedPropCount}
+            valueLabelDisplay="on"
+            onChange={(e, n) =>
+              setState(updateGeneratorOptions(state, "MinProps", n))
+            }
+          />
+        </Grid>
+        <Grid item xs={12} className={"SliderWrapper"}>
+          <Typography
+            id="MaxProps"
+            gutterBottom
+            align={"center"}
+            className={"primary"}
+          >
+            MaxProps
+            <StyledTooltip
+              title={"Maximum number of props an item can have."}
+              placement="bottom"
+              enterDelay={250}
+            >
+              <span className={"help-icon"}>
+                <HelpOutlineOutlinedIcon></HelpOutlineOutlinedIcon>
+              </span>
+            </StyledTooltip>
+          </Typography>
+          <Slider
+            defaultValue={20}
+            getAriaValueText={valuetext}
+            aria-labelledby="min-num-props"
+            step={1}
+            max={20}
+            marks={propMarks}
+            disabled={state.GeneratorOptions.BalancedPropCount}
+            valueLabelDisplay="on"
+            onChange={(e, n) =>
+              setState(updateGeneratorOptions(state, "MaxProps", n))
+            }
+          />
+        </Grid>
+        <Grid container>
+          <Grid item xs={4}>
+            {mkGeneratorCheckbox({
+              key: "ElementalSkills",
+              tooltip: "Add + to (Poison, Cold, or Lightning) skills.",
+            })}
+          </Grid>
+        </Grid>
+
+      </React.Fragment>
+    );
+  };
+
   const randomOptions = () => {
     return (
       <React.Fragment>
@@ -485,10 +786,12 @@ export default function D2ModMaker() {
           <Grid item xs={4}>
             {mkRandomCheckbox({
               key: "Randomize",
-              tooltip: "Randomize all all uniques, sets, and runewords.",
+              tooltip: "Randomize uniques, sets, and runewords.  If Generator is enabled Randomizer will not run.",
             })}
           </Grid>
-          <Grid item xs={8}>
+        </Grid>
+        <Grid container>
+          <Grid item xs={6}>
             <React.Fragment>
               <FormControlLabel
                 control={
@@ -522,25 +825,10 @@ export default function D2ModMaker() {
                 </span>
               </StyledTooltip>
             </React.Fragment>
-            {seedInput()}
+            {randSeedInput()}
           </Grid>
         </Grid>
 
-        <Grid container>
-          <Grid item xs={4}>
-            {mkRandomCheckbox({
-              key: "UseOSkills",
-              tooltip: "Change class only skill props to spawn as oskills.",
-            })}
-          </Grid>
-          <Grid item xs={4}>
-            {mkRandomCheckbox({
-              key: "PerfectProps",
-              tooltip:
-                "All props will have a perfect max value when spawning on an item.",
-            })}
-          </Grid>
-        </Grid>
 
         <Grid container>
           <Grid item xs={4}>
@@ -568,7 +856,7 @@ export default function D2ModMaker() {
             })}
           </Grid>
         </Grid>
-        <Grid item xs={12} className={"SliderWrapper"}>
+        <Grid item xs={12} className={"SliderWrapper"}>s
           <Typography
             id="MinProps"
             align={"center"}
@@ -632,6 +920,7 @@ export default function D2ModMaker() {
             }
           />
         </Grid>
+        
         <Grid container>
           <Grid item xs={4}>
             {mkRandomCheckbox({
@@ -662,6 +951,7 @@ export default function D2ModMaker() {
             let cfg = await loadConfig();
             console.log(cfg);
             setState({ ...cfg });
+            RefreshUI();
           }}
         >
           Load Config
@@ -693,22 +983,26 @@ export default function D2ModMaker() {
 
       <div className={"D2ModMakerContainerInner"}>
         {divider()}
+        <Grid container> {qolOptions()}</Grid>
+        {divider()}
+        <Grid container>{generatorOptions()}</Grid>
+        {divider()}
         <Grid container>{randomOptions()}</Grid>
         {divider()}
         <Grid container>{otherOptions()}</Grid>
         {divider()}
-        <Grid container> {qolOptions()}</Grid>
-        {divider()}
         <Grid container>{dropRateOptions()}</Grid>
         {divider()}
-        <Grid container>{dirOptions()}</Grid>
+        <Grid container>{modOptions()}</Grid>
         {divider()}
         {/*<pre id={"state"}>{JSON.stringify(state, null, 2)}</pre>*/}
       </div>
     </div >
   );
 }
-
+function RefreshUI() {
+  window.location.reload();
+}
 function valuetext(value) {
   return `${value}`;
 }

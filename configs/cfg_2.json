@@ -1,0 +1,16 @@
+{
+    "Name": "Only QOL",
+    "Description": "All Quality Of Life changes",
+    "Author": "EMPY",
+    "IncreaseStackSizes": true,
+    "IncreaseMonsterDensity": 1,
+    "EnableTownSkills": true,
+    "BiggerGoldPiles": true,
+    "NoFlawGems": true,
+    "QuestDrops": true,
+    "StartWithCube": true,
+    "Cowzzz": true,
+	"RemoveUniqCharmLimit":    true,
+    "PerfectProps": true,
+    "SafeUnsocket": true
+}

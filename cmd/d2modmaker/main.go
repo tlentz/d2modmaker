@@ -7,7 +7,6 @@ import (
 )
 
 var (
-	dataDir string
 	outDir  string
 	cfgPath string
 	mode    string
@@ -20,8 +19,8 @@ func main() {
 		outDir = "./"
 		cfgPath = "./cfg.json"
 	} else {
-		outDir = "../../dist/"
-		cfgPath = "../../cfg.json"
+		outDir = "./dist/" // alpha-23 Changed to run from main directory
+		cfgPath = "./cfg.json"
 	}
 
 	if version == "" {

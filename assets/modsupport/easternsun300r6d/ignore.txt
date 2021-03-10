@@ -1,0 +1,31 @@
+Type	File	Name
+prop	UniqueItems.txt	vit-h
+prop	SetItems.txt	vit-h
+prop	Runes.txt	vit-h
+prop	UniqueItems.txt	tinkerflag2
+prop	SetItems.txt	tinkerflag2
+item	UniqueItems.txt	Damage Augmenter
+item	UniqueItems.txt	Uni Ore 0
+item	UniqueItems.txt	Uni Ore 1
+item	UniqueItems.txt	Uni Ore 2
+item	UniqueItems.txt	Uni Ore 3
+item	UniqueItems.txt	Uni Ore 4
+item	UniqueItems.txt	Uni Ore 5
+item	UniqueItems.txt	Uni Ore 6
+item	UniqueItems.txt	Uni Ore 7
+item	UniqueItems.txt	Uni Ore 8
+item	UniqueItems.txt	Uni Ore 9
+item	UniqueItems.txt	Uni Ore 10
+item	UniqueItems.txt	Uni Ore 11
+item	UniqueItems.txt	Uni Ore 12
+item	UniqueItems.txt	Uni Ore 13
+item	UniqueItems.txt	Uni Ore 14
+item	UniqueItems.txt	Uni Ore 15
+prop	UniqueItems.txt	sock
+prop	SetItems.txt	sock
+item	UniqueItems.txt	Amulet of the Viper
+item	UniqueItems.txt	Staff of Kings
+item	UniqueItems.txt	Horadric Staff
+item	UniqueItems.txt	Hell Forge Hammer
+item	UniqueItems.txt	KhalimFlail
+item	UniqueItems.txt	SuperKhalimFlail
