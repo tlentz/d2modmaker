@@ -208,12 +208,20 @@ Thanks!
 
 # Change Log
 ## v0.6.0 
-* Merged with mainline
-
-## v0.6.0-alpha-23
-* Adjustments to Aura availability. Ty iksargodzilla.
 * Preliminary support for different mods.  Manual edit of cfg.json only for now.
 * Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.
+* Added debug cube recipes: axe + 1 health potion = axe with 1 each light,cold,fire,poison, magic skills.  Not added to UI, this allows testing of new props to verify that they are working correctly.
+* Added Scorer & Generator modules from the -alpha- branch:
+   * Scorer reads in Unique, Sets, Setitems & Runes and calculates scores for each item.
+   * Generator uses the scores from the Scorer to generate new weighted random properties.  If it doesn't meet the target score, (the vanilla score * PropScoreMultiplier), the generator will re-roll the item until it does, or warns with error message.  The properties the Generator rolls are item code, range, and group restricted based on columns in PropScores.txt.
+   Significant changes to the Scorer/Generator during the alpha development include:
+      * Added per-slot-ish probability buckets based on item code and type
+      * Widened out the allowable range of props rolled in the beginning.  Properties rolled by the generator can vary more widely than any vanilla item.
+      * Added PropScores.txt:ScoreLimit -- Limits the max score rolled for a new affix to % of vanilla item score.
+      * Added PropScores.txt ScoreMax column and capped max score to itemlevel * (1.2 + 0.1 * (PropScoreMultiplier-1)) but only when PropScoreMult < 4.  This prevents low level items from spawning with very high values for props that have low ScoreMax.
+      * Expanded level and item availability of auras for the Generator
+      * Fixes to +skills to prevent +5 all & +3 class showing up on same item
+      * Made +class skill cheaper on class specific items
 
 ## v0.5.4
 * Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
@@ -230,73 +238,6 @@ Thanks!
 * [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
 * Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.
 
-## v0.5.2-alpha-22
-* [bugfix] PropScores lines weren't allowing Faith or Exiles Path
-
-## v0.5.2-alpha-21
-* Expanded level and item availability of auras for the Generator
-* Merged in cleanup from obc/mobdensity branch
-* [bugfix] Path fixes to get the srcdir option working again.
-
-## v0.5.2-alpha-20
-* Set Generator default to false to work around the ui bug.
-* Fix for PerfectProps doing "r=" proptypes
-## v0.5.2-alpha-19
-* Set PropScoreMultiplier to 1 if user had set it to 0  (thx Speculator)
-* Fix Seeds.txt code to write correct seed, and in addition write SetsSeed.
-* Balance adjustment in PropScores.txt, some due to the new level limit based code from a17
-* Fix for broken Monster Density code that was squaring uniques monster density in nm, and no increase in hell
-* Increased Monster Density to Max and split density between Monstats.txt and Levels.txt.  Ty Necrolis (Issue #81)
-## v0.5.2-alpha-18
-* More prop balance by iksargodzilla
-* Fixed issue score cap from a17 was not working.
-## v0.5.2-alpha-17
-* Added debug cube recipes: axe + 1 health potion = axe with 1 each light,cold,fire,poison, magic skills.  Not added to UI, this allows
-* testing of new props to verify that they are working correctly.
-* Changed elementalkills allow curses (-lightning skills, -cold skills, etc)  Beware this may shift existing items + elemental skills down by 2, possibly going negative.
-* Added PropScores.txt ScoreMax column and capped max score to itemlevel * (1.2 + 0.1 * (PropScoreMultiplier-1)) but only when PropScoreMult < 4
-* This prevents low level items from spawning with very high values for props that have low ScoreMax.
-## v0.5.2-alpha-16
-* Bugfix: Randomizer:IsBalanced was broken
-## v0.5.2-alpha-15
-* Fixed ElementalSkills
-* Increased ranges of some damage props to allow higher values/scores
-## v0.5.2-alpha-13
-* Adding 2hander buff to Generator
-* Fix Randomizer crash
-## v0.5.2-alpha-12
-* Added ElementalSkills handling in Randomizer
-* Balance adjustment to SynergyGroup and ias (properties swing1-3)
-* Fixed some broken curses (-AC etc.)
-## v0.5.2-alpha-11
-* Added "SafeUnsocket" runeword recipe
-* Added "ElementalSkills": ability to Generate items with + cold, poison, lightning, or magic skills.
-## v0.5.2-alpha-10
-* Separated out Generator from Randomizer options
-* Made OSkills and PerfectProps their own separate entities, capable of running against vanilla, randomized or generated items.
-* Separated out Sets Seed from the other seed.
-## v0.5.2-alpha-9
-* Fix for ScoreLimit not applying correctly to proppartype s (skill)
-* Made oskill conversion its own module, run after Generator or Randomizer
-## v0.5.2-alpha-8
-* Added PropScores.txt:ScoreLimit -- Limits the max score rolled for a new affix to % of vanilla item score.
-## v0.5.2-alpha-7
-* Many bugfixes.
-* Widened out the allowable range of props rolled in the beginning.
-* Added per-slot-ish probability buckets based on item code and type
-## v0.5.2-alpha-6
-* Fixes to +skills to prevent +5 all & +3 class showing up on same item
-* Made +class skill cheaper on class specific
-## v0.5.2-alpha-5
-* Fix to stamdrain prop
-## v0.5.2-alpha-4
-* Fixes to Scorer for MinProps support
-* Added r= PropParType to allow generation of props in multiples of 5 or 10
-* Balancing, and more balancing in PropScores.txt mainly to do with damage, but also restricted 1-100% mana steal to staves, 15% max for everything else.
-## v0.5.2-alpha-3
-* Added Scorer & Generator modules.
-   * Scorer reads in Unique, Sets, Setitems & Runes and calculates scores for each item.
-   * Generator uses the scores from the Scorer to generate new weighted random properties with are then filtered according to score.  It will keep generating props until it reaches # props on vanilla item + 4 (if BalancedPropCount) or MaxProps.  It also scales the min & max values based on the target score.
 ## v0.5.1
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
 * Adds new feature `RemoveLevelRequirements`
