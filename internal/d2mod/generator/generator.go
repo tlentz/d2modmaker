@@ -37,6 +37,11 @@ type Generator struct {
 func NewGenerator(d2files *d2fs.Files, opts *config.GeneratorOptions, tt *d2items.TypeTree, psi *propscores.Maps, stats *scorerstatistics.ScorerStatistics) *Generator {
 	opts.MinProps = util.MaxInt(1, opts.MinProps)
 	opts.MaxProps = util.MinInt(20, opts.MaxProps)
+	if opts.MinProps > opts.MaxProps {
+		fmt.Printf("Generator: MinProps > MaxProps, setting MinProps to %d\n", opts.MaxProps)
+		opts.MinProps = opts.MaxProps
+	}
+
 	opts.NumClones = util.MaxInt(0, opts.NumClones)
 	if opts.PropScoreMultiplier == 0 {
 		opts.PropScoreMultiplier = 1

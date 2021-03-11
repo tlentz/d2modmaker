@@ -21,7 +21,7 @@ const _ = require('lodash');
 const axios = require("axios");
 
 const defaultCfg = {
-  Version: "v0.6.0",
+  Version: "v0.6.1",
   ModName: "113c",
   SourceDir: "",
   OutputDir: "",
