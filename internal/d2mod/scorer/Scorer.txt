@@ -1,0 +1,20 @@
+The Scorer read all items fed to it and sums the scores for each property looked up from PropScores.txt.
+
+The score is calculated by taking the average of the Prop min & max values and scaling that interpolating the result 
+from the PropScores Min & Max (*) into ScoreMax and ScoreMin.
+Beware that which columns in PropScores that are used for Min & Max values vary by PropParType.
+
+The Scorer also keeps track of how many times each line in PropScores.txt was used by the following item classes (scorerstatistics:categories.go):
+- Weapons
+- Armor
+- jewelry
+- Full set bonuses
+- other
+
+This information is used by the Generator to weight the probabilities of rolling a mod for an item type.
+
+The Scorer will reduce the score of properties that are partial or full set bonuses.
+It will also reduce the score for all 2-handed weapons that can't be wielded 1-handed.
+
+When the Scorer reads the PropScores.txt file in it keeps a index of all the props by name.  When a prop is read from an item file it scans every matching 
+PropScores line with that name starting from the first one encountered during read until it finds a match in both Min-Max and itype & etype.

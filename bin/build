@@ -48,4 +48,9 @@ fi
 
 # cp cfg.json ./dist/cfg.json
 # cp -r assets/113c-data/ ./dist/113c-data/
+
+# alpha-23 no longer using vfsgen
+cp -r assets/ ./dist/assets/
+
 cp README.md ./dist/README.md
+cp LICENSE ./dist/LICENSE

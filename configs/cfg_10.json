@@ -1,0 +1,33 @@
+{
+    "Name": "Gen3x/45x",
+    "Description": "Generator=3x, 45x mobs",
+    "Author": "EMPY",
+    "MeleeSplash": true,
+    "IncreaseStackSizes": true,
+    "IncreaseMonsterDensity": 45,
+    "EnableTownSkills": true,
+    "BiggerGoldPiles": true,
+    "NoFlawGems": true,
+    "NoDropZero": false,
+    "QuestDrops": true,
+    "UniqueItemDropRate": 30,
+    "RuneDropRate": 90,
+    "StartWithCube": true,
+    "Cowzzz": true,
+    "RemoveLevelRequirements": false,
+	"RemoveAttRequirements":   false,
+	"RemoveUniqCharmLimit":    true,
+    "UseOSkills": true,
+    "PerfectProps": true,
+    "SafeUnsocket": true,
+    "GeneratorOptions": {
+        "Generate": true,
+        "EnhancedSets": true,
+        "BalancedPropCount": false,
+        "MinProps": 8,
+        "MaxProps": 15,
+        "NumClones": 9,
+        "PropScoreMultiplier": 3,
+        "ElementalSkills": true
+    }
+}

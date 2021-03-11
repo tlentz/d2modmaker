@@ -1,0 +1,10 @@
+Hireling Description	Code	*EOL
+None		0
+Fire Arrow	farw	0
+Cold Arrow	carw	0
+Combat	comb	0
+Defensive Auras	def	0
+Offensive Auras	off	0
+Fire Spells	fire	0
+Cold Spells	cold	0
+Lightning Spells	ltng	0

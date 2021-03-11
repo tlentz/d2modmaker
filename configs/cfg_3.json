@@ -1,0 +1,19 @@
+{
+    "Name": "More Vanilla please",
+    "Description": "Vanilla + QOL + moar itemzzz",
+    "Author": "EMPY",
+    "IncreaseStackSizes": true,
+    "EnableTownSkills": true,
+    "BiggerGoldPiles": true,
+    "NoFlawGems": true,
+    "NoDropZero": true,
+    "QuestDrops": true,
+    "UniqueItemDropRate": 70,
+    "RuneDropRate": 90,
+    "StartWithCube": true,
+    "Cowzzz": true,
+	"RemoveUniqCharmLimit":    true,
+    "PerfectProps": true,
+    "UseOSkills": true,
+    "SafeUnsocket": true
+}

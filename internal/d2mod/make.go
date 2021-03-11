@@ -4,14 +4,22 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tlentz/d2modmaker/internal/d2mod/modsupport"
+	"github.com/tlentz/d2modmaker/internal/d2mod/propdebug"
+
 	"github.com/tlentz/d2modmaker/internal/d2fs"
 	"github.com/tlentz/d2modmaker/internal/d2mod/config"
 	"github.com/tlentz/d2modmaker/internal/d2mod/cows"
+	"github.com/tlentz/d2modmaker/internal/d2mod/cuberecipes"
 	"github.com/tlentz/d2modmaker/internal/d2mod/elementalskills"
+	"github.com/tlentz/d2modmaker/internal/d2mod/generator"
 	"github.com/tlentz/d2modmaker/internal/d2mod/monsterdensity"
+	"github.com/tlentz/d2modmaker/internal/d2mod/oskills"
+	"github.com/tlentz/d2modmaker/internal/d2mod/perfectprops"
 	"github.com/tlentz/d2modmaker/internal/d2mod/qol"
 	"github.com/tlentz/d2modmaker/internal/d2mod/randomizer"
 	"github.com/tlentz/d2modmaker/internal/d2mod/reqs"
+	"github.com/tlentz/d2modmaker/internal/d2mod/scorer"
 	"github.com/tlentz/d2modmaker/internal/d2mod/splash"
 	"github.com/tlentz/d2modmaker/internal/d2mod/stacksizes"
 	"github.com/tlentz/d2modmaker/internal/d2mod/townskills"
@@ -19,24 +27,29 @@ import (
 	"github.com/tlentz/d2modmaker/internal/util"
 )
 
+//MakeFromCfgPath ??
 func MakeFromCfgPath(defaultOutDir string, cfgPath string) {
 	cfg := config.Read(cfgPath)
 	Make(defaultOutDir, cfg)
 }
 
+// Make Run all the enabled d2 modules
 func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.OutputDir == "" {
 		cfg.OutputDir = defaultOutDir
 	}
 	d2files := d2fs.NewFiles(cfg.SourceDir, cfg.OutputDir)
 
+	modsupport.Run(&cfg, d2files)
+
 	if cfg.MeleeSplash {
 		splash.Run(cfg.OutputDir, d2files)
-
+	} else {
+		splash.DisableMeleeSplash(d2files)
 	}
 
 	elementalSkillsEnabled := false
-	if cfg.RandomOptions.Randomize && cfg.RandomOptions.ElementalSkills {
+	if (cfg.GeneratorOptions.Generate && cfg.GeneratorOptions.ElementalSkills) || (cfg.RandomOptions.Randomize && cfg.RandomOptions.ElementalSkills) {
 		elementalSkillsEnabled = true
 	}
 	elementalskills.Run(cfg.OutputDir, d2files, elementalSkillsEnabled)
@@ -52,7 +65,12 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.EnableTownSkills {
 		townskills.Enable(d2files)
 	}
-
+	if cfg.BiggerGoldPiles {
+		treasure.BiggerGoldPiles(d2files)
+	}
+	if cfg.NoFlawGems {
+		treasure.NoFlawGems(d2files)
+	}
 	if cfg.NoDropZero {
 		treasure.SetNoDropZero(d2files)
 	}
@@ -65,13 +83,14 @@ func Make(defaultOutDir string, cfg config.Data) {
 		cows.AddTpRecipe(d2files)
 		cows.AllowKingKill(d2files)
 	}
-
-	if cfg.RemoveLevelRequirements {
-		reqs.RemoveLevelRequirements(d2files)
+	if cfg.SafeUnsocket {
+		cuberecipes.SafeUnsocket(d2files)
 	}
-
-	if cfg.RemoveAttRequirements {
-		reqs.RemoveAttRequirements(d2files)
+	// Calculate scores  before any alterations to items.
+	var s *scorer.Scorer
+	if cfg.GeneratorOptions.Generate {
+		s = scorer.Run(&d2files, cfg.GeneratorOptions)
+		elementalskills.SetProbability(d2files, s.Statistics, cfg.GeneratorOptions.ElementalSkills)
 	}
 
 	if cfg.UniqueItemDropRate > 0 {
@@ -89,11 +108,35 @@ func Make(defaultOutDir string, cfg config.Data) {
 	if cfg.RemoveUniqCharmLimit {
 		qol.RemoveUniqCharmLimit(d2files)
 	}
-
-	if cfg.RandomOptions.Randomize {
-		randomizer.Run(&cfg, d2files)
+	if cfg.GeneratorOptions.Generate {
+		fmt.Println("*** Running Generator ***")
+		if cfg.RandomOptions.Randomize {
+			fmt.Println("Warning: Randomizer is enabled but ignored since Generator is on.")
+		}
+		g := generator.NewGenerator(&d2files, &cfg.GeneratorOptions, s.TypeTree, s.PSI, s.Statistics)
+		g.Run()
+	} else {
+		if cfg.RandomOptions.Randomize {
+			fmt.Println("*** Running Randomizer ***")
+			randomizer.Run(&cfg.RandomOptions, &d2files)
+		}
+	}
+	if cfg.RemoveLevelRequirements {
+		reqs.RemoveLevelRequirements(d2files) // Must be done after Scorer/Generator due to alteration of Lvl
 	}
 
+	if cfg.RemoveAttRequirements {
+		reqs.RemoveAttRequirements(d2files)
+	}
+	if cfg.UseOSkills {
+		oskills.ConvertSkillsToOSkills(&d2files)
+	}
+	if cfg.PerfectProps {
+		perfectprops.Run(&d2files)
+	}
+	if cfg.PropDebug {
+		propdebug.Run(d2files)
+	}
 	d2files.Write()
 	writeSeed(cfg)
 	util.PP(cfg)
@@ -110,5 +153,9 @@ func writeSeed(cfg config.Data) {
 	f, err := os.Create(filePath)
 	util.Check(err)
 	defer f.Close()
-	f.WriteString(fmt.Sprintf("%d\n", cfg.RandomOptions.Seed))
+	seed := cfg.RandomOptions.Seed
+	if cfg.GeneratorOptions.Generate {
+		seed = cfg.GeneratorOptions.Seed
+	}
+	f.WriteString(fmt.Sprintf("%d\n", seed))
 }

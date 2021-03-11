@@ -29,14 +29,22 @@ This should be compatible with PlugY and other things such as:
 * [PlugY](http://plugy.free.fr/en/index.html) by Yohann Nicolas.
 * [MultiRes / BH](https://www.reddit.com/r/slashdiablo/comments/7z5uy1/hd_mod_and_maphack_new_release/) by SlashDiablo.
 
-# ModConfig
+# Options
 
-The mod config is located in `cfg.json`.  You can change this config to your liking to produce a new `data` folder.
+The mod config is located in `cfg.json`.  You can change this config to your liking and run to produce a new `data` folder.
 
-## ModConfig Options
+## General Options
 #### SourceDir `string`
 * Specifies the directory the source text files are read from
 * If this is omitted, or set to "", the built-in 113c data files will be used. 
+#### OutputDir `string`
+* Specifies the data directory to write files to.  
+* If omitted it will default to creating the data file tree directly underneath 
+* the current directory, i.e. 
+#### MeleeSplash `bool`
+* Enables spawning of jewels that have the added property "Melee Splash"
+* If the Generator is enabled it can generate items with this property.
+* The Randomizer does not produce items with Melee Splash, so you'll have to use jewels.
 #### IncreaseStackSizes `bool`
 * Increases book of tp to 100
 * Increases book of id to 100
@@ -45,11 +53,15 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Increases key stack sizes to 100
 #### IncreaseMonsterDensity `float`
 * Will increase the density of all areas by the given multiplier
-* `MAX: 30.0`
 * `MIN: 0.0`
+* `MAX: 30.0`
 * Set to `-1` to omit
 #### EnableTownSkills `bool`
 * Enables all skills in town
+#### BiggerGoldPiles `bool`
+* 10x bigger, fewer gold piles
+#### NoFlawGems `bool`
+* (Mostly) Disables Flawed & Flawless gems from dropping on higher difficulties.
 #### NoDropZero `bool`
 * Sets "NoDrop" = 0 (Monsters will always drop items)
 #### QuestDrops `bool`
@@ -79,18 +91,33 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 * Removes attribute requirements from items.
 #### RemoveUniqCharmLimit `bool`
 * Allows to carry more than 1 unique charm of the same type.
+#### UseOSkills `bool`
+* Will change class only skills to oskills
+#### PerfectProps `bool`
+* All props will have the max value for min/max values
+#### SafeUnsocket `bool`
+* Adds recipe (item + quiver) to unsocket an item, returning both the item and everything from its sockets.
+#### PropDebug `bool`
+* Adds recipe health potion + socketable weapon => debugging weapon.  General idea is to hand-edit the cubemain.txt file to add
+* the property you are trying to debug, create and test it.
+
 #### EnterToExit `bool`
 * If this is true, this will require the user to press enter to close the program
 * If false, it will not prompt user input
+---
 ## RandomOptions `RandomOptions`
 #### Randomize `bool`
 * Will randomize if set to true
+#### UseSeed `bool`
+* Will use provided seed if set, generate random seed every run if not set
 #### Seed `int`
 * Will use this seed for randomization
 * Set to `-1` to generate a random seed
+#### EnhancedSets `bool`
+* Removes all full set bonuses because they change on existing items every time d2mm is run
 #### IsBalanced `bool`
 * Allows props only from items within 10 levels of the base item so that you don't get crazy hell stats on normal items, but still get a wide range of randomization
-#### AllowDuplicateProps `bool`
+#### AllowDupeProps `bool`
 * If this value is false, the same prop type will not be placed on an item twice
 * E.g. two instances of all resist will not get stacked on the same randomized item
 #### BalancedPropCount `bool`
@@ -103,10 +130,37 @@ The mod config is located in `cfg.json`.  You can change this config to your lik
 #### MaxProps `int`
 * Maximum number of non blank props that spawn on an item
 * Set to `-1` to omit
-#### UseOSkills `bool`
-* Will change class only skills to oskills
-#### PerfectProps `bool`
-* All props will have the max value for min/max values
+#### ElementalSkills `bool`
+* Add the ability to spawn + to cold skills, poison skills etc, not just + fire skill.
+---
+## GeneratorOptions `GeneratorOptions`
+#### Generate `bool`
+* Set to turn on the Prop Generator
+#### UseSeed `bool`
+* Will use provided seed if set, generate random seed every run if not set
+#### Seed `int`
+* Will use this seed for randomization
+* Set to `-1` to generate a random seed
+#### EnhancedSets `bool`
+* Removes all full set bonuses because they change every time d2mm is run
+* Configures all sets to have more partial set bonuses
+#### BalancedPropCount `bool`
+* Pick prop count on items based on counts from vanilla items
+* Generates up to 4 props more than vanilla if needed to match the vanilla item's score.
+* Enabling this setting will make MinProps and MaxProps unused
+#### MinProps `int`
+* Minimum number of non blank props that spawn on an item
+* Set to `-1` to omit
+#### MaxProps `int`
+* Maximum number of non blank props that spawn on an item
+* Set to `-1` to omit
+#### NumClones `int`
+* Number of clone unique items to create.  Clones will have
+* same name but different generated properties.
+#### PropScoreMultipler `int`
+* The I Win lever.  1 = vanilla.  2 = 2x the score of the vanilla item.
+#### ElementalSkills `bool`
+* Add the ability to spawn + to cold skills, poison skills etc, not just + fire skill.
 
 # Screenshots
 ### Nagel
@@ -153,11 +207,36 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.6.0 
+* Preliminary support for different mods.  Manual edit of cfg.json only for now.
+* Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.
+* Added debug cube recipes: axe + 1 health potion = axe with 1 each light,cold,fire,poison, magic skills.  Not added to UI, this allows testing of new props to verify that they are working correctly.
+* Added Scorer & Generator modules from the -alpha- branch:
+   * Scorer reads in Unique, Sets, Setitems & Runes and calculates scores for each item.
+   * Generator uses the scores from the Scorer to generate new weighted random properties.  If it doesn't meet the target score, (the vanilla score * PropScoreMultiplier), the generator will re-roll the item until it does, or warns with error message.  The properties the Generator rolls are item code, range, and group restricted based on columns in PropScores.txt.
+   Significant changes to the Scorer/Generator during the alpha development include:
+      * Added per-slot-ish probability buckets based on item code and type
+      * Widened out the allowable range of props rolled in the beginning.  Properties rolled by the generator can vary more widely than any vanilla item.
+      * Added PropScores.txt:ScoreLimit -- Limits the max score rolled for a new affix to % of vanilla item score.
+      * Added PropScores.txt ScoreMax column and capped max score to itemlevel * (1.2 + 0.1 * (PropScoreMultiplier-1)) but only when PropScoreMult < 4.  This prevents low level items from spawning with very high values for props that have low ScoreMax.
+      * Expanded level and item availability of auras for the Generator
+      * Fixes to +skills to prevent +5 all & +3 class showing up on same item
+      * Made +class skill cheaper on class specific items
 
-## Upcoming Release
+## v0.5.4
+* Adding BiggerGoldPiles, NoFlawGems and SafeUnsocket.  
+* Patch to elementalskills always being turned on.  This is causing problems with +fireskills coming up negative, and not showing +fireskills text.
+* Added elementalskills option in UI in Randomizer section
+* Changed AllowDupProps & AllowDuplicateProps to AllowDupeProps
+* Fix version # being loaded from cfg.json
+* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
+
+## v0.5.3
+* Fixed version #
+
+## v0.5.2
 * [bugfix] - fixed density overlap in old code, which was squaring density for nightmare, no increase for hell.
 * Upped density max to 45 and split between MonStats.txt & Levels.txt so that the density caps are not hit.
-* Added ElementalSkills option (+Cold,Lightning,Magic,Poison Skills)
 
 ## v0.5.1
 * Fixed an issue that caused 1.14 game to crash with Cowzzz option enabled.
@@ -182,7 +261,7 @@ Thanks!
    * This option enables picking the prop count for items from the counts on vanilla items
    * The count is pulled from items up to 10 levels above the item being randomized
    * The MinProps and MaxProps settings will be ignored if this is enabled
-* Adds a new randomization option: AllowDuplicateProps
+* Adds a new randomization option: AllowDupeProps
    * If this property is false (default), the same property type will not be added to an item twice (e.g. two instances of resist all)
 * Prevents two auras from being placed on the same item. This is bugged in the game, and one aura would not work.
 * Adds an option to specify the directory to read source Diablo 2 text files from instead of using the built-in 1.13c data.
@@ -231,4 +310,8 @@ Thanks!
     
 # Credits
 * [Dead Weight Design](https://www.instagram.com/deadweightdesign/) - Thanks for creating the logo!
-
+* tlentz, Deadlock39, OldBeardedCoder/EMPY -- Teh Devs
+* Amek for being the true moderating god he is and for his awesome tutorials and cat herding.
+* iksargodzilla - Thank-you so much for doing 90% of the grunt work for the scoring engine
+* macohan, Negative Inspiration, for helping with design and being a huge help with the newbies.
+* The many others that reported bugs, proposed enhancements and gave moral support & encouragement.

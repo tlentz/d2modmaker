@@ -1,0 +1,13 @@
+cube modifier type	Code	*EOL
+None		0
+amethyst	ame	0
+ruby	rub	0
+sapphire	sap	0
+topaz	top	0
+emerald	eme	0
+diamond	dim	0
+skull	sku	0
+magic	mag	0
+rare	rar	0
+unique	unq	0
+crafted	crf	0
