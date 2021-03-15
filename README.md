@@ -207,6 +207,9 @@ Anyone who donates, will get recognition in the form of a role in the Discord.
 Thanks!
 
 # Change Log
+## v0.6.1
+* Added code to safeguard against MinProps < MaxProps
+
 ## v0.6.0 
 * Preliminary support for different mods.  Manual edit of cfg.json only for now.
 * Removed UseSetsSeed/SetsSeed options in favor of EnhancedSets.

@@ -51,6 +51,10 @@ func newScrambler(cfg *config.RandomOptions, d2files *d2fs.Files) (s *scrambler)
 	}
 	cfg.MinProps = util.MaxInt(1, cfg.MinProps)
 	cfg.MaxProps = util.MinInt(20, cfg.MaxProps)
+	if cfg.MinProps > cfg.MaxProps {
+		fmt.Printf("Generator: MinProps > MaxProps, setting MinProps to %d\n", cfg.MaxProps)
+		cfg.MinProps = cfg.MaxProps
+	}
 
 	snew := scrambler{
 		opts:    *cfg,
